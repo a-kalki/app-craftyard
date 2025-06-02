@@ -9,9 +9,9 @@
   "private": false,
   "type": "commonjs",
   "scripts": {
-    "bld": "bun run ./scripts/build.ts --mode=dev",
+    "bld": "bun run ./src/zzz-app-run/build.ts --mode=dev",
     "bld-prod": "bun run ./scripts/build.ts --mode=prod",
-    "serve": "bun run bld && bun run ./scripts/serve.ts"
+    "serve": "bun run bld && bun run ./src/zzz-app-run/server.ts"
   },
   "devDependencies": {
     "@shoelace-style/shoelace": "^2.20.1",
@@ -28,6 +28,9 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "lit": "^3.3.0"
+    "@vaadin/router": "^2.0.0",
+    "fs-extra": "^11.3.0",
+    "lit": "^3.3.0",
+    "telegraf": "^4.16.3"
   }
 }

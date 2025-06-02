@@ -2,6 +2,7 @@
 node_modules
 
 # output
+src/zzz-app-run/public/
 out
 dist
 *.tgz

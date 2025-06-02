@@ -1,0 +1,15 @@
+[
+  {
+    "id": "8af1cd19-da3c-4f33-af8c-cc4031e21926",
+    "title": "Кресло \"Кентукки\"",
+    "description": "",
+    "owner": "773084180",
+    "images": ["string"],
+    "categories": ["Category"],
+    "materialsList": ["string"],
+    "toolsRequired": ["string"],
+    "estimatedTime": "string",
+    "difficultyLevel": "Level",
+    "pricePerAccess": "number"
+  }
+]
