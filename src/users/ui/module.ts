@@ -1,5 +1,6 @@
 import { Module } from "../../app/ui/base/module";
 import type { RootItem, RouteRedirect } from "../../app/ui/base/types";
+import { usersModuleName, usersModuleTitle } from "../domain/constants";
 
 const routeItems: RootItem[] = [
   {
@@ -30,4 +31,4 @@ const routeRedirects: RouteRedirect[] = [
   }
 ]
 
-export const usersModule = new Module('Users Module', 'Модуль пользователей', routeItems, routeRedirects);
+export const usersModule = new Module(usersModuleName, usersModuleTitle, routeItems, routeRedirects);

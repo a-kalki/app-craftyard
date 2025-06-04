@@ -18,7 +18,7 @@ export class AppHeaderWidget extends BaseElement {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--sl-color-neutral-0);
+      background: var(--sl-color-neutral-100);
       color: var(--sl-color-neutral-900);
       padding: 0 1rem;
       box-shadow: var(--sl-shadow-large);

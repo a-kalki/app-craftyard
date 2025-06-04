@@ -15,11 +15,18 @@ export async function bootstrap(moduleManifests: ModuleManifest[], getUser: () =
     const user = getUser();
     const app = new App(moduleManifests, user);
     app.init();
-    const appPage = document.createElement('app-page');
-    body.innerHTML = '';
-    body.appendChild(appPage);
+    addAppComponents(body);
   } catch (err) {
     console.error('Ошибка загрузки приложения:', err);
     body.innerHTML = '<p>Произошла ошибка при загрузке приложения. Убедитесь что вы запускаете приложение внутри Telegram  и попробуйте обновить страницу.</p>';
   }
+}
+
+function addAppComponents(body: HTMLElement): void {
+  body.innerHTML = '';
+  const appPage = document.createElement('app-page');
+  body.appendChild(appPage);
+
+  const appToaster = document.createElement('app-toaster');
+  body.appendChild(appToaster);
 }

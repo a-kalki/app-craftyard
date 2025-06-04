@@ -1,8 +1,8 @@
 import type { BaseService } from "./service";
 import type { Command } from "./types";
 
-export abstract class BaseRoot {
-  abstract rootName: string;
+export abstract class BaseRootController {
+  abstract rootEndpoint: string;
 
   abstract services: BaseService<Command>[];
 }

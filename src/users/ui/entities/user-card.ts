@@ -9,7 +9,7 @@ export class UserCardEntity extends BaseElement {
     static styles = css`
       :host {
         display: block;
-        max-width: 300px;
+        max-width: 350px;
         margin: 8px;
         font-family: var(--sl-font-sans); /* Более строгий шрифт */
       }

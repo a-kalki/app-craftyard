@@ -50,11 +50,13 @@ export class JsonRepository<T> {
   }
 
   // Получение всех данных из кеша
-  public async getAll(): Promise<{ [key: string]: T }> {
+  public async getAll<B extends boolean = false>(asList?: B): Promise<B extends true ? T[] : { [key: string]: T }> {
     if (!this.isCacheLoaded) {
       await this.cacheLoadPromise;
     }
-    return this.cache;
+    return asList
+      ? Object.values(this.cache) as B extends true ? T[] : { [key: string]: T }
+      : this.cache as B extends true ? T[] : { [key: string]: T };
   }
 
   // Удаление данных из кеша

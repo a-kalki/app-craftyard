@@ -2,7 +2,7 @@ import type { UserDod } from "../../../app/app-domain/dod";
 import { JsonRepository } from "../../../app/infra/json-repo";
 import type { FindUserResult, RegisterUserCommand } from "./contracts";
 
-const path = import.meta.path + '/users.json';
+const path = import.meta.dir + '/users.json';
 
 class UserRepo extends JsonRepository<UserDod> {
   constructor() {
@@ -22,6 +22,10 @@ class UserRepo extends JsonRepository<UserDod> {
       ...inputDto,
       joinedAt: Date.now(),
     });
+  }
+
+  async getUsers(): Promise<UserDod[]> {
+    return this.getAll(true);
   }
 }
 

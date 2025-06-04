@@ -1,14 +1,16 @@
-import type { AppState, RootItem, RoutableElementAttrs } from "./types";
+import type { AppState, RootItem, RoutableElementAttrs, ToastVariant } from "./types";
 import { AppRouter } from "./app-router";
 import type { ModuleManifest } from "./run-types";
 import type { UserDod } from "../../app-domain/dod";
 import type { Module } from "./module";
+import { AppNotifier } from "./app-notifier";
 
 export class App {
   public router: AppRouter;
 
   private moduleManifests: ModuleManifest[] = [];
   private appState: AppState;
+  private appNotifier = new AppNotifier();
 
   constructor(moduleManifests: ModuleManifest[], initialUser: UserDod) {
     this.moduleManifests = moduleManifests;
@@ -29,6 +31,14 @@ export class App {
 
   setMobileState(state: boolean): void {
     this.appState.isMobile = state;
+  }
+
+  info(text: string, options: { variant?: ToastVariant; details?: unknown } = {}) {
+    this.appNotifier.info(text, options);
+  }
+
+  error(text: string, details?: unknown) {
+    this.appNotifier.error(text, details);
   }
 
   public getState(copy = true): AppState {

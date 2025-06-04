@@ -3,13 +3,14 @@ import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { UserDod } from '../../../app/app-domain/dod';
 import { USER_ROLE_TITLES, USER_ROLE_ICONS } from '../../../app/app-domain/constants';
+import { usersApi } from '../users-api';
 
 @customElement('user-details')
 export class UserDetailsEntity extends BaseElement {
   static styles = css`
     :host {
       display: block;
-      max-width: 400px;
+      max-width: 800px;
       margin: 8px;
       padding: 16px;
       background: var(--sl-color-neutral-0);
@@ -87,30 +88,23 @@ export class UserDetailsEntity extends BaseElement {
   async connectedCallback() {
     super.connectedCallback();
     const userId = this.getUserId();
-    this.user = await this.loadUser(userId);
+    const user = await this.loadUser(userId);
+    if (!user) {
+      this.app.error('Не удалось загрузать данные пользователя', {
+        userId,
+        description: 'Пользователя с таким id не существует в сервисе'
+      });
+      return;
+    }
+    this.user = user;
   }
 
   protected getUserId(): string {
     return this.app.router.getParams().userId;
   }
 
-  private async loadUser(userId: string): Promise<UserDod> {
-    // 🔧 Заглушка — заменить на реальный вызов API
-    return {
-      id: userId,
-      name: 'Иван Иванов',
-      roles: ['HOBBYIST'],
-      profile: {
-        avatarUrl: 'https://placehold.co/64x64',
-        skills: {
-          Frontend: 'sdfafasf sdf awe asdf a asdf asf ',
-          Backend:  'sdfafasf sdf awe asdf a asdf asf ',
-          Mobile:  'sdfafasf sdf awe asdf a asdf asf ',
-          DevOps:  'sdfafasf sdf awe asdf a asdf asf ',
-        },
-      },
-      joinedAt: Date.now(),
-    };
+  private async loadUser(userId: string): Promise<UserDod | undefined> {
+    return usersApi.findUser(userId);
   }
 
   private formatDate(timestamp: number): string {

@@ -26,3 +26,12 @@ export type RootItem = {
   title: string;
   icon: string
 }
+
+export type ToastVariant = 'info' | 'success' | 'warning' | 'danger';
+
+export type ToastMessage = {
+  id: number;
+  text: string;
+  variant: ToastVariant;
+  details?: unknown;
+}
