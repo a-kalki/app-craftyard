@@ -1,27 +1,27 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { WithContextElement } from '../base/base-element';
-import type { UserUI } from '../base/types';
+import { BaseElement } from '../base/base-element';
+import type { UserDod } from '../../app-domain/dod';
 
 @customElement('user-panel')
-export class UserPanelWidget extends WithContextElement {
+export class UserPanelWidget extends BaseElement {
   @property({ type: Boolean }) isMobile = false;
-  @property({ type: Object }) user!: UserUI;
+  @property({ type: Object }) user!: UserDod;
 
   static styles = css`
     :host {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: white;
+      color: var(--sl-color-neutral-900);
     }
 
     .avatar {
-      background: white;
       border-radius: 50%;
       width: 32px;
       height: 32px;
       object-fit: cover;
+      box-shadow: var(--sl-shadow-small);
     }
 
     .info {
@@ -31,18 +31,18 @@ export class UserPanelWidget extends WithContextElement {
     }
 
     .name {
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .role {
       font-size: 0.75rem;
-      color: #ccc;
+      color: var(--sl-color-neutral-600);
     }
   `;
 
   render() {
     const { name, roles, profile } = this.user;
-    const avatarUrl = profile?.avatarUrl || `assets/app/${roles[0].toLowerCase() ?? 'hobbist'}.png'}`;
+    const avatarUrl = profile?.avatarUrl || `/assets/app/${roles[0].toLowerCase() ?? 'hobbist'}.png'}`;
 
     return html`
       <img class="avatar" src=${avatarUrl} alt="avatar" />

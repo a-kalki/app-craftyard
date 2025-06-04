@@ -1,4 +1,4 @@
-import type { UserDod } from "../../domain/user/dod";
+import type { UserDod } from "../../app-domain/dod";
 
 export type AppState = {
   currentUser: UserDod,
@@ -7,15 +7,22 @@ export type AppState = {
 
 export type UrlParams = Record<string, string>;
 
-export type RouteListener = (path: string, params: UrlParams) => void;
-
-export type ModuleState = {
-  currentUser: UserDod;
-  isMobile: boolean;
+export type RoutableElementAttrs = {
+  pattern: string,
+  tag: string,
 }
 
+export type RouteRedirect = {
+  from: string,
+  to: string,
+}
+
+export type RoutableElementEntry = {
+  matcher: (url: string) => UrlParams | undefined
+} & RoutableElementAttrs
+
 export type RootItem = {
-  root: string;
+  name: string;
   title: string;
-  urlPatterns: string[];
+  icon: string
 }

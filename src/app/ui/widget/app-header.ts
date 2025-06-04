@@ -1,27 +1,34 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './user-panel';
-import { WithContextElement } from '../base/base-element';
+import { BaseElement } from '../base/base-element';
 
 @customElement('app-header')
-export class AppHeaderWidget extends WithContextElement {
+export class AppHeaderWidget extends BaseElement {
   @property({ type: Boolean }) isMobile = false;
 
   static styles = css`
     :host {
       position: fixed;
       top: 0;
-      left: 0;
-      right: 0;
+      left: 50%;
+      transform: translateX(-50%);
       height: 56px;
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #333;
-      color: white;
+      background: var(--sl-color-neutral-0);
+      color: var(--sl-color-neutral-900);
       padding: 0 1rem;
+      box-shadow: var(--sl-shadow-large);
+
+      width: 100%;
+      max-width: 1200px; /* такое же ограничение, как у контейнера приложения */
+      box-sizing: border-box;
     }
+
+
 
     .left {
       display: flex;
@@ -35,6 +42,7 @@ export class AppHeaderWidget extends WithContextElement {
 
     .menu-button sl-icon {
       font-size: 1.5rem;
+      color: var(--sl-color-primary-600);
     }
 
     img {
@@ -69,8 +77,8 @@ export class AppHeaderWidget extends WithContextElement {
           : null}
         <img
           src=${this.isMobile
-            ? 'assets/app/logo_short.svg'
-            : 'assets/app/logo_full.svg'}
+            ? '/assets/app/logo_short.svg'
+            : '/assets/app/logo_full.svg'}
           alt="logo"
         />
       </div>

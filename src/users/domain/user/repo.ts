@@ -1,6 +1,6 @@
-import { JsonRepository } from "../../infra/json-repo";
+import type { UserDod } from "../../../app/app-domain/dod";
+import { JsonRepository } from "../../../app/infra/json-repo";
 import type { FindUserResult, RegisterUserCommand } from "./contracts";
-import type { UserDod, UserRole } from "./dod";
 
 const path = import.meta.path + '/users.json';
 

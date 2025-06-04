@@ -1,32 +1,64 @@
-import type { AppState, RootItem } from "./types";
+import type { AppState, RootItem, RoutableElementAttrs } from "./types";
 import { AppRouter } from "./app-router";
+import type { ModuleManifest } from "./run-types";
+import type { UserDod } from "../../app-domain/dod";
 import type { Module } from "./module";
-import type { UserDod } from "../../domain/user/dod";
 
 export class App {
   public router: AppRouter;
 
-  private modules: Module[] = [];
+  private moduleManifests: ModuleManifest[] = [];
   private appState: AppState;
 
-  constructor(modules: Module[], initialUser: UserDod, isMobile = false) {
-    this.modules = modules;
+  constructor(moduleManifests: ModuleManifest[], initialUser: UserDod) {
+    this.moduleManifests = moduleManifests;
     this.appState = {
       currentUser: initialUser,
-      isMobile,
+      isMobile: false,
     }
     this.router = new AppRouter();
+  }
+
+  init(): void {
+    (window as any).app = this;
+    this.registerRoutingComponents();
+    this.registerRedirects();
+    this.router.init();
+    this.moduleManifests.forEach(mm => mm.module.init(this));
   }
 
   setMobileState(state: boolean): void {
     this.appState.isMobile = state;
   }
 
-  public getState(): AppState {
-    return this.appState;
+  public getState(copy = true): AppState {
+    return copy ? { ...this.appState } : this.appState;
   }
 
-  public getSidebarItems(): RootItem[] {
-    return this.modules.flatMap(m => m.rootItems);
+  public getRootItems(): RootItem[] {
+    return this.moduleManifests.flatMap(mm => mm.module.rootItems);
+  }
+
+  private getModules(): Module[] {
+    return this.moduleManifests.flatMap(mm => mm.module);
+  }
+
+  private registerRedirects(): void {
+    this.getModules().forEach(m => {
+      if (m.redirects) {
+        m.redirects.forEach(r => this.router.registerRedirect(r));
+      }
+    });
+  }
+
+  private registerRoutingComponents(): void {
+    this.moduleManifests.forEach(mm => {
+      mm.componentCtors.forEach(Ctor => {
+        const routing = (Ctor as any).routingAttrs as RoutableElementAttrs | undefined;
+        if (routing) {
+          this.router.registerRoutableElement((Ctor as any).routingAttrs);
+        }
+      })
+    })
   }
 }

@@ -1,6 +1,6 @@
+import { BaseService } from "../../../../app/api/base/service";
 import type { FindUserCommand, FindUserResult } from "../../../domain/user/contracts";
 import { userRepo } from "../../../domain/user/repo";
-import { BaseService } from "../../base/service";
 
 class FindUserService extends BaseService<FindUserCommand> {
   commandName = "find-user" as const;

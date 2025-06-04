@@ -1,26 +1,30 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { html, css } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
-import type { App } from '../base/app';
+import { BaseElement } from '../base/base-element';
+import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 
 @customElement('app-page')
-export class AppPage extends LitElement {
-  @property({ type: Object })
-  app!: App;
-
-  @state()
-  private sidebarVisible = false;
-
-  private observer?: ResizeObserver;
-
+export class AppPage extends BaseElement {
   static styles = css`
     :host {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100%;
+      justify-content: stretch;
+      align-items: center; /* центрируем по горизонтали */
+      background: var(--app-background, white);
+    }
+
+    .container {
       display: grid;
       grid-template-rows: auto 1fr;
-      height: 100vh;
-      width: 100vw;
+      max-width: 1200px; /* ограничение ширины */
+      width: 100%;
+      height: 100%;
     }
 
     main {
@@ -46,6 +50,16 @@ export class AppPage extends LitElement {
     }
   `;
 
+  @state()
+  private sidebarVisible = false;
+
+  @state()
+  private currentTag: string | null = null;
+
+  private observer?: ResizeObserver;
+
+  private unsubscribeRouter?: () => void;
+
   connectedCallback(): void {
     super.connectedCallback();
     this.observer = new ResizeObserver((entries) => {
@@ -60,43 +74,63 @@ export class AppPage extends LitElement {
       }
     });
     this.observer.observe(document.body);
+
+    this.unsubscribeRouter = this.app.router.subscribe(this.handleUrlChanged.bind(this));
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
     this.observer?.disconnect();
+    this.unsubscribeRouter?.();
   }
 
   render() {
     const state = this.app.getState();
 
     return html`
-      <app-header
-        .isMobile=${state.isMobile}
-        @toggle-sidebar=${() => (this.sidebarVisible = !this.sidebarVisible)}
-      ></app-header>
+      <div class="container">
+        <app-header
+          .isMobile=${state.isMobile}
+          @toggle-sidebar=${() => (this.sidebarVisible = !this.sidebarVisible)}
+        ></app-header>
 
-      <main class=${state.isMobile ? 'mobile' : ''}>
-        ${!state.isMobile
-          ? html`<app-sidebar .items=${this.app.getSidebarItems()}></app-sidebar>`
-          : null}
+        <main class=${state.isMobile ? 'mobile' : ''}>
+          ${!state.isMobile
+            ? html`<app-sidebar .items=${this.app.getRootItems()}></app-sidebar>`
+            : null}
 
-        <div id="content">
-          <slot></slot>
-        </div>
-      </main>
+          <div id="content">
+            ${this.renderContent()}
+          </div>
+        </main>
 
-      <sl-drawer
-        placement="start"
-        ?open=${this.sidebarVisible}
-        @sl-after-hide=${() => (this.sidebarVisible = false)}
-      >
-        <app-sidebar .items=${this.app.getSidebarItems()}></app-sidebar>
-      </sl-drawer>
+        <sl-drawer
+          placement="start"
+          ?open=${this.sidebarVisible}
+          @sl-after-hide=${() => (this.sidebarVisible = false)}
+        >
+          <app-sidebar .items=${this.app.getRootItems()}></app-sidebar>
+        </sl-drawer>
+      </div>
     `;
   }
 
-  public getContentElement(): HTMLElement | null {
-    return this.renderRoot.querySelector('#content');
+  private renderContent() {
+    if (!this.currentTag || this.currentTag === '404 page') {
+      return staticHtml`<content-not-found></content-not-found>`;
+    }
+
+    const tag = this.currentTag;
+    if (!customElements.get(tag)) {
+      return staticHtml`<internal-error>internal error</internal-error>`;
+    }
+
+    const tagStatic = unsafeStatic(tag);
+    return staticHtml`<${tagStatic}></${tagStatic}>`;
+  }
+
+  private handleUrlChanged(): void {
+    const entry = this.app.router.getEntry();
+    this.currentTag = entry ? entry.tag : '404 page';
   }
 }

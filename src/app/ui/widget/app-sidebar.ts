@@ -1,10 +1,10 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { RootItem } from '../base/types';
-import { WithContextElement } from '../base/base-element';
+import { BaseElement } from '../base/base-element';
 
 @customElement('app-sidebar')
-export class AppSidebarWidget extends WithContextElement {
+export class AppSidebarWidget extends BaseElement {
   @property({ type: Array }) items: RootItem[] = [];
   @property({ type: String }) activeItem?: string;
 
@@ -12,68 +12,79 @@ export class AppSidebarWidget extends WithContextElement {
     :host {
       display: flex;
       flex-direction: column;
-      background: #444;
-      color: white;
+      background: var(--sl-color-neutral-100);
+      color: var(--sl-color-neutral-900);
       height: 100%;
       width: 100%;
       box-sizing: border-box;
       padding: 0;
       margin: 0;
+      border-right: 1px solid var(--sl-color-neutral-200);
     }
 
-    button {
-      background: none;
-      color: inherit;
-      border: none;
+    sl-button {
+      --sl-button-background-color: transparent;
+      --sl-button-color: var(--sl-color-neutral-900);
+      --sl-button-border-radius: 0;
       padding: 1rem;
       text-align: left;
-      cursor: pointer;
-      width: 100%;
-      border-bottom: 1px solid #555;
+      border-bottom: 1px solid var(--sl-color-neutral-200);
       transition: background 0.2s;
+      width: 100%;
     }
 
-    button:hover {
-      background: #555;
+    sl-button:hover {
+      background: var(--sl-color-primary-100);
     }
 
-    button.active {
-      background: #666;
+    sl-button[active] {
+      background: var(--sl-color-primary-200);
       font-weight: bold;
     }
   `;
 
+  private unsubscribe!: () => void;
+
   connectedCallback() {
     super.connectedCallback();
-
-    this.items.forEach(item => {
-      item.urlPatterns.forEach(pattern => {
-        this.app.router.registerPattern(pattern);
-      });
-    });
-
     if (!this.activeItem && this.items.length > 0) {
-      this.activeItem = this.items[0].root;
+      this.activeItem = this.items[this.items.length - 1].name;
     }
+
+    this.unsubscribe = this.app.router.subscribe(() => {
+      const path = this.app.router.getPath();
+      this.items.forEach(item => {
+        if(`/${item.name}` === path) {
+          this.activeItem = item.name;
+        }
+      })
+    })
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.unsubscribe?.();
   }
 
   render() {
     return html`
       ${this.items.map(
         item => html`
-          <button
-            class=${item.root === this.activeItem ? 'active' : ''}
-            @click=${() => this.select(item)}
+          <sl-button
+            ?active=${item.name === this.activeItem}
+            @click=${(e: MouseEvent) => this.select(e, item)}
           >
+            <sl-icon slot="prefix" name=${item.icon} style="margin-right: 0.5rem;"></sl-icon>
             ${item.title}
-          </button>
+          </sl-button>
         `
       )}
     `;
   }
 
-  private select(item: RootItem) {
-    this.activeItem = item.root;
-    this.app.router.navigate(item.root);
+  private select(e: MouseEvent, item: RootItem) {
+    e.preventDefault();
+    this.activeItem = item.name;
+    this.app.router.navigate(`/${item.name}`);
   }
 }

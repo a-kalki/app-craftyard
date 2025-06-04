@@ -1,4 +1,4 @@
-import type { UserDod } from "./dod";
+import type { UserDod } from "../../../app/app-domain/dod";
 
 export type FindUserCommand = {
   command: 'find-user',

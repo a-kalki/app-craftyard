@@ -1,79 +1,112 @@
-import type { RouteListener, UrlParams } from "./types";
+import type { RoutableElementAttrs, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
 
 export class AppRouter {
-  private listeners: RouteListener[] = [];
-  private matchers: { pattern: string; matcher: (url: string) => UrlParams | null }[] = [];
+  private listeners: (() => void)[] = [];
+  private entries: RoutableElementEntry[] = [];
+  private redirects: RouteRedirect[] = [];
 
   constructor() {
-    window.addEventListener('popstate', this.handlePopState);
+    window.addEventListener('popstate', () => this.notify());
+  }
+
+  init(): void {
+    this.initRedirect();
   }
 
   // Навигация
   navigate(path: string) {
-    history.pushState({}, '', path);
+    const resolved = this.resolveRedirect(path);
+    history.pushState({}, '', resolved);
     this.notify();
   }
 
   // Подписка на изменения url
-  subscribe(listener: RouteListener) {
+  subscribe(listener: () => void) {
     this.listeners.push(listener);
-    listener(this.getPath(), this.getParams());
+    listener();
     return () => {
       this.listeners = this.listeners.filter(l => l !== listener);
     };
   }
 
   // Регистрация шаблонов путей для парсинга параметров
-  registerPattern(pattern: string) {
+  registerRoutableElement(attrs: RoutableElementAttrs): void {
     const keys: string[] = [];
     const regex = new RegExp(
       '^' +
-        pattern.replace(/\/:([^\/]+)/g, (_, key) => {
+        attrs.pattern.replace(/\/:([^\/]+)/g, (_, key) => {
           keys.push(key);
           return '/([^/]+)';
         }) +
         '$'
     );
 
-    const matcher = (url: string): UrlParams | null => {
+    const matcher = (url: string): UrlParams | undefined => {
       const match = url.match(regex);
-      if (!match) return null;
+      if (!match) return;
       const values = match.slice(1);
       const params: UrlParams = {};
       keys.forEach((k, i) => (params[k] = decodeURIComponent(values[i])));
       return params;
     };
 
-    this.matchers.push({ pattern, matcher });
+    this.entries.push({ ...attrs, matcher });
+  }
+
+  registerRedirect(redirect: RouteRedirect) {
+    this.redirects.push(redirect);
   }
 
   // Получение текущего пути
   getPath() {
-    return window.location.pathname;
+    return this.removeTrailingSlash(window.location.pathname);
   }
 
   // Получение параметров текущего пути
   getParams(): UrlParams {
-    for (const { matcher } of this.matchers) {
-      const result = matcher(this.getPath());
-      if (result) return result;
+    return this.getEntry().matcher(this.getPath()) as UrlParams;
+  }
+
+  getEntry(): RoutableElementEntry {
+    const path = this.getPath();
+    for (const entry of this.entries) {
+      const result = entry.matcher(path);
+      if (result) return entry;
     }
-    return {};
+    throw Error('Routing component not found: ' + path);
   }
 
   // Уничтожение (например, при hot reload)
   destroy() {
-    window.removeEventListener('popstate', this.handlePopState);
+    window.removeEventListener('popstate', this.notify);
     this.listeners = [];
   }
 
-  // Внутренние методы
-  private handlePopState = () => this.notify();
+  private resolveRedirect(path: string): string {
+    const clean = this.removeTrailingSlash(path);
+    for (const { from, to } of this.redirects) {
+      if (clean === this.removeTrailingSlash(from)) {
+        return this.removeTrailingSlash(to);
+      }
+    }
+    return clean;
+  }
+
+  private initRedirect(): void {
+    const current = this.getPath();
+    const redirected = this.resolveRedirect(current);
+
+    if (current !== redirected) {
+      this.navigate(redirected);
+    }
+  }
+
+  private removeTrailingSlash(path: string): string {
+    return path.endsWith('/') ? path.slice(0, -1) : path;
+  }
 
   private notify() {
-    const path = this.getPath();
-    const params = this.getParams();
-    this.listeners.forEach(listener => listener(path, params));
+    this.listeners.forEach(listener => listener());
   }
 }
 

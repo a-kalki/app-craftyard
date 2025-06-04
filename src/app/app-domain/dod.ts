@@ -1,6 +1,6 @@
-import { USER_ROLES_MAP } from './constants';
+import { USER_ROLE_TITLES } from './constants';
 
-export type UserRole = keyof typeof USER_ROLES_MAP;
+export type UserRole = keyof typeof USER_ROLE_TITLES;
 
 export type UserProfile = {
   skills: Record<string, string>,
