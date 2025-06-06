@@ -5,6 +5,24 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  height: 100%;
   font-family: "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Контейнер, куда вставляется весь app (login-page, app-page и т.д.) */
+#root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Адаптация под мобильные устройства */
+@media (max-width: 768px) {
+  #root {
+    padding: 0.5rem;
+  }
 }

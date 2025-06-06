@@ -2,8 +2,10 @@ import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { UserDod } from '../../../app/app-domain/dod';
-import { USER_ROLE_TITLES, USER_ROLE_ICONS } from '../../../app/app-domain/constants';
 import { usersApi } from '../users-api';
+import { UserAR } from '../../domain/user/aroot';
+import { userAccessRules } from '../../domain/user/rules/access';
+import type { FindUserResult } from '../../../app/ui/base-run/run-types';
 
 @customElement('user-details')
 export class UserDetailsEntity extends BaseElement {
@@ -22,8 +24,37 @@ export class UserDetailsEntity extends BaseElement {
     .header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 1rem;
       margin-bottom: 1rem;
+    }
+
+    .info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      min-height: 72px; /* подгоняем под высоту .avatar */
+    }
+
+    .name-wrapper {
+      margin-bottom: 1.5rem;
+    }
+
+    .edit-button {
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-end;
+    }
+
+    .actions sl-button {
+      white-space: nowrap;
     }
 
     .avatar {
@@ -47,30 +78,11 @@ export class UserDetailsEntity extends BaseElement {
       flex-wrap: wrap;
     }
 
-    .skills-list {
-      margin-top: 1rem;
-    }
-
-    .skill-item {
-      margin-bottom: 0.75rem;
-    }
-
-    .skill-name {
-      font-weight: 600;
-      color: var(--sl-color-primary-700);
-    }
-
-    .skill-desc {
-      margin-left: 1rem;
-      color: var(--sl-color-neutral-700);
-      font-size: 0.9rem;
-    }
-
     sl-divider {
       margin: 1rem 0;
     }
 
-    .joined-date {
+    .user-option-text {
       font-size: 0.9rem;
       color: var(--sl-color-neutral-600);
       margin-top: 0.5rem;
@@ -85,25 +97,38 @@ export class UserDetailsEntity extends BaseElement {
   @state()
   private user: UserDod | null = null;
 
+  @state()
+  private canEdit: boolean = false;
+
+
   async connectedCallback() {
     super.connectedCallback();
     const userId = this.getUserId();
-    const user = await this.loadUser(userId);
-    if (!user) {
+    const result = await this.loadUser(userId);
+    if (!result.status) {
       this.app.error('Не удалось загрузать данные пользователя', {
         userId,
-        description: 'Пользователя с таким id не существует в сервисе'
+        description: 'Пользователя с таким id не существует'
       });
       return;
     }
-    this.user = user;
+    this.user = result.success;
+
+    const currentUser = this.app.getState().currentUser;
+    if (currentUser) {
+      const currentAR = new UserAR(currentUser);
+      const targetAR = new UserAR(this.user);
+      const isSelf = userAccessRules.canEditSelf(currentAR, targetAR);
+      const isKeeterEditingOther = userAccessRules.canKeeterEditOther(currentAR, targetAR);
+      this.canEdit = (isSelf || isKeeterEditingOther);
+    }
   }
 
   protected getUserId(): string {
     return this.app.router.getParams().userId;
   }
 
-  private async loadUser(userId: string): Promise<UserDod | undefined> {
+  private async loadUser(userId: string): Promise<FindUserResult> {
     return usersApi.findUser(userId);
   }
 
@@ -113,43 +138,62 @@ export class UserDetailsEntity extends BaseElement {
   }
 
   render() {
+    this.app.getState().currentUser.id;
     if (!this.user) return html`<sl-spinner label="Загрузка пользователя..." style="width:48px; height:48px;"></sl-spinner>`;
 
-    const { profile, roles, joinedAt } = this.user;
+    const { profile, roleCounters: roles, joinedAt } = this.user;
     const skillsEntries = Object.entries(profile.skills ?? {});
 
     return html`
       <div class="header">
-        <img class="avatar" src=${profile.avatarUrl} alt="Аватар пользователя" />
-        <div>
-          <div class="name">${this.user.name}</div>
-          <div class="roles">
-            ${roles.map(role => html`
-              <sl-tag
-                size="small"
-                variant="primary"
-                pill
-                >${USER_ROLE_TITLES[role] ?? role}</sl-tag
-              >
-            `)}
+        <user-avatar .user=${this.user} size="150"></user-avatar>
+        <div class="info">
+          <div class="name-wrapper">
+            <div class="name">${this.user.name}</div>
           </div>
-          <div class="joined-date">Присоединился: ${this.formatDate(joinedAt)}</div>
+          <div>
+            <div class="roles">
+              ${roles.map(role => html`<role-tag .role=${role}></role-tag>`)}
+            </div>
+            <div class="user-option-text">Присоединился: ${this.formatDate(joinedAt)}</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          ${this.user.telegramNickname ? html`
+            <sl-button
+              variant="primary"
+              href="https://t.me/${this.user.telegramNickname}"
+              target="_blank"
+            >
+              <sl-icon name="telegram"></sl-icon>
+              Написать
+            </sl-button>
+          ` : null}
+
+          ${this.canEdit ? html`
+            <sl-button variant="neutral" @click=${this.onEditClick}>
+              <sl-icon name="pencil"></sl-icon>
+               Изменить
+            </sl-button>
+          ` : null}
         </div>
       </div>
 
       <sl-divider></sl-divider>
 
-      <section class="skills-list">
+      <section>
         <h3>Навыки и специализации</h3>
         ${skillsEntries.length === 0
-          ? html`<p>Навыки отсутствуют</p>`
+          ? html`<p>Навыки не указаны</p>`
           : skillsEntries.map(([skill, desc]) => html`
-            <div class="skill-item">
-              <div class="skill-name">${skill}</div>
-              <div class="skill-desc">${desc}</div>
-            </div>
+            <sl-details summary=${skill}>${desc}</sl-details>
           `)}
       </section>
     `;
+  }
+
+  private onEditClick() {
+    this.app.router.navigate(`/users/${this.user!.id}/edit`);
   }
 }

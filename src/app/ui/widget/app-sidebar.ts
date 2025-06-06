@@ -9,37 +9,23 @@ export class AppSidebarWidget extends BaseElement {
   @property({ type: String }) activeItem?: string;
 
   static styles = css`
-    :host {
-      display: flex;
-      flex-direction: column;
-      background: var(--sl-color-neutral-100);
-      color: var(--sl-color-neutral-900);
-      height: 100%;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 0;
-      margin: 0;
-      border-right: 1px solid var(--sl-color-neutral-200);
+    sl-tree {
+      padding: 0.5rem;
     }
 
-    sl-button {
-      --sl-button-background-color: transparent;
-      --sl-button-color: var(--sl-color-neutral-900);
-      --sl-button-border-radius: 0;
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--sl-color-neutral-200);
+    sl-tree-item::part(base) {
+      padding: 0.75rem;
+      border-radius: var(--sl-border-radius-small);
       transition: background 0.2s;
-      width: 100%;
     }
 
-    sl-button:hover {
-      background: var(--sl-color-primary-100);
-    }
-
-    sl-button[active] {
+    sl-tree-item[selected]::part(base) {
       background: var(--sl-color-primary-200);
       font-weight: bold;
+    }
+
+    sl-tree-item:not([selected]):hover::part(base) {
+      background: var(--sl-color-primary-100);
     }
   `;
 
@@ -68,22 +54,24 @@ export class AppSidebarWidget extends BaseElement {
 
   render() {
     return html`
-      ${this.items.map(
-        item => html`
-          <sl-button
-            ?active=${item.name === this.activeItem}
-            @click=${(e: MouseEvent) => this.select(e, item)}
-          >
-            <sl-icon slot="prefix" name=${item.icon} style="margin-right: 0.5rem;"></sl-icon>
-            ${item.title}
-          </sl-button>
-        `
-      )}
+      <sl-tree>
+        ${this.items.map(
+          item => html`
+            <sl-tree-item
+              ?selected=${item.name === this.activeItem}
+              @click=${(e: MouseEvent) => this.handleSelect(e, item)}
+            >
+              <sl-icon name=${item.icon}></sl-icon>
+              ${item.title}
+            </sl-tree-item>
+          `
+        )}
+      </sl-tree>
     `;
   }
 
-  private select(e: MouseEvent, item: RootItem) {
-    e.preventDefault();
+  private handleSelect(event: MouseEvent, item: RootItem) {
+    event.preventDefault();
     this.activeItem = item.name;
     this.app.router.navigate(`/${item.name}`);
   }

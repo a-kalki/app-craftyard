@@ -16,14 +16,6 @@ export class UserPanelWidget extends BaseElement {
       color: var(--sl-color-neutral-900);
     }
 
-    .avatar {
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      object-fit: cover;
-      box-shadow: var(--sl-shadow-small);
-    }
-
     .info {
       display: flex;
       flex-direction: column;
@@ -41,11 +33,10 @@ export class UserPanelWidget extends BaseElement {
   `;
 
   render() {
-    const { name, roles, profile } = this.user;
-    const avatarUrl = profile?.avatarUrl || `/assets/app/${roles[0].toLowerCase() ?? 'hobbist'}.png'}`;
+    const { name, roleCounters: roles, profile } = this.user;
 
     return html`
-      <img class="avatar" src=${avatarUrl} alt="avatar" />
+      <user-avatar .user=${this.user} shape="circle"></user-avatar>
       ${!this.isMobile
         ? html`
             <div class="info">
@@ -54,6 +45,10 @@ export class UserPanelWidget extends BaseElement {
             </div>
           `
         : null}
+        <sl-divider></sl-divider>
+        <sl-button variant="text" @click=${this.app.logout}>
+          <sl-icon name="box-arrow-right"></sl-icon>
+        </sl-button>
     `;
   }
 }

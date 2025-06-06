@@ -1,4 +1,4 @@
-import type { UserRole } from "./dod";
+import type { UserRoleNames } from "./dod";
 
 export const root = 'users';
 
@@ -7,26 +7,42 @@ export const USER_ROLE_TITLES = {
   CUSTOMER: 'Заказчик',
   HOBBYIST: 'Хоббист',
   MASTER: 'Мастер',
+  MASTER_PLUS: 'Мастер+',
   MENTOR: 'Ментор',
-  KEETER: 'Хранитель'
+  MENTOR_PLUS: 'Ментор+',
+  KEETER: 'Хранитель',
+  SUPPORT: 'Поддержка',
 }
 
-export const USER_ROLE_DESCRIPTIONS: Record<UserRole, string> = {
-  ONLOOKER: 'Зарегестрировался в сообществе, но пока не предпринимал активных действий',
-  CUSTOMER: 'Сделал хотя бы одну покупку Изделия у Мастера (в Мастерской)',
-  HOBBYIST: 'Хотя бы один раз пришел в мастерскую (сделал Изделие или прошел мастер класс)',
-  MASTER: 'Произвел хотя бы одно Изделие которое было продано',
-  MENTOR: 'Провел хотя бы один мастер класс или курс',
-  KEETER: 'Является работником коворкинг мастерской и служит людям'
+export const USER_ROLE_DESCRIPTIONS: Record<UserRoleNames, string> = {
+  ONLOOKER: 'Зарегестрировался в сообществе и не предпринимал активных действий',
+  CUSTOMER: 'Сделал одну или более покупок Изделий или Мастер классов (курсов)',
+  HOBBYIST: 'Поработал в мастерской хотя бы один раз в режиме Хобби',
+  MASTER: 'Произвел и продал хотя бы одно изделиe',
+  MASTER_PLUS: 'Подготовил чертежи и загрузил в систему хотя бы одного изделия',
+  MENTOR: 'Провел хотя бы один мастер класс',
+  MENTOR_PLUS: 'Подготовил программу и загрузил в систему хотя бы одного мастер класса (курса)',
+  KEETER: 'Является работником коворкинг мастерской. Вопросы по мастерской, это к нему',
+  SUPPORT: 'Человек имеющий расширенный доступ в приложении. Если есть вопросы, то обращайтесь к нему'
 }
 
-export const USER_ROLE_ICONS: Record<UserRole, string> = {
+export const USER_ROLE_ICONS: Record<UserRoleNames, string> = {
   ONLOOKER: 'eye',
   CUSTOMER: 'cart',
-  HOBBYIST: 'hammer',
-  MASTER: 'badge-check',
-  MENTOR: 'graduation-cap',
-  KEETER: 'shield-check'
+  HOBBYIST: 'wrench',
+  MASTER: 'wrench-adjustable',
+  MASTER_PLUS: 'wrench-adjustable-circle',
+  MENTOR: 'person',
+  MENTOR_PLUS: 'people',
+  KEETER: 'tools',
+  SUPPORT: 'headset'
 };
 
-export const USER_ROLES: UserRole[] = Object.keys(USER_ROLE_TITLES) as UserRole[];
+
+export const USER_ROLES: UserRoleNames[] = Object.keys(USER_ROLE_TITLES) as UserRoleNames[];
+
+export function getMaxPriorityRole(roles: UserRoleNames[]): UserRoleNames {
+  return roles
+    .filter((role): role is UserRoleNames => USER_ROLES.includes(role))
+    .sort((a, b) => USER_ROLES.indexOf(b) - USER_ROLES.indexOf(a))[0];
+}

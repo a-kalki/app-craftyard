@@ -1,25 +1,39 @@
+import type { Command } from "../../api/base/types";
 import type { App } from "./app";
+import { AppNotifier } from "./app-notifier";
 
 const API_PREFIX = '/api';
 
 export abstract class RootApi {
   protected abstract rootEndpoint: string;
 
-  protected app!: App;
+  protected app?: App;
+
+  // до загрузки приложения, app.error() не доступен.
+  // поэтому у rootApi свой notifier
+  protected notifier = new AppNotifier();
 
   protected async post<T>(
-    body?: unknown,
+    body: Command,
     customHeaders?: HeadersInit
   ): Promise<T> {
     try {
-      return this.request<T>({
+      // если приложение еще не инициализировано, то значит пользователь не залогинен
+      if (!this.app) {
+        this.app = (window as any).app;
+      }
+      const currUserId = this.app?.getState()?.currentUser?.id ?? 'user not logined';
+
+      const response = await this.request({
         method: 'POST',
-        body: body ? JSON.stringify(body) : undefined,
+        body: JSON.stringify({ ...body, currUserId }),
         headers: customHeaders,
       });
 
+      return response.json();
+
     } catch (err) {
-      this.app.error('При загрузке данных произошла ошибка', {
+      this.notifier.error('При загрузке данных произошла ошибка', {
         url: this.getPath(),
         body,
         error: err,
@@ -28,14 +42,10 @@ export abstract class RootApi {
     }
   }
 
-  protected async request<T>(options: RequestInit = {}): Promise<T> {
-    if (this.app === undefined) {
-      this.app = (window as any).app;
-    }
+  protected async request(options: RequestInit = {}): Promise<Response> {
     const response = await fetch(this.getPath(), {
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Id': this.app.getState().currentUser.id,
         ...options.headers,
       },
       ...options,
@@ -43,22 +53,26 @@ export abstract class RootApi {
 
     if (response.ok) {
       if (response.status !== 200) {
-        this.app.error('При загрузке данных произошла ошибка', {
+        this.notifier.error('При загрузке данных произошла ошибка', {
           status: response.status,
           statusText: response.statusText,
         })
         throw new Error(`HTTP ${response.status} ${response.statusText}`);
       }
-      return response.json();
+      return response;
     }
 
-    this.app.error('При загрузке данных произошла ошибка', {
+    this.notifier.error('При загрузке данных произошла ошибка', {
       status: response.status,
       statusText: response.statusText,
     })
     throw new Error(
       `HTTP ${response.status} ${response.statusText}`
     );
+  }
+
+  protected error(text: string, details?: unknown) {
+    
   }
 
   protected getPath(): string {

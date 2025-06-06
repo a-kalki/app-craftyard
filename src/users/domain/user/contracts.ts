@@ -1,4 +1,6 @@
 import type { UserDod } from "../../../app/app-domain/dod";
+import type { Result } from "../../../app/app-domain/types";
+import type { RegisterUserDto } from "../../../app/ui/base-run/run-types";
 
 // ========== find-user ============
 export type FindUserCommand = {
@@ -6,20 +8,29 @@ export type FindUserCommand = {
   dto: { id: string },
 };
 
-export type FindUserResult = UserDod | undefined;
-
 // ========== get-users ============
 export type GetUsersCommand = {
   command: 'get-users',
   dto: Record<never, unknown>
 };
 
-export type GetUsersResult = UserDod[];
+export type GetUsersResult = Result<UserDod[], never>;
 
 // ========== register-user ============
 export type RegisterUserCommand = {
   command: 'register-user',
-  dto: Omit<UserDod, 'joinedAt'>
+  dto: RegisterUserDto
 };
 
-export type RegisterUserResult = void;
+// ========== edit-user ============
+export type EditUserCommand = {
+  command: 'edit-user',
+  dto: Pick<UserDod, 'id' | 'name' | 'telegramNickname' | 'profile'>
+};
+
+export type EditUserByKeeterCommand = {
+  command: 'edit-user',
+  dto: EditUserCommand['dto'] & Pick<UserDod, 'roles'> 
+};
+
+export type EditUserResult = Result<'success', string>;

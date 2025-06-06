@@ -1,9 +1,11 @@
 import type { AppState, RootItem, RoutableElementAttrs, ToastVariant } from "./types";
 import { AppRouter } from "./app-router";
-import type { ModuleManifest } from "./run-types";
+import type { ModuleManifest } from "./types";
 import type { UserDod } from "../../app-domain/dod";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
+import { currentUserKey, localStore } from "./localstorage";
+import { AppDialog, type DialogOptions } from "./app-dialog";
 
 export class App {
   public router: AppRouter;
@@ -11,14 +13,17 @@ export class App {
   private moduleManifests: ModuleManifest[] = [];
   private appState: AppState;
   private appNotifier = new AppNotifier();
+  private appDialog = new AppDialog();
 
-  constructor(moduleManifests: ModuleManifest[], initialUser: UserDod) {
+  constructor(moduleManifests: ModuleManifest[], initialUser: UserDod, isTelegramMiniApp: boolean) {
     this.moduleManifests = moduleManifests;
     this.appState = {
       currentUser: initialUser,
       isMobile: false,
+      isTelegramMiniApp
     }
     this.router = new AppRouter();
+    localStore.set(currentUserKey, initialUser);
   }
 
   init(): void {
@@ -29,8 +34,18 @@ export class App {
     this.moduleManifests.forEach(mm => mm.module.init(this));
   }
 
+  logout(): void {
+    localStore.clear();
+    (window as any).app = undefined;
+    window.dispatchEvent(new Event('app-logout'));
+  }
+
   setMobileState(state: boolean): void {
     this.appState.isMobile = state;
+  }
+
+  showDialog(options: DialogOptions): Promise<boolean> {
+    return this.appDialog.show(options);
   }
 
   info(text: string, options: { variant?: ToastVariant; details?: unknown } = {}) {

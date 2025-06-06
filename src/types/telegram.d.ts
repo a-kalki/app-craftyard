@@ -5,6 +5,7 @@ declare global {
     Telegram: {
       WebApp: TelegramWebApp;
     };
+    onTelegramAuth: (user: TelegramAuthUser) => void;
   }
 
   interface TelegramWebApp {

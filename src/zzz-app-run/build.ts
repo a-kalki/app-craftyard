@@ -6,9 +6,10 @@ const projectDir = cwd();
 const publicDir = join(projectDir, 'src/zzz-app-run/public');
 const staticDir = join(projectDir, 'src/zzz-app-run/static');
 const assetsDir = join(publicDir, 'assets');
+const shoelaceAssetsDir = join(assetsDir, 'assets');
 
 await rmdir(publicDir, { recursive: true });
-await mkdir(assetsDir, { recursive: true });
+await mkdir(shoelaceAssetsDir, { recursive: true });
 
 await Bun.build({
   entrypoints: ['src/zzz-app-run/bootstrap.ts'],
@@ -21,7 +22,7 @@ await Bun.build({
 
 // 💡 Копируем Shoelace assets (папка assets внутри assetsDir)
 const shoelaceSource = join(projectDir, 'node_modules/@shoelace-style/shoelace/dist/assets');
-await cp(shoelaceSource, assetsDir, { recursive: true });
+await cp(shoelaceSource, shoelaceAssetsDir, { recursive: true });
 
 // Копируем стили с указанием имени файла
 await cp(join(staticDir, 'global.css'), join(assetsDir, 'global.css'));
@@ -29,7 +30,7 @@ await cp('node_modules/@shoelace-style/shoelace/dist/themes/light.css', join(ass
 
 // Копируем основные файлы в publicDir (вне assets)
 await cp(join(staticDir, 'index.html'), join(publicDir, 'index.html'));
-await cp(join(staticDir, 'favicon.ico'), join(publicDir, 'favicon.ico'));
+await cp(join(staticDir, 'favicon.svg'), join(publicDir, 'favicon.svg'));
 
 // Копируем статики приложения (в assets)
 const appStaticSource = join(projectDir, 'src/app/ui/page/assets');

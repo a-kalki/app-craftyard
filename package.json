@@ -9,6 +9,7 @@
   "private": false,
   "type": "commonjs",
   "scripts": {
+    "tslint": "tsc --noEmit",
     "bld": "bun run ./src/zzz-app-run/build.ts --mode=dev",
     "bld-prod": "bun run ./scripts/build.ts --mode=prod",
     "serve": "bun run bld && bun run ./src/zzz-app-run/server.ts"
@@ -28,7 +29,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@vaadin/router": "^2.0.0",
     "fs-extra": "^11.3.0",
     "lit": "^3.3.0",
     "telegraf": "^4.16.3"

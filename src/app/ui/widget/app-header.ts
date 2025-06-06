@@ -76,9 +76,7 @@ export class AppHeaderWidget extends BaseElement {
             `
           : null}
         <img
-          src=${this.isMobile
-            ? '/assets/app/logo_short.svg'
-            : '/assets/app/logo_full.svg'}
+          src="/assets/app/logo_full.svg"}
           alt="logo"
         />
       </div>

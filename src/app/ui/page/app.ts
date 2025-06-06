@@ -5,6 +5,7 @@ import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
 import { BaseElement } from '../base/base-element';
 import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
+import { mobileWidth } from '../constants';
 
 @customElement('app-page')
 export class AppPage extends BaseElement {
@@ -65,7 +66,7 @@ export class AppPage extends BaseElement {
     this.observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const width = entry.contentRect.width;
-        const isMobile = width < 768;
+        const isMobile = width < mobileWidth;
         const currentState = this.app.getState();
         if (currentState.isMobile !== isMobile) {
           this.app.setMobileState(isMobile);

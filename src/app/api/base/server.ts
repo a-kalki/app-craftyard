@@ -1,9 +1,10 @@
 import { serve } from 'bun';
-import { join } from 'path';
+import { extname, join } from 'path';
 import {} from '../../../app/bot/app'
 import type { Command } from './types';
 import type { Module } from './module';
 import type { BaseService } from './service';
+import { contentTypes } from './constants';
 
 const PORT = 8000;
 
@@ -42,38 +43,58 @@ export abstract class Server {
             if (req.method !== 'POST') {
               throw Error('not supported method: ' + req.method);
             }
-            return self.handleApi(path, await req.json())
+
+            const bodyWithUserId = await req.json();
+            const { currUserId, ...body } = bodyWithUserId;
+
+            if (!currUserId) {
+              throw Error('not found user id for current user');
+            }
+
+            return self.handleApi(path, body, currUserId);
           }
+
           else if (path.startsWith('/bot')) {
             throw Error('not implemented');
           }
-          else if (path === '/favicon.ico') {
+
+          else if (path === '/favicon.svg') {
             filePath = join(publicDir, path);
           }
+
           else if (path.startsWith('/assets')) {
             filePath = join(publicDir, path);
           }
+
           else {
             filePath = join(publicDir, '/index.html');
           }
 
+          const ext = extname(filePath);
+          const contentType = contentTypes[ext] ?? 'application/octet-stream';
+
           const file = Bun.file(filePath);
-          return new Response(file);
+          return new Response(file, {
+            headers: {
+              'Content-Type': contentType,
+            },
+          });
+
         } catch (e) {
           console.log('error: ', e);
           status = 500;
           return new Response('Not found', { status: 500 });
+
         } finally {
           console.log(req.method, req.url, status);
         }
-
-      },
+      }
     });
 
     console.log(`Listening on http://localhost:${port}`);
   }
 
-  protected async handleApi(path: string, dto: Command): Promise<Response> {
+  protected async handleApi(path: string, dto: Command, currUserId: string): Promise<Response> {
     const rootName = path.split('/')[2];
 
     const services = this.rootServices[rootName];
@@ -90,7 +111,8 @@ export abstract class Server {
     if (!service) {
       throw Error('not finded service by command name: ' + dto.command);
     }
-    const result = await service.execute(dto);
+    
+    const result = await service.execute(dto, currUserId);
     return this.toJsonResponse(result);
   }
 

@@ -35,13 +35,9 @@ export class UsersWidget extends BaseElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    this.users = await this.loadUsers();
+    const result = await usersApi.getUsers();
+    this.users = result.status ? result.success : [];
   }
-
-  private async loadUsers(): Promise<UserDod[]> {
-    return usersApi.getUsers();
-  }
-
 
   render() {
     return html`
@@ -50,16 +46,10 @@ export class UsersWidget extends BaseElement {
           (user) => html`
             <user-card
               .user=${user}
-              @click=${(e: MouseEvent) => this.handleSelectCard(e, user.id)}
             ></user-card>
           `
         )}
       </div>
     `;
-  }
-
-  private handleSelectCard(e: MouseEvent, id: string): void {
-    e.preventDefault();
-    this.app.router.navigate(`/users/${id}`);
   }
 }

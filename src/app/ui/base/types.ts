@@ -1,8 +1,16 @@
 import type { UserDod } from "../../app-domain/dod";
+import type { BaseElement } from "./base-element";
+import type { Module } from "./module";
 
 export type AppState = {
   currentUser: UserDod,
   isMobile: boolean,
+  isTelegramMiniApp: boolean,
+}
+
+export type ModuleManifest = {
+  module: Module,
+  componentCtors: (typeof BaseElement)[];
 }
 
 export type UrlParams = Record<string, string>;
@@ -13,8 +21,8 @@ export type RoutableElementAttrs = {
 }
 
 export type RouteRedirect = {
-  from: string,
-  to: string,
+  from: string, // этот атрибут используется как роутинг, поэтому слеш нужен '/home'
+  to: string, // этот атрибут используется как роутинг, поэтому слеш нужен '/my-profile'
 }
 
 export type RoutableElementEntry = {
@@ -22,7 +30,7 @@ export type RoutableElementEntry = {
 } & RoutableElementAttrs
 
 export type RootItem = {
-  name: string;
+  name: string; // этот атрибут используется как имя, слеш не нужен 'users'
   title: string;
   icon: string
 }
