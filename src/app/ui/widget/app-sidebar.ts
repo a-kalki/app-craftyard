@@ -7,6 +7,8 @@ import { BaseElement } from '../base/base-element';
 export class AppSidebarWidget extends BaseElement {
   @property({ type: Array }) items: RootItem[] = [];
   @property({ type: String }) activeItem?: string;
+  @property({ type: Boolean }) isMobile = false;
+  @property({ type: Function }) closeSidebar = () => {};
 
   static styles = css`
     sl-tree {
@@ -74,5 +76,10 @@ export class AppSidebarWidget extends BaseElement {
     event.preventDefault();
     this.activeItem = item.name;
     this.app.router.navigate(`/${item.name}`);
+    
+    // Закрываем sidebar в мобильном режиме
+    if (this.isMobile) {
+      this.closeSidebar();
+    }
   }
 }

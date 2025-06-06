@@ -20,15 +20,15 @@ export class RegistrationPage extends LitElement {
     }
 
     img.avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
+      width: 98px;
+      height: 98px;
+      border-radius: var{(--sl-border-radius-medium)};
     }
   `;
 
   @property({ type: String }) telegramId!: string;
   @property({ type: String }) telegramName!: string;
-  @property({ type: String }) telegramNickname!: string;
+  @property({ type: String }) telegramNickname?: string;
   @property({ type: String }) avatarUrl?: string;
 
   @property({ type: Object }) usersApi!: UserApiInterface;
@@ -39,6 +39,7 @@ export class RegistrationPage extends LitElement {
 
   private async handleRegister() {
     this.submitting = true;
+    this.checkValidity();
 
     try {
       const registerResult = await this.usersApi.registerUser({
@@ -70,39 +71,64 @@ export class RegistrationPage extends LitElement {
     }
   }
 
+  private checkValidity(): boolean {
+    const inputs: NodeListOf<HTMLInputElement | HTMLTextAreaElement> =
+      this.renderRoot.querySelectorAll('sl-input, sl-textarea');
+
+    let allValid = true;
+    for (const input of Array.from(inputs)) {
+      if ('reportValidity' in input && !input.reportValidity()) {
+        allValid = false;
+      }
+    }
+
+    if (!allValid) {
+      this.appNotifier.info('Заполните все обязательные поля', { variant: 'warning' });
+      return false;
+    }
+    return true;
+  }
+
   render() {
     return html`
       <div class="form">
 
-        <sl-input label="Telegram ID" .value=${this.telegramId} disabled></sl-input>
+        <sl-input label="Telegram ID" required .value=${this.telegramId} disabled></sl-input>
 
         <sl-input
           label="Имя"
+          required
+          help-text="Как к тебе обращаться?"
           .value=${this.telegramName}
           @sl-input=${(e: CustomEvent) => {
             this.telegramName = (e.target as HTMLInputElement).value;
           }}
         ></sl-input>
 
-        <sl-input
-          label="Никнейм"
-          .value=${this.telegramNickname}
-          @sl-input=${(e: CustomEvent) => {
-            this.telegramNickname = (e.target as HTMLInputElement).value;
-          }}
-        ></sl-input>
+        ${!this.telegramNickname ? html`
+          <sl-input
+            label="Никнейм Telegram"
+            disabled
+            help-text="Никнейм не указан. Если это сделать (позже), то к вам могут обращаться напрямую"
+            .value=
+          ></sl-input>
+        `: ''}
 
-        <sl-input
-          label="Аватар URL"
-          .value=${this.avatarUrl ?? ''}
-          @sl-input=${(e: CustomEvent) => {
-            this.avatarUrl = (e.target as HTMLInputElement).value;
-          }}
-        ></sl-input>
+        <div class="avatar-row">
+          <div class="avatar-input">
+            <sl-input
+              label="Аватар URL"
+              help-text="Укажи свой аватар (ссылку)!"
+              style="height: 100%;"
+              .value=${this.avatarUrl}
+              @sl-input=${(e: CustomEvent) => this.avatarUrl = (e.target as HTMLInputElement).value}
+            ></sl-input>
+          </div>
 
-        ${this.avatarUrl
-          ? html`<img class="avatar" src="${this.avatarUrl}" alt="avatar" />`
-          : null}
+          ${this.avatarUrl && this.avatarUrl.startsWith('http') ? html`
+            <img class="avatar" src=${this.avatarUrl} />
+          ` : ''}
+        </div>
 
         <sl-button
           variant="primary"

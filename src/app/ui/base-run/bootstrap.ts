@@ -169,7 +169,7 @@ export class Bootstrap {
 
     const appDialog = document.createElement('sl-dialog');
     appDialog.id = 'app-dialog';
-    document.body.appendChild(appDialog);
+    root.appendChild(appDialog);
 
     const appToaster = document.createElement('app-toaster');
     appToaster.id = 'app-toaster';

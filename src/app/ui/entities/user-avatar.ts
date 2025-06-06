@@ -1,8 +1,9 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
-import type { UserDod, UserRoleNames } from '../../app-domain/dod';
-import { getMaxPriorityRole, USER_ROLE_ICONS } from '../../app-domain/constants';
+import type { UserDod, UserStatus } from '../../app-domain/dod';
+import { USER_STATUS_ICONS } from '../../app-domain/constants';
+import { UserAR } from '../../../users/domain/user/aroot';
 
 @customElement('user-avatar')
 export class UserAvatarEntity extends BaseElement {
@@ -13,6 +14,9 @@ export class UserAvatarEntity extends BaseElement {
 
     .avatar {
       object-fit: cover;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
       background-color: var(--sl-color-neutral-100);
       box-shadow: var(--sl-shadow-small);
     }
@@ -31,27 +35,30 @@ export class UserAvatarEntity extends BaseElement {
       justify-content: center;
       background-color: var(--sl-color-neutral-100);
       color: var(--sl-color-neutral-600);
+      width: 100%;
+      aspect-ratio: 1 / 1;
     }
   `;
 
   @property({ type: Object })
-  user?: UserDod;
+  user!: UserDod;
 
   @property({ type: String })
   shape: 'circle' | 'rounded' = 'rounded';
 
   @property({ type: Number })
-  size = 32;
+  size?: number;
 
-  private getDefaultAvatar(role: UserRoleNames): string {
-    const icon = USER_ROLE_ICONS[role];
-    return `/assets/icons/${icon}.svg`;
+  private getDefaultAvatar(status: UserStatus): string {
+    const icon = USER_STATUS_ICONS[status];
+    return `/assets/assets/icons/${icon}.svg`;
   }
 
   render() {
-    const role = getMaxPriorityRole(this.user?.roleCounters || ['ONLOOKER']);
-    const avatarUrl = this.user?.profile?.avatarUrl;
-    const size = `${this.size}px`;
+    const userAr = new UserAR(this.user);
+    const status = userAr.getMaxPriorityStatus();
+    const avatarUrl = this.user?.profile?.avatarUrl ?? this.getDefaultAvatar(status);
+    const sizePx = this.size ? `${this.size}px` : undefined;
     const borderRadius = this.shape === 'circle' ? '50%' : 'var(--sl-border-radius-medium)';
 
     if (avatarUrl) {
@@ -60,7 +67,7 @@ export class UserAvatarEntity extends BaseElement {
           class="avatar avatar--${this.shape}"
           src=${avatarUrl}
           alt="User avatar"
-          style="width: ${size}; height: ${size};"
+          style=${sizePx ? `width: ${sizePx}; height: ${sizePx};` : ''}
         />
       `;
     }
@@ -68,15 +75,14 @@ export class UserAvatarEntity extends BaseElement {
     return html`
       <div
         class="icon-avatar avatar--${this.shape}"
-        style="
-          width: ${size};
-          height: ${size};
-          border-radius: ${borderRadius};
-        "
+        style=${[
+          sizePx ? `width: ${sizePx}; height: ${sizePx};` : '',
+          `border-radius: ${borderRadius};`,
+        ].join(' ')}
       >
         <sl-icon
-          name=${USER_ROLE_ICONS[role]}
-          style="font-size: calc(${size} * 0.6);"
+          name=${USER_STATUS_ICONS[status]}
+          style=${sizePx ? `font-size: calc(${sizePx} * 0.6);` : ''}
         ></sl-icon>
       </div>
     `;

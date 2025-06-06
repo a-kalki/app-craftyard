@@ -71,13 +71,6 @@ export class UserDetailsEntity extends BaseElement {
       color: var(--sl-color-primary-900);
     }
 
-    .roles {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 4px;
-      flex-wrap: wrap;
-    }
-
     sl-divider {
       margin: 1rem 0;
     }
@@ -100,7 +93,6 @@ export class UserDetailsEntity extends BaseElement {
   @state()
   private canEdit: boolean = false;
 
-
   async connectedCallback() {
     super.connectedCallback();
     const userId = this.getUserId();
@@ -119,8 +111,8 @@ export class UserDetailsEntity extends BaseElement {
       const currentAR = new UserAR(currentUser);
       const targetAR = new UserAR(this.user);
       const isSelf = userAccessRules.canEditSelf(currentAR, targetAR);
-      const isKeeterEditingOther = userAccessRules.canKeeterEditOther(currentAR, targetAR);
-      this.canEdit = (isSelf || isKeeterEditingOther);
+      const isModeratorEditingOther = userAccessRules.canModeratorEditOther(currentAR);
+      this.canEdit = (isSelf || isModeratorEditingOther);
     }
   }
 
@@ -138,32 +130,34 @@ export class UserDetailsEntity extends BaseElement {
   }
 
   render() {
-    this.app.getState().currentUser.id;
-    if (!this.user) return html`<sl-spinner label="Загрузка пользователя..." style="width:48px; height:48px;"></sl-spinner>`;
+    if (!this.user) {
+      return html`<sl-spinner label="Загрузка пользователя..." style="width:48px; height:48px;"></sl-spinner>`;
+    }
 
-    const { profile, roleCounters: roles, joinedAt } = this.user;
-    const skillsEntries = Object.entries(profile.skills ?? {});
+    const userAR = new UserAR(this.user);
+    const statuses = userAR.statuses;
+    const skillsEntries = Object.entries(this.user.profile.skills ?? {});
 
     return html`
       <div class="header">
-        <user-avatar .user=${this.user} size="150"></user-avatar>
+        <user-avatar .user=${this.user}></user-avatar>
         <div class="info">
           <div class="name-wrapper">
             <div class="name">${this.user.name}</div>
           </div>
           <div>
-            <div class="roles">
-              ${roles.map(role => html`<role-tag .role=${role}></role-tag>`)}
-            </div>
-            <div class="user-option-text">Присоединился: ${this.formatDate(joinedAt)}</div>
+              ${statuses.map(s => html`
+                <user-status-tag .userStatus=${s}></user-status-tag>
+              `)}
+            <div class="user-option-text">Присоединился: ${this.formatDate(this.user.joinedAt)}</div>
           </div>
         </div>
 
         <div class="actions">
-          ${this.user.telegramNickname ? html`
+          ${this.user.profile.telegramNickname ? html`
             <sl-button
               variant="primary"
-              href="https://t.me/${this.user.telegramNickname}"
+              href="https://t.me/${this.user.profile.telegramNickname}"
               target="_blank"
             >
               <sl-icon name="telegram"></sl-icon>
@@ -197,3 +191,4 @@ export class UserDetailsEntity extends BaseElement {
     this.app.router.navigate(`/users/${this.user!.id}/edit`);
   }
 }
+

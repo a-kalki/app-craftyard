@@ -11,8 +11,8 @@ export class AppHeaderWidget extends BaseElement {
     :host {
       position: fixed;
       top: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
+      right: 0;
       height: 56px;
       z-index: 1000;
       display: flex;
@@ -22,13 +22,17 @@ export class AppHeaderWidget extends BaseElement {
       color: var(--sl-color-neutral-900);
       padding: 0 1rem;
       box-shadow: var(--sl-shadow-large);
-
-      width: 100%;
-      max-width: 1200px; /* такое же ограничение, как у контейнера приложения */
       box-sizing: border-box;
     }
 
-
+    .container {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
     .left {
       display: flex;
@@ -59,29 +63,31 @@ export class AppHeaderWidget extends BaseElement {
   render() {
     const user = this.app.getState().currentUser;
     return html`
-      <div class="left">
-        ${this.isMobile
-          ? html`
-              <sl-button
-                variant="text"
-                class="menu-button"
-                @click=${() =>
-                  this.dispatchEvent(new CustomEvent('toggle-sidebar', {
-                    bubbles: true,
-                    composed: true
-                  }))}
-              >
-                <sl-icon name="list"></sl-icon>
-              </sl-button>
-            `
-          : null}
-        <img
-          src="/assets/app/logo_full.svg"}
-          alt="logo"
-        />
-      </div>
-      <div class="right">
-        <user-panel .isMobile=${this.isMobile} .user=${user}></user-panel>
+      <div class="container">
+        <div class="left">
+          ${this.isMobile
+            ? html`
+                <sl-button
+                  variant="text"
+                  class="menu-button"
+                  @click=${() =>
+                    this.dispatchEvent(new CustomEvent('toggle-sidebar', {
+                      bubbles: true,
+                      composed: true
+                    }))}
+                >
+                  <sl-icon name="list"></sl-icon>
+                </sl-button>
+              `
+            : null}
+          <img
+            src="/assets/app/logo_full.svg"}
+            alt="logo"
+          />
+        </div>
+        <div class="right">
+          <user-panel .isMobile=${this.isMobile} .user=${user}></user-panel>
+        </div>
       </div>
     `;
   }

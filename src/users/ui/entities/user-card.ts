@@ -2,61 +2,72 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { UserDod } from '../../../app/app-domain/dod';
-import { USER_ROLE_DESCRIPTIONS, USER_ROLE_TITLES, USER_ROLE_ICONS } from '../../../app/app-domain/constants';
+import { UserAR } from '../../domain/user/aroot';
 
 @customElement('user-card')
 export class UserCardEntity extends BaseElement {
   static styles = css`
     :host {
       display: block;
-      max-width: 350px;
-      margin: 8px;
-      font-family: var(--sl-font-sans);
+      width: 100%;
+      contain: content;
+      min-width: 0;
     }
 
-    sl-card::part(base) {
-      padding: 1rem;
+    sl-card {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .main {
       display: flex;
-      flex-direction: column;
+      width: 100%;
+      min-width: 0;
       gap: 1rem;
     }
 
-    .top-section {
-      display: flex;
-      gap: 1rem;
+    .header {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .avatar-container {
+      flex: 0 0 120px;
+      max-width: 120px;
     }
 
     .details {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .roles-section {
-      margin-top: 0.5rem;
-    }
-
-    .roles-title {
-      font-size: 0.875rem;
-      color: var(--sl-color-neutral-600);
-      margin-bottom: 0.25rem;
-    }
-
-    .roles-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      min-width: 0;
     }
 
     .actions {
-      display: flex;
-      justify-content: flex-end;
+      width: 100%;
     }
 
-    .name {
-      font-size: 1.25rem;
+    sl-button {
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
       font-weight: 600;
+      color: var(--sl-color-neutral-600);
+      margin-bottom: 0.3rem;
+    }
+
+    .statuses-section {
+      margin-top: 0.5rem;
+    }
+
+    .status-list, .skills-section {
+      max-width: 100%;
+      overflow: hidden;
     }
 
     .skills-section {
@@ -68,43 +79,36 @@ export class UserCardEntity extends BaseElement {
   user!: UserDod;
 
   render() {
-    const skills = Object.keys(this.user.profile.skills ?? {});
+    const userAR = new UserAR(this.user);
+    const skills = userAR.skills;
+    const statuses = userAR.statuses;
 
     return html`
       <sl-card>
-        <div slot="header" class="name">${this.user.name}</div>
-        <div class="top-section">
-          <user-avatar .user=${this.user} size="150"></user-avatar>
+        <div slot="header" class="header">${this.user.name}</div>
+
+        <div class="main">
+          <div class="avatar-container">
+            <user-avatar .user=${this.user}></user-avatar>
+          </div>
+
           <div class="details">
             <div class="actions">
-              <sl-button
-                variant="primary"
-                size="medium"
-                @click=${(e: MouseEvent) => this.navigateToDetails(e)}>
-                <sl-icon name="ticket-detailed"></sl-icon>
-                Подробнее
+              <sl-button @click=${this.navigateToDetails} variant="primary" size="medium">
+                <sl-icon name="ticket-detailed"></sl-icon> Подробнее
               </sl-button>
             </div>
-            <div class="roles-section">
-              <div class="roles-title"><strong>Роли:</strong></div>
-              <div class="roles-list">
-                ${this.user.roleCounters.map(
-                  role => html`
-                    <role-tag
-                      .role=${role}
-                      .title=${USER_ROLE_TITLES[role]}
-                      .description=${USER_ROLE_DESCRIPTIONS[role]}
-                      .icon=${USER_ROLE_ICONS[role]}
-                    ></role-tag>
-                  `
-                )}
+            <div class="statuses-section">
+              <div class="section-title">Статусы:</div>
+              <div class="status-list">
+                ${userAR.statuses.map(s => html`<user-status-tag .userStatus=${s}></user-status-tag>`)}
               </div>
             </div>
           </div>
         </div>
 
         <div slot="footer" class="skills-section">
-          <div class="roles-title"><strong>Навыки:</strong></div>
+          <div class="section-title"><strong>Навыки:</strong></div>
           <div>
             ${skills.length === 0
               ? html`<p>Навыки не указаны</p>`

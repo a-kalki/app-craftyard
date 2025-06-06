@@ -21,6 +21,6 @@ bot.start((ctx) => {
   });
 });
 
-bot.launch();
-
-console.log('bot launched...');
+// bot.launch();
+//
+// console.log('bot launched...');

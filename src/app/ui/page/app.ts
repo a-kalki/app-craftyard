@@ -35,6 +35,11 @@ export class AppPage extends BaseElement {
       padding-top: 56px; /* отступ под фиксированную шапку */
     }
 
+    #content {
+      width: 100%;
+      max-width: none; /* Убираем возможные ограничения */
+    }
+
     main.mobile {
       grid-template-columns: 1fr;
     }
@@ -97,7 +102,11 @@ export class AppPage extends BaseElement {
 
         <main class=${state.isMobile ? 'mobile' : ''}>
           ${!state.isMobile
-            ? html`<app-sidebar .items=${this.app.getRootItems()}></app-sidebar>`
+            ? html`<app-sidebar 
+                  .items=${this.app.getRootItems()}
+                  .closeSidebar=${() => (this.sidebarVisible = false)}
+                  .isMobile=${state.isMobile}
+                ></app-sidebar>`
             : null}
 
           <div id="content">
@@ -110,7 +119,11 @@ export class AppPage extends BaseElement {
           ?open=${this.sidebarVisible}
           @sl-after-hide=${() => (this.sidebarVisible = false)}
         >
-          <app-sidebar .items=${this.app.getRootItems()}></app-sidebar>
+          <app-sidebar 
+            .items=${this.app.getRootItems()}
+            .closeSidebar=${() => (this.sidebarVisible = false)}
+            .isMobile=${state.isMobile}
+          ></app-sidebar>
         </sl-drawer>
       </div>
     `;

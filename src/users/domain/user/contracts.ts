@@ -25,12 +25,12 @@ export type RegisterUserCommand = {
 // ========== edit-user ============
 export type EditUserCommand = {
   command: 'edit-user',
-  dto: Pick<UserDod, 'id' | 'name' | 'telegramNickname' | 'profile'>
+  dto: Pick<UserDod, 'id' | 'name' | 'profile'>
 };
 
-export type EditUserByKeeterCommand = {
+export type EditUserByModeratorCommand = {
   command: 'edit-user',
-  dto: EditUserCommand['dto'] & Pick<UserDod, 'roles'> 
+  dto: EditUserCommand['dto'] & Pick<UserDod, 'statusStats'> 
 };
 
 export type EditUserResult = Result<'success', string>;

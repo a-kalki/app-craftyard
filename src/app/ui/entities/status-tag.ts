@@ -1,11 +1,15 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
-import { USER_ROLE_DESCRIPTIONS, USER_ROLE_ICONS, USER_ROLE_TITLES } from '../../app-domain/constants';
-import type { UserRoleNames } from '../../app-domain/dod';
+import {
+  USER_STATUS_ICONS,
+  USER_STATUS_TITLES,
+  USER_STATUS_DESCRIPTIONS
+} from '../../app-domain/constants';
+import type { UserStatus } from '../../app-domain/dod';
 
-@customElement('role-tag')
-export class RoleTag extends BaseElement {
+@customElement('user-status-tag')
+export class StatusTag extends BaseElement {
   static styles = css`
     :host {
       display: inline-block;
@@ -43,25 +47,25 @@ export class RoleTag extends BaseElement {
         transform: scale(var(--scale-factor));
       }
     }
-  `
+  `;
 
   @property({ type: String })
-  role!: UserRoleNames;
+  userStatus!: UserStatus;
 
   getDetails(): { icon: string; title: string; description: string } {
-    const icon = USER_ROLE_ICONS[this.role];
-    const title = USER_ROLE_TITLES[this.role];
-    const description = USER_ROLE_DESCRIPTIONS[this.role];
+    const icon = USER_STATUS_ICONS[this.userStatus];
+    const title = USER_STATUS_TITLES[this.userStatus];
+    const description = USER_STATUS_DESCRIPTIONS[this.userStatus];
     return { icon, title, description };
   }
 
-  private showRoleDetails() {
+  private showStatusDetails() {
     const { icon, title, description } = this.getDetails();
     this.app.showDialog({
       title: html`
-        <div class="role-header" style="display: flex; align-items: center; gap: 0.5em;">
-          <sl-icon name=${icon} class="role-icon"></sl-icon>
-          <span><strong>Описание роли "${title}"</strong></span>
+        <div class="status-header" style="display: flex; align-items: center; gap: 0.5em;">
+          <sl-icon name=${icon}></sl-icon>
+          <span><strong>Описание статуса "${title}"</strong></span>
         </div>
       `,
       content: description,
@@ -73,10 +77,10 @@ export class RoleTag extends BaseElement {
     const { icon, title } = this.getDetails();
     return html`
       <sl-tag 
-        size="small" 
+        size="small"
         variant="success"
         pill
-        @click=${this.showRoleDetails}
+        @click=${this.showStatusDetails}
       >
         <sl-icon name=${icon}></sl-icon>
         <span>&nbsp;|&nbsp;${title}</span>

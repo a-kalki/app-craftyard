@@ -10,4 +10,4 @@ import {} from './entities/content-not-found';
 import {} from './entities/internal-error';
 import {} from './entities/app-toaster';
 import {} from './entities/user-avatar';
-import {} from './entities/role-tag';
+import {} from './entities/status-tag';

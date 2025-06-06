@@ -1,8 +1,15 @@
-import { USER_ROLE_TITLES } from './constants';
-
-export type UserRoleNames = keyof typeof USER_ROLE_TITLES;
-
-export type RoleCounters = Record<UserRoleNames, number>;
+export type UserStatus =
+  | 'NEWBIE'
+  | 'REACTOR'
+  | 'SPEAKER'
+  | 'BUYER'
+  | 'MAKER'
+  | 'SELLER'
+  | 'DESIGNER'
+  | 'TRAINER'
+  | 'AUTHOR'
+  | 'KEEPER'
+  | 'MODERATOR';
 
 export type UserProfile = {
   telegramNickname?: string,
@@ -10,16 +17,18 @@ export type UserProfile = {
   avatarUrl?: string,
 };
 
+export type StatusCounter = {
+  count: number;
+  firstAt: number;
+  lastAt: number;
+};
+
+export type StatusStats = {[key in UserStatus]?: StatusCounter};
+
 export type UserDod = {
   id: string, // telegram id
   name: string,
   profile: UserProfile,
-  status: {
-
-  }
-};
-
-export type UserStats = {
-  roleCounters: RoleCounters,
+  statusStats: StatusStats,
   joinedAt: number,
-}
+};

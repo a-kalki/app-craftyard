@@ -5,8 +5,8 @@ class UserAccessRules {
     return currentUser.id === targetUser.id;
   }
 
-  canKeeterEditOther(currentUser: UserAR): boolean {
-    return currentUser.hasRole('KEETER');
+  canModeratorEditOther(currentUser: UserAR): boolean {
+    return currentUser.hasStatus('MODERATOR');
   }
 }
 

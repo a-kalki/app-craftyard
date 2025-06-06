@@ -1,12 +1,10 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserDod, UserRoleNames } from '../../../app/app-domain/dod';
+import type { UserDod } from '../../../app/app-domain/dod';
 import { usersApi } from '../users-api';
 import { UserAR } from '../../domain/user/aroot';
 import { userAccessRules } from '../../domain/user/rules/access';
-import { USER_ROLE_TITLES, USER_ROLES } from '../../../app/app-domain/constants';
-import type { EditUserByKeeterCommand, EditUserCommand } from '../../domain/user/contracts';
 
 @customElement('user-edit')
 export class UserEditFeature extends BaseElement {
@@ -72,6 +70,24 @@ export class UserEditFeature extends BaseElement {
       justify-content: flex-end;
       gap: 0.5rem;
     }
+
+    .status-stats table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+
+    .status-stats th,
+    .status-stats td {
+      border: 1px solid var(--sl-color-neutral-300);
+      padding: 0.5rem;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .status-stats th {
+      background-color: var(--sl-color-neutral-100);
+    }
   `;
 
   static routingAttrs = {
@@ -86,9 +102,6 @@ export class UserEditFeature extends BaseElement {
   private name = '';
 
   @state()
-  private roles: UserRoleNames[] = [];
-
-  @state()
   private telegramUsername = '';
 
   @state()
@@ -99,7 +112,7 @@ export class UserEditFeature extends BaseElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    this.loadUser();
+    await this.loadUser();
   }
 
   async loadUser(): Promise<void> {
@@ -117,11 +130,11 @@ export class UserEditFeature extends BaseElement {
 
     if (!this.checkRules()) {
       this.app.router.navigate(`/users/${userId}`);
-    };
+      return;
+    }
 
     this.name = this.user.name;
-    this.roles = [...this.user.roleCounters];
-    this.telegramUsername = this.user.telegramNickname ?? '';
+    this.telegramUsername = this.user.profile.telegramNickname ?? '';
     this.avatarUrl = this.user.profile.avatarUrl ?? '';
     this.skills = Object.entries(this.user.profile.skills ?? {});
   }
@@ -142,12 +155,11 @@ export class UserEditFeature extends BaseElement {
   }
 
   private async save() {
-    if(!(this.checkValidity() && this.checkRules())) return;
+    if (!(this.checkValidity() && this.checkRules())) return;
 
-    const updated: EditUserByKeeterCommand['dto'] = {
+    const updated = {
       id: this.user!.id,
       name: this.name,
-      roleCounters: this.roles,
       telegramNickname: this.telegramUsername,
       profile: {
         avatarUrl: this.avatarUrl,
@@ -182,22 +194,17 @@ export class UserEditFeature extends BaseElement {
     if (!allValid) {
       this.app.info('Заполните все обязательные поля', { variant: 'warning' });
       return false;
-    };
+    }
     return true;
-  }
-
-  private currUserIsKeeter(): boolean {
-    const currUserAr = new UserAR(this.app.getState().currentUser);
-    return currUserAr.hasRole('KEETER');
   }
 
   private checkRules(): boolean {
     try {
       const currUserAr = new UserAR(this.app.getState().currentUser);
-      const targerUserAr = new UserAR(this.user!);
-      const isSelf = userAccessRules.canEditSelf(currUserAr, targerUserAr);
-      const isKeeter = userAccessRules.canKeeterEditOther(currUserAr);
-      if (!isSelf && !isKeeter) {
+      const targetUserAr = new UserAR(this.user!);
+      const isSelf = userAccessRules.canEditSelf(currUserAr, targetUserAr);
+      const isModerator = userAccessRules.canModeratorEditOther(currUserAr);
+      if (!isSelf && !isModerator) {
         this.app.info('У вас недостаточно прав для редактирования профиля', { variant: 'warning' });
         return false;
       }
@@ -242,20 +249,40 @@ export class UserEditFeature extends BaseElement {
       
       <sl-input
         label="Ник в Телеграм"
-        help-text="Укажи, чтобы к тебе могли обращаться напрямую."
+        help-text="Укажи никнейм телеграма, и к тебе могут обращаться напрямую"
         .value=${this.telegramUsername}
         @sl-input=${(e: CustomEvent) => this.telegramUsername = (e.target as HTMLInputElement).value}
       ></sl-input>
 
-      <sl-select
-        label="Роли"
-        ?disabled=${!this.currUserIsKeeter()}
-        multiple
-        .value=${this.roles}
-        @sl-change=${(e: CustomEvent) => this.roles = Array.from((e.target as any).value)}
-      >
-        ${USER_ROLES.map(role => html`<sl-option value=${role}>${USER_ROLE_TITLES[role]}</sl-option>`)}
-      </sl-select>
+      <sl-divider></sl-divider>
+
+      <div class="status-stats">
+        <h3>Статусы пользователя (статистика)</h3>
+        ${Object.entries(this.user.statusStats ?? {}).length === 0 ? html`
+          <p>Статусная статистика отсутствует.</p>
+        ` : html`
+          <table>
+            <thead>
+              <tr>
+                <th>Статус</th>
+                <th>Количество</th>
+                <th>Первое появление</th>
+                <th>Последнее появление</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Object.entries(this.user.statusStats).map(([status, counter]) => html`
+                <tr>
+                  <td>${status}</td>
+                  <td>${counter?.count ?? 0}</td>
+                  <td>${counter?.firstAt ? new Date(counter.firstAt).toLocaleDateString() : '-'}</td>
+                  <td>${counter?.lastAt ? new Date(counter.lastAt).toLocaleDateString() : '-'}</td>
+                </tr>
+              `)}
+            </tbody>
+          </table>
+        `}
+      </div>
 
       <sl-divider></sl-divider>
 
@@ -292,11 +319,9 @@ export class UserEditFeature extends BaseElement {
           Сохранить
         </sl-button>
         <sl-button variant="default" @click=${() => this.app.router.navigate(`/users/${this.user!.id}`)}>
-          <sl-icon name="x-lg"></sl-icon>
           Отмена
         </sl-button>
       </div>
     `;
   }
 }
-

@@ -12,21 +12,27 @@ class RegisterUserService extends BaseService<RegisterUserCommand> {
     const userDod: UserDod = {
       id: input.dto.id,
       name: input.dto.name,
-      telegramNickname: input.dto.telegramNickname,
-      roleCounters: ['ONLOOKER'],
+      statusStats: {
+        NEWBIE: {
+          count: 0,
+          firstAt: Date.now(),
+          lastAt: Date.now(),
+        }
+      },
       profile: {
         skills: {},
+        telegramNickname: input.dto.telegramNickname,
         avatarUrl: input.dto.avatarUrl
       },
       joinedAt: Date.now(),
     }
     try {
-      new UserAR(userDod);
+      new UserAR(userDod); // invariants;
       await userRepo.add(userDod);
       return { status: true, success: 'success' };
     } catch (err) {
-      console.error(err);
-      return { status: false, failure: 'fail' };
+      console.error('Register user error:', err);
+      return { status: false, failure: (err as Error).message };
     }
   }
 }

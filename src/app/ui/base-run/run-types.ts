@@ -2,8 +2,8 @@ import type { UserDod } from "../../app-domain/dod";
 import type { Result } from "../../app-domain/types";
 
 export type RegisterUserDto =
-  Pick<UserDod, 'id' | 'name' | 'telegramNickname'>
-  & Pick<UserDod['profile'], 'avatarUrl'>
+  Pick<UserDod, 'id' | 'name'>
+  & Pick<UserDod['profile'], 'avatarUrl' | 'telegramNickname'>
 
 export type FindUserResult = Result<UserDod, 'User not found'>;
 

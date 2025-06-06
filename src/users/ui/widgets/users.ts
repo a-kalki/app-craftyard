@@ -15,18 +15,45 @@ export class UsersWidget extends BaseElement {
     :host {
       display: block;
       padding: 16px;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 1200px; /* Ограничение по макету */
+      margin: 0 auto; /* Центрирование */
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 16px;
+      width: 100%;
+      
+      /* Автоматическая адаптация с приоритетом на 3 колонки */
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 
-    @media (max-width: 600px) {
+    /* Точные контрольные точки для 3 колонок */
+    @media (min-width: 1150px) {
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    /* На промежуточных размерах - 2 колонки */
+    @media (min-width: 900px) and (max-width: 899px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* На узких экранах - 1 колонка */
+    @media (max-width: 650px) {
       .grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    user-card {
+      width: 100%;
+      min-width: 0;
     }
   `;
 
@@ -42,13 +69,7 @@ export class UsersWidget extends BaseElement {
   render() {
     return html`
       <div class="grid">
-        ${this.users.map(
-          (user) => html`
-            <user-card
-              .user=${user}
-            ></user-card>
-          `
-        )}
+        ${this.users.map(user => html`<user-card .user=${user}></user-card>`)}
       </div>
     `;
   }

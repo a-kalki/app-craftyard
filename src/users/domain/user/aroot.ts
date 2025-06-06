@@ -1,5 +1,5 @@
-import { USER_ROLES } from "../../../app/app-domain/constants";
-import type { UserDod, UserRoleNames } from "../../../app/app-domain/dod";
+import { USER_STATUSES } from "../../../app/app-domain/constants";
+import type { UserDod, UserStatus } from "../../../app/app-domain/dod";
 
 export class UserAR {
   private user: UserDod;
@@ -10,39 +10,60 @@ export class UserAR {
   }
 
   getUserDod(copy = true): UserDod {
-    return copy ? { ...this.user } : this.user;
+    return copy ? structuredClone(this.user) : this.user;
   }
 
   get id(): string {
     return this.user.id;
   }
 
-  get roles(): UserRoleNames[] {
-    return this.user.roleCounters;
+  get statuses(): UserStatus[] {
+    return Object.keys(this.user.statusStats) as UserStatus[];
   }
 
-  hasRole(role: UserRoleNames): boolean {
-    return this.user.roleCounters.includes(role);
+  get skills(): string[] {
+    return Object.keys(this.user.profile.skills ?? {});
   }
 
-  hasAnyRole(roles: UserRoleNames[]): boolean {
-    return roles.some(role => this.hasRole(role));
+  hasStatus(status: UserStatus): boolean {
+    return Boolean(this.user.statusStats?.[status]);
+  }
+
+  hasAnyStatus(statuses: UserStatus[]): boolean {
+    return statuses.some(status => this.hasStatus(status));
+  }
+
+  getMaxPriorityStatus(): UserStatus {
+    return this.statuses
+      .filter((s): s is UserStatus => USER_STATUSES.includes(s))
+      .sort((a, b) => USER_STATUSES.indexOf(b) - USER_STATUSES.indexOf(a))[0];
   }
 
   protected checkInvariants(): void {
-    const idIsValid = this.user.id.length > 0;
-    const nameIsValid = this.user.name.length > 0;
-    const rolesIsValid = this.user.roleCounters.length > 0 && this.user.roleCounters.every(r => USER_ROLES.includes(r));
-    const joinedAtIsValid = this.user.joinedAt > 0 && this.user.joinedAt < Date.now();
-    const skills = this.user.profile.skills;
-    const skillsIsValid =
-      (typeof skills === 'object')
-      && Object.values(skills).every(v => (typeof v === 'string') && v.length > 0);
+    const { id, name, statusStats, joinedAt, profile } = this.user;
 
-    if (idIsValid && nameIsValid && rolesIsValid && joinedAtIsValid && skillsIsValid) {
-      return;
+    const idIsValid = id.length > 0;
+    const nameIsValid = name.length > 0;
+
+    const statuses = Object.keys(statusStats ?? {}) as UserStatus[];
+    const statusesAreValid =
+      statuses.length > 0 &&
+      statuses.every(status => USER_STATUSES.includes(status)) &&
+      statuses.every(status => {
+        const s = statusStats?.[status];
+        return s && s.count >= 0 && s.firstAt > 0 && s.lastAt >= s.firstAt;
+      });
+
+    const joinedAtIsValid = joinedAt > 0 && joinedAt < Date.now();
+
+    const skills = profile.skills;
+    const skillsAreValid =
+      typeof skills === 'object' &&
+      Object.values(skills ?? {}).every(v => typeof v === 'string' && v.length > 0);
+
+    if (!idIsValid || !nameIsValid || !statusesAreValid || !joinedAtIsValid || !skillsAreValid) {
+      console.log('Invalid user invariants:', this.user);
+      throw new Error('Invalid user invariants');
     }
-    console.log('Invalid user invariants:', this.user);
-    throw new Error('Invalid user invariants');
   }
 }

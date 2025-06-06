@@ -2,24 +2,26 @@
   "1": {
     "id": "1",
     "name": "Нурболат",
-    "roles": [
-      "ONLOOKER",
-      "HOBBYIST"
-    ],
-    "profile": {},
+    "profile": {
+      "avatarUrl": "https://icons.iconarchive.com/icons/erix-subyarko/medical/256/Document-Analytics-List-Report-Health-icon.png",
+      "skills": {
+        "as": "fffsdf"
+      }
+    },
     "joinedAt": 1749151947695,
-    "telegramNickname": ""
+    "statusStats": {
+      "NEWBIE": {
+        "count": 1,
+        "firstAt": 1749151947695,
+        "lastAt": 1749151947695
+      }
+    }
   },
   "773084180": {
     "id": "773084180",
     "name": "Nurbolat",
-    "roles": [
-      "MASTER",
-      "MENTOR",
-      "KEETER"
-    ],
-    "telegramUsername": "anzUralsk",
     "profile": {
+      "telegramNickname": "anzUralsk",
       "avatarUrl": "https://t.me/i/userpic/320/bOrpGbX5Jq3fbysH_VoGshRjzc7AAw_J6UARzLI-qUQ.svg",
       "skills": {
         "Топограф": "Профессиональная специализация с которого начался профессиональный путь. Опыт работы 3 года в проектном институте. Дальше опыт развития своего профильного бизнеса.",
@@ -34,19 +36,39 @@
       }
     },
     "joinedAt": 1735862400000,
-    "telegramNickname": "anzUralsk"
+    "statusStats": {
+      "SELLER": {
+        "count": 1,
+        "firstAt": 1735862400000,
+        "lastAt": 1735862400000
+      },
+      "TRAINER": {
+        "count": 1,
+        "firstAt": 1735862400000,
+        "lastAt": 1735862400000
+      },
+      "KEEPER": {
+        "count": 1,
+        "firstAt": 1735862400000,
+        "lastAt": 1735862400000
+      }
+    }
   },
   "773084181": {
     "id": "773084181",
     "name": "Нурболат",
-    "telegramNickname": "",
-    "roles": [
-      "ONLOOKER"
-    ],
     "profile": {
+      "telegramNickname": "",
       "avatarUrl": "https://t.me/i/userpic/320/bOrpGbX5Jq3fbysH_VoGshRjzc7AAw_J6UARzLI-qUQ.svg",
       "skills": {}
     },
-    "joinedAt": 1749146759215
+    "joinedAt": 1749146759215,
+    "statusStats": {
+      "NEWBIE": {
+        "count": 1,
+        "firstAt": 1749146759215,
+        "lastAt": 1749146759215
+      }
+    }
   }
 }
