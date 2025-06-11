@@ -12,7 +12,7 @@ class RegisterUserService extends BaseService<RegisterUserCommand> {
     const userDod: UserDod = {
       id: input.dto.id,
       name: input.dto.name,
-      statusStats: {
+      contributions: {
         NEWBIE: {
           count: 0,
           firstAt: Date.now(),

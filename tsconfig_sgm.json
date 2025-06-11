@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "esnext",  // В какую версию js кода должна компилироваться код ts.
+    "module": "nodenext",  // Как должны разрешаться модули js после компиляции кода ts.
+    "moduleResolution": "nodenext",  // Стратегия поиска и разрешения модулей (файлов) ts.
+    "outDir": "./dist",  // Директория для выходных файлов
+    "lib": ["esnext", "dom"],  // Включение библиотек для браузера и стандартной библиотеки ES
+    "esModuleInterop": true,  // Включение совместимости с CommonJS модулями
+    "resolveJsonModule": true,  // Поддержка импорта JSON файлов
+    "allowSyntheticDefaultImports": true,  // Разрешение синтетических импортов по умолчанию
+    "skipLibCheck": true,  // Пропуск проверки типов в файлах библиотеки для ускорения компиляции
+    "allowImportingTsExtensions": true, // Разрешить для библиотек импорт с расширением *.ts
+    "strict": true,  // Включение строгого режима для повышения качества кода
+    "experimentalDecorators": true,
+    "sourceMap": true,  // Генерация карт источников для отладки
+    "baseUrl": "./",
+    "paths": {
+        "#*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+
+

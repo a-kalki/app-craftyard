@@ -1,9 +1,10 @@
-import type { UserDod } from "../../../app/app-domain/dod";
-import { JsonRepository } from "../../../app/infra/json-repo";
+import { JsonRepository } from "../../app/infra/json-repo";
+import type { UserDod } from "../domain/user/struct/dod";
+import type { UserRepo } from "../domain/user/struct/repo";
 
 const path = import.meta.dir + '/users.json';
 
-class UserRepo extends JsonRepository<UserDod> {
+class UserJsonRepo extends JsonRepository<UserDod> implements UserRepo {
   constructor() {
     super(path);
   }
@@ -35,4 +36,4 @@ class UserRepo extends JsonRepository<UserDod> {
   }
 }
 
-export const userRepo = new UserRepo();
+export const userRepo = new UserJsonRepo();

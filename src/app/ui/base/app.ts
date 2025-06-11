@@ -4,7 +4,6 @@ import type { ModuleManifest } from "./types";
 import type { UserDod } from "../../app-domain/dod";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
-import { currentUserKey, localStore } from "./localstorage";
 import { AppDialog, type DialogOptions } from "./app-dialog";
 
 export class App {
@@ -23,7 +22,6 @@ export class App {
       isTelegramMiniApp
     }
     this.router = new AppRouter();
-    localStore.set(currentUserKey, initialUser);
   }
 
   init(): void {
@@ -35,7 +33,6 @@ export class App {
   }
 
   logout(): void {
-    localStore.clear();
     (window as any).app = undefined;
     window.dispatchEvent(new Event('app-logout'));
   }

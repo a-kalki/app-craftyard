@@ -1,4 +1,5 @@
-import type { UserAR } from "../aroot";
+import { appUserRules } from "../../../../app/domain/rules";
+import type { UserAR } from "./a-root";
 
 class UserAccessRules {
   canEditSelf(currentUser: UserAR, targetUser: UserAR): boolean {
@@ -6,7 +7,7 @@ class UserAccessRules {
   }
 
   canModeratorEditOther(currentUser: UserAR): boolean {
-    return currentUser.hasStatus('MODERATOR');
+    return appUserRules.canModeratorEditOther(currentUser.getUserDod());
   }
 }
 

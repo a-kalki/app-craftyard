@@ -26,7 +26,7 @@ class EditUserService extends BaseService<EditUserCommand | EditUserByModeratorC
 
     // только если MODERATOR редактирует другого пользователя
     if (isModeratorEditingOther) {
-      patch.statusStats = (input as EditUserByModeratorCommand).dto.statusStats;
+      patch.contributions = (input as EditUserByModeratorCommand).dto.contributions;
     }
 
     try {

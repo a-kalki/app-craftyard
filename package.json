@@ -4,15 +4,15 @@
   "author": "a-kalki",
   "repository": "https://github.com/a-kalki/app-dedok",
   "version": "1.0.0",
-  "module": "./src/index.ts",
+  "module": "./src/zzz-app-run/bootstrap.ts",
   "license": "MIT",
   "private": false,
-  "type": "commonjs",
   "scripts": {
     "tslint": "tsc --noEmit",
     "bld": "bun run ./src/zzz-app-run/build.ts --mode=dev",
     "bld-prod": "bun run ./scripts/build.ts --mode=prod",
-    "serve": "bun run bld && bun run ./src/zzz-app-run/server.ts"
+    "serve": "bun run bld && bun run ./src/zzz-app-run/server.ts",
+    "start": "NODE_ENV='development' bun run ./src/zzz-app-run/server/main.ts"
   },
   "devDependencies": {
     "@shoelace-style/shoelace": "^2.20.1",
@@ -31,6 +31,7 @@
   "dependencies": {
     "fs-extra": "^11.3.0",
     "lit": "^3.3.0",
+    "rilata": "link:rilata",
     "telegraf": "^4.16.3"
   }
 }

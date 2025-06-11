@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserDod } from '../../../app/app-domain/dod';
+import type { UserDod, UserStatus } from '../../../app/app-domain/dod';
 import { usersApi } from '../users-api';
 import { UserAR } from '../../domain/user/aroot';
 import { userAccessRules } from '../../domain/user/rules/access';
@@ -71,22 +71,35 @@ export class UserEditFeature extends BaseElement {
       gap: 0.5rem;
     }
 
-    .status-stats table {
-      width: 100%;
-      border-collapse: collapse;
+    .editable-stats {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .stat-item {
+      border: 1px solid var(--sl-color-neutral-200);
+      border-radius: var(--sl-border-radius-medium);
+      padding: 1rem;
+    }
+
+    .stat-header {
       margin-bottom: 1rem;
     }
 
-    .status-stats th,
-    .status-stats td {
-      border: 1px solid var(--sl-color-neutral-300);
-      padding: 0.5rem;
-      text-align: left;
-      font-size: 0.9rem;
+    .stat-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
     }
 
-    .status-stats th {
-      background-color: var(--sl-color-neutral-100);
+    @media (max-width: 600px) {
+      .stat-controls {
+        grid-template-columns: 1fr;
+      }
+      
+      .stat-item {
+        padding: 0.75rem;
+      }
     }
   `;
 
@@ -137,6 +150,52 @@ export class UserEditFeature extends BaseElement {
     this.telegramUsername = this.user.profile.telegramNickname ?? '';
     this.avatarUrl = this.user.profile.avatarUrl ?? '';
     this.skills = Object.entries(this.user.profile.skills ?? {});
+  }
+
+  private canEditStatusStats(): boolean {
+    if (!this.user) return false;
+    const currentUser = this.app.getState().currentUser;
+    if (!currentUser) return false;
+    
+    const currentAR = new UserAR(currentUser);
+    return userAccessRules.canModeratorEditOther(currentAR);
+  }
+
+  private updateStatCount(status: UserStatus, count: number) {
+    if (!this.user || isNaN(count)) return;
+    
+    this.user = {
+      ...this.user,
+      contributions: {
+        ...this.user.contributions,
+        [status]: {
+          ...this.user.contributions[status],
+          count
+        }
+      }
+    };
+  }
+
+  private updateStatDate(status: UserStatus, field: 'firstAt' | 'lastAt', dateString: string) {
+    if (!this.user || !dateString) return;
+    
+    const timestamp = new Date(dateString).getTime();
+    this.user = {
+      ...this.user,
+      contributions: {
+        ...this.user.contributions,
+        [status]: {
+          ...this.user.contributions[status],
+          [field]: timestamp
+        }
+      }
+    };
+  }
+
+  private formatDateInput(timestamp?: number): string {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toISOString().split('T')[0];
   }
 
   private updateSkill(index: number, field: 'name' | 'desc', value: string) {
@@ -254,35 +313,63 @@ export class UserEditFeature extends BaseElement {
         @sl-input=${(e: CustomEvent) => this.telegramUsername = (e.target as HTMLInputElement).value}
       ></sl-input>
 
-      <sl-divider></sl-divider>
-
-      <div class="status-stats">
-        <h3>Статусы пользователя (статистика)</h3>
-        ${Object.entries(this.user.statusStats ?? {}).length === 0 ? html`
-          <p>Статусная статистика отсутствует.</p>
-        ` : html`
-          <table>
-            <thead>
-              <tr>
-                <th>Статус</th>
-                <th>Количество</th>
-                <th>Первое появление</th>
-                <th>Последнее появление</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${Object.entries(this.user.statusStats).map(([status, counter]) => html`
-                <tr>
-                  <td>${status}</td>
-                  <td>${counter?.count ?? 0}</td>
-                  <td>${counter?.firstAt ? new Date(counter.firstAt).toLocaleDateString() : '-'}</td>
-                  <td>${counter?.lastAt ? new Date(counter.lastAt).toLocaleDateString() : '-'}</td>
-                </tr>
+      ${this.canEditStatusStats() ? html`
+        <sl-divider></sl-divider>
+        
+        <div class="status-stats">
+          <h3>Статусы пользователя</h3>
+          
+          ${Object.entries(this.user.contributions ?? {}).length === 0 ? html`
+            <p>Статусная статистика отсутствует.</p>
+          ` : html`
+            <div class="editable-stats">
+              ${Object.entries(this.user.contributions).map(([status, counter]) => html`
+                <div class="stat-item">
+                  <div class="stat-header">
+                    <user-status-tag .userStatus=${status as UserStatus}></user-status-tag>
+                  </div>
+                  
+                  <div class="stat-controls">
+                    <sl-input
+                      type="number"
+                      label="Количество"
+                      min="0"
+                      .value=${counter?.count?.toString() ?? '0'}
+                      @sl-change=${
+                        (e: CustomEvent) => this.updateStatCount(
+                          status as UserStatus, parseInt((e.target as HTMLInputElement).value)
+                        )
+                      }
+                    ></sl-input>
+                    
+                    <sl-input
+                      type="date"
+                      label="Первое"
+                      .value=${this.formatDateInput(counter?.firstAt)}
+                      @sl-change=${
+                        (e: CustomEvent) => this.updateStatDate(
+                          status as UserStatus, 'firstAt', (e.target as HTMLInputElement).value
+                        )
+                      }
+                    ></sl-input>
+                    
+                    <sl-input
+                      type="date"
+                      label="Последнее"
+                      .value=${this.formatDateInput(counter?.lastAt)}
+                      @sl-change=${
+                        (e: CustomEvent) => this.updateStatDate(
+                          status as UserStatus, 'lastAt', (e.target as HTMLInputElement).value
+                        )
+                      }
+                    ></sl-input>
+                  </div>
+                </div>
               `)}
-            </tbody>
-          </table>
-        `}
-      </div>
+            </div>
+          `}
+        </div>
+      ` : ''}
 
       <sl-divider></sl-divider>
 

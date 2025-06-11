@@ -13,7 +13,7 @@ export class UserDetailsEntity extends BaseElement {
     :host {
       display: block;
       max-width: 800px;
-      margin: 8px;
+      margin: 8px auto;
       padding: 16px;
       background: var(--sl-color-neutral-0);
       border-radius: var(--sl-border-radius-medium);
@@ -23,62 +23,129 @@ export class UserDetailsEntity extends BaseElement {
 
     .header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      min-height: 72px; /* подгоняем под высоту .avatar */
-    }
-
-    .name-wrapper {
+      flex-wrap: wrap;
+      gap: 1.5rem;
       margin-bottom: 1.5rem;
     }
 
-    .edit-button {
-      white-space: nowrap;
-    }
-
-    .actions {
+    .user-info {
+      flex: 2;
+      min-width: 250px;
       display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      align-items: flex-end;
+      gap: 1rem;
+      align-items: center;
     }
 
-    .actions sl-button {
-      white-space: nowrap;
+    .user-avatar {
+      flex-shrink: 0;
     }
 
-    .avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--sl-color-primary-600);
+    .user-text {
+      flex: 1;
     }
 
     .name {
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--sl-color-primary-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .join-date {
+      font-size: 0.9rem;
+      color: var(--sl-color-neutral-600);
+    }
+
+    .actions {
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .actions sl-button {
+      width: 100%;
+      max-width: 200px;
     }
 
     sl-divider {
-      margin: 1rem 0;
+      margin: 1.5rem 0;
+    }
+
+    .status-section {
+      margin-bottom: 2rem;
+    }
+
+    .status-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--sl-color-primary-800);
+    }
+
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+
+    .status-table th,
+    .status-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--sl-color-neutral-200);
+    }
+
+    .status-table th {
+      font-weight: 600;
+      color: var(--sl-color-neutral-800);
+      background-color: var(--sl-color-neutral-100);
+    }
+
+    .status-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skills-section h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--sl-color-primary-800);
     }
 
     .user-option-text {
       font-size: 0.9rem;
       color: var(--sl-color-neutral-600);
       margin-top: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .user-info {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .actions {
+        align-items: center;
+      }
+
+      .actions sl-button {
+        max-width: 100%;
+      }
+
+      .status-table {
+        display: block;
+        overflow-x: auto;
+      }
     }
   `;
 
@@ -137,19 +204,18 @@ export class UserDetailsEntity extends BaseElement {
     const userAR = new UserAR(this.user);
     const statuses = userAR.statuses;
     const skillsEntries = Object.entries(this.user.profile.skills ?? {});
+    const statusStats = this.user.contributions;
 
     return html`
       <div class="header">
-        <user-avatar .user=${this.user}></user-avatar>
-        <div class="info">
-          <div class="name-wrapper">
+        <div class="user-info">
+          <user-avatar size="96" .user=${this.user}></user-avatar>
+          <div class="user-text">
             <div class="name">${this.user.name}</div>
-          </div>
-          <div>
-              ${statuses.map(s => html`
-                <user-status-tag .userStatus=${s}></user-status-tag>
-              `)}
-            <div class="user-option-text">Присоединился: ${this.formatDate(this.user.joinedAt)}</div>
+            <div class="join-date">
+              <sl-icon name="person-plus" style="font-size: 0.9rem;"></sl-icon>
+              <span style="margin-left: 0.25rem;">${this.formatDate(this.user.joinedAt)}</span>
+            </div>
           </div>
         </div>
 
@@ -168,7 +234,7 @@ export class UserDetailsEntity extends BaseElement {
           ${this.canEdit ? html`
             <sl-button variant="neutral" @click=${this.onEditClick}>
               <sl-icon name="pencil"></sl-icon>
-               Изменить
+              Изменить
             </sl-button>
           ` : null}
         </div>
@@ -176,14 +242,48 @@ export class UserDetailsEntity extends BaseElement {
 
       <sl-divider></sl-divider>
 
-      <section>
+      <div class="status-section">
+        <h3 class="status-title">Статусы и активность</h3>
+        <table class="status-table">
+          <thead>
+            <tr>
+              <th>Статус</th>
+              <th>Действий</th>
+              <th>Активность</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${statuses.map(status => {
+              const stat = statusStats[status];
+              return html`
+                <tr>
+                  <td>
+                    <div class="status-badge">
+                      <user-status-tag .userStatus=${status}></user-status-tag>
+                    </div>
+                  </td>
+                  <td>${stat?.count || 0}</td>
+                  <td>
+                    ${stat ? html`
+                      Первый: ${this.formatDate(stat.firstAt)}<br>
+                      Последний: ${this.formatDate(stat.lastAt)}
+                    ` : 'Нет данных'}
+                  </td>
+                </tr>
+              `;
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="skills-section">
         <h3>Навыки и специализации</h3>
         ${skillsEntries.length === 0
           ? html`<p>Навыки не указаны</p>`
           : skillsEntries.map(([skill, desc]) => html`
             <sl-details summary=${skill}>${desc}</sl-details>
           `)}
-      </section>
+      </div>
     `;
   }
 
@@ -191,4 +291,3 @@ export class UserDetailsEntity extends BaseElement {
     this.app.router.navigate(`/users/${this.user!.id}/edit`);
   }
 }
-

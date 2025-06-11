@@ -4,18 +4,10 @@
     "name": "Нурболат",
     "profile": {
       "avatarUrl": "https://icons.iconarchive.com/icons/erix-subyarko/medical/256/Document-Analytics-List-Report-Health-icon.png",
-      "skills": {
-        "as": "fffsdf"
-      }
+      "skills": {}
     },
     "joinedAt": 1749151947695,
-    "statusStats": {
-      "NEWBIE": {
-        "count": 1,
-        "firstAt": 1749151947695,
-        "lastAt": 1749151947695
-      }
-    }
+    "contributions": {}
   },
   "773084180": {
     "id": "773084180",
@@ -36,21 +28,16 @@
       }
     },
     "joinedAt": 1735862400000,
-    "statusStats": {
-      "SELLER": {
-        "count": 1,
-        "firstAt": 1735862400000,
-        "lastAt": 1735862400000
-      },
-      "TRAINER": {
-        "count": 1,
-        "firstAt": 1735862400000,
-        "lastAt": 1735862400000
-      },
+    "contributions": {
       "KEEPER": {
         "count": 1,
         "firstAt": 1735862400000,
         "lastAt": 1735862400000
+      },
+      "MODERATOR": {
+        "count": 0,
+        "firstAt": 1749150000000,
+        "lastAt": 1749150000000
       }
     }
   },
@@ -63,12 +50,17 @@
       "skills": {}
     },
     "joinedAt": 1749146759215,
-    "statusStats": {
-      "NEWBIE": {
-        "count": 1,
-        "firstAt": 1749146759215,
-        "lastAt": 1749146759215
-      }
-    }
+    "contributions": {}
+  },
+  "6867263977": {
+    "id": "6867263977",
+    "name": "Диети",
+    "profile": {
+      "skills": {},
+      "telegramNickname": "nxvKTMaYUuS",
+      "avatarUrl": "https://t.me/i/userpic/320/zHlqTN1Dz76PjP_oVj8nlNxCJ_EmN7L0MbTTEQEPduRuVMQXBv7gMoEaBmQ5Lq_S.jpg"
+    },
+    "joinedAt": 1749235599507,
+    "contributions": {}
   }
 }

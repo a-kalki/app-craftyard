@@ -2,7 +2,7 @@ import {} from '../shoelace';
 import {} from '../app-components'
 
 import { App } from '../base/app';
-import { currentUserKey, localStore } from '../base/localstorage';
+import { authUserId, localStore } from '../base/localstorage';
 import type { TelegramAuthUser, TelegramUser, UserApiInterface } from './run-types';
 import type { UserDod } from '../../app-domain/dod';
 import type { ModuleManifest } from '../base/types';
@@ -24,13 +24,16 @@ export class Bootstrap {
       this.prepareBody();
       this.isTelegramMiniApp = await this.initTelegramWebApp();
 
-      let user: UserDod | undefined = localStore.get<UserDod>(currentUserKey);
-      if (user) {
-        this.showAppPage(user);
-        return;
-      }
-
-      if(this.isTelegramMiniApp) {
+      let storedUserId: string | undefined = localStore.get<string>(authUserId);
+      if (storedUserId) {
+        const result = storedUserId ? (await this.usersApi.findUser(storedUserId)) : undefined
+        if (result && result.status) {
+          this.showAppPage(result.success);
+          return;
+        } else {
+          localStore.clear();
+        }
+      } else if(this.isTelegramMiniApp) {
         const tgUser = this.getUserFromTelegram();
         const result = await this.usersApi.findUser(tgUser.id.toString());
         if (!result.status) {
@@ -143,6 +146,7 @@ export class Bootstrap {
   }
 
   protected showAppPage(user: UserDod): void {
+      localStore.set(authUserId, user.id);
       const app = new App(this.manifests, user, this.isTelegramMiniApp);
       app.init();
       this.redirectStartApp(app);
@@ -169,7 +173,7 @@ export class Bootstrap {
 
     const appDialog = document.createElement('sl-dialog');
     appDialog.id = 'app-dialog';
-    root.appendChild(appDialog);
+    document.body.appendChild(appDialog);
 
     const appToaster = document.createElement('app-toaster');
     appToaster.id = 'app-toaster';

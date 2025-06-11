@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import type { TelegramAuthUser, UserApiInterface } from '../base-run/run-types';
+import type { TelegramAuthUser, TelegramUser, UserApiInterface } from '../base-run/run-types';
 import { AppNotifier } from '../base/app-notifier';
 
 @customElement('login-page')
@@ -108,7 +108,12 @@ export class LoginPage extends LitElement {
     window.dispatchEvent(new CustomEvent('user-logined', { detail: result.success }));
   }
 
+  private getDebugAuthUser(): TelegramAuthUser | undefined {
+    return (window as any).debugAuthUser;
+  }
+
   render() {
+    const debugAuthUser = this.getDebugAuthUser();
     return html`
       ${this.renderStyles()}
 
@@ -121,16 +126,10 @@ export class LoginPage extends LitElement {
             : html`<sl-spinner style="font-size: 24px;"></sl-spinner>`}
         </div>
 
-        ${this.debug ? html`
+        ${debugAuthUser ? html`
           <div class="debug-button-wrapper">
             <sl-button variant="primary" @click=${() =>
-              this.onTelegramAuth({
-                id: 1,
-                first_name: 'Нурболат',
-                username: 'anzUralsk',
-                auth_date: Date.now(),
-                hash: 'debug'
-              })}>
+              this.onTelegramAuth(debugAuthUser)}>
               Debug вход
             </sl-button>
           </div>

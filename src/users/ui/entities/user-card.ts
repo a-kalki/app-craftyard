@@ -80,7 +80,7 @@ export class UserCardEntity extends BaseElement {
 
   render() {
     const userAR = new UserAR(this.user);
-    const skills = userAR.skills;
+    const skills = userAR.skillKeys;
     const statuses = userAR.statuses;
 
     return html`
