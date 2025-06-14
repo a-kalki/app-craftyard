@@ -1,14 +1,14 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
-import type { UserDod } from '../../app-domain/dod';
-import { UserAR } from '../../../users/domain/user/aroot';
-import { USER_STATUS_TITLES } from '../../app-domain/constants';
+import type { UserAttrs } from '#app/domain/user/user';
+import { UserAr } from '#app/domain/user/a-root';
+import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
 
 @customElement('user-panel')
 export class UserPanelWidget extends BaseElement {
   @property({ type: Boolean }) isMobile = false;
-  @property({ type: Object }) user!: UserDod;
+  @property({ type: Object }) user!: UserAttrs;
 
   static styles = css`
     :host {
@@ -28,7 +28,7 @@ export class UserPanelWidget extends BaseElement {
       font-weight: 600;
     }
 
-    .status {
+    .title {
       font-size: 0.75rem;
       color: var(--sl-color-neutral-600);
     }
@@ -48,15 +48,16 @@ export class UserPanelWidget extends BaseElement {
   `;
 
   render() {
-    const userAr = new UserAR(this.user);
-    const statusTitle = USER_STATUS_TITLES[userAr.getMaxPriorityStatus()];
+    const userAr = new UserAr(this.user);
+    const topKey = userAr.getTopContributionKeyByOrder();
+    const title = CONTRIBUTIONS_DETAILS[topKey].title;
 
     return html`
       <user-avatar .user=${this.user} shape="circle" size="36"></user-avatar>
       
       <div class="info desktop-only">
         <span class="name">${this.user.name}</span>
-        <span class="status">${statusTitle}</span>
+        <span class="title">${title}</span>
       </div>
       
       <div class="mobile-only">

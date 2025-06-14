@@ -1,44 +1,59 @@
-import { RootApi } from "../../app/ui/base/root-api";
-import type { FindUserResult, RegisterUserDto, RegisterUserResult, UserApiInterface } from "../../app/ui/base-run/run-types";
-import { usersEndpoint } from "../domain/constants";
-import type {
-  EditUserCommand, EditUserResult, FindUserCommand, GetUsersCommand, GetUsersResult, RegisterUserCommand 
-} from "../domain/user/contracts";
+import type { AuthData, AppApiInterface } from "../../app/ui/base-run/run-types";
+import { type BackendResultByMeta } from "rilata/core";
+import { type GetUserCommand, type GetUserMeta } from "#app/domain/user/struct/get-user";
+import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users";
+import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user";
+import type { AuthUserCommand, AuthUserMeta } from "#app/domain/user/struct/auth-user";
+import { usersApiUrl } from "#users/constants";
+import { jwtDecoder } from "#app/ui/base-run/app-resolves";
+import { BaseBackendApi } from "#app/ui/base/base-api";
+import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
 
-class UsersApi extends RootApi implements UserApiInterface {
-  protected rootEndpoint = usersEndpoint
-
-  registerUser(dto: RegisterUserDto): Promise<RegisterUserResult> {
-    const command: RegisterUserCommand = {
-      command: 'register-user',
-      dto
+class UsersApi extends BaseBackendApi implements AppApiInterface {
+  authUser(dto: AuthData): Promise<BackendResultByMeta<AuthUserMeta>> {
+    const command: AuthUserCommand = {
+      name: 'auth-user',
+      attrs: dto,
+      requestId: crypto.randomUUID(),
     }
-    return this.post(command);
+    return this.request<AuthUserMeta>(command);
   }
 
-  findUser(id: string): Promise<FindUserResult> {
-    const command: FindUserCommand = {
-      command: 'find-user',
-      dto: { id}
+  refreshUser(attrs: RefreshUserCommand['attrs']): Promise<BackendResultByMeta<RefreshUserMeta>> {
+    const command: RefreshUserCommand = {
+      name: 'refresh-user',
+      attrs,
+      requestId: crypto.randomUUID(),
     }
-    return this.post(command);
+    return this.request<RefreshUserMeta>(command);
   }
 
-  getUsers(): Promise<GetUsersResult> {
+  getUser(id: string): Promise<BackendResultByMeta<GetUserMeta>> {
+    const command: GetUserCommand = {
+      name: 'get-user',
+      attrs: { id },
+      requestId: crypto.randomUUID(),
+    }
+    return this.request<GetUserMeta>(command);
+  }
+
+  getUsers(): Promise<BackendResultByMeta<GetUsersMeta>> {
     const command: GetUsersCommand = {
-      command: 'get-users',
-      dto: {}
+      name: 'get-users',
+      attrs: {},
+      requestId: crypto.randomUUID(),
     }
-    return this.post(command);
+    return this.request<GetUsersMeta>(command);
   }
 
-  editUser(dto: EditUserCommand['dto']): Promise<EditUserResult> {
+  editUser(attrs: EditUserCommand['attrs']): Promise<BackendResultByMeta<EditUserMeta>> {
     const command: EditUserCommand = {
-      command: 'edit-user',
-      dto
+      name: 'edit-user',
+      attrs,
+      requestId: crypto.randomUUID(),
     }
-    return this.post(command);
+    return this.request<EditUserMeta>(command);
   }
 }
 
-export const usersApi = new UsersApi();
+export const usersApi = new UsersApi(usersApiUrl, jwtDecoder);

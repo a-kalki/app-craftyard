@@ -26,11 +26,11 @@ await cp(shoelaceSource, shoelaceAssetsDir, { recursive: true });
 
 // Копируем стили с указанием имени файла
 await cp(join(staticDir, 'global.css'), join(assetsDir, 'global.css'));
+await cp(join(staticDir, 'favicon.svg'), join(assetsDir, 'favicon.svg'));
 await cp('node_modules/@shoelace-style/shoelace/dist/themes/light.css', join(assetsDir, 'light.css'));
 
 // Копируем основные файлы в publicDir (вне assets)
 await cp(join(staticDir, 'index.html'), join(publicDir, 'index.html'));
-await cp(join(staticDir, 'favicon.svg'), join(publicDir, 'favicon.svg'));
 
 // Копируем статики приложения (в assets)
 const appStaticSource = join(projectDir, 'src/app/ui/page/assets');

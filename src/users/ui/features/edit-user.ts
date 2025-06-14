@@ -1,10 +1,11 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserDod, UserStatus } from '../../../app/app-domain/dod';
 import { usersApi } from '../users-api';
-import { UserAR } from '../../domain/user/aroot';
-import { userAccessRules } from '../../domain/user/rules/access';
+import type { UserAttrs } from '#app/domain/user/user';
+import type { ContributionKey } from '#app/domain/contributions/types';
+import { UserPolicy } from '#app/domain/user/policy';
+import type { EditUserCommand } from '#app/domain/user/struct/edit-user';
 
 @customElement('user-edit')
 export class UserEditFeature extends BaseElement {
@@ -71,18 +72,18 @@ export class UserEditFeature extends BaseElement {
       gap: 0.5rem;
     }
 
-    .editable-stats {
+    .editable-contribution {
       display: grid;
       gap: 1rem;
     }
 
-    .stat-item {
+    .contribution-item {
       border: 1px solid var(--sl-color-neutral-200);
       border-radius: var(--sl-border-radius-medium);
       padding: 1rem;
     }
 
-    .stat-header {
+    .contribution-header {
       margin-bottom: 1rem;
     }
 
@@ -97,7 +98,7 @@ export class UserEditFeature extends BaseElement {
         grid-template-columns: 1fr;
       }
       
-      .stat-item {
+      .contribution-item {
         padding: 0.75rem;
       }
     }
@@ -109,7 +110,7 @@ export class UserEditFeature extends BaseElement {
   };
 
   @property({ type: Object })
-  user: UserDod | undefined;
+  user: UserAttrs | undefined;
 
   @state()
   private name = '';
@@ -130,63 +131,64 @@ export class UserEditFeature extends BaseElement {
 
   async loadUser(): Promise<void> {
     const userId = this.app.router.getParams().userId;
-    const result = await usersApi.findUser(userId);
-    if (!result.status) {
-      this.app.error('Не удалось загрузать данные пользователя', {
+    const result = await usersApi.getUser(userId);
+    if (result.isFailure()) {
+      this.app.error('Не удалось загрузить данные пользователя', {
         userId,
         description: 'Пользователя с таким id не существует'
       });
       this.app.router.navigate(`/users/${userId}`);
       return;
     }
-    this.user = result.success;
+    this.user = result.value;
 
     if (!this.checkRules()) {
       this.app.router.navigate(`/users/${userId}`);
       return;
     }
 
-    this.name = this.user.name;
-    this.telegramUsername = this.user.profile.telegramNickname ?? '';
-    this.avatarUrl = this.user.profile.avatarUrl ?? '';
-    this.skills = Object.entries(this.user.profile.skills ?? {});
+    this.name = result.value.name;
+    this.telegramUsername = result.value.profile.telegramNickname ?? '';
+    this.avatarUrl = result.value.profile.avatarUrl ?? '';
+    this.skills = Object.entries(result.value.profile.skills ?? {});
   }
 
-  private canEditStatusStats(): boolean {
+  private canEditStatistics(): boolean {
     if (!this.user) return false;
-    const currentUser = this.app.getState().currentUser;
-    if (!currentUser) return false;
-    
-    const currentAR = new UserAR(currentUser);
-    return userAccessRules.canModeratorEditOther(currentAR);
+    const userPolicy = new UserPolicy(this.app.getState().currentUser);
+    return userPolicy.isModerator();
   }
 
-  private updateStatCount(status: UserStatus, count: number) {
+  private updateContriburionCount(key: ContributionKey, count: number) {
     if (!this.user || isNaN(count)) return;
     
     this.user = {
       ...this.user,
-      contributions: {
-        ...this.user.contributions,
-        [status]: {
-          ...this.user.contributions[status],
-          count
+      statistics: {
+        contributions: {
+          ...this.user.statistics.contributions,
+          [key]: {
+            ...this.user.statistics.contributions[key],
+            count
+          }
         }
       }
     };
   }
 
-  private updateStatDate(status: UserStatus, field: 'firstAt' | 'lastAt', dateString: string) {
+  private updateContributionDate(key: ContributionKey, field: 'firstAt' | 'lastAt', dateString: string) {
     if (!this.user || !dateString) return;
     
     const timestamp = new Date(dateString).getTime();
     this.user = {
       ...this.user,
-      contributions: {
-        ...this.user.contributions,
-        [status]: {
-          ...this.user.contributions[status],
-          [field]: timestamp
+      statistics: {
+        contributions: {
+          ...this.user.statistics.contributions,
+          [key]: {
+            ...this.user.statistics.contributions[key],
+            [field]: timestamp
+          }
         }
       }
     };
@@ -214,22 +216,27 @@ export class UserEditFeature extends BaseElement {
   }
 
   private async save() {
-    if (!(this.checkValidity() && this.checkRules())) return;
+    if (!this.checkValidity()) return;
+    if (!this.checkRules()) return;
 
-    const updated = {
+    const updated: EditUserCommand['attrs'] = {
       id: this.user!.id,
       name: this.name,
-      telegramNickname: this.telegramUsername,
       profile: {
         avatarUrl: this.avatarUrl,
-        skills: Object.fromEntries(this.skills.filter(([key]) => key.trim()))
+        skills: Object.fromEntries(this.skills.filter(([key]) => key.trim())),
+        telegramNickname: this.telegramUsername,
       }
     };
 
+    if (this.canEditStatistics()) {
+      updated.statistics = this.user!.statistics;
+    }
+
     try {
       const result = await usersApi.editUser(updated);
-      if (!result.status) {
-        this.app.error('Ошибка при сохранении профиля.', result.failure);
+      if (result.isFailure()) {
+        this.app.error('Ошибка при сохранении профиля.', result.value);
         return;
       }
       this.app.info('Профиль обновлён');
@@ -258,18 +265,13 @@ export class UserEditFeature extends BaseElement {
   }
 
   private checkRules(): boolean {
-    try {
-      const currUserAr = new UserAR(this.app.getState().currentUser);
-      const targetUserAr = new UserAR(this.user!);
-      const isSelf = userAccessRules.canEditSelf(currUserAr, targetUserAr);
-      const isModerator = userAccessRules.canModeratorEditOther(currUserAr);
-      if (!isSelf && !isModerator) {
-        this.app.info('У вас недостаточно прав для редактирования профиля', { variant: 'warning' });
-        return false;
-      }
-    } catch {
-      this.app.info('Ошибка инвариантов!');
+    if (!this.user) {
+      this.app.info('Ошибка: пользователь не загружен для проверки правил доступа.', { variant: 'danger' });
       return false;
+    }
+    const userPolicy = new UserPolicy(this.app.getState().currentUser);
+    if (!userPolicy.canEdit(this.user)) {
+      this.app.info('У вас недостаточно прав для редактирования профиля', { variant: 'warning' });
     }
     return true;
   }
@@ -278,6 +280,9 @@ export class UserEditFeature extends BaseElement {
     if (this.user === undefined) {
       return html`<sl-spinner></sl-spinner>`;
     }
+
+    const canEditStats = this.canEditStatistics();
+
     return html`
       <h2>Редактирование профиля</h2>
 
@@ -302,7 +307,11 @@ export class UserEditFeature extends BaseElement {
         </div>
 
         ${this.avatarUrl && this.avatarUrl.startsWith('http') ? html`
-          <user-avatar size="96" .user=${this.user}></user-avatar>
+          <user-avatar
+            size="96"
+            .user=${this.user}
+            .shape=${this.avatarUrl.includes('gravatar') ? 'circle' : 'rounded'}
+          ></user-avatar>
         ` : ''}
       </div>
       
@@ -313,63 +322,62 @@ export class UserEditFeature extends BaseElement {
         @sl-input=${(e: CustomEvent) => this.telegramUsername = (e.target as HTMLInputElement).value}
       ></sl-input>
 
-      ${this.canEditStatusStats() ? html`
-        <sl-divider></sl-divider>
+      <sl-divider></sl-divider>
+      
+      <div class="status-stats">
+        <h3>Статусы пользователя</h3>
         
-        <div class="status-stats">
-          <h3>Статусы пользователя</h3>
-          
-          ${Object.entries(this.user.contributions ?? {}).length === 0 ? html`
-            <p>Статусная статистика отсутствует.</p>
-          ` : html`
-            <div class="editable-stats">
-              ${Object.entries(this.user.contributions).map(([status, counter]) => html`
-                <div class="stat-item">
-                  <div class="stat-header">
-                    <user-status-tag .userStatus=${status as UserStatus}></user-status-tag>
-                  </div>
-                  
-                  <div class="stat-controls">
-                    <sl-input
-                      type="number"
-                      label="Количество"
-                      min="0"
-                      .value=${counter?.count?.toString() ?? '0'}
-                      @sl-change=${
-                        (e: CustomEvent) => this.updateStatCount(
-                          status as UserStatus, parseInt((e.target as HTMLInputElement).value)
-                        )
-                      }
-                    ></sl-input>
-                    
-                    <sl-input
-                      type="date"
-                      label="Первое"
-                      .value=${this.formatDateInput(counter?.firstAt)}
-                      @sl-change=${
-                        (e: CustomEvent) => this.updateStatDate(
-                          status as UserStatus, 'firstAt', (e.target as HTMLInputElement).value
-                        )
-                      }
-                    ></sl-input>
-                    
-                    <sl-input
-                      type="date"
-                      label="Последнее"
-                      .value=${this.formatDateInput(counter?.lastAt)}
-                      @sl-change=${
-                        (e: CustomEvent) => this.updateStatDate(
-                          status as UserStatus, 'lastAt', (e.target as HTMLInputElement).value
-                        )
-                      }
-                    ></sl-input>
-                  </div>
+        ${html`
+          <div class="editable-contribution">
+            ${Object.entries(this.user.statistics.contributions).map(([key, counter]) => html`
+              <div class="contribution-item">
+                <div class="contribution-header">
+                  <user-contribution-tag .contributionKey=${key}></user-contribution-tag>
                 </div>
-              `)}
-            </div>
-          `}
-        </div>
-      ` : ''}
+                
+                <div class="stat-controls">
+                  <sl-input
+                    type="number"
+                    label="Количество"
+                    min="0"
+                    .value=${counter.count.toString()}
+                    ?disabled=${!canEditStats} <!-- Отключено, если не модератор -->
+                    @sl-change=${
+                      (e: CustomEvent) => this.updateContriburionCount(
+                        key as ContributionKey, parseInt((e.target as HTMLInputElement).value)
+                      )
+                    }
+                  ></sl-input>
+                  
+                  <sl-input
+                    type="date"
+                    label="Первое"
+                    .value=${this.formatDateInput(counter?.firstAt)}
+                    ?disabled=${!canEditStats} <!-- Отключено, если не модератор -->
+                    @sl-change=${
+                      (e: CustomEvent) => this.updateContributionDate(
+                        key as ContributionKey, 'firstAt', (e.target as HTMLInputElement).value
+                      )
+                    }
+                  ></sl-input>
+                  
+                  <sl-input
+                    type="date"
+                    label="Последнее"
+                    .value=${this.formatDateInput(counter?.lastAt)}
+                    ?disabled=${!canEditStats} <!-- Отключено, если не модератор -->
+                    @sl-change=${
+                      (e: CustomEvent) => this.updateContributionDate(
+                        key as ContributionKey, 'lastAt', (e.target as HTMLInputElement).value
+                      )
+                    }
+                  ></sl-input>
+                </div>
+              </div>
+            `)}
+          </div>
+        `}
+      </div>
 
       <sl-divider></sl-divider>
 

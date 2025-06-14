@@ -75,8 +75,15 @@ export class AppToaster extends LitElement {
         }
 
         return html`
-          <sl-alert open closable variant=${msg.variant}>
-            <strong>${msg.text}</strong>
+          <sl-alert 
+            open 
+            closable 
+            variant=${msg.variant}
+            style="max-width: 90vw; word-break: break-word;"
+          >
+            <div style="white-space: pre-wrap; word-break: break-word;">
+              <strong>${msg.text}</strong>
+            </div>
             ${detailContent
               ? html`
                   <sl-details 
@@ -84,8 +91,24 @@ export class AppToaster extends LitElement {
                     style="margin-top: 0.5rem"
                     @sl-show=${() => this.onDetailsToggle(msg.id, true)}
                     @sl-hide=${() => this.onDetailsToggle(msg.id, false)}
-                  >
-                    <pre style="white-space: pre-wrap; font-size: 0.8rem;">${detailContent}</pre>
+                    <div style="
+                      max-height: 40vh; 
+                      max-width: 90vw; 
+                      overflow: auto; 
+                      background: #f9f9f9; 
+                      padding: 4px; 
+                      border-radius: 4px;
+                    ">
+                      <pre style="
+                        white-space: pre; 
+                        font-size: 0.8rem; 
+                        overflow-x: auto; 
+                        overflow-wrap: normal;
+                        word-break: normal;
+                      ">
+                    ${detailContent}
+                      </pre>
+                    </div>
                   </sl-details>
                 `
               : ''}

@@ -1,8 +1,8 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserDod } from '../../../app/app-domain/dod';
 import { usersApi } from '../users-api';
+import type { UserAttrs } from '#app/domain/user/user';
 
 @customElement('users-list')
 export class UsersWidget extends BaseElement {
@@ -58,12 +58,16 @@ export class UsersWidget extends BaseElement {
   `;
 
   @state()
-  private users: UserDod[] = [];
+  private users: UserAttrs[] = [];
 
   async connectedCallback() {
     super.connectedCallback();
     const result = await usersApi.getUsers();
-    this.users = result.status ? result.success : [];
+    if (result.isFailure()) {
+      this.app.error('Не удалось отобразить страницу, попробуйте позже.', { details: { result: result.value } });
+      return;
+    }
+    this.users = result.value;
   }
 
   render() {

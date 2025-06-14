@@ -1,34 +1,40 @@
-import type { UserDod } from "../../app-domain/dod";
-import type { Result } from "../../app-domain/types";
+import type { AuthUserMeta } from "#app/domain/user/struct/auth-user";
+import type { GetUserMeta } from "#app/domain/user/struct/get-user";
+import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
+import type { BackendResultByMeta } from "rilata/core";
 
-export type RegisterUserDto =
-  Pick<UserDod, 'id' | 'name'>
-  & Pick<UserDod['profile'], 'avatarUrl' | 'telegramNickname'>
+export type UserDoesNotExistError = {
+  name: 'UserDoesNotExistError',
+  type: 'domain-error',
+}
 
-export type FindUserResult = Result<UserDod, 'User not found'>;
+export interface AppApiInterface {
+  authUser(dto: AuthData): Promise<BackendResultByMeta<AuthUserMeta>>;
 
-export type RegisterUserResult = Result<'success', string>;
+  getUser(userId: string): Promise<BackendResultByMeta<GetUserMeta>>;
 
-export interface UserApiInterface {
-  registerUser(dto: RegisterUserDto): Promise<RegisterUserResult>;
+  refreshUser(dto: RefreshUserCommand['attrs']): Promise<BackendResultByMeta<RefreshUserMeta>>;
+}
 
-  findUser(userId: string): Promise<FindUserResult>;
+export type AuthData = {
+  type: 'widget-login' | 'mini-app-login';
+  data: string,
 }
 
 export type TelegramUser = {
-  id: number;
+  id: string;
   first_name: string;
   username?: string;
   photo_url?: string,
-  language_code?: string;
+  [key: string]: string | number | undefined;
 }
 
-export type TelegramAuthUser = {
+export type TelegramWidgetUserData = {
   id: number;
   first_name: string;
-  last_name?: string;
   username?: string;
   photo_url?: string;
   auth_date: number;
   hash: string;
+  [key: string]: unknown;
 }

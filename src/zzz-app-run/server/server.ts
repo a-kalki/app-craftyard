@@ -1,6 +1,6 @@
-import { BunServer, ServerAfterware, ServerMiddleware, type BunServerConfig } from 'rilata/api-server';
-import type { DedokServerMeta } from './types';
 import type { Controller, Module, ModuleMeta } from 'rilata/api';
+import type { DedokServerMeta } from './types';
+import { BunServer, ServerAfterware, ServerMiddleware, type BunServerConfig } from 'rilata/api-server';
 
 export class DedokServer extends BunServer<DedokServerMeta> {
   name = 'Dedok Monolith Server' as const;

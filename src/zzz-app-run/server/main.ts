@@ -1,12 +1,18 @@
+import { cwd } from "process";
 import { DedokServer } from "./server";
-import { getServerConfig, InjectCallerMiddleware, LogResponseAfterware, ServerAfterware, ServerMiddleware } from "rilata/api-server";
 import { dedokServerResolver } from "./resolver";
-import { WebModuleController, type Controller, type Module, type ModuleMeta } from "rilata/api";
 import { UsersModule } from "#users/api/module";
-import { usersModuleConfig, usersModuleResolver } from "#users/api/resolver";
+import { getServerConfig, InjectCallerMiddleware, LogResponseAfterware, ServerAfterware, type ServerMiddleware } from "rilata/api-server";
+import type { Controller, Module, ModuleMeta } from "rilata/api";
+import { userModuleResolvers } from "./module-resolvers";
+import { IndexHtmlFileController } from "#app/api/controllers/index-html-file";
+import { AssetFilesController } from "#app/api/controllers/asset-files";
+import {} from '../../app/bot/app.ts';
+
+const PROJECT_PATH = cwd();
 
 const middlewares: ServerMiddleware[] = [
-  new InjectCallerMiddleware(dedokServerResolver)
+  new InjectCallerMiddleware(dedokServerResolver.jwtVerifier)
 ];
 
 const afterwares: ServerAfterware[] = [
@@ -14,18 +20,12 @@ const afterwares: ServerAfterware[] = [
 ]
 
 const modules: Module<ModuleMeta>[] = [
-  new UsersModule(
-    usersModuleConfig,
-    {
-      moduleResolver: usersModuleResolver,
-      serverResolver: dedokServerResolver,
-    },
-
-  )
+  new UsersModule(userModuleResolvers)
 ]
 
 const controllers: Controller[] = [
-
+  new AssetFilesController(PROJECT_PATH),
+  new IndexHtmlFileController(PROJECT_PATH),
 ]
 
 const server = new DedokServer(

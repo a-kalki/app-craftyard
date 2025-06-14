@@ -1,9 +1,9 @@
-import type { UserDod } from "../../app-domain/dod";
+import type { UserAttrs } from "#app/domain/user/user";
 import type { BaseElement } from "./base-element";
 import type { Module } from "./module";
 
 export type AppState = {
-  currentUser: UserDod,
+  currentUser: UserAttrs,
   isMobile: boolean,
   isTelegramMiniApp: boolean,
 }

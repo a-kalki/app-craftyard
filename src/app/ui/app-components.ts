@@ -1,5 +1,4 @@
 import {} from './page/app';
-import {} from './page/registration';
 import {} from './page/login';
 
 import {} from './widget/app-header';
@@ -10,4 +9,4 @@ import {} from './entities/content-not-found';
 import {} from './entities/internal-error';
 import {} from './entities/app-toaster';
 import {} from './entities/user-avatar';
-import {} from './entities/status-tag';
+import {} from './entities/contribution-tag';

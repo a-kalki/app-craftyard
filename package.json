@@ -12,7 +12,7 @@
     "bld": "bun run ./src/zzz-app-run/build.ts --mode=dev",
     "bld-prod": "bun run ./scripts/build.ts --mode=prod",
     "serve": "bun run bld && bun run ./src/zzz-app-run/server.ts",
-    "start": "NODE_ENV='development' bun run ./src/zzz-app-run/server/main.ts"
+    "start": "NODE_ENV=development bun run bld && bun ./src/zzz-app-run/server/main.ts"
   },
   "devDependencies": {
     "@shoelace-style/shoelace": "^2.20.1",

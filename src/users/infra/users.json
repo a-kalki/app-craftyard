@@ -3,15 +3,26 @@
     "id": "1",
     "name": "Нурболат",
     "profile": {
-      "avatarUrl": "https://icons.iconarchive.com/icons/erix-subyarko/medical/256/Document-Analytics-List-Report-Health-icon.png",
-      "skills": {}
+      "skills": {},
+      "telegramNickname": "anzUralsk"
     },
-    "joinedAt": 1749151947695,
-    "contributions": {}
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "firstAt": 1749821077648,
+          "lastAt": 1749821077648
+        }
+      }
+    },
+    "joinedAt": 1749821077648
   },
   "773084180": {
     "id": "773084180",
     "name": "Nurbolat",
+    "support": {
+      "isModerator": true
+    },
     "profile": {
       "telegramNickname": "anzUralsk",
       "avatarUrl": "https://t.me/i/userpic/320/bOrpGbX5Jq3fbysH_VoGshRjzc7AAw_J6UARzLI-qUQ.svg",
@@ -28,39 +39,19 @@
       }
     },
     "joinedAt": 1735862400000,
-    "contributions": {
-      "KEEPER": {
-        "count": 1,
-        "firstAt": 1735862400000,
-        "lastAt": 1735862400000
-      },
-      "MODERATOR": {
-        "count": 0,
-        "firstAt": 1749150000000,
-        "lastAt": 1749150000000
+    "statistics": {
+      "contributions": {
+        "KEEPER": {
+          "count": 1,
+          "firstAt": 1735862400000,
+          "lastAt": 1735862400000
+        },
+        "MODERATOR": {
+          "count": 0,
+          "firstAt": 1749150000000,
+          "lastAt": 1749150000000
+        }
       }
     }
-  },
-  "773084181": {
-    "id": "773084181",
-    "name": "Нурболат",
-    "profile": {
-      "telegramNickname": "",
-      "avatarUrl": "https://t.me/i/userpic/320/bOrpGbX5Jq3fbysH_VoGshRjzc7AAw_J6UARzLI-qUQ.svg",
-      "skills": {}
-    },
-    "joinedAt": 1749146759215,
-    "contributions": {}
-  },
-  "6867263977": {
-    "id": "6867263977",
-    "name": "Диети",
-    "profile": {
-      "skills": {},
-      "telegramNickname": "nxvKTMaYUuS",
-      "avatarUrl": "https://t.me/i/userpic/320/zHlqTN1Dz76PjP_oVj8nlNxCJ_EmN7L0MbTTEQEPduRuVMQXBv7gMoEaBmQ5Lq_S.jpg"
-    },
-    "joinedAt": 1749235599507,
-    "contributions": {}
   }
 }

@@ -1,0 +1,29 @@
+import type { RequestScope, RunDomainResult } from "rilata/api";
+import { failure, success } from "rilata/core";
+import { getUserValidator } from "./v-map";
+import { UserUseCase } from "#users/api/base-use-case";
+import type { GetUserCommand, GetUserMeta } from "#app/domain/user/struct/get-user";
+
+export class GetUserUC extends UserUseCase<GetUserMeta> {
+  arName = "UserAr" as const;
+
+  name = "Get User Use Case" as const;
+
+  inputName = "get-user" as const;
+
+  protected supportAnonimousCall = true;
+
+  protected validator = getUserValidator;
+
+  async runDomain(
+    input: GetUserCommand, requestData: RequestScope,
+  ): Promise<RunDomainResult<GetUserMeta>> {
+    const user = await this.moduleResolver.db.findUser(input.attrs.id);
+    return user
+      ? success(user)
+      : failure({
+        name: 'UserDoesNotExistError',
+        type: 'domain-error',
+      });
+  }
+}

@@ -1,20 +1,29 @@
 import type { AppState, RootItem, RoutableElementAttrs, ToastVariant } from "./types";
 import { AppRouter } from "./app-router";
 import type { ModuleManifest } from "./types";
-import type { UserDod } from "../../app-domain/dod";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
 import { AppDialog, type DialogOptions } from "./app-dialog";
+import type { UserAttrs } from "#app/domain/user/user";
+import type { AppApiInterface } from '../base-run/run-types';
 
 export class App {
   public router: AppRouter;
+
+  public appApiInterface: AppApiInterface;
 
   private moduleManifests: ModuleManifest[] = [];
   private appState: AppState;
   private appNotifier = new AppNotifier();
   private appDialog = new AppDialog();
 
-  constructor(moduleManifests: ModuleManifest[], initialUser: UserDod, isTelegramMiniApp: boolean) {
+  constructor(
+    appApiInterface: AppApiInterface,
+    moduleManifests: ModuleManifest[],
+    initialUser: UserAttrs,
+    isTelegramMiniApp: boolean
+  ) {
+    this.appApiInterface = appApiInterface;
     this.moduleManifests = moduleManifests;
     this.appState = {
       currentUser: initialUser,

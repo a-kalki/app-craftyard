@@ -1,7 +1,8 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import type { TelegramAuthUser, TelegramUser, UserApiInterface } from '../base-run/run-types';
+import type { AuthData, TelegramWidgetUserData, AppApiInterface } from '../base-run/run-types';
 import { AppNotifier } from '../base/app-notifier';
+import { AuthUserSuccess } from '#app/domain/user/struct/auth-user';
 
 @customElement('login-page')
 export class LoginPage extends LitElement {
@@ -10,7 +11,7 @@ export class LoginPage extends LitElement {
   }
 
   @property({ type: Boolean }) debug = true;
-  @property({ type: Object }) usersApi!: UserApiInterface;
+  @property({ type: Object }) usersApi!: AppApiInterface;
   @state() private widgetLoaded = false;
 
   private appNotifier = new AppNotifier();
@@ -87,7 +88,6 @@ export class LoginPage extends LitElement {
     script.dataset.userpic = 'true';
     script.dataset.requestAccess = 'write';
     script.dataset.onauth = 'onTelegramAuth(user)';
-    script.dataset.authUrl = 'https://c78f-2a0d-b201-6010-f27f-391-ab73-6d33-14b8.ngrok-free.app/';
 
     script.onload = () => {
       this.widgetLoaded = true;
@@ -97,18 +97,23 @@ export class LoginPage extends LitElement {
     container.appendChild(script);
   }
 
-  private async onTelegramAuth(tgUser: TelegramAuthUser) {
-    const result = await this.usersApi.findUser(tgUser.id.toString());
-    if (!result.status) {
-      alert('Вы не зарегистрированы. Пройдите регистрацию.');
-      window.dispatchEvent(new CustomEvent('need-registration', { detail: tgUser }));
+  private async onTelegramAuth(tgUser: TelegramWidgetUserData) {
+    const data: AuthData = {
+      type: 'widget-login',
+      data: new URLSearchParams(tgUser as Record<string, string>).toString(),
+    }
+    const result = await this.usersApi.authUser(data);
+    if (result.isFailure()) {
+      this.appNotifier.error(
+        'В процессе авторизации произошел сбой, попробуйте перезагрузить страницу и повторить процесс.',
+        { details: result.value }
+      );
       return;
     }
-    this.appNotifier.info('user-logined', { details: result.success });
-    window.dispatchEvent(new CustomEvent('user-logined', { detail: result.success }));
+    window.dispatchEvent(new CustomEvent<AuthUserSuccess>('user-logined', { detail: result.value }));
   }
 
-  private getDebugAuthUser(): TelegramAuthUser | undefined {
+  private getDebugAuthUser(): TelegramWidgetUserData | undefined {
     return (window as any).debugAuthUser;
   }
 

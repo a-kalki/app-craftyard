@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     // Enable latest features
-    "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
+    "project": "./tsconfig.json",
+    "lib": ["ESNext", "DOM"],
     "moduleDetection": "force",
     "allowJs": true,
     "experimentalDecorators": true,
@@ -11,8 +12,22 @@
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
+    "outDir": "./src/zzz-app-run/public",
+
+    "baseUrl": "./",
+    "paths": {
+      "#app/*": ["./src/app/*"],
+      "#models/*": ["./src/models/*"],
+      "#users/*": ["./src/users/*"],
+      "#workshop/*": ["./src/workshop/*"],
+      "@shoelace-style/shoelace": ["./node_modules/@shoelace-style/shoelace/dist/shoelace.js"]
+    },
+    "include": ["src", "src/types/telegram.d.ts"],
+    "exclude": ["node_modules/", "node_modules/rilata/**/*", "rilata/**/*"],
+    "types": ["@shoelace-style/shoelace"],
 
     // Best practices
     "strict": true,
@@ -22,12 +37,6 @@
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
-
-    "types": ["@shoelace-style/shoelace"],
-    "paths": {
-      "@shoelace-style/shoelace": ["./node_modules/@shoelace-style/shoelace/dist/shoelace.js"]
-    },
-    "include": ["src", "src/types/telegram.d.ts"]
+    "noPropertyAccessFromIndexSignature": false
   }
 }

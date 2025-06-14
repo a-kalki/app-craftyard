@@ -1,8 +1,8 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserDod } from '../../../app/app-domain/dod';
-import { UserAR } from '../../domain/user/aroot';
+import { UserAr } from '#app/domain/user/a-root';
+import type { UserAttrs } from '#app/domain/user/user';
 
 @customElement('user-card')
 export class UserCardEntity extends BaseElement {
@@ -61,11 +61,11 @@ export class UserCardEntity extends BaseElement {
       margin-bottom: 0.3rem;
     }
 
-    .statuses-section {
+    .contribution-section {
       margin-top: 0.5rem;
     }
 
-    .status-list, .skills-section {
+    .contribution-list, .skills-section {
       max-width: 100%;
       overflow: hidden;
     }
@@ -76,12 +76,12 @@ export class UserCardEntity extends BaseElement {
   `;
 
   @property({ type: Object })
-  user!: UserDod;
+  user!: UserAttrs;
 
   render() {
-    const userAR = new UserAR(this.user);
-    const skills = userAR.skillKeys;
-    const statuses = userAR.statuses;
+    const userAR = new UserAr(this.user);
+    const skills = Object.keys(userAR.getSkills());
+    const contributionKeys = userAR.getContributionKeys();
 
     return html`
       <sl-card>
@@ -98,10 +98,10 @@ export class UserCardEntity extends BaseElement {
                 <sl-icon name="ticket-detailed"></sl-icon> Подробнее
               </sl-button>
             </div>
-            <div class="statuses-section">
+            <div class="contribution-section">
               <div class="section-title">Статусы:</div>
-              <div class="status-list">
-                ${userAR.statuses.map(s => html`<user-status-tag .userStatus=${s}></user-status-tag>`)}
+              <div class="contribution-list">
+                ${contributionKeys.map(s => html`<user-contribution-tag .contributionKey=${s}></user-contribution-tag>`)}
               </div>
             </div>
           </div>

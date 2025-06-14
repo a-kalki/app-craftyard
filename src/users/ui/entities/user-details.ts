@@ -1,11 +1,13 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserDod } from '../../../app/app-domain/dod';
 import { usersApi } from '../users-api';
-import { UserAR } from '../../domain/user/aroot';
-import { userAccessRules } from '../../domain/user/rules/access';
-import type { FindUserResult } from '../../../app/ui/base-run/run-types';
+import type { UserAttrs } from '#app/domain/user/user';
+import { UserAr } from '#app/domain/user/a-root';
+import type { ContributionCounter, ContributionKey } from '#app/domain/contributions/types';
+import type { BackendResultByMeta } from 'rilata/core';
+import type { GetUserMeta } from '#app/domain/user/struct/get-user';
+import { UserPolicy } from '#app/domain/user/policy';
 
 @customElement('user-details')
 export class UserDetailsEntity extends BaseElement {
@@ -75,37 +77,37 @@ export class UserDetailsEntity extends BaseElement {
       margin: 1.5rem 0;
     }
 
-    .status-section {
+    .contribution-section {
       margin-bottom: 2rem;
     }
 
-    .status-title {
+    .contribution-title {
       font-size: 1.2rem;
       font-weight: 600;
       margin-bottom: 1rem;
       color: var(--sl-color-primary-800);
     }
 
-    .status-table {
+    .contribution-table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 1rem;
     }
 
-    .status-table th,
-    .status-table td {
+    .contribution-table th,
+    .contribution-table td {
       padding: 0.75rem;
       text-align: left;
       border-bottom: 1px solid var(--sl-color-neutral-200);
     }
 
-    .status-table th {
+    .contribution-table th {
       font-weight: 600;
       color: var(--sl-color-neutral-800);
       background-color: var(--sl-color-neutral-100);
     }
 
-    .status-table tr:last-child td {
+    .contribution-table tr:last-child td {
       border-bottom: none;
     }
 
@@ -142,7 +144,7 @@ export class UserDetailsEntity extends BaseElement {
         max-width: 100%;
       }
 
-      .status-table {
+      .contribution-table {
         display: block;
         overflow-x: auto;
       }
@@ -155,7 +157,7 @@ export class UserDetailsEntity extends BaseElement {
   };
 
   @state()
-  private user: UserDod | null = null;
+  private user: UserAttrs | null = null;
 
   @state()
   private canEdit: boolean = false;
@@ -164,31 +166,27 @@ export class UserDetailsEntity extends BaseElement {
     super.connectedCallback();
     const userId = this.getUserId();
     const result = await this.loadUser(userId);
-    if (!result.status) {
+    if (result.isFailure()) {
       this.app.error('Не удалось загрузать данные пользователя', {
         userId,
         description: 'Пользователя с таким id не существует'
       });
       return;
     }
-    this.user = result.success;
+    this.user = result.value;
 
     const currentUser = this.app.getState().currentUser;
-    if (currentUser) {
-      const currentAR = new UserAR(currentUser);
-      const targetAR = new UserAR(this.user);
-      const isSelf = userAccessRules.canEditSelf(currentAR, targetAR);
-      const isModeratorEditingOther = userAccessRules.canModeratorEditOther(currentAR);
-      this.canEdit = (isSelf || isModeratorEditingOther);
-    }
+    const userPolicy = new UserPolicy(currentUser);
+    const targetAttrs = result.value;
+    this.canEdit = userPolicy.canEdit(targetAttrs);;
   }
 
   protected getUserId(): string {
     return this.app.router.getParams().userId;
   }
 
-  private async loadUser(userId: string): Promise<FindUserResult> {
-    return usersApi.findUser(userId);
+  private async loadUser(userId: string): Promise<BackendResultByMeta<GetUserMeta>> {
+    return usersApi.getUser(userId);
   }
 
   private formatDate(timestamp: number): string {
@@ -201,10 +199,11 @@ export class UserDetailsEntity extends BaseElement {
       return html`<sl-spinner label="Загрузка пользователя..." style="width:48px; height:48px;"></sl-spinner>`;
     }
 
-    const userAR = new UserAR(this.user);
-    const statuses = userAR.statuses;
-    const skillsEntries = Object.entries(this.user.profile.skills ?? {});
-    const statusStats = this.user.contributions;
+    const userAR = new UserAr(this.user);
+    const keys: ContributionKey[] = userAR.getContributionKeys();
+    const skillsEntries = Object.entries(userAR.getSkills());
+    const profile = userAR.getAttrs().profile;
+    const contributions = userAR.getContributions();
 
     return html`
       <div class="header">
@@ -220,10 +219,10 @@ export class UserDetailsEntity extends BaseElement {
         </div>
 
         <div class="actions">
-          ${this.user.profile.telegramNickname ? html`
+          ${profile.telegramNickname ? html`
             <sl-button
               variant="primary"
-              href="https://t.me/${this.user.profile.telegramNickname}"
+              href="https://t.me/${profile.telegramNickname}"
               target="_blank"
             >
               <sl-icon name="telegram"></sl-icon>
@@ -242,9 +241,9 @@ export class UserDetailsEntity extends BaseElement {
 
       <sl-divider></sl-divider>
 
-      <div class="status-section">
-        <h3 class="status-title">Статусы и активность</h3>
-        <table class="status-table">
+      <div class="contribution-section">
+        <h3 class="contribution-title">Статусы и активность</h3>
+        <table class="contribution-table">
           <thead>
             <tr>
               <th>Статус</th>
@@ -253,21 +252,21 @@ export class UserDetailsEntity extends BaseElement {
             </tr>
           </thead>
           <tbody>
-            ${statuses.map(status => {
-              const stat = statusStats[status];
+            ${keys.map(key => {
+              const contribution = contributions[key] as ContributionCounter;
               return html`
                 <tr>
                   <td>
                     <div class="status-badge">
-                      <user-status-tag .userStatus=${status}></user-status-tag>
+                      <user-contribution-tag .contributionKey=${key}></user-status-tag>
                     </div>
                   </td>
-                  <td>${stat?.count || 0}</td>
+                  <td>${contribution.count || 0}</td>
                   <td>
-                    ${stat ? html`
-                      Первый: ${this.formatDate(stat.firstAt)}<br>
-                      Последний: ${this.formatDate(stat.lastAt)}
-                    ` : 'Нет данных'}
+                    ${html`
+                      Первый: ${this.formatDate(contribution.firstAt)}<br>
+                      Последний: ${this.formatDate(contribution.lastAt)}
+                    `}
                   </td>
                 </tr>
               `;

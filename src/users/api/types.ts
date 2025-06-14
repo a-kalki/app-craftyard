@@ -1,16 +1,17 @@
+import type { DedokServerResolver } from "#app/api/server-resolver"
+import type { UserRepo } from "#app/domain/user/repo"
+
 export type UsersModuleResolver = {
-    moduleUrls: ['/users'],
-    db: 'Database',
+    moduleUrls: ['/api/users'],
+    db: UserRepo,
+}
+
+export type UsersModuleResolvers = {
+  serverResolver: DedokServerResolver,
+  moduleResolver: UsersModuleResolver
 }
 
 export type UsersModuleMeta = {
-    name: "Users Module",
-    resolvers: {
-        serverResolver: undefined,
-        moduleResolver: {
-            logger: undefined,
-            moduleUrls: [],
-            db: undefined
-        }
-    }
+  name: "Users Module",
+  resolvers: UsersModuleResolvers
 }

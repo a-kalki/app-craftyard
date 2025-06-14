@@ -1,0 +1,38 @@
+import {
+  DtoFieldValidator, IsStringTypeRule,
+  LiteralFieldValidator,
+  MinCharsCountValidationRule,
+  RecordDtoValidator,
+  RegexMatchesValueValidationRule,
+  type ValidatorMap,
+} from "rilata/validator";
+import type { UserAttrs } from "./user";
+import { userStatisticsVMap } from "../contributions/v-map";
+
+export const userSupportVMap: ValidatorMap<UserAttrs['support']> = {
+  isModerator: new LiteralFieldValidator('isModerator', false, { isArray: false }, 'boolean', [])
+}
+
+export const userProfileVMap: ValidatorMap<UserAttrs['profile']> = {
+  telegramNickname: new LiteralFieldValidator('telegramNickname', false, { isArray: false }, 'string', []),
+  avatarUrl: new LiteralFieldValidator('avatarUrl', false, { isArray: false }, 'string', []),
+  // @ts-expect-error
+  skills: new RecordDtoValidator(true, { isArray: false }, [
+    new IsStringTypeRule(),
+    new MinCharsCountValidationRule(30, 'Описание навыка должно содержать не менее 30 символов'),
+  ]),
+}
+
+export const userVMap: ValidatorMap<UserAttrs> = {
+  id: new LiteralFieldValidator('id', true, { isArray: false }, 'string', [
+    new RegexMatchesValueValidationRule(/^\d+$/, 'Id может содержать только цифры'),
+  ]),
+  name: new LiteralFieldValidator('name', true, { isArray: false }, 'string', [
+    new MinCharsCountValidationRule(3, 'Имя должно содержать не менее 3 символов'),
+  ]),
+  support: new DtoFieldValidator('support', false, { isArray: false }, 'dto', userSupportVMap),
+  profile: new DtoFieldValidator('profile', true, { isArray: false }, 'dto', userProfileVMap),
+  statistics: new DtoFieldValidator('statistics', true, { isArray: false }, 'dto', userStatisticsVMap),
+}
+
+export const userInvariantsValidator = new DtoFieldValidator('user', true, { isArray: false }, 'dto', userVMap);

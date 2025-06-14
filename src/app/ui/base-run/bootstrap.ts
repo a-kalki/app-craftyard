@@ -2,12 +2,15 @@ import {} from '../shoelace';
 import {} from '../app-components'
 
 import { App } from '../base/app';
-import { authUserId, localStore } from '../base/localstorage';
-import type { TelegramAuthUser, TelegramUser, UserApiInterface } from './run-types';
-import type { UserDod } from '../../app-domain/dod';
+import type { AuthData, AppApiInterface } from './run-types';
 import type { ModuleManifest } from '../base/types';
 import { AppRouter } from '../base/app-router';
 import { AppNotifier } from '../base/app-notifier';
+import { localStore } from 'rilata/ui';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './constants';
+import type { UserAttrs } from '#app/domain/user/user';
+import type { AuthUserSuccess, TokenType } from '#app/domain/user/struct/auth-user';
+import { jwtDecoder } from './app-resolves';
 
 export class Bootstrap {
   protected  appRouter = new AppRouter();
@@ -16,7 +19,58 @@ export class Bootstrap {
 
   protected isTelegramMiniApp = false;
 
-  constructor(protected manifests: ModuleManifest[], protected usersApi: UserApiInterface) {}
+  constructor(
+    protected manifests: ModuleManifest[],
+    protected appApi: AppApiInterface,
+  ) {}
+
+  protected async processStoredAuthToken(accessToken: string): Promise<void> {
+    const refreshToken = localStore.get<string>(REFRESH_TOKEN_KEY);
+    if (jwtDecoder.dateIsExpired(accessToken) === false) {
+      const payloadResult = jwtDecoder.getTokenPayload(accessToken);
+      if (payloadResult.isFailure()) {
+        this.showLoginPage();
+        return;
+      }
+      const userId = payloadResult.value.userId;
+      const getResult = await this.appApi.getUser(userId);
+      if (getResult.isFailure()) {
+        this.showLoginPage();
+        return;
+      }
+      this.showAppPage(getResult.value, {
+        access: accessToken,
+        refresh: refreshToken ?? '',
+      });
+      return;
+    }
+
+    if (!refreshToken || jwtDecoder.dateIsExpired(refreshToken)) {
+      this.showLoginPage();
+      return;
+    }
+    const refreshResult = await this.appApi.refreshUser({ refreshToken });
+    if (refreshResult.isFailure()) {
+      this.showLoginPage();
+      return;
+    }
+    const refreshedAccessToken = refreshResult.value.accessToken;
+    const payloadResult = jwtDecoder.getTokenPayload(refreshedAccessToken);
+    if (payloadResult.isFailure()) {
+      this.showLoginPage();
+      return;
+    }
+    const { userId } = payloadResult.value;
+    const getResult = await this.appApi.getUser(userId);
+    if (getResult.isFailure()) {
+      this.showLoginPage();
+      return;
+    }
+    this.showAppPage(getResult.value, {
+      access: refreshedAccessToken,
+      refresh: refreshToken,
+    });
+  }
 
   async start() {
     try {
@@ -24,23 +78,24 @@ export class Bootstrap {
       this.prepareBody();
       this.isTelegramMiniApp = await this.initTelegramWebApp();
 
-      let storedUserId: string | undefined = localStore.get<string>(authUserId);
-      if (storedUserId) {
-        const result = storedUserId ? (await this.usersApi.findUser(storedUserId)) : undefined
-        if (result && result.status) {
-          this.showAppPage(result.success);
-          return;
-        } else {
-          localStore.clear();
-        }
+      const storedAuthToken = localStore.get<string>(ACCESS_TOKEN_KEY);
+      if (storedAuthToken) {
+        this.processStoredAuthToken(storedAuthToken);
       } else if(this.isTelegramMiniApp) {
-        const tgUser = this.getUserFromTelegram();
-        const result = await this.usersApi.findUser(tgUser.id.toString());
-        if (!result.status) {
-          this.showRegistrationPage(tgUser);
-        } else {
-          this.showAppPage(result.success);
+        const data: AuthData = {
+          type: 'mini-app-login',
+          data: this.getTelegramInitData(),
         }
+        const authResult = await this.appApi.authUser(data);
+        if (authResult.isFailure()) {
+          this.appNotifier.error('Произошла ошибка при авторизации. Попробуйте перезагрузить страницу.', {
+            result: authResult,
+            commandData: data,
+          });
+          return;
+        } 
+        const { user, token } = authResult.value;
+        this.showAppPage(user, token);
       } else {
         this.showLoginPage();
       }
@@ -93,61 +148,47 @@ export class Bootstrap {
     });
   }
 
-  protected getUserFromTelegram(): TelegramUser {
-    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    if (!tgUser) {
-      const err = new Error('Telegram user not found');
-      this.appNotifier.error('Непредвиденная ошибка. Убедитесь что запускаете внутри Telegram.', err);
+  protected getTelegramInitData(): string {
+    const initData = window.Telegram?.WebApp?.initData;
+    this.appNotifier.info('Ваш Telegram data: ', {
+      details: {
+        initData: window.Telegram?.WebApp?.initData,
+        initDataUnsafe: window.Telegram?.WebApp?.initDataUnsafe
+      }
+    });
+    if (!initData) {
+      const err = new Error('Telegram init data not found');
+      this.appNotifier.error('Непредвиденная ошибка. Перезапустите приложение.', err);
       throw err;
     };
-    return tgUser;
+    return initData;
   }
 
   protected appRunSubscribes(): void {
     window.addEventListener('app-logout', () => this.showLoginPage());
     window.addEventListener('user-logined', this.loginListener)
-    window.addEventListener('need-registration', this.registrationListener)
   }
 
   protected loginListener = (e: Event) => {
-    console.log('Login listener', e);
-    localStore.clear();
-    const user = (e as CustomEvent<UserDod>).detail;
+    const { user, token } = (e as CustomEvent<AuthUserSuccess>).detail;
     this.appRouter.navigate('/my-profile');
-    this.showAppPage(user);
-  }
-
-  protected registrationListener = (e: Event) => {
-    const tgUser = (e as CustomEvent<TelegramAuthUser>).detail;
-    this.showRegistrationPage(tgUser);
+    this.showAppPage(user, token);
   }
 
   protected showLoginPage(): void {
+    localStore.clear();
     this.appRouter.navigate('/login');
     const root = this.prepareBody();
 
     const page = document.createElement('login-page');
-    (page as any).usersApi = this.usersApi;
+    (page as any).usersApi = this.appApi;
     root.appendChild(page);
   }
 
-  protected showRegistrationPage(tgUser: TelegramUser): void {
-    this.appRouter.navigate(`/register?t=${tgUser.id}`);
-    const root = this.prepareBody();
-
-    const page = document.createElement('registration-page');
-    (page as any).telegramId = tgUser.id.toString();
-    (page as any).telegramName = tgUser.first_name;
-    (page as any).telegramNickname = tgUser.username ?? '';
-    (page as any).avatarUrl = tgUser.photo_url;
-    (page as any).usersApi = this.usersApi;
-
-    root.appendChild(page);
-  }
-
-  protected showAppPage(user: UserDod): void {
-      localStore.set(authUserId, user.id);
-      const app = new App(this.manifests, user, this.isTelegramMiniApp);
+  protected showAppPage(user: UserAttrs, token: TokenType): void {
+      localStore.set(ACCESS_TOKEN_KEY, token.access);
+      localStore.set(REFRESH_TOKEN_KEY, token.refresh);
+      const app = new App(this.appApi, this.manifests, user, this.isTelegramMiniApp);
       app.init();
       this.redirectStartApp(app);
 

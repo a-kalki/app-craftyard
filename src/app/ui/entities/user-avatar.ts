@@ -1,9 +1,9 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
-import type { UserDod, UserStatus } from '../../app-domain/dod';
-import { USER_STATUS_ICONS } from '../../app-domain/constants';
-import { UserAR } from '../../../users/domain/user/aroot';
+import type { UserAttrs } from '#app/domain/user/user';
+import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
+import { UserAr } from '#app/domain/user/a-root';
 
 @customElement('user-avatar')
 export class UserAvatarEntity extends BaseElement {
@@ -14,11 +14,12 @@ export class UserAvatarEntity extends BaseElement {
 
     .avatar {
       object-fit: cover;
-      width: 100%;
-      height: auto;
+      width: 100%; /* По умолчанию, будет переопределено инлайн-стилем, если 'size' установлен */
+      height: auto; /* По умолчанию, будет переопределено инлайн-стилем, если 'size' установлен */
       aspect-ratio: 1 / 1;
       background-color: var(--sl-color-neutral-100);
       box-shadow: var(--sl-shadow-small);
+      /* border-radius будет применен инлайн для лучшей гибкости */
     }
 
     .avatar--circle {
@@ -35,13 +36,28 @@ export class UserAvatarEntity extends BaseElement {
       justify-content: center;
       background-color: var(--sl-color-neutral-100);
       color: var(--sl-color-neutral-600);
-      width: 100%;
+      width: 100%; /* По умолчанию, будет переопределено инлайн-стилем, если 'size' установлен */
       aspect-ratio: 1 / 1;
+      /* font-size: 100% удален, так как он устанавливается динамически через инлайн-стиль */
+    }
+
+    .icon-avatar sl-icon {
+      /*
+       * Иконка должна масштабироваться по font-size, унаследованному от родителя.
+       * Мы удаляем width: 100% и height: 100%, чтобы icon-font не пытался
+       * растянуться до размеров контейнера до того, как font-size его увеличит.
+       * Flexbox центрирует иконку после того, как font-size определит ее размер.
+       */
+      font-size: inherit; /* Наследуем рассчитанный font-size от .icon-avatar */
+      line-height: 1; /* Часто полезно для выравнивания иконочных шрифтов */
+      display: block; /* Убедитесь, что иконка ведет себя как блочный элемент для лучшего центрирования */
+      flex-shrink: 0; /* Предотвращаем сжатие иконки в flex-контейнере */
+      flex-grow: 0; /* Предотвращаем растяжение иконки в flex-контейнере */
     }
   `;
 
   @property({ type: Object })
-  user!: UserDod;
+  user!: UserAttrs;
 
   @property({ type: String })
   shape: 'circle' | 'rounded' = 'rounded';
@@ -49,16 +65,13 @@ export class UserAvatarEntity extends BaseElement {
   @property({ type: Number })
   size?: number;
 
-  private getDefaultAvatar(status: UserStatus): string {
-    const icon = USER_STATUS_ICONS[status];
-    return `/assets/assets/icons/${icon}.svg`;
-  }
-
   render() {
-    const userAr = new UserAR(this.user);
-    const status = userAr.getMaxPriorityStatus();
-    const avatarUrl = this.user?.profile?.avatarUrl ?? this.getDefaultAvatar(status);
+    const userAr = new UserAr(this.user);
+    const key = userAr.getTopContributionKeyByOrder();
+    const avatarUrl = this.user?.profile?.avatarUrl;
+
     const sizePx = this.size ? `${this.size}px` : undefined;
+
     const borderRadius = this.shape === 'circle' ? '50%' : 'var(--sl-border-radius-medium)';
 
     if (avatarUrl) {
@@ -67,10 +80,15 @@ export class UserAvatarEntity extends BaseElement {
           class="avatar avatar--${this.shape}"
           src=${avatarUrl}
           alt="User avatar"
-          style=${sizePx ? `width: ${sizePx}; height: ${sizePx};` : ''}
+          style=${[
+            sizePx ? `width: ${sizePx}; height: ${sizePx};` : '',
+            `border-radius: ${borderRadius};`
+          ].filter(Boolean).join(' ')}
         />
       `;
     }
+
+    const iconFontSize = this.size ? `${this.size * 0.75}px` : '7.5rem';
 
     return html`
       <div
@@ -78,12 +96,10 @@ export class UserAvatarEntity extends BaseElement {
         style=${[
           sizePx ? `width: ${sizePx}; height: ${sizePx};` : '',
           `border-radius: ${borderRadius};`,
-        ].join(' ')}
+          `font-size: ${iconFontSize};`
+        ].filter(Boolean).join(' ')}
       >
-        <sl-icon
-          name=${USER_STATUS_ICONS[status]}
-          style=${sizePx ? `font-size: calc(${sizePx} * 0.6);` : ''}
-        ></sl-icon>
+        <sl-icon name=${CONTRIBUTIONS_DETAILS[key].icon}></sl-icon>
       </div>
     `;
   }
