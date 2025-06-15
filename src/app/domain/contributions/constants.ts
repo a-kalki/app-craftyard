@@ -46,21 +46,31 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
   BUYER: {
     title: 'Покупатель',
     description: 'Поддерживает мастеров через покупки',
-    action: 'Покупать изделия или мастер-классы',
+    action: 'Покупать изделия у наших мастеров',
     icon: 'cart-check',
     condition: 'Совершить покупки',
     implemented: false,
     orderNumber: 4,
     trackedBy: ['APP']
   },
+  HOBBIST: {
+    title: 'Хоббист',
+    description: 'Делает изделия для себя',
+    action: 'Создавать свои изделия',
+    icon: 'wrench',
+    condition: 'Сделать в мастерской что нибудь',
+    implemented: false,
+    orderNumber: 5,
+    trackedBy: ['APP']
+  },
   MAKER: {
     title: 'Мастер',
     description: 'Создаёт изделия в мастерской',
     action: 'Работать в мастерской',
-    icon: 'hammer',
+    icon: 'tools',
     condition: 'Завершить сессии в мастерской',
     implemented: false,
-    orderNumber: 5,
+    orderNumber: 6,
     trackedBy: ['APP']
   },
   SELLER: {
@@ -70,7 +80,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'cash-stack',
     condition: 'Завершить продажи',
     implemented: false,
-    orderNumber: 6,
+    orderNumber: 7,
     trackedBy: ['APP']
   },
   DESIGNER: {
@@ -80,7 +90,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'cloud-upload',
     condition: 'Опубликовать модели',
     implemented: false,
-    orderNumber: 7,
+    orderNumber: 8,
     trackedBy: ['APP']
   },
   TRAINER: {
@@ -90,7 +100,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'person-video',
     condition: 'Провести мероприятия',
     implemented: false,
-    orderNumber: 8,
+    orderNumber: 9,
     trackedBy: ['BOTH']
   },
   AUTHOR: {
@@ -100,7 +110,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'journal-code',
     condition: 'Опубликовать курсы',
     implemented: false,
-    orderNumber: 9,
+    orderNumber: 10,
     trackedBy: ['APP']
   },
   KEEPER: {
@@ -110,7 +120,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'tools',
     condition: 'Быть назначенным',
     implemented: false,
-    orderNumber: 10,
+    orderNumber: 11,
     trackedBy: ['MANUAL']
   },
   MODERATOR: {
@@ -120,7 +130,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'shield-lock',
     condition: 'Быть назначенным',
     implemented: false,
-    orderNumber: 11,
+    orderNumber: 12,
     trackedBy: ['MANUAL']
   },
   ORGANIZER: {
@@ -130,7 +140,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'calendar-event',
     condition: 'Организовать мероприятия',
     implemented: false,
-    orderNumber: 12,
+    orderNumber: 13,
     trackedBy: ['BOTH']
   },
   INVESTOR: {
@@ -140,7 +150,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'coin',
     condition: 'Сделать финансовый вклад',
     implemented: false,
-    orderNumber: 13,
+    orderNumber: 14,
     trackedBy: ['APP']
   },
   AMBASSADOR: {
@@ -150,7 +160,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'megaphone',
     condition: 'Привести новых участников',
     implemented: false,
-    orderNumber: 14,
+    orderNumber: 15,
     trackedBy: ['BOTH']
   },
   REVIEWER: {
@@ -160,7 +170,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'stars',
     condition: 'Оставить экспертные оценки',
     implemented: false,
-    orderNumber: 15,
+    orderNumber: 16,
     trackedBy: ['APP']
   },
   WORKSHOP_CREATOR: {
@@ -170,7 +180,7 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
     icon: 'building',
     condition: 'Создать мастерскую',
     implemented: false,
-    orderNumber: 16,
+    orderNumber: 17,
     trackedBy: ['MANUAL']
   },
 };

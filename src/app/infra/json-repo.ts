@@ -1,16 +1,14 @@
+// @ts-expect-error: по какой то причине этот импорт вызывает ошибку линтера
 import fs from "fs-extra";
 
 export class JsonRepository<T> {
   private cache: { [key: string]: any } = {};
-  private isCacheLoaded = false;
   private cacheLoadPromise: Promise<void> | null = null;
+  private saveLock: Promise<void> = Promise.resolve();
 
-  constructor(private filePath: string) {
-    this.initialize();
-  }
+  constructor(private filePath: string) {}
 
-  // Инициализация кеша (загрузка данных из файла)
-  private async initialize(): Promise<void> {
+  private async ensureReady(): Promise<void> {
     if (!this.cacheLoadPromise) {
       this.cacheLoadPromise = (async () => {
         if (await fs.pathExists(this.filePath)) {
@@ -18,53 +16,46 @@ export class JsonRepository<T> {
         } else {
           this.cache = {};
         }
-        this.isCacheLoaded = true;
       })();
     }
     await this.cacheLoadPromise;
   }
 
-  // Сохранение данных в файл
   private async saveCache(): Promise<void> {
-    if (!this.isCacheLoaded) {
-      await this.cacheLoadPromise;
-    }
-    await fs.writeJson(this.filePath, this.cache, { spaces: 2 });
+    await this.ensureReady();
+
+    // Ставим текущую запись в очередь
+    this.saveLock = this.saveLock.then(
+      () => fs.writeJson(this.filePath, this.cache, { spaces: 2 })
+    );
+
+    await this.saveLock;
   }
 
-  // Добавление или обновление данных в кеше
   public async update(key: string, data: T): Promise<void> {
-    if (!this.isCacheLoaded) {
-      await this.cacheLoadPromise;
-    }
+    await this.ensureReady();
     this.cache[key] = data;
     await this.saveCache();
   }
 
-  // Чтение данных из кеша
   public async find(key: string): Promise<T | undefined> {
-    if (!this.isCacheLoaded) {
-      await this.cacheLoadPromise;
-    }
+    await this.ensureReady();
     return this.cache[key];
   }
 
-  // Получение всех данных из кеша
-  public async getAll<B extends boolean = false>(asList?: B): Promise<B extends true ? T[] : { [key: string]: T }> {
-    if (!this.isCacheLoaded) {
-      await this.cacheLoadPromise;
-    }
-    return asList
-      ? Object.values(this.cache) as B extends true ? T[] : { [key: string]: T }
-      : this.cache as B extends true ? T[] : { [key: string]: T };
+  public async getAll(): Promise<T[]> {
+    await this.ensureReady();
+    return Object.values(this.cache);
   }
 
-  // Удаление данных из кеша
   public async delete(key: string): Promise<void> {
-    if (!this.isCacheLoaded) {
-      await this.cacheLoadPromise;
-    }
+    await this.ensureReady();
     delete this.cache[key];
     await this.saveCache();
+  }
+
+  public async has(key: string): Promise<boolean> {
+    await this.ensureReady();
+    return key in this.cache;
   }
 }

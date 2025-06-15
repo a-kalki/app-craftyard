@@ -1,9 +1,9 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
-import type { UserAttrs } from '#app/domain/user/user';
 import { UserAr } from '#app/domain/user/a-root';
 import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
+import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 @customElement('user-panel')
 export class UserPanelWidget extends BaseElement {

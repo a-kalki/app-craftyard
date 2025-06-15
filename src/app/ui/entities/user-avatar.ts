@@ -1,9 +1,9 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
-import type { UserAttrs } from '#app/domain/user/user';
 import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
 import { UserAr } from '#app/domain/user/a-root';
+import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 @customElement('user-avatar')
 export class UserAvatarEntity extends BaseElement {

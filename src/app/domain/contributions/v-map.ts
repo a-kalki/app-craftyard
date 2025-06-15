@@ -1,7 +1,7 @@
 import { DtoFieldValidator, IsTimeStampValidationRule, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule, StringChoiceValidationRule, type ValidatorMap } from "rilata/validator"
 import type { ContributionCounter, ContributionDetails, ContributionKey, Contributions } from "./types"
 import { TRACKING_METHODS } from "./constants"
-import type { UserAttrs } from "../user/user"
+import type { UserStatistics } from "../user/struct/attrs"
 
 export const userContribuitionDetailsVmap: ValidatorMap<ContributionDetails> = {
   description: new LiteralFieldValidator('description', true, { isArray: false }, 'string', [
@@ -48,6 +48,7 @@ export const userContribuitionsVmap: ValidatorMap<Contributions> = {
     WRITER: getContributionDetailsVMap('WRITER'),
     SPEAKER: getContributionDetailsVMap('SPEAKER'),
     BUYER: getContributionDetailsVMap('BUYER'),
+    HOBBIST: getContributionDetailsVMap('HOBBIST'),
     MAKER: getContributionDetailsVMap('MAKER'),
     SELLER: getContributionDetailsVMap('SELLER'),
     DESIGNER: getContributionDetailsVMap('DESIGNER'),
@@ -59,11 +60,11 @@ export const userContribuitionsVmap: ValidatorMap<Contributions> = {
     INVESTOR: getContributionDetailsVMap('INVESTOR'),
     AMBASSADOR: getContributionDetailsVMap('AMBASSADOR'),
     REVIEWER: getContributionDetailsVMap('REVIEWER'),
-    WORKSHOP_CREATOR: getContributionDetailsVMap('WORKSHOP_CREATOR')
+    WORKSHOP_CREATOR: getContributionDetailsVMap('WORKSHOP_CREATOR'),
 }
 
 
-export const userStatisticsVMap: ValidatorMap<UserAttrs['statistics']> = {
+export const userStatisticsVMap: ValidatorMap<UserStatistics> = {
     contributions: new DtoFieldValidator(
       'contributions', true, { isArray: false }, 'dto', userContribuitionsVmap
     )

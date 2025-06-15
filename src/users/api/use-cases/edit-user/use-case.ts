@@ -3,9 +3,9 @@ import { failure, success, type ValidationError } from "rilata/core";
 import { UserUseCase } from "#users/api/base-use-case";
 import { editUserValidator } from "./v-map";
 import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user";
-import type { UserAttrs } from "#app/domain/user/user";
 import { UserAr } from "#app/domain/user/a-root";
 import { UserPolicy } from "#app/domain/user/policy";
+import type { UserAttrs } from "#app/domain/user/struct/attrs";
 
 export class EditUserUseCase extends UserUseCase<EditUserMeta> {
   inputName = "edit-user" as const;

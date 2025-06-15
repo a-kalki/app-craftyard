@@ -2,7 +2,7 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import { UserAr } from '#app/domain/user/a-root';
-import type { UserAttrs } from '#app/domain/user/user';
+import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 @customElement('user-card')
 export class UserCardEntity extends BaseElement {

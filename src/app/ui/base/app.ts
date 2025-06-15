@@ -4,8 +4,8 @@ import type { ModuleManifest } from "./types";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
 import { AppDialog, type DialogOptions } from "./app-dialog";
-import type { UserAttrs } from "#app/domain/user/user";
 import type { AppApiInterface } from '../base-run/run-types';
+import type { UserAttrs } from "#app/domain/user/struct/attrs";
 
 export class App {
   public router: AppRouter;

@@ -1,7 +1,7 @@
-import type { dedokServerResolver } from "./resolver"
+import type { craftYardServerResolver } from "./resolver"
 
-export type DedokServerMeta = {
-  name: 'Dedok Monolith Server',
-  description?: 'Запускает мололитное приложение Дедок',
-  resolver: typeof dedokServerResolver
+export type CraftyardServerMeta = {
+  name: 'Craftyard Monolith Server',
+  description?: 'Запускает мололитное приложение "Ремесленный двор"',
+  resolver: typeof craftYardServerResolver
 }

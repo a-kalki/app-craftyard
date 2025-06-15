@@ -2,10 +2,10 @@ import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import { usersApi } from '../users-api';
-import type { UserAttrs } from '#app/domain/user/user';
 import type { ContributionKey } from '#app/domain/contributions/types';
 import { UserPolicy } from '#app/domain/user/policy';
 import type { EditUserCommand } from '#app/domain/user/struct/edit-user';
+import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 @customElement('user-edit')
 export class UserEditFeature extends BaseElement {

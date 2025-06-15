@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { AuthData, TelegramWidgetUserData, AppApiInterface } from '../base-run/run-types';
 import { AppNotifier } from '../base/app-notifier';
-import { AuthUserSuccess } from '#app/domain/user/struct/auth-user';
+import type { AuthUserSuccess } from '#app/domain/user/struct/auth-user';
 
 @customElement('login-page')
 export class LoginPage extends LitElement {

@@ -2,7 +2,7 @@ import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import { usersApi } from '../users-api';
-import type { UserAttrs } from '#app/domain/user/user';
+import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 @customElement('users-list')
 export class UsersWidget extends BaseElement {

@@ -25,8 +25,6 @@
       "#workshop/*": ["./src/workshop/*"],
       "@shoelace-style/shoelace": ["./node_modules/@shoelace-style/shoelace/dist/shoelace.js"]
     },
-    "include": ["src", "src/types/telegram.d.ts"],
-    "exclude": ["node_modules/", "node_modules/rilata/**/*", "rilata/**/*"],
     "types": ["@shoelace-style/shoelace"],
 
     // Best practices
@@ -38,5 +36,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
-  }
+  },
+  "include": ["src", "types/telegram.d.ts"],
+  "exclude": ["node_modules/", "../rilata"]
 }

@@ -1,36 +1,40 @@
 import { cwd } from "process";
-import { DedokServer } from "./server";
-import { dedokServerResolver } from "./resolver";
+import { CraftyardServer } from "./server";
+import { craftYardServerResolver } from "./resolver";
 import { UsersModule } from "#users/api/module";
 import { getServerConfig, InjectCallerMiddleware, LogResponseAfterware, ServerAfterware, type ServerMiddleware } from "rilata/api-server";
 import type { Controller, Module, ModuleMeta } from "rilata/api";
-import { userModuleResolvers } from "./module-resolvers";
+import { userModuleResolvers, workshopModuleResolvers } from "./module-resolvers";
 import { IndexHtmlFileController } from "#app/api/controllers/index-html-file";
 import { AssetFilesController } from "#app/api/controllers/asset-files";
 import {} from '../../app/bot/app.ts';
+import { WorkshopsModule } from "#workshop/api/module.ts";
+import { UploadsFilesController } from "#app/api/controllers/uploads-files.ts";
 
 const PROJECT_PATH = cwd();
 
 const middlewares: ServerMiddleware[] = [
-  new InjectCallerMiddleware(dedokServerResolver.jwtVerifier)
+  new InjectCallerMiddleware(craftYardServerResolver.jwtVerifier)
 ];
 
 const afterwares: ServerAfterware[] = [
-  new LogResponseAfterware(dedokServerResolver.logger)
+  new LogResponseAfterware(craftYardServerResolver.logger)
 ]
 
 const modules: Module<ModuleMeta>[] = [
-  new UsersModule(userModuleResolvers)
+  new UsersModule(userModuleResolvers),
+  new WorkshopsModule(workshopModuleResolvers)
 ]
 
 const controllers: Controller[] = [
+  new UploadsFilesController(PROJECT_PATH),
   new AssetFilesController(PROJECT_PATH),
   new IndexHtmlFileController(PROJECT_PATH),
 ]
 
-const server = new DedokServer(
+const server = new CraftyardServer(
   getServerConfig(),
-  dedokServerResolver,
+  craftYardServerResolver,
   modules,
   middlewares,
   afterwares,

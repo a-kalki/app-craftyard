@@ -1,5 +1,5 @@
 import { UserAr } from "#app/domain/user/a-root";
-import type { UserAttrs } from "#app/domain/user/user";
+import type { UserAttrs } from "#app/domain/user/struct/attrs";
 import type { UserDoesNotExistError } from "#app/ui/base-run/run-types";
 import type { UsersModuleResolvers } from "#users/api/types";
 import { QueryUseCase } from "rilata/api";

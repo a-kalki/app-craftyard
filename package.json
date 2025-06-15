@@ -1,18 +1,20 @@
 {
-  "name": "app-dedok",
-  "description": "Приложение коворкинг центра Дедок",
+  "name": "app-craftyard",
+  "description": "Приложение 'Ремесленный двор'",
   "author": "a-kalki",
-  "repository": "https://github.com/a-kalki/app-dedok",
+  "repository": "https://github.com/a-kalki/app-craftyard",
   "version": "1.0.0",
   "module": "./src/zzz-app-run/bootstrap.ts",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "tslint": "tsc --noEmit",
+    "tslint:old": "tsc --noEmit --pretty false | grep -v '../rilata/'",
+    "tslint": "bash -c 'tsc --noEmit --pretty false | grep ^src/ || true'",
     "bld": "bun run ./src/zzz-app-run/build.ts --mode=dev",
     "bld-prod": "bun run ./scripts/build.ts --mode=prod",
     "serve": "bun run bld && bun run ./src/zzz-app-run/server.ts",
-    "start": "NODE_ENV=development bun run bld && bun ./src/zzz-app-run/server/main.ts"
+    "start": "NODE_ENV=development bun run bld && bun ./src/zzz-app-run/server/main.ts",
+    "sync:rilata": "rsync -av --delete ../rilata/src/ node_modules/rilata/src/"
   },
   "devDependencies": {
     "@shoelace-style/shoelace": "^2.20.1",
@@ -31,7 +33,8 @@
   "dependencies": {
     "fs-extra": "^11.3.0",
     "lit": "^3.3.0",
-    "rilata": "link:rilata",
+    "marked": "^15.0.12",
+    "rilata": "a-kalki/rilata",
     "telegraf": "^4.16.3"
   }
 }

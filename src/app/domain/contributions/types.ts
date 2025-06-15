@@ -17,6 +17,7 @@ export type ContributionKey =
   | 'WRITER'
   | 'SPEAKER'
   | 'BUYER'
+  | 'HOBBIST'
   | 'MAKER'
   | 'SELLER'
   | 'DESIGNER'

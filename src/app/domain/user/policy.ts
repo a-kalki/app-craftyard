@@ -1,4 +1,4 @@
-import type { JwtUser, UserAttrs } from './user';
+import type { JwtUser, UserAttrs } from "./struct/attrs";
 
 export class UserPolicy {
   constructor(private currentUser: UserAttrs | JwtUser) {}

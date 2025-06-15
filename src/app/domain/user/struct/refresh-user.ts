@@ -1,5 +1,4 @@
-import type { TokenType } from "./auth-user";
-import type { UserArMeta } from "./meta";
+import type { UserArMeta } from "../meta";
 
 // ========== commands ============
 export type RefreshUserCommand = {

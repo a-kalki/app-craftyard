@@ -1,4 +1,4 @@
-import type { UserAttrs } from "#app/domain/user/user";
+import type { UserAttrs } from "#app/domain/user/struct/attrs";
 import type { BaseElement } from "./base-element";
 import type { Module } from "./module";
 
@@ -30,7 +30,8 @@ export type RoutableElementEntry = {
 } & RoutableElementAttrs
 
 export type RootItem = {
-  name: string; // этот атрибут используется как имя, слеш не нужен 'users'
+  name: string;
+  url: string;
   title: string;
   icon: string
 }

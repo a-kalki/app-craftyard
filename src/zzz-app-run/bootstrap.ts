@@ -1,3 +1,5 @@
+import { workshopsModuleComponentCtors } from "#workshop/ui/components";
+import { workshopsModule } from "#workshop/ui/module";
 import { Bootstrap } from "../app/ui/base-run/bootstrap";
 import type { TelegramWidgetUserData } from "../app/ui/base-run/run-types";
 import type { ModuleManifest } from "../app/ui/base/types";
@@ -17,6 +19,7 @@ const debugAuthUser: TelegramWidgetUserData = {
 
 const manifests: ModuleManifest[] = [
   { module: usersModule, componentCtors: userModuleComponentCtors },
+  { module: workshopsModule, componentCtors: workshopsModuleComponentCtors }
 ]
 
 new Bootstrap(manifests, usersApi).start();

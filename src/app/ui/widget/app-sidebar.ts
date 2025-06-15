@@ -75,7 +75,7 @@ export class AppSidebarWidget extends BaseElement {
   private handleSelect(event: MouseEvent, item: RootItem) {
     event.preventDefault();
     this.activeItem = item.name;
-    this.app.router.navigate(`/${item.name}`);
+    this.app.router.navigate(item.url);
     
     // Закрываем sidebar в мобильном режиме
     if (this.isMobile) {

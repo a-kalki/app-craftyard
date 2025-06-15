@@ -1,4 +1,4 @@
-import type { DedokServerResolver } from "#app/api/server-resolver";
+import type { CreaftYardServerResolver } from "#app/api/server-resolver";
 import { BotLogger, ConsoleLogger, getEnvLogMode } from "rilata/api-helper";
 import {
   BunJwtCreator, BunJwtVerifier,
@@ -13,7 +13,7 @@ function getEnvVar(token: string): string {
 }
 
 function findEnvVar(token: string): string | undefined {
-  return process.env.DEDOK_LOG_BOT_TOKEN;
+  return process.env.CY_LOG_BOT_TOKEN;
 }
 
 const logMode = getEnvLogMode() || 'all';
@@ -23,8 +23,8 @@ const runMode = getRunMode();
 const logger = new ConsoleLogger(logMode);
 
 const botLogger = new BotLogger(logMode, runMode, {
-  token: getEnvVar('DEDOK_LOG_BOT_TOKEN'),
-  name: getEnvVar('DEDOK_LOG_BOT_NAME'),
+  token: getEnvVar('CY_LOG_BOT_TOKEN'),
+  name: getEnvVar('CY_LOG_BOT_NAME'),
   managerIds: ['773084180'],
 })
 
@@ -36,12 +36,12 @@ const jwtConfig: JwtConfig = {
   jwtRefreshLifetimeAsHour: 1
 }
 
-export const dedokServerResolver: DedokServerResolver = {
+export const craftYardServerResolver: CreaftYardServerResolver = {
     logger,
     botLogger,
     runMode,
-    appBotToken: getEnvVar('DEDOK_APP_BOT_TOKEN'),
-    appBotName: getEnvVar('DEDOK_APP_BOT_NAME'),
+    appBotToken: getEnvVar('CY_APP_BOT_TOKEN'),
+    appBotName: getEnvVar('CY_APP_BOT_NAME'),
     jwtDecoder: jwtDecoder,
     jwtVerifier: new BunJwtVerifier(getJwtSecretKey(), jwtConfig, jwtDecoder),
     jwtCreator: new BunJwtCreator(getJwtSecretKey(), jwtConfig, jwtDecoder),

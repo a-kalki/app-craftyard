@@ -3,6 +3,7 @@ import { Module } from "../../app/ui/base/module";
 export const modelsModule = new Module('Models Module', 'Модуль моделей', [
   {
     name: 'models',
+    url: '/models',
     title: 'Модели',
     icon: 'layers'
   }

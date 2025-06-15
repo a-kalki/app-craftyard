@@ -1,9 +1,9 @@
 import { AggregateRoot } from "rilata/domain";
-import type { UserArMeta } from "./struct/meta";
-import type { Skills, UserAttrs } from "./user";
 import { userInvariantsValidator } from "./v-map";
 import type { ContributionKey, Contributions } from "../contributions/types";
 import { CONTRIBUTIONS_DETAILS } from "../contributions/constants";
+import type { UserArMeta } from "./meta";
+import type { Skills, UserAttrs } from "./struct/attrs";
 
 export class UserAr extends AggregateRoot<UserArMeta> {
   name = "UserAr" as const;

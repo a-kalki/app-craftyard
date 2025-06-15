@@ -4,10 +4,10 @@ import { AssertionException, failure, success, type JwtDto } from "rilata/core";
 import { UserUseCase } from "#users/api/base-use-case";
 import { authUserValidator } from "./v-map";
 import type { AuthUserMeta } from "#app/domain/user/struct/auth-user";
-import type { UserAttrs } from "#app/domain/user/user";
 import { UserAr } from "#app/domain/user/a-root";
 import { TELEGRAM_AUTH_TIME_AS_SEC } from "#app/ui/base-run/constants";
 import type { TelegramUser } from "#app/ui/base-run/run-types";
+import type { UserAttrs } from "#app/domain/user/struct/attrs";
 
 export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
   inputName = "auth-user" as const;

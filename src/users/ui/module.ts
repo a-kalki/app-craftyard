@@ -4,11 +4,13 @@ import type { RootItem, RouteRedirect } from "../../app/ui/base/types";
 const routeItems: RootItem[] = [
   {
     name: 'my-profile',
+    url: '/my-profile',
     title: 'Мой профиль',
     icon: 'person-circle'
   },
   {
     name: 'users',
+    url: '/users',
     title: 'Пользователи',
     icon: '	people'
   }

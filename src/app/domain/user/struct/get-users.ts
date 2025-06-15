@@ -1,5 +1,5 @@
-import type { UserAttrs } from "../user";
-import type { UserArMeta } from "./meta";
+import type { UserArMeta } from "../meta";
+import type { UserAttrs } from "./attrs";
 
 // ========== commands ============
 export type GetUsersCommand = {

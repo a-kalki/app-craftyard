@@ -8,9 +8,9 @@ import { AppRouter } from '../base/app-router';
 import { AppNotifier } from '../base/app-notifier';
 import { localStore } from 'rilata/ui';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './constants';
-import type { UserAttrs } from '#app/domain/user/user';
 import type { AuthUserSuccess, TokenType } from '#app/domain/user/struct/auth-user';
 import { jwtDecoder } from './app-resolves';
+import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 export class Bootstrap {
   protected  appRouter = new AppRouter();

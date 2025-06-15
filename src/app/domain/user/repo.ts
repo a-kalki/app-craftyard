@@ -1,4 +1,4 @@
-import type { UserAttrs } from "./user";
+import type { UserAttrs } from "./struct/attrs";
 
 export interface UserRepo  {
   findUser(id: string): Promise<UserAttrs | undefined>;
