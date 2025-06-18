@@ -1,15 +1,15 @@
+import type { RootItem, RouteRedirect } from "#app/ui/base/types";
 import { Module } from "../../app/ui/base/module";
 
-export const modelsModule = new Module('Models Module', 'Модуль моделей', [
+const routeItems: RootItem[] = [
   {
     name: 'models',
     url: '/models',
     title: 'Модели',
-    icon: 'layers'
-  }
-]);
+    icon: 'postcard'
+  },
+];
 
-// иконки для других модулей
-// products	box
-// courses	journal-text
-// workshops	build
+const routeRedirects: RouteRedirect[] = []
+
+export const modelsModule = new Module('Models Module', 'Модуль Моделей', routeItems, routeRedirects);

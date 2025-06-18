@@ -1,0 +1,37 @@
+import type { RequestScope, RunDomainResult } from "rilata/api";
+import { FileUseCase } from "../../base-use-case";
+import type { GetFileCommand, GetFileUcMeta } from "src/files/domain/struct/get-file";
+import { getFileValidator } from "./v-map";
+import { failure, success } from "rilata/core";
+
+export class GetFileUC extends FileUseCase<GetFileUcMeta> {
+  arName = "FileEntryAr" as const;
+
+  name = "Get File Use Case" as const;
+
+  inputName = "get-file" as const;
+
+  protected supportAnonimousCall = false;
+
+  protected validator = getFileValidator;
+
+  async runDomain(
+    input: GetFileCommand, requestData: RequestScope,
+  ): Promise<RunDomainResult<GetFileUcMeta>> {
+    const { id } = input.attrs;
+    const attrsResult = await this.getFileAttrs(id);
+    if (attrsResult.isFailure()) {
+      return failure(attrsResult.value);
+    }
+    const attrs = attrsResult.value;
+
+    if (!this.getFilePolicy(requestData.caller).canGetFile(attrs)) {
+      return failure({
+        name: 'GettingFileIsNotPermittedError',
+        description: 'У вас нет прав на просмотр этого файла',
+        type: 'domain-error',
+      });
+    }
+    return success(attrs);
+  }
+}

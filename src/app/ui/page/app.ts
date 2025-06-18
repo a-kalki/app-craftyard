@@ -1,8 +1,5 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-import '@shoelace-style/shoelace/dist/components/button/button.js';
-import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
 import { BaseElement } from '../base/base-element';
 import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 

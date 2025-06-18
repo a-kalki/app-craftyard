@@ -8,6 +8,8 @@ export type DialogOptions = {
     content: DialogContent;
     confirmText?: string;
     cancelText?: string;
+    confirmVariant?: 'primary' | 'default' | 'success' | 'danger' | 'warning' | 'text';
+    cancelVariant?: 'primary' | 'default' | 'success' | 'danger' | 'warning' | 'text';
   }
 
 export class AppDialog {
@@ -24,7 +26,12 @@ export class AppDialog {
     this.clearDialog();
     this.renderTitle(options.title);
     this.renderContent(options.content);
-    this.renderFooter(options.confirmText ?? 'Ок', options.cancelText);
+    this.renderFooter(
+      options.confirmText ?? 'Ок',
+      options.cancelText,
+      options.confirmVariant ?? 'primary',
+      options.cancelVariant ?? 'default'
+    );
 
     this.dialog.show();
 
@@ -90,7 +97,12 @@ export class AppDialog {
     }
   }
 
-  private renderFooter(confirmText: string, cancelText?: string) {
+  private renderFooter(
+    confirmText: string,
+    cancelText?: string,
+    confirmVariant: string = 'primary',
+    cancelVariant: string = 'default'
+  ) {
     this.footer = document.createElement('div');
     this.footer.slot = 'footer';
     this.footer.style.display = 'flex';
@@ -99,7 +111,7 @@ export class AppDialog {
 
     if (cancelText) {
       this.cancelBtn = document.createElement('sl-button');
-      (this.cancelBtn as any).variant = 'default';
+      (this.cancelBtn as any).variant = cancelVariant;
       this.cancelBtn.innerText = cancelText;
       this.footer.appendChild(this.cancelBtn);
     } else {
@@ -107,20 +119,10 @@ export class AppDialog {
     }
 
     this.confirmBtn = document.createElement('sl-button');
-    (this.confirmBtn as any).variant = 'primary';
+    (this.confirmBtn as any).variant = confirmVariant;
     this.confirmBtn.innerText = confirmText;
     this.footer.appendChild(this.confirmBtn);
 
-    this.dialog.appendChild(this.footer);
-  }
-
-  private isTemplateResult(value: unknown): value is TemplateResult {
-    return (
-      typeof value === 'object' &&
-      value !== null &&
-      'getTemplateElement' in value &&
-      typeof (value as any).getTemplateElement === 'function'
-    );
-  }
+    this.dialog.appendChild(this.footer);  }
 }
 

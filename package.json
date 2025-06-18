@@ -8,16 +8,16 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "tslint:old": "tsc --noEmit --pretty false | grep -v '../rilata/'",
     "tslint": "bash -c 'tsc --noEmit --pretty false | grep ^src/ || true'",
-    "bld": "bun run ./src/zzz-app-run/build.ts --mode=dev",
-    "bld-prod": "bun run ./scripts/build.ts --mode=prod",
-    "serve": "bun run bld && bun run ./src/zzz-app-run/server.ts",
-    "start": "NODE_ENV=development bun run bld && bun ./src/zzz-app-run/server/main.ts",
+    "build": "bunx vite build && bun ./src/zzz-app-run/server/set-assets.ts",
+    "start": "NODE_ENV=development bun run build && bun ./src/zzz-app-run/server/main.ts",
+    "start:prod": "NODE_ENV=production bun run build && bun ./src/zzz-app-run/server/main.ts",
     "sync:rilata": "rsync -av --delete ../rilata/src/ node_modules/rilata/src/"
   },
   "devDependencies": {
     "@shoelace-style/shoelace": "^2.20.1",
+    "@sveltejs/vite-plugin-svelte": "^5.1.0",
+    "@tsconfig/svelte": "^5.0.4",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "bun-types": "^1.0.25",
@@ -25,16 +25,21 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^26.0.0",
-    "nurgeo-project-configs": "github:NurGeo/project-config"
+    "nurgeo-project-configs": "github:NurGeo/project-config",
+    "svelte-check": "^4.2.1",
+    "svelte-preprocess": "^6.0.3",
+    "vite": "^6.3.5",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "fs-extra": "^11.3.0",
     "lit": "^3.3.0",
     "marked": "^15.0.12",
     "rilata": "a-kalki/rilata",
+    "svelte": "^5.34.5",
     "telegraf": "^4.16.3"
   }
 }

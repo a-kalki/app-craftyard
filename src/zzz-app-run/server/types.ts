@@ -1,4 +1,4 @@
-import type { craftYardServerResolver } from "./resolver"
+import type { craftYardServerResolver } from "./server-resolver"
 
 export type CraftyardServerMeta = {
   name: 'Craftyard Monolith Server',

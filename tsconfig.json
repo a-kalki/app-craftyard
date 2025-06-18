@@ -8,6 +8,7 @@
     "moduleDetection": "force",
     "allowJs": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": false,
 
     // Bundler mode
     "moduleResolution": "bundler",
@@ -19,13 +20,10 @@
 
     "baseUrl": "./",
     "paths": {
-      "#app/*": ["./src/app/*"],
-      "#models/*": ["./src/models/*"],
-      "#users/*": ["./src/users/*"],
-      "#workshop/*": ["./src/workshop/*"],
+      "#*": ["./src/*"],
       "@shoelace-style/shoelace": ["./node_modules/@shoelace-style/shoelace/dist/shoelace.js"]
     },
-    "types": ["@shoelace-style/shoelace"],
+    "types": ["@shoelace-style/shoelace", "svelte"],
 
     // Best practices
     "strict": true,
@@ -37,6 +35,6 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["src", "types/telegram.d.ts"],
-  "exclude": ["node_modules/", "../rilata"]
+  "include": ["src/**/*", "types/telegram.d.ts", "src/**/*.svelte"],
+  "exclude": ["node_modules/", "__sapper__/*", "public/*"]
 }

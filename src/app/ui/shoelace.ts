@@ -21,6 +21,10 @@ import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
 import '@shoelace-style/shoelace/dist/components/select/select.js';
 import '@shoelace-style/shoelace/dist/components/option/option.js';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
+import '@shoelace-style/shoelace/dist/components/carousel/carousel.js';
+import '@shoelace-style/shoelace/dist/components/carousel-item/carousel-item.js';
+import '@shoelace-style/shoelace/dist/components/progress-bar/progress-bar.js';
+
 
 // установка базового пути по которому будут загружаться статичные файлы shoelace
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js';

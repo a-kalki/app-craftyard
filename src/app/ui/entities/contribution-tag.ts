@@ -1,8 +1,8 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { BaseElement } from '../base/base-element';
 import type { ContributionKey } from '#app/domain/contributions/types';
 import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
+import { BaseElement } from '../base/base-element';
 
 @customElement('user-contribution-tag')
 export class ContributionTag extends BaseElement {

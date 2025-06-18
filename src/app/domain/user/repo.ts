@@ -1,11 +1,12 @@
+import type { MaybePromise } from "rilata/core";
 import type { UserAttrs } from "./struct/attrs";
 
 export interface UserRepo  {
-  findUser(id: string): Promise<UserAttrs | undefined>;
+  findUser(id: string): MaybePromise<UserAttrs | undefined>;
 
-  add(uuserDod: UserAttrs): Promise<{ changes: number }>;
+  add(uuserDod: UserAttrs): MaybePromise<{ changes: number }>;
 
-  getUsers(): Promise<UserAttrs[]>;
+  getUsers(): MaybePromise<UserAttrs[]>;
 
-  editUser(id: string, patch: Partial<UserAttrs>): Promise<{ changes: number }>
+  editUser(id: string, patch: Partial<UserAttrs>): MaybePromise<{ changes: number }>
 }

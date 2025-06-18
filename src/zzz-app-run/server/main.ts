@@ -1,15 +1,17 @@
 import { cwd } from "process";
 import { CraftyardServer } from "./server";
-import { craftYardServerResolver } from "./resolver";
+import { craftYardServerResolver } from "./server-resolver.ts";
 import { UsersModule } from "#users/api/module";
 import { getServerConfig, InjectCallerMiddleware, LogResponseAfterware, ServerAfterware, type ServerMiddleware } from "rilata/api-server";
 import type { Controller, Module, ModuleMeta } from "rilata/api";
-import { userModuleResolvers, workshopModuleResolvers } from "./module-resolvers";
+import { fileModuleResolvers, modelModuleResolvers, userModuleResolvers, workshopModuleResolvers } from "./module-resolvers";
 import { IndexHtmlFileController } from "#app/api/controllers/index-html-file";
 import { AssetFilesController } from "#app/api/controllers/asset-files";
 import {} from '../../app/bot/app.ts';
 import { WorkshopsModule } from "#workshop/api/module.ts";
 import { UploadsFilesController } from "#app/api/controllers/uploads-files.ts";
+import { ModelModule } from "#models/api/module.ts";
+import { FilesModule } from "src/files/api/module.ts";
 
 const PROJECT_PATH = cwd();
 
@@ -22,8 +24,10 @@ const afterwares: ServerAfterware[] = [
 ]
 
 const modules: Module<ModuleMeta>[] = [
+  new FilesModule(fileModuleResolvers),
   new UsersModule(userModuleResolvers),
-  new WorkshopsModule(workshopModuleResolvers)
+  new WorkshopsModule(workshopModuleResolvers),
+  new ModelModule(modelModuleResolvers),
 ]
 
 const controllers: Controller[] = [

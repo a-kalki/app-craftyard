@@ -17,9 +17,14 @@ export class AppToaster extends LitElement {
   `;
 
   @state()
-  private messages: ToastMessage[] = [];
+  private messages: ToastMessage[];
 
   private timers = new Map<number, number>();
+  
+  constructor() {
+    super();
+    this.messages = []; // ✅ теперь инициализация не мешает реактивности
+  }
 
   connectedCallback() {
     super.connectedCallback();
