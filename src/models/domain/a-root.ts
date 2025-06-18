@@ -19,6 +19,10 @@ export class ModelAr extends AggregateRoot<ModelArMeta> {
       ids.forEach(id => attrs.imageIds.push(id));
     }
 
+    reorderImages(ids: string[]): void {
+      this.getAttrs({ copy: false }).imageIds = ids;
+    }
+
     deleteImage(id: string): void {
       const attrs = this.getAttrs({ copy: false });
       attrs.imageIds = attrs.imageIds.filter(imageId => imageId !== id);

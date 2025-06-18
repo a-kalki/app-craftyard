@@ -1,5 +1,5 @@
+import type { SubDir } from "#app/domain/file/struct/attrs";
 import type { UnionToTuple } from "rilata/core";
-import type { SubDir } from "./domain/struct/attrs";
 
 export const fileApiUrls = '/api/files/'
 

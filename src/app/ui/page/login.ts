@@ -1,8 +1,9 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import type { AuthData, TelegramWidgetUserData, AppApiInterface } from '../base-run/run-types';
+import type { TelegramWidgetUserData } from '../base-run/run-types';
 import { AppNotifier } from '../base/app-notifier';
-import type { AuthUserSuccess } from '#app/domain/user/struct/auth-user';
+import type { AuthData, AuthUserSuccess } from '#app/domain/user/struct/auth-user';
+import type { UserFacade } from '#app/domain/user/facade';
 
 @customElement('login-page')
 export class LoginPage extends LitElement {
@@ -11,7 +12,7 @@ export class LoginPage extends LitElement {
   }
 
   @property({ type: Boolean }) debug = true;
-  @property({ type: Object }) usersApi!: AppApiInterface;
+  @property({ type: Object }) userApi!: UserFacade;
   @state() private widgetLoaded = false;
 
   private appNotifier = new AppNotifier();
@@ -19,6 +20,7 @@ export class LoginPage extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     window.onTelegramAuth = this.onTelegramAuth.bind(this);
+    this.userApi = (window as any).userApi;
   }
 
   firstUpdated() {
@@ -102,7 +104,7 @@ export class LoginPage extends LitElement {
       type: 'widget-login',
       data: new URLSearchParams(tgUser as Record<string, string>).toString(),
     }
-    const result = await this.usersApi.authUser(data);
+    const result = await this.userApi.authUser(data);
     if (result.isFailure()) {
       this.appNotifier.error(
         'В процессе авторизации произошел сбой, попробуйте перезагрузить страницу и повторить процесс.',

@@ -1,8 +1,8 @@
 import type { RequestScope, RunDomainResult } from "rilata/api";
 import { FileUseCase } from "../../base-use-case";
-import type { GetFileCommand, GetFileUcMeta } from "src/files/domain/struct/get-file";
 import { getFileValidator } from "./v-map";
 import { failure, success } from "rilata/core";
+import type { GetFileCommand, GetFileUcMeta } from "#app/domain/file/struct/get-file";
 
 export class GetFileUC extends FileUseCase<GetFileUcMeta> {
   arName = "FileEntryAr" as const;

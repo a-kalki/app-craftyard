@@ -1,11 +1,16 @@
 import { BackendApi, localStore } from "rilata/ui";
-import { type ResultDTO } from "rilata/core";
+import { type JwtDecoder, type JwtDto, type ResultDTO } from "rilata/core";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "../base-run/constants";
 import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
-import { API_CASH_TTL_AS_MIN } from "../app-ui-config";
 
 export abstract class BaseBackendApi<T> extends BackendApi<T> {
-  protected cacheTtlAsMin = API_CASH_TTL_AS_MIN;
+  constructor(
+    moduleUrl: string,
+    jwtDecoder: JwtDecoder<JwtDto>,
+    protected cacheTtlAsMin: number,
+  ) {
+    super(moduleUrl, jwtDecoder);
+  }
 
   protected REFRESH_URL = '/api/users';
 

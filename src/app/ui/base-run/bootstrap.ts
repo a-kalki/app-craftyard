@@ -1,16 +1,18 @@
 import {} from '../shoelace';
-import {} from '../app-components'
+import {} from '../app-components';
+import AppContextProvider from '../app-context-provider.svelte';
 
 import { App } from '../base/app';
-import type { AuthData, AppApiInterface } from './run-types';
-import type { ModuleManifest } from '../base/types';
 import { AppRouter } from '../base/app-router';
 import { AppNotifier } from '../base/app-notifier';
 import { localStore } from 'rilata/ui';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './constants';
-import type { AuthUserSuccess, TokenType } from '#app/domain/user/struct/auth-user';
-import { jwtDecoder } from './app-resolves';
+import type { AuthData, AuthUserSuccess, TokenType } from '#app/domain/user/struct/auth-user';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import type { Module } from '../base/module';
+import type { BootstrapResolves } from './run-types';
+import type { UserFacade } from '#app/domain/user/facade';
+import { render } from 'svelte/server';
 
 export class Bootstrap {
   protected  appRouter = new AppRouter();
@@ -19,13 +21,18 @@ export class Bootstrap {
 
   protected isTelegramMiniApp = false;
 
+  protected userApi: UserFacade;
+
   constructor(
-    protected manifests: ModuleManifest[],
-    protected appApi: AppApiInterface,
-  ) {}
+    protected modules: Module[],
+    protected resolves: BootstrapResolves,
+  ) {
+    this.userApi = resolves.userFacade;
+  }
 
   protected async processStoredAuthToken(accessToken: string): Promise<void> {
     const refreshToken = localStore.get<string>(REFRESH_TOKEN_KEY);
+    const { jwtDecoder } = this.resolves;
     if (jwtDecoder.dateIsExpired(accessToken) === false) {
       const payloadResult = jwtDecoder.getTokenPayload(accessToken);
       if (payloadResult.isFailure()) {
@@ -33,7 +40,7 @@ export class Bootstrap {
         return;
       }
       const userId = payloadResult.value.userId;
-      const getResult = await this.appApi.getUser(userId);
+      const getResult = await this.userApi.getUser(userId);
       if (getResult.isFailure()) {
         this.showLoginPage();
         return;
@@ -49,7 +56,7 @@ export class Bootstrap {
       this.showLoginPage();
       return;
     }
-    const refreshResult = await this.appApi.refreshUser({ refreshToken });
+    const refreshResult = await this.userApi.refreshUser({ refreshToken });
     if (refreshResult.isFailure()) {
       this.showLoginPage();
       return;
@@ -61,7 +68,7 @@ export class Bootstrap {
       return;
     }
     const { userId } = payloadResult.value;
-    const getResult = await this.appApi.getUser(userId);
+    const getResult = await this.userApi.getUser(userId);
     if (getResult.isFailure()) {
       this.showLoginPage();
       return;
@@ -86,7 +93,7 @@ export class Bootstrap {
           type: 'mini-app-login',
           data: this.getTelegramInitData(),
         }
-        const authResult = await this.appApi.authUser(data);
+        const authResult = await this.userApi.authUser(data);
         if (authResult.isFailure()) {
           this.appNotifier.error('Произошла ошибка при авторизации. Попробуйте перезагрузить страницу.', {
             result: authResult,
@@ -181,20 +188,33 @@ export class Bootstrap {
     const root = this.prepareBody();
 
     const page = document.createElement('login-page');
-    (page as any).usersApi = this.appApi;
+    (page as any).usersApi = this.userApi;
     root.appendChild(page);
   }
 
   protected showAppPage(user: UserAttrs, token: TokenType): void {
       localStore.set(ACCESS_TOKEN_KEY, token.access);
       localStore.set(REFRESH_TOKEN_KEY, token.refresh);
-      const app = new App(this.appApi, this.manifests, user, this.isTelegramMiniApp);
+      const app = new App(this.resolves, this.modules, user, this.isTelegramMiniApp);
       app.init();
       this.redirectStartApp(app);
+      // this.setContext(app, this.resolves);
 
       const root = this.prepareBody();
       const appPage = document.createElement('app-page');
       root.appendChild(appPage);
+  }
+
+  protected setContext(app: App, resolves: Record<string, unknown>): void {
+    const hiddenHost = document.createElement('div');
+    hiddenHost.style.display = 'none';
+    document.body.appendChild(hiddenHost);
+
+    render(AppContextProvider, {
+      props: { app, resolves, $$slots: {
+        default: [() => document.createElement('div')]
+      } }
+    });
   }
 
   protected redirectStartApp(app: App): void {

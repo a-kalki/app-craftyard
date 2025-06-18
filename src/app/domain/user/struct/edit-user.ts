@@ -1,6 +1,6 @@
-import type { UserDoesNotExistError } from "#app/ui/base-run/run-types";
 import type { UserArMeta } from "../meta";
 import type { UserAttrs } from "./attrs";
+import type { UserDoesNotExistError } from "./get-user";
 
 // ========== commands ============
 export type EditUserCommand = {

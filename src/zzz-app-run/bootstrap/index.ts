@@ -1,15 +1,19 @@
-import { modelsModuleComponentCtors } from "#models/ui/components";
+import type { Module } from "#app/ui/base/module";
 import { modelsModule } from "#models/ui/module";
-import { workshopsModuleComponentCtors } from "#workshop/ui/components";
 import { workshopsModule } from "#workshop/ui/module";
-import { filesModuleComponentCtors } from "src/files/ui/components";
+import { BaseJwtDecoder } from "rilata/core";
 import { Bootstrap } from "../../app/ui/base-run/bootstrap";
-import type { TelegramWidgetUserData } from "../../app/ui/base-run/run-types";
-import type { ModuleManifest } from "../../app/ui/base/types";
-import { userModuleComponentCtors } from "../../users/ui/components";
+import type { BootstrapResolves, TelegramWidgetUserData } from "../../app/ui/base-run/run-types";
 import { usersModule } from "../../users/ui/module";
-import { usersApi } from "../../users/ui/users-api";
+import { UsersBackendApi } from "../../users/ui/users-api";
 import { filesModule } from "src/files/ui/module";
+import { FileBackendLocalApi } from "#files/ui/files-api";
+import { ModelsBackendApi } from "#models/ui/models-api";
+import { WorkshopsBackendApi } from "#workshop/ui/workshops-api";
+import type { UserFacade } from "#app/domain/user/facade";
+import type { FileFacade } from "#app/domain/file/facade";
+import type { ModelsFacade } from "#models/domain/facade";
+import type { WorkshopsFacade } from "#workshop/domain/facade";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,
@@ -21,12 +25,53 @@ const debugAuthUser: TelegramWidgetUserData = {
 
 (window as any).debugAuthUser = debugAuthUser;
 
-const manifests: ModuleManifest[] = [
-  { module: filesModule, componentCtors: filesModuleComponentCtors },
-  { module: usersModule, componentCtors: userModuleComponentCtors },
-  { module: workshopsModule, componentCtors: workshopsModuleComponentCtors },
-  { module: modelsModule, componentCtors: modelsModuleComponentCtors },
+const modules: Module[] = [
+  filesModule,
+  usersModule,
+  workshopsModule,
+  modelsModule,
 ]
 
-new Bootstrap(manifests, usersApi).start();
+// токен будет истекшим до наступления этот периода
+const expiredTimeShiftAsMs = 3000;
+
+// данные будут уничтожаться с кэше запросов в бэк при наступлении этого периода
+const cacheTtlAsMin = 5;
+
+const jwtDecoder = new BaseJwtDecoder(expiredTimeShiftAsMs);
+
+const resolves: BootstrapResolves = {
+  userFacade: new UsersBackendApi(jwtDecoder, cacheTtlAsMin),
+  fileFacade: new FileBackendLocalApi(jwtDecoder, cacheTtlAsMin),
+  jwtDecoder,
+}
+
+const otherApis = {
+  ...resolves,
+  modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
+  workshopApi: new WorkshopsBackendApi(jwtDecoder, cacheTtlAsMin),
+}
+
+type Facades = {
+  userApi: UserFacade,
+  fileApi: FileFacade,
+  modelFacade: ModelsFacade,
+  workshopFacade: WorkshopsFacade,
+}
+
+const withFacades: BootstrapResolves & Facades = {
+  ...otherApis,
+  userApi: otherApis.userFacade,
+  fileApi: otherApis.fileFacade,
+  modelFacade: otherApis.modelApi,
+  workshopFacade: otherApis.workshopApi,
+}
+
+// нужно удалить после удаления библиотеки lit;
+Object.keys(withFacades).forEach((key) => {
+  // @ts-expect-error
+  (window as any)[key] = withFacades[key];
+})
+
+new Bootstrap(modules, withFacades).start();
 

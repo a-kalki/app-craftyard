@@ -1,14 +1,18 @@
-import { jwtDecoder } from "#app/ui/base-run/app-resolves";
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { modelApiUrl } from "#models/constants";
+import type { ModelsFacade } from "#models/domain/facade";
 import type { AddModelImagesCommand, AddModelImagesMeta } from "#models/domain/struct/add-images";
 import type { ModelAttrs } from "#models/domain/struct/attrs";
 import type { DeleteModelImageCommand, DeleteModelImageMeta } from "#models/domain/struct/delete-image";
 import type { GetModelCommand, GetModelMeta } from "#models/domain/struct/get-model";
 import type { GetModelsCommand, GetModelsMeta } from "#models/domain/struct/get-models";
-import { success, type BackendResultByMeta } from "rilata/core";
+import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images";
+import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 
-class ModelsApi extends BaseBackendApi<ModelAttrs> {
+export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements ModelsFacade {
+  constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
+    super(modelApiUrl, jwtDecoder, cacheTtlAsMin);
+  }
   async getModel(id: string, forceRefresh?: boolean): Promise<BackendResultByMeta<GetModelMeta>> {
     const cached = this.getFromCacheById(id, forceRefresh);
     if (cached) return success(cached);
@@ -42,13 +46,24 @@ class ModelsApi extends BaseBackendApi<ModelAttrs> {
     return result;
   }
 
-  addModelImages(id: string, imageIds: string[]): Promise<BackendResultByMeta<AddModelImagesMeta>> {
+  addModelImages(id: string, pushImageIds: string[]): Promise<BackendResultByMeta<AddModelImagesMeta>> {
     const command: AddModelImagesCommand = {
       name: "add-model-images",
-      attrs: { id, imageIds },
+      attrs: { id, pushImageIds },
       requestId: crypto.randomUUID(),
     }
     return this.request<AddModelImagesMeta>(command);
+  }
+
+  reorderModelImages(
+    id: string, reorderedImageIds: string[],
+  ): Promise<BackendResultByMeta<ReorderModelImagesMeta>> {
+    const command: ReorderModelImagesCommand = {
+      name: "reorder-model-images",
+      attrs: { id, reorderedImageIds },
+      requestId: crypto.randomUUID(),
+    }
+    return this.request<ReorderModelImagesMeta>(command);
   }
 
   deleteImage(id: string, imageId: string): Promise<BackendResultByMeta<DeleteModelImageMeta>> {
@@ -60,5 +75,3 @@ class ModelsApi extends BaseBackendApi<ModelAttrs> {
     return this.request<DeleteModelImageMeta>(command);
   }
 }
-
-export const modelsApi = new ModelsApi(modelApiUrl, jwtDecoder);

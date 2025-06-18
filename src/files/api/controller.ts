@@ -1,9 +1,9 @@
 import { WebModuleController, type RilataRequest } from "rilata/api";
 import type { FilesModule } from "./module";
 import { failure, success, type BadRequestError, type Result } from "rilata/core";
-import type { UploadFileCommand } from "../domain/struct/upload-file";
-import type { SubDir } from "../domain/struct/attrs";
 import { uuidUtility } from "rilata/api-helper";
+import type { UploadFileCommand } from "#app/domain/file/struct/upload-file";
+import type { SubDir } from "#app/domain/file/struct/attrs";
 
 export class FileModuleController extends WebModuleController {
   declare protected module: FilesModule

@@ -2,15 +2,9 @@ import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import { modelsApi } from '../models-api';
 
 @customElement('models-list')
 export class ModelsWidget extends BaseElement {
-  static routingAttrs = {
-    pattern: '/models',
-    tag: 'models-list',
-  };
-
   static styles = css`
     :host {
       display: block;
@@ -57,7 +51,7 @@ export class ModelsWidget extends BaseElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    const result = await modelsApi.getModels();
+    const result = await this.modelApi.getModels();
     if (result.isFailure()) {
       this.app.error('Не удалось загрузить модели. Попробуйте позже.', { details: { result: result.value } });
       return;

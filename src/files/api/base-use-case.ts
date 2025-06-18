@@ -1,11 +1,11 @@
 import { QueryUseCase } from "rilata/api";
 import { AssertionException, failure, success, type Caller, type Result, type UCMeta } from "rilata/core";
-import type { FileNotFoundError } from "../domain/struct/get-file";
 import type { FilesModuleResolvers } from "./types";
-import { FilePolicy } from "../domain/policy";
-import { FileAr } from "../domain/a-root";
-import type { FileEntryAttrs } from "../domain/struct/attrs";
-import type { FileRepo } from "../domain/repo";
+import { FilePolicy } from "#app/domain/file/policy";
+import type { FileRepo } from "#app/domain/file/repo";
+import type { FileNotFoundError } from "#app/domain/file/struct/get-file";
+import type { FileEntryAttrs } from "#app/domain/file/struct/attrs";
+import { FileAr } from "#app/domain/file/a-root";
 
 export abstract class FileUseCase<META extends UCMeta> extends QueryUseCase<
   FilesModuleResolvers, META

@@ -1,5 +1,7 @@
 import { Module } from "../../app/ui/base/module";
-import type { RootItem, RouteRedirect } from "../../app/ui/base/types";
+import type { RootItem, RoutableTags, RouteRedirect } from "../../app/ui/base/types";
+
+import {} from './components';
 
 const routeItems: RootItem[] = [
   {
@@ -10,11 +12,19 @@ const routeItems: RootItem[] = [
   },
 ];
 
-// иконки для других модулей
-// products	box
-// courses	journal-text
-// workshops	build
+const routableTags: RoutableTags[] = [
+  {
+    pattern: '/workshops/:workshopId',
+    tag: 'workshop-details',
+  },
+]
 
 const routeRedirects: RouteRedirect[] = []
 
-export const workshopsModule = new Module('Workshop Module', 'Модуль Мастерской', routeItems, routeRedirects);
+export const workshopsModule = new Module(
+  'Workshop Module',
+  'Модуль Мастерской',
+  routeItems,
+  routableTags,
+  routeRedirects
+);

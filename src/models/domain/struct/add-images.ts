@@ -6,7 +6,7 @@ export type AddModelImagesCommand = {
   name: 'add-model-images',
   attrs: {
     id: string,
-    imageIds: string[],
+    pushImageIds: string[],
   },
   requestId: string,
 };

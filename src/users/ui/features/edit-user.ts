@@ -1,7 +1,6 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import { usersApi } from '../users-api';
 import type { ContributionKey } from '#app/domain/contributions/types';
 import { UserPolicy } from '#app/domain/user/policy';
 import type { EditUserCommand } from '#app/domain/user/struct/edit-user';
@@ -104,11 +103,6 @@ export class UserEditFeature extends BaseElement {
     }
   `;
 
-  static routingAttrs = {
-    pattern: '/users/:userId/edit',
-    tag: 'user-edit',
-  };
-
   @property({ type: Object })
   user: UserAttrs | undefined;
 
@@ -131,7 +125,7 @@ export class UserEditFeature extends BaseElement {
 
   async loadUser(): Promise<void> {
     const userId = this.app.router.getParams().userId;
-    const result = await usersApi.getUser(userId);
+    const result = await this.userApi.getUser(userId);
     if (result.isFailure()) {
       this.app.error('Не удалось загрузить данные пользователя', {
         userId,
@@ -234,7 +228,7 @@ export class UserEditFeature extends BaseElement {
     }
 
     try {
-      const result = await usersApi.editUser(updated);
+      const result = await this.userApi.editUser(updated);
       if (result.isFailure()) {
         this.app.error('Ошибка при сохранении профиля.', result.value);
         return;

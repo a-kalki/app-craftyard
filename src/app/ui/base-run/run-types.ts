@@ -1,24 +1,11 @@
-import type { AuthUserMeta } from "#app/domain/user/struct/auth-user";
-import type { GetUserMeta } from "#app/domain/user/struct/get-user";
-import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
-import type { BackendResultByMeta } from "rilata/core";
+import type { FileFacade } from "#app/domain/file/facade";
+import type { UserFacade } from "#app/domain/user/facade";
+import type { JwtDecoder, JwtDto } from "rilata/core";
 
-export type UserDoesNotExistError = {
-  name: 'UserDoesNotExistError',
-  type: 'domain-error',
-}
-
-export interface AppApiInterface {
-  authUser(dto: AuthData): Promise<BackendResultByMeta<AuthUserMeta>>;
-
-  getUser(userId: string): Promise<BackendResultByMeta<GetUserMeta>>;
-
-  refreshUser(dto: RefreshUserCommand['attrs']): Promise<BackendResultByMeta<RefreshUserMeta>>;
-}
-
-export type AuthData = {
-  type: 'widget-login' | 'mini-app-login';
-  data: string,
+export type BootstrapResolves = {
+  userFacade: UserFacade,
+  fileFacade: FileFacade,
+  jwtDecoder: JwtDecoder<JwtDto>,
 }
 
 export type TelegramUser = {

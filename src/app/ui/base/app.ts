@@ -1,30 +1,30 @@
-import type { AppState, RootItem, RoutableElementAttrs, ToastVariant } from "./types";
+import type { AppState, RootItem, ToastVariant } from "./types";
 import { AppRouter } from "./app-router";
-import type { ModuleManifest } from "./types";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
 import { AppDialog, type DialogOptions } from "./app-dialog";
-import type { AppApiInterface } from '../base-run/run-types';
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import type { UserFacade } from "#app/domain/user/facade";
+import type { BootstrapResolves } from "../base-run/run-types";
 
 export class App {
   public router: AppRouter;
 
-  public appApiInterface: AppApiInterface;
+  public userFacade: UserFacade;
 
-  private moduleManifests: ModuleManifest[] = [];
+  private modules: Module[] = [];
   private appState: AppState;
   private appNotifier = new AppNotifier();
   private appDialog = new AppDialog();
 
   constructor(
-    appApiInterface: AppApiInterface,
-    moduleManifests: ModuleManifest[],
+    resolves: BootstrapResolves,
+    modules: Module[],
     initialUser: UserAttrs,
     isTelegramMiniApp: boolean
   ) {
-    this.appApiInterface = appApiInterface;
-    this.moduleManifests = moduleManifests;
+    this.userFacade = resolves.userFacade;
+    this.modules = modules;
     this.appState = {
       currentUser: initialUser,
       isMobile: false,
@@ -35,10 +35,10 @@ export class App {
 
   init(): void {
     (window as any).app = this;
-    this.registerRoutingComponents();
+    this.registerRoutableComponents();
     this.registerRedirects();
     this.router.init();
-    this.moduleManifests.forEach(mm => mm.module.init(this));
+    this.modules.forEach(m => m.init(this));
   }
 
   logout(): void {
@@ -67,11 +67,11 @@ export class App {
   }
 
   public getRootItems(): RootItem[] {
-    return this.moduleManifests.flatMap(mm => mm.module.rootItems);
+    return this.modules.flatMap(m => m.rootItems);
   }
 
   private getModules(): Module[] {
-    return this.moduleManifests.flatMap(mm => mm.module);
+    return this.modules;
   }
 
   private registerRedirects(): void {
@@ -82,13 +82,10 @@ export class App {
     });
   }
 
-  private registerRoutingComponents(): void {
-    this.moduleManifests.forEach(mm => {
-      mm.componentCtors.forEach(Ctor => {
-        const routing = (Ctor as any).routingAttrs as RoutableElementAttrs | undefined;
-        if (routing) {
-          this.router.registerRoutableElement((Ctor as any).routingAttrs);
-        }
+  private registerRoutableComponents(): void {
+    this.modules.forEach(m => {
+      m.routableTags.forEach(rt => {
+        this.router.registerRoutableElement(rt);
       })
     })
   }

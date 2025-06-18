@@ -1,7 +1,7 @@
+import type { FileRepo } from "#app/domain/file/repo";
+import type { FileEntryAttrs } from "#app/domain/file/struct/attrs";
+import type { UpdateFileCommand } from "#app/domain/file/struct/update-file";
 import { JsonRepository } from "../../app/infra/json-repo";
-import type { FileRepo } from "../domain/repo";
-import type { FileEntryAttrs } from "../domain/struct/attrs";
-import type { UpdateFileCommand } from "../domain/struct/update-file";
 
 const path = import.meta.dir + '/files.json';
 

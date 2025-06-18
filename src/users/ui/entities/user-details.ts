@@ -1,7 +1,6 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import { usersApi } from '../users-api';
 import { UserAr } from '#app/domain/user/a-root';
 import type { ContributionCounter, ContributionKey } from '#app/domain/contributions/types';
 import type { BackendResultByMeta } from 'rilata/core';
@@ -151,11 +150,6 @@ export class UserDetailsEntity extends BaseElement {
     }
   `;
 
-  static routingAttrs = {
-    pattern: '/users/:userId',
-    tag: 'user-details',
-  };
-
   @state()
   private user: UserAttrs | null = null;
 
@@ -186,7 +180,7 @@ export class UserDetailsEntity extends BaseElement {
   }
 
   private async loadUser(userId: string): Promise<BackendResultByMeta<GetUserMeta>> {
-    return usersApi.getUser(userId);
+    return this.userApi.getUser(userId);
   }
 
   private formatDate(timestamp: number): string {

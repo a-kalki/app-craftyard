@@ -1,4 +1,3 @@
-import type { UserDoesNotExistError } from "#app/ui/base-run/run-types";
 import type { UserArMeta } from "../meta";
 import type { UserAttrs } from "./attrs";
 
@@ -11,6 +10,12 @@ export type GetUserCommand = {
 
 // ========== success ============
 export type GetUserSuccess = UserAttrs;
+
+// ========== errors ============
+export type UserDoesNotExistError = {
+  name: 'UserDoesNotExistError',
+  type: 'domain-error',
+}
 
 // ========== uc-meta ============
 export type GetUserMeta = {

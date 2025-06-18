@@ -1,16 +1,19 @@
-import type { AuthData, AppApiInterface } from "../../app/ui/base-run/run-types";
-import { success, type BackendResultByMeta } from "rilata/core";
+import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 import { type GetUserCommand, type GetUserMeta } from "#app/domain/user/struct/get-user";
 import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users";
 import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user";
-import type { AuthUserCommand, AuthUserMeta } from "#app/domain/user/struct/auth-user";
-import { usersApiUrl } from "#users/constants";
-import { jwtDecoder } from "#app/ui/base-run/app-resolves";
+import type { AuthData, AuthUserCommand, AuthUserMeta } from "#app/domain/user/struct/auth-user";
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import { usersApiUrl } from "#users/constants";
+import type { UserFacade } from "#app/domain/user/facade";
 
-class UsersApi extends BaseBackendApi<UserAttrs> implements AppApiInterface {
+export class UsersBackendApi extends BaseBackendApi<UserAttrs> implements UserFacade {
+  constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
+    super(usersApiUrl, jwtDecoder, cacheTtlAsMin);
+  }
+
   async authUser(dto: AuthData): Promise<BackendResultByMeta<AuthUserMeta>> {
     const command: AuthUserCommand = {
       name: 'auth-user',
@@ -76,5 +79,3 @@ class UsersApi extends BaseBackendApi<UserAttrs> implements AppApiInterface {
     return this.request<EditUserMeta>(command);
   }
 }
-
-export const usersApi = new UsersApi(usersApiUrl, jwtDecoder);

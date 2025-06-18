@@ -1,5 +1,7 @@
-import type { RootItem, RouteRedirect } from "#app/ui/base/types";
+import type { RootItem, RoutableTags, RouteRedirect } from "#app/ui/base/types";
 import { Module } from "../../app/ui/base/module";
+
+import {} from './components';
 
 const routeItems: RootItem[] = [
   {
@@ -10,6 +12,23 @@ const routeItems: RootItem[] = [
   },
 ];
 
+const routableTags: RoutableTags[] = [
+  {
+    pattern: '/models',
+    tag: 'models-list',
+  },
+  {
+    pattern: '/models/:modelId',
+    tag: 'model-details',
+  },
+]
+
 const routeRedirects: RouteRedirect[] = []
 
-export const modelsModule = new Module('Models Module', 'Модуль Моделей', routeItems, routeRedirects);
+export const modelsModule = new Module(
+  'Models Module',
+  'Модуль Моделей',
+  routeItems,
+  routableTags,
+  routeRedirects
+);

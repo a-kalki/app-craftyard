@@ -1,10 +1,15 @@
-import type { AuthData, UserDoesNotExistError } from "#app/ui/base-run/run-types";
 import type { UserArMeta } from "../meta";
 import type { UserAttrs } from "./attrs";
+import type { UserDoesNotExistError } from "./get-user";
 
 export type TokenType = {
   access: string,
   refresh: string,
+}
+
+export type AuthData = {
+  type: 'widget-login' | 'mini-app-login';
+  data: string,
 }
 
 // ========== commands ============

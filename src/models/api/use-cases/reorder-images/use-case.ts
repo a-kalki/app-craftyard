@@ -1,30 +1,30 @@
-import type { AddModelImagesCommand, AddModelImagesMeta } from "#models/domain/struct/add-images";
+import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images";
 import type { RequestScope, RunDomainResult } from "rilata/api";
 import { ModelUseCase } from "../../base-use-case";
 import { failure, success } from "rilata/core";
-import { addModelImagesValidator } from "./v-map";
+import { reorderModelImagesValidator } from "./v-map";
 
-export class AddModelImagesUC extends ModelUseCase<AddModelImagesMeta> {
+export class ReoderModelImagesUC extends ModelUseCase<ReorderModelImagesMeta> {
   arName = 'ModelAr' as const;
 
-  name = 'Add Model Images Use Case' as const;
+  name = 'Reorder Model Images Use Case' as const;
 
-  inputName = 'add-model-images' as const;
+  inputName = 'reorder-model-images' as const;
 
   protected supportAnonimousCall = true;
 
-  protected validator = addModelImagesValidator;
+  protected validator = reorderModelImagesValidator;
 
   async runDomain(
-    input: AddModelImagesCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<AddModelImagesMeta>> {
-    const { id, pushImageIds: imageIds } = input.attrs;
+    input: ReorderModelImagesCommand, requestData: RequestScope,
+  ): Promise<RunDomainResult<ReorderModelImagesMeta>> {
+    const { id, reorderedImageIds } = input.attrs;
     const result = await this.getModelAr(id);
     if (result.isFailure()) return failure(result.value);
     const aRoot = result.value;
 
     const modelPolicy = this.getModelPolicy(requestData.caller);
-    if (modelPolicy.canEdit(aRoot.getAttrs()) === false) {
+    if (modelPolicy.notCanEdit(aRoot.getAttrs())) {
       return failure({
         name: 'EditingIsNotPermitted',
         description: 'Вы не имеете прав на редактирование этой модели',
@@ -32,7 +32,7 @@ export class AddModelImagesUC extends ModelUseCase<AddModelImagesMeta> {
       });
     }
     
-    aRoot.addImages(imageIds);
+    aRoot.reorderImages(reorderedImageIds);
     await this.getRepo().update(aRoot.getAttrs());
     return success('success');
   }

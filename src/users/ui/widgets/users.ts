@@ -1,15 +1,10 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import { usersApi } from '../users-api';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 @customElement('users-list')
 export class UsersWidget extends BaseElement {
-  static routingAttrs = {
-    pattern: '/users',
-    tag: 'users-list',
-  };
 
   static styles = css`
     :host {
@@ -62,7 +57,7 @@ export class UsersWidget extends BaseElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    const result = await usersApi.getUsers();
+    const result = await this.userApi.getUsers();
     if (result.isFailure()) {
       this.app.error('Не удалось отобразить страницу, попробуйте позже.', { details: { result: result.value } });
       return;

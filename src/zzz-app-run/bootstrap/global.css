@@ -8,6 +8,8 @@ html, body {
   height: 100%;
   font-family: "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
   overflow-x: hidden;
+  touch-action: manipulation;
+  overflow-x: hidden;
 }
 
 /* Контейнер, куда вставляется весь app (login-page, app-page и т.д.) */

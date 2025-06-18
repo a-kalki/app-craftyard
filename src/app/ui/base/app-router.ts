@@ -1,4 +1,4 @@
-import type { RoutableElementAttrs, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
+import type { RoutableTags, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
 
 export class AppRouter {
   private listeners: (() => void)[] = [];
@@ -30,7 +30,7 @@ export class AppRouter {
   }
 
   // Регистрация шаблонов путей для парсинга параметров
-  registerRoutableElement(attrs: RoutableElementAttrs): void {
+  registerRoutableElement(attrs: RoutableTags): void {
     const keys: string[] = [];
     const regex = new RegExp(
       '^' +

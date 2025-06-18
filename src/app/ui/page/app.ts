@@ -132,6 +132,7 @@ export class AppPage extends BaseElement {
 
     const tag = this.currentTag;
     if (!customElements.get(tag)) {
+      console.log('Unknown tag', tag);
       return staticHtml`<internal-error>internal error</internal-error>`;
     }
 

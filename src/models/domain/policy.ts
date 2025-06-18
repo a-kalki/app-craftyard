@@ -12,6 +12,10 @@ export class ModelPolicy {
     return this.isOwner(model) || this.userPolicy.isModerator();;
   }
 
+  notCanEdit(model: ModelAttrs): boolean {
+    return !this.canEdit(model);
+  }
+
   isOwner(model: ModelAttrs): boolean {
     return this.currentUser.id === model.owner;
   }

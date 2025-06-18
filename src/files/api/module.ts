@@ -1,8 +1,8 @@
 import { WebModule } from "rilata/api";
-import { FileAr } from "../domain/a-root";
 import type { FilesModuleMeta, FilesModuleResolver, FilesModuleResolvers } from "./types";
 import { filesModuleConfig, filesModuleUseCases } from "./setup";
 import { FileModuleController } from "./controller";
+import { FileAr } from "#app/domain/file/a-root";
 
 export class FilesModule extends WebModule<FilesModuleMeta> {
     name = "Files Module" as const;

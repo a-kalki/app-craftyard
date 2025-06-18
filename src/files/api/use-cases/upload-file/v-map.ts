@@ -1,10 +1,10 @@
+import type { UploadFileCommand } from "#app/domain/file/struct/upload-file";
+import { fileAccessVmap, fileEntryAttrsVmap } from "#app/domain/file/v-map";
 import {
   DtoFieldValidator, type ValidatorMap, NotValidateFieldValidator,
   LiteralFieldValidator, StringChoiceValidationRule,
 } from "rilata/validator";
 import { fileSubDirs } from "src/files/constants";
-import type { UploadFileCommand } from "src/files/domain/struct/upload-file";
-import { fileAccessVmap, fileEntryAttrsVmap } from "src/files/domain/v-map";
 
 const uploadFileVmap: ValidatorMap<UploadFileCommand['attrs']> = {
     file: new NotValidateFieldValidator('file'),

@@ -1,12 +1,12 @@
 import type { RequestScope, RunDomainResult } from "rilata/api";
 import { AssertionException, failure, success, type AuthUser } from "rilata/core";
 import { FileUseCase } from "../../base-use-case";
-import type { UploadFileCommand, UploadFileUcMeta } from "src/files/domain/struct/upload-file";
 import { uploadFileValidator } from "./v-map";
 import path from "node:path";
-import type { FileEntryAttrs } from "src/files/domain/struct/attrs";
 import { uuidUtility } from "rilata/api-helper";
-import { FileAr } from "src/files/domain/a-root";
+import type { UploadFileCommand, UploadFileUcMeta } from "#app/domain/file/struct/upload-file";
+import type { FileEntryAttrs } from "#app/domain/file/struct/attrs";
+import { FileAr } from "#app/domain/file/a-root";
 
 export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
   arName = "FileEntryAr" as const;

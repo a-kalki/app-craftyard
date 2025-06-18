@@ -3,7 +3,6 @@ import type { IndividualCommission } from "#workshop/domain/struct/attrs";
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
-import { usersApi } from "#users/ui/users-api";
 
 @customElement('workshop-individual-commission-card')
 export class WorkshopIndividualCommissionCard extends BaseElement {
@@ -134,7 +133,7 @@ export class WorkshopIndividualCommissionCard extends BaseElement {
     if (this.commission?.userId) {
       try {
         this.isLoadingUser = true;
-        const getResult = await usersApi.getUser(this.commission.userId);
+        const getResult = await this.usersFacade.getUser(this.commission.userId);
         if (getResult.isFailure()) {
           this.app.info('Не удалось загрузить пользователя', { details: getResult.value });
           return;

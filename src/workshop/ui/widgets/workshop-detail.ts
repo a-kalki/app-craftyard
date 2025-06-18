@@ -1,7 +1,6 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import { workshopsApi } from '../workshops-api';
 import type { BackendResultByMeta } from 'rilata/core';
 import type { WorkshopAttrs } from '#workshop/domain/struct/attrs';
 import type { GetWorkshopMeta } from '#workshop/domain/struct/get-workshop';
@@ -164,7 +163,7 @@ export class WorkshopDetailsEntity extends BaseElement {
   }
 
   private async loadWorkshop(workshopId: string): Promise<BackendResultByMeta<GetWorkshopMeta>> {
-    return workshopsApi.getWorkshop(workshopId);
+    return this.workshopApi.getWorkshop(workshopId);
   }
 
   render() {
