@@ -1,6 +1,6 @@
 import type { ModelCategory } from "./attrs"
 
-export const modelCategoriesTitles = {
+export const MODEL_CATEGORY_TITLES = {
   KITCHEN: 'Кухня',
   GARDEN: 'Сад',
   INTERIOR: 'Интерьер',
@@ -8,4 +8,4 @@ export const modelCategoriesTitles = {
   FURNITURE: 'Мебель',
 }
 
-export const modelCategoryKeys = Object.keys(modelCategoriesTitles) as ModelCategory[]
+export const MODEL_CATEGORY_KEYS = Object.keys(MODEL_CATEGORY_TITLES) as ModelCategory[]

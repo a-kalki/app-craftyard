@@ -4,7 +4,7 @@ import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const addModelImagesVmap: ValidatorMap<AddModelImagesCommand['attrs']> = {
   id: modelVmap.id,
-  imageIds: modelVmap.imageIds,
+  pushImageIds: modelVmap.imageIds.cloneWithName('pushImageIds'),
 }
 
 export const addModelImagesValidator = new DtoFieldValidator(

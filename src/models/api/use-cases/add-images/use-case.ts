@@ -18,7 +18,7 @@ export class AddModelImagesUC extends ModelUseCase<AddModelImagesMeta> {
   async runDomain(
     input: AddModelImagesCommand, requestData: RequestScope,
   ): Promise<RunDomainResult<AddModelImagesMeta>> {
-    const { id, pushImageIds: imageIds } = input.attrs;
+    const { id, pushImageIds } = input.attrs;
     const result = await this.getModelAr(id);
     if (result.isFailure()) return failure(result.value);
     const aRoot = result.value;
@@ -32,7 +32,7 @@ export class AddModelImagesUC extends ModelUseCase<AddModelImagesMeta> {
       });
     }
     
-    aRoot.addImages(imageIds);
+    aRoot.addImages(pushImageIds);
     await this.getRepo().update(aRoot.getAttrs());
     return success('success');
   }

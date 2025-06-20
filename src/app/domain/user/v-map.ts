@@ -25,7 +25,6 @@ export const userSupportVMap: ValidatorMap<UserAttrs['support']> = {
 export const userProfileVMap: ValidatorMap<UserAttrs['profile']> = {
   telegramNickname: new LiteralFieldValidator('telegramNickname', false, { isArray: false }, 'string', []),
   avatarUrl: new LiteralFieldValidator('avatarUrl', false, { isArray: false }, 'string', []),
-  // @ts-expect-error
   skills: new RecordDtoValidator(true, { isArray: false }, [
     new IsStringTypeRule(),
     new MinCharsCountValidationRule(30, 'Описание навыка должно содержать не менее 30 символов'),

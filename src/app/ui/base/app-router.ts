@@ -1,4 +1,5 @@
-import type { RoutableTags, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
+import type { ComponentType } from "svelte";
+import type { LoadableSvelteComponent, RoutableComponent, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
 
 export class AppRouter {
   private listeners: (() => void)[] = [];
@@ -30,7 +31,7 @@ export class AppRouter {
   }
 
   // Регистрация шаблонов путей для парсинга параметров
-  registerRoutableElement(attrs: RoutableTags): void {
+  registerRoutableElement(attrs: RoutableComponent): void {
     const keys: string[] = [];
     const regex = new RegExp(
       '^' +
@@ -64,16 +65,23 @@ export class AppRouter {
 
   // Получение параметров текущего пути
   getParams(): UrlParams {
-    return this.getEntry().matcher(this.getPath()) as UrlParams;
+    const entry = this.getEntry();
+    return entry ? entry.matcher(this.getPath()) as UrlParams : {};
   }
 
-  getEntry(): RoutableElementEntry {
+  getEntry(): RoutableElementEntry | null {
     const path = this.getPath();
     for (const entry of this.entries) {
       const result = entry.matcher(path);
       if (result) return entry;
     }
     throw Error('Routing component not found: ' + path);
+  }
+
+  findComponentByTag(tag: string): LoadableSvelteComponent | undefined {
+    return this.entries
+      .filter(entry => entry.type === 'svelte')
+      .find(entry => entry.tag === tag)?.component
   }
 
   // Уничтожение (например, при hot reload)

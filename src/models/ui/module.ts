@@ -1,9 +1,10 @@
-import type { RootItem, RoutableTags, RouteRedirect } from "#app/ui/base/types";
+import ModelDetails from './widgets/model-details.svelte';
 import { Module } from "../../app/ui/base/module";
 
 import {} from './components';
+import type { RoutableComponent, RouteRedirect, SidebarItem } from '../../app/ui/base/types';
 
-const routeItems: RootItem[] = [
+const routeItems: SidebarItem[] = [
   {
     name: 'models',
     url: '/models',
@@ -12,14 +13,17 @@ const routeItems: RootItem[] = [
   },
 ];
 
-const routableTags: RoutableTags[] = [
+const routableTags: RoutableComponent[] = [
   {
     pattern: '/models',
     tag: 'models-list',
+    type: 'wc',
   },
   {
     pattern: '/models/:modelId',
     tag: 'model-details',
+    component: ModelDetails,
+    type: 'svelte',
   },
 ]
 

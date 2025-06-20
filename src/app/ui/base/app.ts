@@ -1,4 +1,4 @@
-import type { AppState, RootItem, ToastVariant } from "./types";
+import type { AppState, SidebarItem, ToastVariant } from "./types";
 import { AppRouter } from "./app-router";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
@@ -66,7 +66,7 @@ export class App {
     return copy ? { ...this.appState } : this.appState;
   }
 
-  public getRootItems(): RootItem[] {
+  public getRootItems(): SidebarItem[] {
     return this.modules.flatMap(m => m.rootItems);
   }
 

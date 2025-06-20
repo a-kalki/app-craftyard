@@ -1,9 +1,9 @@
 import { Module } from "../../app/ui/base/module";
-import type { RootItem, RoutableTags, RouteRedirect } from "../../app/ui/base/types";
+import type { SidebarItem, RoutableComponent, RouteRedirect } from "../../app/ui/base/types";
 
 import {} from './components';
 
-const routeItems: RootItem[] = [
+const routeItems: SidebarItem[] = [
   {
     name: 'my-profile',
     url: '/my-profile',
@@ -18,22 +18,26 @@ const routeItems: RootItem[] = [
   }
 ];
 
-const routableTags: RoutableTags[] = [
+const routableTags: RoutableComponent[] = [
   {
     pattern: '/my-profile',
     tag: 'my-profile',
+    type: 'wc',
   },
   {
     pattern: '/users',
     tag: 'users-list',
+    type: 'wc',
   },
   {
     pattern: '/users/:userId',
     tag: 'user-details',
+    type: 'wc',
   },
   {
     pattern: '/users/:userId/edit',
     tag: 'user-edit',
+    type: 'wc',
   },
 ]
 

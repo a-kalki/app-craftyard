@@ -1,8 +1,8 @@
 import { DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule, StringChoiceValidationRule, UuidField, type ValidatorMap } from "rilata/validator";
 import type { ModelAttrs } from "./struct/attrs";
 import { getUserIdValidator } from "#app/domain/user/v-map";
-import { skillLevelKeys } from "#app/domain/constants";
-import { modelCategoryKeys } from "./struct/constants";
+import { SKILL_LEVEL_KEYS } from "#app/domain/constants";
+import { MODEL_CATEGORY_KEYS } from "./struct/constants";
 
 export const modelVmap: ValidatorMap<ModelAttrs> = {
   id: new UuidField('id'),
@@ -15,10 +15,10 @@ export const modelVmap: ValidatorMap<ModelAttrs> = {
   owner: getUserIdValidator('owner', true, { isArray: false }),
   imageIds: new LiteralFieldValidator('imageIds', true, { isArray: true }, 'string', []),
   categories: new LiteralFieldValidator('categories', true, { isArray: true }, 'string', [
-    new StringChoiceValidationRule(modelCategoryKeys)
+    new StringChoiceValidationRule(MODEL_CATEGORY_KEYS)
   ]),
   difficultyLevel: new LiteralFieldValidator('difficultyLevel', true, { isArray: false }, 'string', [
-    new StringChoiceValidationRule(skillLevelKeys)
+    new StringChoiceValidationRule(SKILL_LEVEL_KEYS)
   ]),
   materialsList: new LiteralFieldValidator('materialsList', true, { isArray: true }, 'string', []),
   toolsRequired: new LiteralFieldValidator('toolsRequired', true, { isArray: true }, 'string', []),

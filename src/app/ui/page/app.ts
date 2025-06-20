@@ -1,7 +1,8 @@
-import { html, css } from 'lit';
+import { html, css, type TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
 import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
+import type { RoutableComponent } from '../base/types';
 
 @customElement('app-page')
 export class AppPage extends BaseElement {
@@ -56,7 +57,7 @@ export class AppPage extends BaseElement {
   private sidebarVisible = false;
 
   @state()
-  private currentTag: string | null = null;
+  private routableComponent: RoutableComponent | null = null;
 
   private observer?: ResizeObserver;
 
@@ -88,6 +89,7 @@ export class AppPage extends BaseElement {
 
   render() {
     const state = this.app.getState();
+    const component = this.routableComponent;
 
     return html`
       <div class="container">
@@ -106,7 +108,12 @@ export class AppPage extends BaseElement {
             : null}
 
           <div id="content">
-            ${this.renderContent()}
+            ${!component
+              ? html`<sl-spinner>Загрузка приложения...</sl-spinner>`
+              : component.type === 'wc'
+                ? html`<app-content>${this.renderCustomComponent(component.tag)}</app-content>`
+                : html`<app-content .svelteComponentTag=${component.tag}></app-content>`
+            }
           </div>
         </main>
 
@@ -125,15 +132,9 @@ export class AppPage extends BaseElement {
     `;
   }
 
-  private renderContent() {
-    if (!this.currentTag || this.currentTag === '404 page') {
-      return staticHtml`<content-not-found></content-not-found>`;
-    }
-
-    const tag = this.currentTag;
+  private renderCustomComponent(tag: string): TemplateResult {
     if (!customElements.get(tag)) {
-      console.log('Unknown tag', tag);
-      return staticHtml`<internal-error>internal error</internal-error>`;
+      return staticHtml`<internal-error>internal error: unknown tag - "${tag}"</internal-error>`;
     }
 
     const tagStatic = unsafeStatic(tag);
@@ -142,6 +143,15 @@ export class AppPage extends BaseElement {
 
   private handleUrlChanged(): void {
     const entry = this.app.router.getEntry();
-    this.currentTag = entry ? entry.tag : '404 page';
+    if (!entry) {
+      this.routableComponent = {
+        type: 'wc',
+        tag: 'content-not-found',
+        pattern: 'page 404'
+      }
+      return;
+    }
+    const { matcher, ...routableComponent } = entry;
+    this.routableComponent = routableComponent;
   }
 }

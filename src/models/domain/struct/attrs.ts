@@ -1,7 +1,7 @@
 import type { SkillLevel } from "#app/domain/types";
-import type { modelCategoriesTitles } from "./constants"
+import type { MODEL_CATEGORY_TITLES } from "./constants"
 
-export type ModelCategory = keyof typeof modelCategoriesTitles;
+export type ModelCategory = keyof typeof MODEL_CATEGORY_TITLES;
 
 export type ModelAttrs = {
   id: string,

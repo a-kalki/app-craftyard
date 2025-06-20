@@ -1,4 +1,5 @@
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import type { ComponentType } from "svelte";
 
 export type AppState = {
   currentUser: UserAttrs,
@@ -6,23 +7,37 @@ export type AppState = {
   isTelegramMiniApp: boolean,
 }
 
-export type RoutableTags = {
+export type RoutableCustomComponent = {
   pattern: string,
   tag: string,
+  type: 'wc',
 }
+
+export type LoadableSvelteComponent =
+  ComponentType
+  | { loader: () => Promise<{ default: ComponentType }> }
+
+export type RoutableSvelteComponent = {
+  pattern: string,
+  tag: string,
+  component: LoadableSvelteComponent
+  type: 'svelte';
+}
+
+export type RoutableComponent = RoutableCustomComponent | RoutableSvelteComponent;
 
 export type UrlParams = Record<string, string>;
 
 export type RouteRedirect = {
-  from: string, // этот атрибут используется как роутинг, поэтому слеш нужен '/home'
-  to: string, // этот атрибут используется как роутинг, поэтому слеш нужен '/my-profile'
+  from: string, // '/home'
+  to: string, // '/my-profile'
 }
 
 export type RoutableElementEntry = {
   matcher: (url: string) => UrlParams | undefined
-} & RoutableTags
+} & RoutableComponent
 
-export type RootItem = {
+export type SidebarItem = {
   name: string;
   url: string;
   title: string;

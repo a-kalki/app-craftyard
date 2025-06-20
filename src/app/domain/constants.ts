@@ -1,9 +1,9 @@
 import type { SkillLevel } from "./types";
 
-export const skillLevelTitles: Record<SkillLevel, string> = {
+export const SKILL_LEVEL_TITLES: Record<SkillLevel, string> = {
     BEGINNER: 'Новичок',
     INTERMEDIATE: 'Опытный',
     EXPERT: 'Эксперт',
 }
 
-export const skillLevelKeys: SkillLevel[] = ['BEGINNER', 'INTERMEDIATE', 'EXPERT'];
+export const SKILL_LEVEL_KEYS: SkillLevel[] = ['BEGINNER', 'INTERMEDIATE', 'EXPERT'];

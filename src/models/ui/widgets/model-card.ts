@@ -2,8 +2,8 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
-import { modelCategoriesTitles } from '#models/domain/struct/constants';
-import { skillLevelTitles } from '#app/domain/constants';
+import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
+import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
 
 @customElement('model-card')
 export class ModelCardWidget extends BaseElement {
@@ -80,7 +80,7 @@ export class ModelCardWidget extends BaseElement {
 
   render() {
     const previewUrl = this.model.imageIds[0];
-    const categories = this.model.categories.map(cat => modelCategoriesTitles[cat]);
+    const categories = this.model.categories.map(cat => MODEL_CATEGORY_TITLES[cat]);
 
     return html`
       <sl-card>
@@ -96,7 +96,7 @@ export class ModelCardWidget extends BaseElement {
               ${categories.map(cat => html`<sl-tag size="small" variant="primary">${cat}</sl-tag>`)}
             </div>
             <div class="difficulty">
-              <sl-tag size="small" variant="warning">${skillLevelTitles[this.model.difficultyLevel]}</sl-tag>
+              <sl-tag size="small" variant="warning">${SKILL_LEVEL_TITLES[this.model.difficultyLevel]}</sl-tag>
             </div>
           </div>
         </div>

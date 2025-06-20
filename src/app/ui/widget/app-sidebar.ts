@@ -1,11 +1,11 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { RootItem } from '../base/types';
+import type { SidebarItem } from '../base/types';
 import { BaseElement } from '../base/base-element';
 
 @customElement('app-sidebar')
 export class AppSidebarWidget extends BaseElement {
-  @property({ type: Array }) items: RootItem[] = [];
+  @property({ type: Array }) items: SidebarItem[] = [];
   @property({ type: String }) activeItem?: string;
   @property({ type: Boolean }) isMobile = false;
   @property({ type: Function }) closeSidebar = () => {};
@@ -72,7 +72,7 @@ export class AppSidebarWidget extends BaseElement {
     `;
   }
 
-  private handleSelect(event: MouseEvent, item: RootItem) {
+  private handleSelect(event: MouseEvent, item: SidebarItem) {
     event.preventDefault();
     this.activeItem = item.name;
     this.app.router.navigate(item.url);

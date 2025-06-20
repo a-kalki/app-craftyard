@@ -1,11 +1,11 @@
-import type { RootItem, RoutableTags, RouteRedirect } from "#app/ui/base/types";
+import type { SidebarItem, RoutableComponent, RouteRedirect } from "#app/ui/base/types";
 import { Module } from "../../app/ui/base/module";
 
 import {} from './components';
 
-const routeItems: RootItem[] = [];
+const routeItems: SidebarItem[] = [];
 
-const routableTags: RoutableTags[] = []
+const routableTags: RoutableComponent[] = []
 
 const routeRedirects: RouteRedirect[] = []
 
