@@ -1,5 +1,4 @@
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
-import type { ComponentType } from "svelte";
 
 export type AppState = {
   currentUser: UserAttrs,
@@ -13,19 +12,6 @@ export type RoutableCustomComponent = {
   type: 'wc',
 }
 
-export type LoadableSvelteComponent =
-  ComponentType
-  | { loader: () => Promise<{ default: ComponentType }> }
-
-export type RoutableSvelteComponent = {
-  pattern: string,
-  tag: string,
-  component: LoadableSvelteComponent
-  type: 'svelte';
-}
-
-export type RoutableComponent = RoutableCustomComponent | RoutableSvelteComponent;
-
 export type UrlParams = Record<string, string>;
 
 export type RouteRedirect = {
@@ -35,7 +21,7 @@ export type RouteRedirect = {
 
 export type RoutableElementEntry = {
   matcher: (url: string) => UrlParams | undefined
-} & RoutableComponent
+} & RoutableCustomComponent
 
 export type SidebarItem = {
   name: string;

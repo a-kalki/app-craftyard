@@ -1,6 +1,5 @@
 import {} from '../shoelace';
 import {} from '../app-components';
-import AppContextProvider from '../app-context-provider.svelte';
 
 import { App } from '../base/app';
 import { AppRouter } from '../base/app-router';
@@ -12,7 +11,6 @@ import type { UserAttrs } from '#app/domain/user/struct/attrs';
 import type { Module } from '../base/module';
 import type { BootstrapResolves } from './run-types';
 import type { UserFacade } from '#app/domain/user/facade';
-import { render } from 'svelte/server';
 
 export class Bootstrap {
   protected  appRouter = new AppRouter();
@@ -198,23 +196,10 @@ export class Bootstrap {
       const app = new App(this.resolves, this.modules, user, this.isTelegramMiniApp);
       app.init();
       this.redirectStartApp(app);
-      // this.setContext(app, this.resolves);
 
       const root = this.prepareBody();
       const appPage = document.createElement('app-page');
       root.appendChild(appPage);
-  }
-
-  protected setContext(app: App, resolves: Record<string, unknown>): void {
-    const hiddenHost = document.createElement('div');
-    hiddenHost.style.display = 'none';
-    document.body.appendChild(hiddenHost);
-
-    render(AppContextProvider, {
-      props: { app, resolves, $$slots: {
-        default: [() => document.createElement('div')]
-      } }
-    });
   }
 
   protected redirectStartApp(app: App): void {

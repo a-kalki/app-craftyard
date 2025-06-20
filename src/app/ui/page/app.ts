@@ -1,8 +1,7 @@
-import { html, css, type TemplateResult } from 'lit';
+import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
 import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
-import type { RoutableComponent } from '../base/types';
 
 @customElement('app-page')
 export class AppPage extends BaseElement {
@@ -13,14 +12,15 @@ export class AppPage extends BaseElement {
       height: 100vh;
       width: 100%;
       justify-content: stretch;
-      align-items: center; /* центрируем по горизонтали */
+      align-items: center;
       background: var(--app-background, white);
+      overflow: hidden; /* Запрещаем скролл всей страницы */
     }
 
     .container {
       display: grid;
       grid-template-rows: auto 1fr;
-      max-width: 1200px; /* ограничение ширины */
+      max-width: 1200px;
       width: 100%;
       height: 100%;
     }
@@ -29,12 +29,22 @@ export class AppPage extends BaseElement {
       display: grid;
       grid-template-columns: 250px 1fr;
       height: 100%;
-      padding-top: 56px; /* отступ под фиксированную шапку */
+      padding-top: 56px;
     }
 
     #content {
       width: 100%;
-      max-width: none; /* Убираем возможные ограничения */
+      max-width: none;
+      overflow-y: auto; /* Скролл только для контента */
+      height: calc(100vh - 56px); /* Высота минус header */
+    }
+
+    app-sidebar {
+      height: calc(100vh - 56px); /* Высота минус header */
+      overflow-y: auto; /* Скролл внутри сайдбара, если контент не помещается */
+      position: sticky;
+      top: 56px;
+      background: var(--app-background, white);
     }
 
     main.mobile {
@@ -50,6 +60,15 @@ export class AppPage extends BaseElement {
       main {
         grid-template-columns: 1fr;
       }
+      
+      #content {
+        height: calc(100vh - 56px);
+      }
+      
+      app-sidebar {
+        position: static;
+        height: auto;
+      }
     }
   `;
 
@@ -57,7 +76,7 @@ export class AppPage extends BaseElement {
   private sidebarVisible = false;
 
   @state()
-  private routableComponent: RoutableComponent | null = null;
+  private currentTag: string | null = null;
 
   private observer?: ResizeObserver;
 
@@ -89,7 +108,6 @@ export class AppPage extends BaseElement {
 
   render() {
     const state = this.app.getState();
-    const component = this.routableComponent;
 
     return html`
       <div class="container">
@@ -108,12 +126,7 @@ export class AppPage extends BaseElement {
             : null}
 
           <div id="content">
-            ${!component
-              ? html`<sl-spinner>Загрузка приложения...</sl-spinner>`
-              : component.type === 'wc'
-                ? html`<app-content>${this.renderCustomComponent(component.tag)}</app-content>`
-                : html`<app-content .svelteComponentTag=${component.tag}></app-content>`
-            }
+            ${this.renderContent()}
           </div>
         </main>
 
@@ -132,9 +145,14 @@ export class AppPage extends BaseElement {
     `;
   }
 
-  private renderCustomComponent(tag: string): TemplateResult {
+  private renderContent() {
+    if (!this.currentTag || this.currentTag === '404 page') {
+      return staticHtml`<content-not-found></content-not-found>`;
+    }
+
+    const tag = this.currentTag;
     if (!customElements.get(tag)) {
-      return staticHtml`<internal-error>internal error: unknown tag - "${tag}"</internal-error>`;
+      return staticHtml`<internal-error>internal error</internal-error>`;
     }
 
     const tagStatic = unsafeStatic(tag);
@@ -143,15 +161,6 @@ export class AppPage extends BaseElement {
 
   private handleUrlChanged(): void {
     const entry = this.app.router.getEntry();
-    if (!entry) {
-      this.routableComponent = {
-        type: 'wc',
-        tag: 'content-not-found',
-        pattern: 'page 404'
-      }
-      return;
-    }
-    const { matcher, ...routableComponent } = entry;
-    this.routableComponent = routableComponent;
+    this.currentTag = entry ? entry.tag : '404 page';
   }
 }

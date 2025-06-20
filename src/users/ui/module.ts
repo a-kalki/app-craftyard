@@ -1,5 +1,5 @@
 import { Module } from "../../app/ui/base/module";
-import type { SidebarItem, RoutableComponent, RouteRedirect } from "../../app/ui/base/types";
+import type { SidebarItem, RouteRedirect, RoutableCustomComponent } from "../../app/ui/base/types";
 
 import {} from './components';
 
@@ -18,7 +18,7 @@ const routeItems: SidebarItem[] = [
   }
 ];
 
-const routableTags: RoutableComponent[] = [
+const routableTags: RoutableCustomComponent[] = [
   {
     pattern: '/my-profile',
     tag: 'my-profile',

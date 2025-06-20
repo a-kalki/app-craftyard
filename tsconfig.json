@@ -23,7 +23,7 @@
       "#*": ["./src/*"],
       "@shoelace-style/shoelace": ["./node_modules/@shoelace-style/shoelace/dist/shoelace.js"]
     },
-    "types": ["@shoelace-style/shoelace", "svelte"],
+    "types": ["@shoelace-style/shoelace", "bun-types"],
 
     // Best practices
     "strict": true,
@@ -35,6 +35,6 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["src/**/*", "types/telegram.d.ts", "src/**/*.svelte"],
-  "exclude": ["node_modules/", "__sapper__/*", "public/*"]
+  "include": ["src/**/*", "types/telegram.d.ts"],
+  "exclude": ["node_modules/", "public/*"]
 }

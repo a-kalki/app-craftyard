@@ -1,5 +1,4 @@
-import type { ComponentType } from "svelte";
-import type { LoadableSvelteComponent, RoutableComponent, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
+import type { RoutableCustomComponent, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
 
 export class AppRouter {
   private listeners: (() => void)[] = [];
@@ -31,7 +30,7 @@ export class AppRouter {
   }
 
   // Регистрация шаблонов путей для парсинга параметров
-  registerRoutableElement(attrs: RoutableComponent): void {
+  registerRoutableElement(attrs: RoutableCustomComponent): void {
     const keys: string[] = [];
     const regex = new RegExp(
       '^' +
@@ -76,12 +75,6 @@ export class AppRouter {
       if (result) return entry;
     }
     throw Error('Routing component not found: ' + path);
-  }
-
-  findComponentByTag(tag: string): LoadableSvelteComponent | undefined {
-    return this.entries
-      .filter(entry => entry.type === 'svelte')
-      .find(entry => entry.tag === tag)?.component
   }
 
   // Уничтожение (например, при hot reload)

@@ -1,5 +1,5 @@
 import type { App } from "./app";
-import type { SidebarItem, RoutableComponent, RouteRedirect } from "./types";
+import type { SidebarItem, RouteRedirect, RoutableCustomComponent } from "./types";
 
 export class Module {
   public app!: App;
@@ -8,7 +8,7 @@ export class Module {
     public name: string,
     public title: string,
     public rootItems: SidebarItem[],
-    public routableTags: RoutableComponent[],
+    public routableTags: RoutableCustomComponent[],
     public redirects?: RouteRedirect[]
   ) {}
 

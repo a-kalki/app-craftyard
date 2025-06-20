@@ -11,8 +11,16 @@ export class AppSidebarWidget extends BaseElement {
   @property({ type: Function }) closeSidebar = () => {};
 
   static styles = css`
+    :host {
+      display: block;
+      width: 250px;
+      border-right: 1px solid var(--sl-color-neutral-200);
+      overscroll-behavior: contain;
+    }
+
     sl-tree {
       padding: 0.5rem;
+      --indent-guide-width: 2px;
     }
 
     sl-tree-item::part(base) {
@@ -28,6 +36,13 @@ export class AppSidebarWidget extends BaseElement {
 
     sl-tree-item:not([selected]):hover::part(base) {
       background: var(--sl-color-primary-100);
+    }
+
+    @media (max-width: 768px) {
+      :host {
+        width: 100%;
+        border-right: none;
+      }
     }
   `;
 
