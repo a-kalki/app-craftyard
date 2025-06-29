@@ -4,7 +4,7 @@ import type { FileEntryArMeta } from "../meta";
 import type { FileNotFoundError } from "./get-file";
 
 export type UpdateFileCommand = {
-  name: string,
+  name: 'update-file',
   attrs: {
     id: string,
     patch: Partial<Pick<FileEntryAttrs, 'comment' | 'access'>>,

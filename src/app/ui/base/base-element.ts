@@ -1,13 +1,14 @@
 import { LitElement } from 'lit';
 import type { App } from '../base/app';
 import type { WorkshopsBackendApi } from '#workshop/ui/workshops-api';
-import type { FileFacade } from '#app/domain/file/facade';
+import type { UiFileFacade } from '#app/domain/file/facade';
 import type { UsersBackendApi } from '#users/ui/users-api';
 import type { ModelsBackendApi } from '#models/ui/models-api';
 import type { FileBackendLocalApi } from '#files/ui/files-api';
-import type { UserFacade } from '#app/domain/user/facade';
-import type { ModelsFacade } from '#models/domain/facade';
-import type { WorkshopsFacade } from '#workshop/domain/facade';
+import type { UiUserFacade } from '#app/domain/user/facade';
+import type { UiModelsFacade } from '#models/domain/facade';
+import type { UiWorkshopsFacade } from '#workshop/domain/facade';
+import type { ThesisSetBackendApi } from '#user-contents/ui/thesis-set-api';
 
 export abstract class BaseElement extends LitElement {
   protected globalAttr<T>(key: string): T {
@@ -35,19 +36,23 @@ export abstract class BaseElement extends LitElement {
     return this.globalAttr('workshopApi');
   }
 
-  get usersFacade(): UserFacade {
+  get usersFacade(): UiUserFacade {
     return this.globalAttr('userFacade');
   }
 
-  get fileFacade(): FileFacade {
+  get fileFacade(): UiFileFacade {
     return this.globalAttr('fileFacade');
   }
 
-  get modelFacade(): ModelsFacade {
+  get modelFacade(): UiModelsFacade {
     return this.globalAttr('modelFacade');
   }
 
-  get workshopFacade(): WorkshopsFacade {
+  get workshopFacade(): UiWorkshopsFacade {
     return this.globalAttr('workshopFacade');
+  }
+
+  get thesisSetApi(): ThesisSetBackendApi {
+    return this.globalAttr('thesisSetApi');
   }
 }

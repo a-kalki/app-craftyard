@@ -10,4 +10,4 @@ import {} from './entities/internal-error';
 import {} from './entities/app-toaster';
 import {} from './entities/user-avatar';
 import {} from './entities/contribution-tag';
-import {} from './entities/custom-content-block';
+import {} from './entities/icon-picker';

@@ -1,8 +1,8 @@
-import type { CreaftYardServerResolver } from "#app/api/server-resolver";
+import type { CraftYardServerResolver } from "#app/api/resolvers";
 import { BotLogger, ConsoleLogger, getEnvLogMode } from "rilata/api-helper";
 import {
   BunJwtCreator, BunJwtVerifier,
-  getJwtSecretKey, getRunMode, type JwtConfig,
+  getJwtSecretKey, getRunMode, MonolithModuleMediator, type JwtConfig,
 } from "rilata/api-server";
 import { BaseJwtDecoder } from "rilata/core";
 
@@ -10,10 +10,6 @@ function getEnvVar(token: string): string {
   const value = process.env[token];
   if (!value) throw Error(`env variable "${token}" not found`);
   return value;
-}
-
-function findEnvVar(token: string): string | undefined {
-  return process.env.CY_LOG_BOT_TOKEN;
 }
 
 const logMode = getEnvLogMode() || 'all';
@@ -36,13 +32,14 @@ const jwtConfig: JwtConfig = {
   jwtRefreshLifetimeAsHour: 1
 }
 
-export const craftYardServerResolver: CreaftYardServerResolver = {
-    logger,
-    botLogger,
-    runMode,
-    appBotToken: getEnvVar('CY_APP_BOT_TOKEN'),
-    appBotName: getEnvVar('CY_APP_BOT_NAME'),
-    jwtDecoder: jwtDecoder,
-    jwtVerifier: new BunJwtVerifier(getJwtSecretKey(), jwtConfig, jwtDecoder),
-    jwtCreator: new BunJwtCreator(getJwtSecretKey(), jwtConfig, jwtDecoder),
+export const craftYardServerResolver: CraftYardServerResolver = {
+  logger,
+  botLogger,
+  runMode,
+  appBotToken: getEnvVar('CY_APP_BOT_TOKEN'),
+  appBotName: getEnvVar('CY_APP_BOT_NAME'),
+  jwtDecoder: jwtDecoder,
+  jwtVerifier: new BunJwtVerifier(getJwtSecretKey(), jwtConfig, jwtDecoder),
+  jwtCreator: new BunJwtCreator(getJwtSecretKey(), jwtConfig, jwtDecoder),
+  moduleMediator: new MonolithModuleMediator(logger),
 }

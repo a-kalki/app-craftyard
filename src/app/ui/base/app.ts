@@ -4,13 +4,13 @@ import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
 import { AppDialog, type DialogOptions } from "./app-dialog";
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
-import type { UserFacade } from "#app/domain/user/facade";
+import type { UiUserFacade } from "#app/domain/user/facade";
 import type { BootstrapResolves } from "../base-run/run-types";
 
 export class App {
   public router: AppRouter;
 
-  public userFacade: UserFacade;
+  public userFacade: UiUserFacade;
 
   private modules: Module[] = [];
   private appState: AppState;

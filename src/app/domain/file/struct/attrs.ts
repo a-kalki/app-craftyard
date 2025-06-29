@@ -1,7 +1,3 @@
-export type FileAccessType =
-  { type: 'public' }
-  | { type: 'private' }
-
 export type SubDir =
   | 'avatars'
   | 'model-images'
@@ -13,7 +9,7 @@ export type FileEntryAttrs = {
   mimeType: string;
   size: number;
   ownerId: string;
-  access: FileAccessType;
+  access: 'public' | 'private';
   comment?: string;
   uploadedAt: number;
 };

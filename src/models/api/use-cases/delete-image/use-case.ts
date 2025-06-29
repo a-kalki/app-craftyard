@@ -1,8 +1,9 @@
 import type { DeleteModelImageCommand, DeleteModelImageMeta } from "#models/domain/struct/delete-image";
-import type { RequestScope, RunDomainResult } from "rilata/api";
-import { ModelUseCase } from "../../base-use-case";
+import type { RequestScope, DomainResult } from "rilata/api";
+import { ModelUseCase } from "../../base-uc";
 import { failure, success } from "rilata/core";
 import { deleteModelImageValidator } from "./v-map";
+import type { DeleteFileCommand } from "#app/domain/file/struct/delete-file";
 
 export class DeleteModelImageUC extends ModelUseCase<DeleteModelImageMeta> {
   arName = 'ModelAr' as const;
@@ -17,23 +18,32 @@ export class DeleteModelImageUC extends ModelUseCase<DeleteModelImageMeta> {
 
   async runDomain(
     input: DeleteModelImageCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<DeleteModelImageMeta>> {
+  ): Promise<DomainResult<DeleteModelImageMeta>> {
     const { id, imageId } = input.attrs;
     const ArResult = await this.getModelAr(id);
     if (ArResult.isFailure()) return failure(ArResult.value);
     const aRoot = ArResult.value;
 
-    const modelPolicy = this.getModelPolicy(requestData.caller);
-    if (modelPolicy.canEdit(aRoot.getAttrs()) === false) {
+    const modelPolicy = this.getModelPolicy(requestData.caller, aRoot.getAttrs());
+    if (modelPolicy.canEdit() === false) {
       return failure({
-        name: 'EditingIsNotPermitted',
-        description: 'Вы не имеете прав на редактирование этой модели',
+        name: 'DeletingIsNotPermittedError',
+        description: 'Вы не имеете прав на удаление этой модели',
         type: 'domain-error',
       });
     }
     
     aRoot.deleteImage(imageId);
     await this.getRepo().update(aRoot.getAttrs());
+
+    const facade = this.moduleResolver.fileFacade;
+    const command: DeleteFileCommand = {
+      name: 'delete-file',
+      attrs: { id: imageId },
+      requestId: input.requestId,
+    }
+    await facade.deleteFile(command, requestData.caller)
+
     return success('success');
   }
 

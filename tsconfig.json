@@ -24,6 +24,11 @@
       "@shoelace-style/shoelace": ["./node_modules/@shoelace-style/shoelace/dist/shoelace.js"]
     },
     "types": ["@shoelace-style/shoelace", "bun-types"],
+    "plugins": [
+      {
+        "name": "ts-lit-plugin"
+      }
+    ],
 
     // Best practices
     "strict": true,

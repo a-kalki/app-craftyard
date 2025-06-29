@@ -1,5 +1,5 @@
-import type { RequestScope, RunDomainResult } from "rilata/api";
-import { FileUseCase } from "../../base-use-case";
+import type { RequestScope, DomainResult } from "rilata/api";
+import { FileUseCase } from "../../base-uc";
 import { getFileValidator } from "./v-map";
 import { failure, success } from "rilata/core";
 import type { GetFileCommand, GetFileUcMeta } from "#app/domain/file/struct/get-file";
@@ -17,7 +17,7 @@ export class GetFileUC extends FileUseCase<GetFileUcMeta> {
 
   async runDomain(
     input: GetFileCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<GetFileUcMeta>> {
+  ): Promise<DomainResult<GetFileUcMeta>> {
     const { id } = input.attrs;
     const attrsResult = await this.getFileAttrs(id);
     if (attrsResult.isFailure()) {

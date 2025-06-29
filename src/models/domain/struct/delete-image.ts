@@ -1,6 +1,5 @@
+import type { AggregateDoesNotExistError, DeletingIsNotPermittedError } from "#app/domain/errors";
 import type { ModelArMeta } from "../meta";
-import type { EditingIsNotPermitted } from "./add-images";
-import type { ModelDoesNotExistError } from "./get-model";
 
 // ========== commands ============
 export type DeleteModelImageCommand = {
@@ -20,7 +19,7 @@ export type DeleteModelImageMeta = {
   name: 'Delete Model Image Use Case'
   in: DeleteModelImageCommand,
   success: DeleteModelImageSuccess,
-  errors: ModelDoesNotExistError | EditingIsNotPermitted,
+  errors: AggregateDoesNotExistError | DeletingIsNotPermittedError,
   events: never,
   aRoot: ModelArMeta,
 }

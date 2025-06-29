@@ -1,6 +1,6 @@
 import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images";
-import type { RequestScope, RunDomainResult } from "rilata/api";
-import { ModelUseCase } from "../../base-use-case";
+import type { RequestScope, DomainResult } from "rilata/api";
+import { ModelUseCase } from "../../base-uc";
 import { failure, success } from "rilata/core";
 import { reorderModelImagesValidator } from "./v-map";
 
@@ -17,16 +17,16 @@ export class ReoderModelImagesUC extends ModelUseCase<ReorderModelImagesMeta> {
 
   async runDomain(
     input: ReorderModelImagesCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<ReorderModelImagesMeta>> {
+  ): Promise<DomainResult<ReorderModelImagesMeta>> {
     const { id, reorderedImageIds } = input.attrs;
     const result = await this.getModelAr(id);
     if (result.isFailure()) return failure(result.value);
     const aRoot = result.value;
 
-    const modelPolicy = this.getModelPolicy(requestData.caller);
-    if (modelPolicy.notCanEdit(aRoot.getAttrs())) {
+    const modelPolicy = this.getModelPolicy(requestData.caller, aRoot.getAttrs());
+    if (modelPolicy.notCanEdit()) {
       return failure({
-        name: 'EditingIsNotPermitted',
+        name: 'EditingIsNotPermittedError',
         description: 'Вы не имеете прав на редактирование этой модели',
         type: 'domain-error',
       });

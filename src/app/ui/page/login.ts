@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { TelegramWidgetUserData } from '../base-run/run-types';
 import { AppNotifier } from '../base/app-notifier';
 import type { AuthData, AuthUserSuccess } from '#app/domain/user/struct/auth-user';
-import type { UserFacade } from '#app/domain/user/facade';
+import type { UiUserFacade } from '#app/domain/user/facade';
 
 @customElement('login-page')
 export class LoginPage extends LitElement {
@@ -12,7 +12,7 @@ export class LoginPage extends LitElement {
   }
 
   @property({ type: Boolean }) debug = true;
-  @property({ type: Object }) userApi!: UserFacade;
+  @property({ type: Object }) userApi!: UiUserFacade;
   @state() private widgetLoaded = false;
 
   private appNotifier = new AppNotifier();

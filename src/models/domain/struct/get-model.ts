@@ -1,3 +1,4 @@
+import type { AggregateDoesNotExistError } from "#app/domain/errors";
 import type { ModelArMeta } from "../meta";
 import type { ModelAttrs } from "./attrs";
 
@@ -11,18 +12,12 @@ export type GetModelCommand = {
 // ========== success ============
 export type GetModelSuccess = ModelAttrs;
 
-// ========== errors ============
-export type ModelDoesNotExistError = {
-  name: 'ModelDoesNotExistError',
-  type: 'domain-error',
-};
-
 // ========== uc-meta ============
 export type GetModelMeta = {
   name: 'Get Model Use Case'
   in: GetModelCommand,
   success: GetModelSuccess,
-  errors: ModelDoesNotExistError,
+  errors: AggregateDoesNotExistError,
   events: never,
   aRoot: ModelArMeta,
 }

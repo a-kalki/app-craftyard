@@ -1,18 +1,22 @@
-import { DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule, StringChoiceValidationRule, UuidField, type ValidatorMap } from "rilata/validator";
+import {
+  DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule,
+  StringChoiceValidationRule, type ValidatorMap,
+}from "rilata/validator";
 import type { ModelAttrs } from "./struct/attrs";
-import { getUserIdValidator } from "#app/domain/user/v-map";
 import { SKILL_LEVEL_KEYS } from "#app/domain/constants";
 import { MODEL_CATEGORY_KEYS } from "./struct/constants";
+import { userIdValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import { costValidator } from "#app/domain/v-map";
 
 export const modelVmap: ValidatorMap<ModelAttrs> = {
-  id: new UuidField('id'),
+  id: uuidFieldValidator,
   title: new LiteralFieldValidator('title', true, { isArray: false }, 'string', [
     new MinCharsCountValidationRule(5, 'Название должно содержать не менее 5 символов'),
   ]),
   description: new LiteralFieldValidator('description', true, { isArray: false }, 'string', [
     new MinCharsCountValidationRule(10, 'Описание должно содержать не менее 10 символов'),
   ]),
-  owner: getUserIdValidator('owner', true, { isArray: false }),
+  ownerId: userIdValidator.cloneWithName('ownerId'),
   imageIds: new LiteralFieldValidator('imageIds', true, { isArray: true }, 'string', []),
   categories: new LiteralFieldValidator('categories', true, { isArray: true }, 'string', [
     new StringChoiceValidationRule(MODEL_CATEGORY_KEYS)
@@ -20,12 +24,8 @@ export const modelVmap: ValidatorMap<ModelAttrs> = {
   difficultyLevel: new LiteralFieldValidator('difficultyLevel', true, { isArray: false }, 'string', [
     new StringChoiceValidationRule(SKILL_LEVEL_KEYS)
   ]),
-  materialsList: new LiteralFieldValidator('materialsList', true, { isArray: true }, 'string', []),
-  toolsRequired: new LiteralFieldValidator('toolsRequired', true, { isArray: true }, 'string', []),
   estimatedTime: new LiteralFieldValidator('estimatedTime', true, { isArray: false }, 'string', []),
-  pricePerAccess: new LiteralFieldValidator('pricePerAccess', true, { isArray: false }, 'number', [
-    new PositiveNumberValidationRule(),
-  ])
+  costPerAccess: costValidator.cloneWithName('costPerAccess'),
 }
 
 export const modelValidator = new DtoFieldValidator('ModelAr', true, { isArray: false }, 'dto', modelVmap);

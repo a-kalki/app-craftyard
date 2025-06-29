@@ -1,6 +1,6 @@
 import type { GetModelCommand, GetModelMeta } from "#models/domain/struct/get-model";
-import type { RequestScope, RunDomainResult } from "rilata/api";
-import { ModelUseCase } from "../../base-use-case";
+import type { RequestScope, DomainResult } from "rilata/api";
+import { ModelUseCase } from "../../base-uc";
 import { getModelValidator } from "./v-map";
 import { failure, success } from "rilata/core";
 
@@ -15,12 +15,12 @@ export class GetModelUC extends ModelUseCase<GetModelMeta> {
 
   protected validator = getModelValidator;
 
-  async runDomain(input: GetModelCommand, requestData: RequestScope): Promise<RunDomainResult<GetModelMeta>> {
-    const model = await this.moduleResolver.db.findModel(input.attrs.id);
+  async runDomain(input: GetModelCommand, requestData: RequestScope): Promise<DomainResult<GetModelMeta>> {
+    const model = await this.moduleResolver.modelRepo.findModel(input.attrs.id);
     return model
       ? success(model)
       : failure({
-        name: 'ModelDoesNotExistError',
+        name: 'AggregateDoesNotExistError',
         type: 'domain-error',
       });
   }

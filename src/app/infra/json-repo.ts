@@ -43,15 +43,44 @@ export class JsonRepository<T> {
     return this.cache[key];
   }
 
+  /**
+   * Фильтрует объекты в репозитории по заданным атрибутам.
+   *
+   * @param query Объект с атрибутами для фильтрации (частичное совпадение).
+   * Если указано несколько атрибутов, они применяются с оператором И.
+   * @returns Массив объектов T, точно соответствующих всем заданным атрибутам.
+   */
+  public async filter(query: Partial<T>): Promise<T[]> {
+    await this.ensureReady();
+    const allItems: T[] = Object.values(this.cache);
+
+    if (Object.keys(query).length === 0) {
+      return allItems;
+    }
+
+    // Фильтруем элементы кэша
+    const filteredItems = allItems.filter(item => {
+      for (const key in query) {
+        if (item[key as keyof T] !== query[key]) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    return filteredItems;
+  }
+
   public async getAll(): Promise<T[]> {
     await this.ensureReady();
     return Object.values(this.cache);
   }
 
-  public async delete(key: string): Promise<void> {
+  public async delete(key: string): Promise<{ changes: number }> {
     await this.ensureReady();
     delete this.cache[key];
     await this.saveCache();
+    return { changes: 1 }
   }
 
   public async has(key: string): Promise<boolean> {

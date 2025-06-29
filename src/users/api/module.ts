@@ -1,9 +1,9 @@
-import { WebModule } from "rilata/api";
 import type { UsersModuleMeta, UsersModuleResolvers } from "./types";
-import { usersModuleConfig, usersModuleUseCases } from "./setup";
+import { usersModuleConfig, usersModulePermissionCheckers, usersModuleUseCases } from "./setup";
 import { UserAr } from "#app/domain/user/a-root";
+import { CraftYardModule } from "#app/api/module";
 
-export class UsersModule extends WebModule<UsersModuleMeta> {
+export class UsersModule extends CraftYardModule<UsersModuleMeta> {
     name = "Users Module" as const;
 
     constructor(resolvers: UsersModuleResolvers) {
@@ -11,11 +11,17 @@ export class UsersModule extends WebModule<UsersModuleMeta> {
         usersModuleConfig,
         resolvers,
         usersModuleUseCases,
+        usersModulePermissionCheckers,
       )
+      this.checkArInvariants();
+    }
+
+    getFacade(): unknown {
+      throw new Error("Method not implemented.");
     }
 
     async checkArInvariants(): Promise<void> {
-      const users = await this.resolvers.moduleResolver.db.getUsers();
+      const users = await this.resolvers.moduleResolver.userRepo.getUsers();
       users.forEach(attrs => new UserAr(attrs));
     }
 }

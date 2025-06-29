@@ -11,6 +11,14 @@ import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { fileSubDirs } from 'src/files/constants';
 import { craftYardServerResolver } from './server-resolver';
+import { FilesModule } from '#files/api/module';
+import { UsersModule } from '#users/api/module';
+import { WorkshopsModule } from '#workshop/api/module';
+import { FilesBackendFacade } from '#files/api/backend-facade';
+import { ModelModule } from '#models/api/module';
+import { UserContentModule } from '#user-contents/api/module';
+import type { UserContentModuleResolvers } from '#user-contents/api/types';
+import { thesisSetRepo } from '#user-contents/infra/thesis-set/repo';
 
 const PROJECT_PATH = cwd();
 const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
@@ -30,33 +38,57 @@ function setUploadDir(): void {
 
 setUploadDir();
 
+// +++++++++++++ files module ++++++++++++++
 export const fileModuleResolvers: FilesModuleResolvers = {
-    serverResolver: craftYardServerResolver,
-    moduleResolver: {
-        db: fileRepo,
-        fileDir: PATH_TO_UPLOADS,
-        fileUrlPath: '/uploads',
-        formFieldName: 'file'
-    }
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {
+    fileRepo: fileRepo,
+    fileDir: PATH_TO_UPLOADS,
+    fileUrlPath: '/uploads',
+    formFieldName: 'file'
+  }
 }
 
+export const filesBackendModule = new FilesModule(fileModuleResolvers);
+export const filesBackendFacade = new FilesBackendFacade(filesBackendModule);
+
+// +++++++++++++ user-content module ++++++++++++++
+export const userContentModuleResolvers: UserContentModuleResolvers = {
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {
+    thesisSetRepo: thesisSetRepo
+  }
+}
+
+export const userContentsBackendModule = new UserContentModule(userContentModuleResolvers);
+
+// +++++++++++++ users module ++++++++++++++
 export const userModuleResolvers: UsersModuleResolvers = {
-    serverResolver: craftYardServerResolver,
-    moduleResolver: {
-        db: usersRepo
-    }
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {
+    userRepo: usersRepo
+  }
 }
 
+export const userBackendModule = new UsersModule(userModuleResolvers);
+
+// +++++++++++++ workshops module ++++++++++++++
 export const workshopModuleResolvers: WorkshopsModuleResolvers = {
-    serverResolver: craftYardServerResolver,
-    moduleResolver: {
-        db: workshopsRepo
-    }
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {
+    workshopRepo: workshopsRepo
+  }
 }
 
+export const workshopBackendModule = new WorkshopsModule(workshopModuleResolvers);
+
+// +++++++++++++ model module ++++++++++++++
 export const modelModuleResolvers: ModelModuleResolvers = {
-    serverResolver: craftYardServerResolver,
-    moduleResolver: {
-        db: modelsRepo
-    }
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {
+    modelRepo: modelsRepo,
+    fileFacade: filesBackendFacade,
+  }
 }
+
+export const modelBackendModule = new ModelModule(modelModuleResolvers);

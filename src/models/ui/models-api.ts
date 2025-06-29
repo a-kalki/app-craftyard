@@ -1,6 +1,6 @@
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { modelApiUrl } from "#models/constants";
-import type { ModelsFacade } from "#models/domain/facade";
+import type { UiModelsFacade } from "#models/domain/facade";
 import type { AddModelImagesCommand, AddModelImagesMeta } from "#models/domain/struct/add-images";
 import type { ModelAttrs } from "#models/domain/struct/attrs";
 import type { DeleteModelImageCommand, DeleteModelImageMeta } from "#models/domain/struct/delete-image";
@@ -9,7 +9,7 @@ import type { GetModelsCommand, GetModelsMeta } from "#models/domain/struct/get-
 import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images";
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 
-export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements ModelsFacade {
+export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements UiModelsFacade {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
     super(modelApiUrl, jwtDecoder, cacheTtlAsMin);
   }

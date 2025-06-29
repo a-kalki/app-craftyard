@@ -3,6 +3,11 @@ import { customElement, state } from 'lit/decorators.js';
 import { ModelPolicy } from '#models/domain/policy';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { BaseElement } from '#app/ui/base/base-element';
+import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
+import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
+import type { OwnerAggregateAttrs } from 'rilata/api-server';
+import type { ModelArMeta } from '#models/domain/meta';
+import { costUtils } from '#app/domain/utils/cost/cost-utils';
 
 @customElement('model-details')
 export class ModelDetails extends BaseElement {
@@ -86,7 +91,7 @@ export class ModelDetails extends BaseElement {
       return;
     }
     this.model = result.value;
-    this.canEdit = new ModelPolicy(this.app.getState().currentUser).canEdit(this.model);
+    this.canEdit = new ModelPolicy(this.app.getState().currentUser, this.model).canEdit();
   }
 
   private handleAddImages(event: CustomEvent<string[]>) {
@@ -150,6 +155,15 @@ export class ModelDetails extends BaseElement {
       `;
     }
 
+    const modelName: ModelArMeta['name'] = 'ModelAr';
+    const additionalInfoOwnerAttrs: OwnerAggregateAttrs = {
+      ownerId: this.model.id,
+      ownerName: modelName,
+      context: 'additional-info',
+      access: 'public'
+    }
+    const modelPolicy = new ModelPolicy(this.app.getState().currentUser, this.model);
+
     return html`
       <div class="model-details">
         <div class="header">
@@ -168,35 +182,25 @@ export class ModelDetails extends BaseElement {
           <p class="description">${this.model.description}</p>
           <div class="middle">
             <div>
-              <strong>Категория:</strong>
+              <strong>Категория:</strong></br>
               ${this.model.categories.map(cat => html`
-                <sl-tag size="small" variant="primary">${cat}</sl-tag>
-              `)}
-              <strong>Уровень:</strong>
-              <sl-tag size="small" variant="warning">${this.model.difficultyLevel}</sl-tag>
+                <sl-tag size="small" variant="primary">${MODEL_CATEGORY_TITLES[cat]}</sl-tag>
+              `)}</br></br>
+              <strong>Уровень:</strong></br>
+              <sl-tag size="small" variant="warning">${SKILL_LEVEL_TITLES[this.model.difficultyLevel]}</sl-tag>
             </div>
             <div>
-              <strong>Время изготовления:</strong>
-              <sl-tag size="small" variant="neutral">${this.model.estimatedTime}</sl-tag>
-              <strong>Цена за доступ:</strong>
-              <sl-tag size="small" variant="success">${this.model.pricePerAccess} ₸</sl-tag>
+              <strong>Время изготовления:</strong></br>
+              <sl-tag size="small" variant="neutral">${this.model.estimatedTime}</sl-tag></br></br>
+              <strong>Цена за доступ:</strong></br>
+              <sl-tag size="small" variant="success">${costUtils.costToString(this.model.costPerAccess)}</sl-tag>
             </div>
           </div>
 
-          <div class="bottom">
-            <div class="column">
-              <h4>Инструменты</h4>
-              <ul>
-                ${this.model.toolsRequired.map(t => html`<li>${t}</li>`)}
-              </ul>
-            </div>
-            <div class="column">
-              <h4>Материалы</h4>
-              <ul>
-                ${this.model.materialsList.map(m => html`<li>${m}</li>`)}
-              </ul>
-            </div>
-          </div>
+          <user-content-container
+            .ownerAttrs=${additionalInfoOwnerAttrs}
+            .canEdit=${modelPolicy.canEditUserContent(additionalInfoOwnerAttrs)}
+          ></user-content-container>
         </div>
       </div>
     `;

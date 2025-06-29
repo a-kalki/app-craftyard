@@ -1,8 +1,8 @@
-import type { RequestScope, RunDomainResult } from "rilata/api";
+import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success } from "rilata/core";
 import { getWorkshopValidator } from "./v-map";
 import type { GetWorkshopCommand, GetWorkshopMeta } from "#workshop/domain/struct/get-workshop";
-import { WorkshopsUseCase } from "#workshop/api/base-use-case";
+import { WorkshopsUseCase } from "#workshop/api/base-uc";
 
 export class GetWorkshopUC extends WorkshopsUseCase<GetWorkshopMeta> {
   arName = "WorkshopAr" as const;
@@ -17,8 +17,8 @@ export class GetWorkshopUC extends WorkshopsUseCase<GetWorkshopMeta> {
 
   async runDomain(
     input: GetWorkshopCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<GetWorkshopMeta>> {
-    const workshop = await this.moduleResolver.db.findWorkshop(input.attrs.id);
+  ): Promise<DomainResult<GetWorkshopMeta>> {
+    const workshop = await this.moduleResolver.workshopRepo.findWorkshop(input.attrs.id);
     return workshop
       ? success(workshop)
       : failure({

@@ -1,6 +1,6 @@
-import type { RequestScope, RunDomainResult } from "rilata/api";
+import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type ValidationError } from "rilata/core";
-import { UserUseCase } from "#users/api/base-use-case";
+import { UserUseCase } from "#users/api/base-uc";
 import { editUserValidator } from "./v-map";
 import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user";
 import { UserAr } from "#app/domain/user/a-root";
@@ -18,7 +18,7 @@ export class EditUserUseCase extends UserUseCase<EditUserMeta> {
 
   protected validator = editUserValidator;
 
-  async runDomain(input: EditUserCommand, requestData: RequestScope): Promise<RunDomainResult<EditUserMeta>> {
+  async runDomain(input: EditUserCommand, requestData: RequestScope): Promise<DomainResult<EditUserMeta>> {
     const targetUserResult = await this.getUserAttrs(input.attrs.id);
     if (targetUserResult.isFailure()) {
       return failure(
@@ -54,7 +54,7 @@ export class EditUserUseCase extends UserUseCase<EditUserMeta> {
     inAttrs: EditUserCommand['attrs'],
     dbUser: UserAttrs,
     editType: 'self' | 'moderator',
-  ): Promise<RunDomainResult<EditUserMeta>> {
+  ): Promise<DomainResult<EditUserMeta>> {
     const patch: Partial<UserAttrs> = {
       name: inAttrs.name,
       profile: inAttrs.profile,
@@ -83,7 +83,7 @@ export class EditUserUseCase extends UserUseCase<EditUserMeta> {
 
     // проверка инвариантов
     new UserAr({...dbUser, ...patch});
-    const res = await this.moduleResolver.db.editUser(inAttrs.id, patch);
+    const res = await this.moduleResolver.userRepo.editUser(inAttrs.id, patch);
     if (res.changes > 0) {
       return success({ status: 'success' });
     }

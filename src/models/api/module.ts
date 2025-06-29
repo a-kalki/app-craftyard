@@ -1,9 +1,9 @@
-import { WebModule } from "rilata/api";
 import type { ModelModuleMeta, ModelModuleResolvers } from "./types";
-import { modelModuleConfig, modelModuleUseCases } from "./setup";
+import { modelModuleConfig, modelModuleContentDeliverer, modelModulePermissionCheckers, modelModuleUseCases } from "./setup";
 import { ModelAr } from "#models/domain/a-root";
+import { CraftYardModule } from "#app/api/module";
 
-export class ModelModule extends WebModule<ModelModuleMeta> {
+export class ModelModule extends CraftYardModule<ModelModuleMeta> {
     name = "Model Module" as const;
 
     constructor(resolvers: ModelModuleResolvers) {
@@ -11,12 +11,14 @@ export class ModelModule extends WebModule<ModelModuleMeta> {
         modelModuleConfig,
         resolvers,
         modelModuleUseCases,
+        modelModulePermissionCheckers,
+        modelModuleContentDeliverer,
       );
       this.checkArInvariants();
     }
 
     async checkArInvariants(): Promise<void> {
-      const models = await this.resolvers.moduleResolver.db.getModels();
+      const models = await this.resolvers.moduleResolver.modelRepo.getModels();
       models.forEach(attrs => new ModelAr(attrs));
     }
 }

@@ -1,5 +1,5 @@
+import type { AggregateDoesNotExistError, EditingIsNotPermittedError } from "#app/domain/errors";
 import type { ModelArMeta } from "../meta";
-import type { ModelDoesNotExistError } from "./get-model";
 
 // ========== commands ============
 export type AddModelImagesCommand = {
@@ -14,19 +14,12 @@ export type AddModelImagesCommand = {
 // ========== success ============
 export type AddModelsImageSuccess = 'success';
 
-// ========== errors ============
-export type EditingIsNotPermitted = {
-  name: 'EditingIsNotPermitted',
-  description?: string,
-  type: 'domain-error',
-}
-
 // ========== uc-meta ============
 export type AddModelImagesMeta = {
   name: 'Add Model Images Use Case'
   in: AddModelImagesCommand,
   success: AddModelsImageSuccess,
-  errors: ModelDoesNotExistError | EditingIsNotPermitted,
+  errors: AggregateDoesNotExistError | EditingIsNotPermittedError,
   events: never,
   aRoot: ModelArMeta,
 }

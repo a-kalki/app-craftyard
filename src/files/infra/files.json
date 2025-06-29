@@ -1,182 +1,32 @@
 {
-  "0197812e-2c2b-7107-95d6-4cd4df380c1d": {
-    "id": "0197812e-2c2b-7107-95d6-4cd4df380c1d",
-    "url": "/uploads/model-images/644c5ef6-8a06-4601-be30-b9d5a479fbe5.jpg",
-    "mimeType": "image/jpeg",
-    "size": 84115,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750218976299
-  },
-  "0197812e-2c44-7a4c-b5b4-1f51a7ca8b22": {
-    "id": "0197812e-2c44-7a4c-b5b4-1f51a7ca8b22",
-    "url": "/uploads/model-images/a6cec779-a4a2-4b15-929d-cb4a2f8208fc.jpg",
-    "mimeType": "image/jpeg",
-    "size": 17196,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750218976324
-  },
-  "0197812e-51f3-7ec2-878c-06305a002ef3": {
-    "id": "0197812e-51f3-7ec2-878c-06305a002ef3",
-    "url": "/uploads/model-images/0acf2a33-c66c-4f09-9170-dde409ae9c16.jpg",
-    "mimeType": "image/jpeg",
-    "size": 92697,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750218985971
-  },
-  "0197815d-2754-7a36-a65f-9776a7d3cb2e": {
-    "id": "0197815d-2754-7a36-a65f-9776a7d3cb2e",
-    "url": "/uploads/model-images/bfa147a5-8cc0-421d-bdc5-28d81a86c9cd.jpg",
-    "mimeType": "image/jpeg",
-    "size": 107081,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750222055252
-  },
-  "01978452-0638-72f3-8068-d65c2faf9085": {
-    "id": "01978452-0638-72f3-8068-d65c2faf9085",
-    "url": "/uploads/model-images/86ecd80a-745b-47d8-b168-48c6c5000155.jpg",
-    "mimeType": "image/jpeg",
-    "size": 103171,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750271657528
-  },
-  "01978453-db4a-73a4-9428-a3cafe619a22": {
-    "id": "01978453-db4a-73a4-9428-a3cafe619a22",
-    "url": "/uploads/model-images/81d7de7c-68db-49ab-afae-857ed8f167af.jpg",
+  "01979154-da4c-7850-87d3-9f747c8fb92e": {
+    "id": "01979154-da4c-7850-87d3-9f747c8fb92e",
+    "url": "/uploads/model-images/01979154-da4c-7850-87d3-9f747c8fb92e.jpg",
     "mimeType": "image/jpeg",
     "size": 97918,
     "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
+    "access": "public",
     "comment": null,
-    "uploadedAt": 1750271777610
+    "uploadedAt": 1750489946700
   },
-  "01978453-db75-71e1-81fa-4571048fa86b": {
-    "id": "01978453-db75-71e1-81fa-4571048fa86b",
-    "url": "/uploads/model-images/8e36af66-24a1-4db3-86bd-6935449d2c36.jpg",
+  "01979154-fd52-725a-aeb4-ff62c1788496": {
+    "id": "01979154-fd52-725a-aeb4-ff62c1788496",
+    "url": "/uploads/model-images/01979154-fd52-725a-aeb4-ff62c1788496.jpg",
     "mimeType": "image/jpeg",
     "size": 20032,
     "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
+    "access": "public",
     "comment": null,
-    "uploadedAt": 1750271777653
+    "uploadedAt": 1750489955666
   },
-  "0197845a-089e-7162-9f72-aa60f444ed49": {
-    "id": "0197845a-089e-7162-9f72-aa60f444ed49",
-    "url": "/uploads/model-images/5efedfe2-00d9-4f65-a68b-91ee297be5ef.jpg",
+  "01979154-fd74-7c24-8cfe-ee321afbe94d": {
+    "id": "01979154-fd74-7c24-8cfe-ee321afbe94d",
+    "url": "/uploads/model-images/01979154-fd74-7c24-8cfe-ee321afbe94d.jpg",
     "mimeType": "image/jpeg",
     "size": 107081,
     "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
+    "access": "public",
     "comment": null,
-    "uploadedAt": 1750272182430
-  },
-  "0197845a-3671-74a1-a937-ce959c0821f9": {
-    "id": "0197845a-3671-74a1-a937-ce959c0821f9",
-    "url": "/uploads/model-images/7172186d-a8d5-47f0-8c2e-9c5fe6818017.jpg",
-    "mimeType": "image/jpeg",
-    "size": 97918,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750272194161
-  },
-  "01978463-2d35-7479-8e30-c5114b0070a5": {
-    "id": "01978463-2d35-7479-8e30-c5114b0070a5",
-    "url": "/uploads/model-images/e7058398-1132-4c67-9408-98f16cf0abfd.jpg",
-    "mimeType": "image/jpeg",
-    "size": 20032,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750272781621
-  },
-  "01978499-f031-7707-a181-c45e713113dd": {
-    "id": "01978499-f031-7707-a181-c45e713113dd",
-    "url": "/uploads/model-images/7363f377-2695-4a70-afce-b1bb7d6b182e.jpg",
-    "mimeType": "image/jpeg",
-    "size": 97918,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750276370481
-  },
-  "01978f0d-af83-7f9c-b9d0-bd561ffce70a": {
-    "id": "01978f0d-af83-7f9c-b9d0-bd561ffce70a",
-    "url": "/uploads/model-images/962267c4-51d9-4caa-9e99-54b3050cd75f.jpg",
-    "mimeType": "image/jpeg",
-    "size": 107081,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750451728259
-  },
-  "01978f1c-9ca8-7ac0-8637-4086972854c5": {
-    "id": "01978f1c-9ca8-7ac0-8637-4086972854c5",
-    "url": "/uploads/model-images/d5788929-7abf-4439-b51f-f8d9aec3e588.jpg",
-    "mimeType": "image/jpeg",
-    "size": 97918,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750452706473
-  },
-  "01978f41-9f19-78f9-b397-123175790efa": {
-    "id": "01978f41-9f19-78f9-b397-123175790efa",
-    "url": "/uploads/model-images/a7131ff0-3160-40cd-b68c-8a32a785b635.jpg",
-    "mimeType": "image/jpeg",
-    "size": 107081,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750455131929
-  },
-  "01978f42-0910-7d5e-9611-c83506fc5fc5": {
-    "id": "01978f42-0910-7d5e-9611-c83506fc5fc5",
-    "url": "/uploads/model-images/6831e09a-94b5-41b7-8c22-d85df8d797f2.jpg",
-    "mimeType": "image/jpeg",
-    "size": 97918,
-    "ownerId": "773084180",
-    "access": {
-      "type": "public"
-    },
-    "comment": null,
-    "uploadedAt": 1750455159056
+    "uploadedAt": 1750489955700
   }
 }

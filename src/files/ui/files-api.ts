@@ -1,14 +1,14 @@
 import { failure, success, type JwtDecoder, type JwtDto, type ResultDTO } from "rilata/core";
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { fileApiUrls, formFileName } from "../constants";
-import type { FileFacade } from "#app/domain/file/facade";
+import type { UiFileFacade } from "#app/domain/file/facade";
 import type { FileUploadResult, UploadFileInput, UploadFileUcMeta } from "#app/domain/file/struct/upload-file";
 import type { GetFileCommand, GetFileEntryResult, GetFileUcMeta } from "#app/domain/file/struct/get-file";
 import type { UpdateFileCommand, UpdateFileResult, UpdateFileUcMeta } from "#app/domain/file/struct/update-file";
 import type { DeleteFileCommand, DeleteFileResult, DeleteFileUcMeta } from "#app/domain/file/struct/delete-file";
 
 /** Реализация для файлового хранилища сохраняющего прямо на сервере (не в s3) */
-export class FileBackendLocalApi extends BaseBackendApi<unknown> implements FileFacade {
+export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFileFacade {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
     super(fileApiUrls, jwtDecoder, cacheTtlAsMin);
   }

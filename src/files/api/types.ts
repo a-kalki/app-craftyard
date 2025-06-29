@@ -1,16 +1,16 @@
-import type { CreaftYardServerResolver } from "#app/api/server-resolver"
+import type { CraftYardServerResolver } from "#app/api/resolvers"
 import type { FileRepo } from "#app/domain/file/repo"
 import type { formFileName } from "../constants"
 
 export type FilesModuleResolver = {
-  db: FileRepo,
+  fileRepo: FileRepo,
   fileDir: string,
   fileUrlPath: string,
   formFieldName: typeof formFileName,
 }
 
 export type FilesModuleResolvers = {
-  serverResolver: CreaftYardServerResolver,
+  serverResolver: CraftYardServerResolver,
   moduleResolver: FilesModuleResolver
 }
 

@@ -1,23 +1,33 @@
 import { UserPolicy } from "#app/domain/user/policy";
 import type { JwtUser } from "#app/domain/user/struct/attrs";
+import type { OwnerAggregateAttrs } from "rilata/api-server";
 import type { ModelAttrs } from "./struct/attrs";
 
 export class ModelPolicy {
   private userPolicy: UserPolicy;
-  constructor(private currentUser: JwtUser) {
+
+  constructor(private currentUser: JwtUser, private model: ModelAttrs) {
     this.userPolicy = new UserPolicy(currentUser);
   }
 
-  canEdit(model: ModelAttrs): boolean {
-    return this.isOwner(model) || this.userPolicy.isModerator();;
+  canEdit(): boolean {
+    return this.isOwner() || this.userPolicy.isModerator();;
   }
 
-  notCanEdit(model: ModelAttrs): boolean {
-    return !this.canEdit(model);
+  notCanEdit(): boolean {
+    return !this.canEdit();
   }
 
-  isOwner(model: ModelAttrs): boolean {
-    return this.currentUser.id === model.owner;
+  isOwner(): boolean {
+    return this.currentUser.id === this.model.ownerId;
+  }
+
+  canEditUserContent(ownerAttrs: OwnerAggregateAttrs): boolean {
+    return this.canEdit();
+  }
+
+  canGetUserContent(ownerAttrs: OwnerAggregateAttrs): boolean {
+    return this.canEdit();
   }
 }
 

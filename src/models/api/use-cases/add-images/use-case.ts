@@ -1,6 +1,6 @@
 import type { AddModelImagesCommand, AddModelImagesMeta } from "#models/domain/struct/add-images";
-import type { RequestScope, RunDomainResult } from "rilata/api";
-import { ModelUseCase } from "../../base-use-case";
+import type { RequestScope, DomainResult } from "rilata/api";
+import { ModelUseCase } from "../../base-uc";
 import { failure, success } from "rilata/core";
 import { addModelImagesValidator } from "./v-map";
 
@@ -17,16 +17,16 @@ export class AddModelImagesUC extends ModelUseCase<AddModelImagesMeta> {
 
   async runDomain(
     input: AddModelImagesCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<AddModelImagesMeta>> {
+  ): Promise<DomainResult<AddModelImagesMeta>> {
     const { id, pushImageIds } = input.attrs;
     const result = await this.getModelAr(id);
     if (result.isFailure()) return failure(result.value);
     const aRoot = result.value;
 
-    const modelPolicy = this.getModelPolicy(requestData.caller);
-    if (modelPolicy.canEdit(aRoot.getAttrs()) === false) {
+    const modelPolicy = this.getModelPolicy(requestData.caller, aRoot.getAttrs());
+    if (modelPolicy.canEdit() === false) {
       return failure({
-        name: 'EditingIsNotPermitted',
+        name: 'EditingIsNotPermittedError',
         description: 'Вы не имеете прав на редактирование этой модели',
         type: 'domain-error',
       });

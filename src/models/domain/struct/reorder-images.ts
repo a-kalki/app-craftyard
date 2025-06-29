@@ -1,6 +1,5 @@
+import type { AggregateDoesNotExistError, EditingIsNotPermittedError } from "#app/domain/errors";
 import type { ModelArMeta } from "../meta";
-import type { EditingIsNotPermitted } from "./add-images";
-import type { ModelDoesNotExistError } from "./get-model";
 
 // ========== commands ============
 export type ReorderModelImagesCommand = {
@@ -20,7 +19,7 @@ export type ReorderModelImagesMeta = {
   name: 'Reorder Model Images Use Case'
   in: ReorderModelImagesCommand,
   success: ReorderModelsImageSuccess,
-  errors: ModelDoesNotExistError | EditingIsNotPermitted,
+  errors: AggregateDoesNotExistError | EditingIsNotPermittedError,
   events: never,
   aRoot: ModelArMeta,
 }

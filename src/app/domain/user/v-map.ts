@@ -3,20 +3,11 @@ import {
   LiteralFieldValidator,
   MinCharsCountValidationRule,
   RecordDtoValidator,
-  RegexMatchesValueValidationRule,
   type ValidatorMap,
 } from "rilata/validator";
 import { userStatisticsVMap } from "../contributions/v-map";
-import type { GetArrayConfig } from "node_modules/rilata/src/domain/validator/field-validator/types";
 import type { UserAttrs } from "./struct/attrs";
-
-export function getUserIdValidator<N extends string, REQ extends boolean, IS_ARR extends boolean>(
-  name: N, required: REQ, arrayConfig: GetArrayConfig<IS_ARR>
-): LiteralFieldValidator<N, REQ, IS_ARR, string> {
-  return new LiteralFieldValidator(name, required, arrayConfig, 'string', [
-    new RegexMatchesValueValidationRule(/^\d+$/, 'Id может содержать только цифры'),
-  ])
-}
+import { userIdValidator } from "../base-validators";
 
 export const userSupportVMap: ValidatorMap<UserAttrs['support']> = {
   isModerator: new LiteralFieldValidator('isModerator', false, { isArray: false }, 'boolean', [])
@@ -32,7 +23,7 @@ export const userProfileVMap: ValidatorMap<UserAttrs['profile']> = {
 }
 
 export const userVMap: ValidatorMap<UserAttrs> = {
-  id: getUserIdValidator('id', true, { isArray: false }),
+  id: userIdValidator,
   name: new LiteralFieldValidator('name', true, { isArray: false }, 'string', [
     new MinCharsCountValidationRule(3, 'Имя должно содержать не менее 3 символов'),
   ]),

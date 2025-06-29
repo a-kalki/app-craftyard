@@ -1,6 +1,10 @@
-import type { BackendResultByMeta } from "rilata/core";
-import type { GetWorkshopMeta } from "./struct/get-workshop";
+import type { BackendResultByMeta, Caller } from "rilata/core";
+import type { GetWorkshopCommand, GetWorkshopMeta } from "./struct/get-workshop";
 
-export interface WorkshopsFacade {
-  getWorkshop(id: string, forceRefresh?: boolean): Promise<BackendResultByMeta<GetWorkshopMeta>>
+export interface UiWorkshopsFacade {
+  getWorkshop(id: string): Promise<BackendResultByMeta<GetWorkshopMeta>>
+}
+
+export interface ApiWorkshopsFacade {
+  getWorkshop(input: GetWorkshopCommand, caller: Caller): Promise<BackendResultByMeta<GetWorkshopMeta>>
 }

@@ -1,5 +1,4 @@
 import {} from "./widgets/individual-comission-card"
-import {} from "./widgets/workshop-basic-info"
 import {} from "./widgets/workshop-detail"
 import {} from "./widgets/workshop-hobbyists-section"
 import {} from "./widgets/workshop-masters-section"

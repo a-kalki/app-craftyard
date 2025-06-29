@@ -1,7 +1,7 @@
 import { createHash, createHmac } from "crypto";
-import type { RequestScope, RunDomainResult } from "rilata/api";
+import type { RequestScope, DomainResult } from "rilata/api";
 import { AssertionException, failure, success, type JwtDto } from "rilata/core";
-import { UserUseCase } from "#users/api/base-use-case";
+import { UserUseCase } from "#users/api/base-uc";
 import { authUserValidator } from "./v-map";
 import type { AuthUserMeta } from "#app/domain/user/struct/auth-user";
 import { UserAr } from "#app/domain/user/a-root";
@@ -20,7 +20,7 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
 
   protected validator = authUserValidator;
 
-  async runDomain(input: AuthUserMeta['in'], requestData: RequestScope): Promise<RunDomainResult<AuthUserMeta>> {
+  async runDomain(input: AuthUserMeta['in'], requestData: RequestScope): Promise<DomainResult<AuthUserMeta>> {
     if (!this.checkHash(input.attrs.data)) {
       return failure({
         name: 'Auth Hash Not Valid',
@@ -92,7 +92,7 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
     return hash === computedHash;
   }
 
-  protected async registerUser(tgUser: TelegramUser): Promise<RunDomainResult<AuthUserMeta>> {
+  protected async registerUser(tgUser: TelegramUser): Promise<DomainResult<AuthUserMeta>> {
     const userAttrs: UserAttrs = {
       id: tgUser.id,
       name: tgUser.first_name,
@@ -114,7 +114,7 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
     }
 
     const user = new UserAr(userAttrs);
-    const result = await this.moduleResolver.db.add(userAttrs);
+    const result = await this.moduleResolver.userRepo.add(userAttrs);
     if (result.changes > 0) {
       return success({
         user: user.getAttrs(),

@@ -1,10 +1,10 @@
 import type { BackendResultByMeta } from "rilata/core";
-import type { FileAccessType, FileEntryAttrs, SubDir } from "./attrs";
+import type { FileEntryAttrs, SubDir } from "./attrs";
 import type { FileEntryArMeta } from "../meta";
 
 export type UploadFileInput = {
   comment?: string;
-  access: FileAccessType;
+  access: 'public' | 'private';
   file: File;
   subDir?: SubDir;
   onProgress?: (progress: number) => void;

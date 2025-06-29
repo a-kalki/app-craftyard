@@ -1,8 +1,8 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, type TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { imageUtils } from '#app/ui/utils/image';
 import { keyboardUtils } from '#app/ui/utils/keyboard';
-import type { FileFacade } from '#app/domain/file/facade';
+import type { UiFileFacade } from '#app/domain/file/facade';
 import type { App } from '#app/ui/base/app';
 import { ref } from 'lit/directives/ref.js';
 
@@ -22,7 +22,7 @@ export class ModelImages extends LitElement {
   @state() private isTouchDragging = false;
 
   private app: App = (window as any).app;
-  private fileFacade: FileFacade = (window as any).fileFacade;
+  private fileFacade: UiFileFacade = (window as any).fileFacade;
   private thumbnailsContainer: HTMLDivElement | null = null;
   private thumbElements: HTMLElement[] = [];
   private dragElementRect: DOMRect | null = null;
@@ -130,20 +130,22 @@ export class ModelImages extends LitElement {
     }
 
     .add-btn::part(base) {
-      color: var(--sl-color-success-600);
+      color: var(--sl-color-primary-600);
     }
 
     .delete-btn::part(base) {
       color: var(--sl-color-danger-600);
     }
 
-    .no-images {
+    .empty-carousel-item {
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100%;
       color: var(--sl-color-gray-500);
       font-style: italic;
+      background-color: var(--sl-color-gray-100);
+      border-radius: var(--sl-border-radius-medium);
     }
   `;
 
@@ -180,21 +182,14 @@ export class ModelImages extends LitElement {
 
   private reorderImages(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex) return;
-    
-    // Создаем полностью новые массивы
+
     const newIds = [...this.imageIds];
     const [movedId] = newIds.splice(fromIndex, 1);
     newIds.splice(toIndex, 0, movedId);
-    
-    const newUrls = [...this.imageUrls];
-    const [movedUrl] = newUrls.splice(fromIndex, 1);
-    newUrls.splice(toIndex, 0, movedUrl);
-    
-    // Обновляем состояния атомарно
+
     this.imageIds = newIds;
-    this.imageUrls = newUrls;
-    
-    this.dispatchEvent(new CustomEvent('reorderImages', { 
+
+    this.dispatchEvent(new CustomEvent('reorderImages', {
       detail: newIds,
       bubbles: true,
       composed: true
@@ -364,7 +359,7 @@ export class ModelImages extends LitElement {
         const compressed = await imageUtils.compressImage(file, 0.7, 1920);
         const res = await this.fileFacade.uploadFile({
           file: compressed,
-          access: { type: 'public' },
+          access: 'public',
           subDir: 'model-images',
           onProgress: p => this.uploadProgress = p,
         });
@@ -419,7 +414,7 @@ export class ModelImages extends LitElement {
 
   render() {
     if (this.imageUrls.length === 0) {
-      return html`<div class="no-images">Фотографии не загружены</div>`;
+      return this.renderNoImages();
     }
 
     return html`
@@ -476,34 +471,54 @@ export class ModelImages extends LitElement {
 
       ${this.canEdit ? html`
         <div class="button-bar">
-          <sl-icon-button
-            class="add-btn"
-            name="plus-square"
-            label="Добавить"
-            role="button"
-            tabindex="0"
-            @click=${this.openFileDialog}
-            @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.openFileDialog)}
-          ></sl-icon-button>
+          ${this.renderAddImageButton()}
           ${this.selectedIndex !== null ? html`
-            <sl-icon-button
-              class="delete-btn"
-              name="x-square"
-              label="Удалить"
-              role="button"
-              tabindex="0"
-              @click=${this.confirmDelete}
-              @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.confirmDelete)}
-            ></sl-icon-button>
+            ${this.renderDeletemageButton()}
           ` : ''}
         </div>
       ` : ''}
     `;
   }
-}
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'model-images': ModelImages;
+  protected renderNoImages(): TemplateResult {
+      return html`
+        <sl-carousel loop navigation>
+          <sl-carousel-item>
+            <div class="empty-carousel-item">
+              Фотографии не загружены
+            </div>
+          </sl-carousel-item>
+        </sl-carousel>
+        
+        ${this.canEdit ? html`
+          <div class="button-bar">${this.renderAddImageButton()}</div>
+        ` : ''}
+      `;
+  }
+
+  protected renderAddImageButton(): TemplateResult {
+    return html`
+      <sl-icon-button
+        class="add-btn"
+        name="plus-square"
+        label="Добавить"
+        tabindex="0"
+        @click=${this.openFileDialog}
+        @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.openFileDialog)}
+      ></sl-icon-button>
+    `
+  }
+
+  protected renderDeletemageButton(): TemplateResult {
+    return html`
+      <sl-icon-button
+        class="delete-btn"
+        name="x-square"
+        label="Удалить"
+        tabindex="0"
+        @click=${this.confirmDelete}
+        @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.confirmDelete)}
+      ></sl-icon-button>
+    `
   }
 }

@@ -4,6 +4,7 @@ import { BaseElement } from '../../../app/ui/base/base-element';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
 import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
+import { costUtils } from '#app/domain/utils/cost/cost-utils';
 
 @customElement('model-card')
 export class ModelCardWidget extends BaseElement {
@@ -105,7 +106,7 @@ export class ModelCardWidget extends BaseElement {
           <sl-button size="small" variant="primary" @click=${this.navigateToDetails}>
             Подробнее
           </sl-button>
-          <span><strong>${this.model.pricePerAccess} ₸</strong></span>
+          <span><strong>${costUtils.costToString(this.model.costPerAccess)}</strong></span>
         </div>
       </sl-card>
     `;

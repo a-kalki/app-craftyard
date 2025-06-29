@@ -1,12 +1,14 @@
-import type { CreaftYardServerResolver } from "#app/api/server-resolver"
+import type { CraftYardServerResolver } from "#app/api/resolvers"
+import type { ApiFileFacade } from "#app/domain/file/facade"
 import type { ModelRepo } from "#models/domain/repo"
 
 export type ModelModuleResolver = {
-    db: ModelRepo,
+  modelRepo: ModelRepo,
+  fileFacade: ApiFileFacade,
 }
 
 export type ModelModuleResolvers = {
-  serverResolver: CreaftYardServerResolver,
+  serverResolver: CraftYardServerResolver,
   moduleResolver: ModelModuleResolver
 }
 

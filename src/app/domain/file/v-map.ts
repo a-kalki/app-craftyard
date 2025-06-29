@@ -1,29 +1,25 @@
-import { DtoFieldValidator, IsTimeStampValidationRule, LiteralFieldValidator, PositiveNumberValidationRule, StringChoiceValidationRule, UuidField, type ValidatorMap } from "rilata/validator";
-import type { FileAccessType, FileEntryAttrs } from "./struct/attrs";
-import { getUserIdValidator } from "#app/domain/user/v-map";
+import {
+  DtoFieldValidator, LiteralFieldValidator, PositiveNumberValidationRule,
+  StringChoiceValidationRule, type ValidatorMap,
+} from "rilata/validator";
+import type { FileEntryAttrs } from "./struct/attrs";
+import { timeStampValidator, uuidFieldValidator } from "../base-validators";
 
-const fileTypeKeys: FileAccessType['type'][] = ['public', 'private'];
-
-export const fileAccessVmap: ValidatorMap<FileAccessType> = {
-  type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
-    new StringChoiceValidationRule(fileTypeKeys),
-  ])
-}
+const fileAccess: FileEntryAttrs['access'][] = ['public', 'private'];
 
 export const fileEntryAttrsVmap: ValidatorMap<FileEntryAttrs> = {
-  id: new UuidField('id'),
+  id: uuidFieldValidator,
   url: new LiteralFieldValidator('url', true, { isArray: false }, 'string', []),
   mimeType: new LiteralFieldValidator('mimeType', true, { isArray: false }, 'string', []),
   size: new LiteralFieldValidator('size', true, { isArray: false }, 'number', [
     new PositiveNumberValidationRule()
   ]),
-  ownerId: getUserIdValidator('ownerId', true, { isArray: false }),
+  ownerId: new LiteralFieldValidator('ownerId', true, { isArray: false }, 'string', []),
   comment: new LiteralFieldValidator('comment', false, { isArray: false }, 'string', []),
-  // @ts-expect-error:
-  access: new DtoFieldValidator('access', true, { isArray: false }, 'dto', fileAccessVmap),
-  uploadedAt: new LiteralFieldValidator('uploadedAt', true, { isArray: false }, 'number', [
-    new IsTimeStampValidationRule(),
+  access: new LiteralFieldValidator('access', true, { isArray: false }, 'string', [
+    new StringChoiceValidationRule(fileAccess)
   ]),
+  uploadedAt: timeStampValidator.cloneWithName('uploadedAt'),
 }
 
 export const fileEntryValidator = new DtoFieldValidator(

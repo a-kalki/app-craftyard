@@ -1,5 +1,3 @@
-import type { CustomContent } from "#app/domain/types";
-
 export type WorkshopAttrs = {
   id: string; // UUID
   title: string;
@@ -15,7 +13,6 @@ export type WorkshopAttrs = {
 export type WorkshopAbout = {
   logo?: string;
   location: string;
-  customContent?: CustomContent[];
 }
 
 export type SubscriptionPlan = {

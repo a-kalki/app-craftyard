@@ -18,7 +18,7 @@ export class FilePolicy {
   }
 
   canGetFile(file: FileEntryAttrs): boolean {
-    return file.access.type === 'public' || this.isOwner(file) || this.isModerator();
+    return file.access === 'public' || this.isOwner(file) || this.isModerator();
   }
 
   protected isModerator(): boolean {

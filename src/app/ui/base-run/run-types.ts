@@ -1,10 +1,10 @@
-import type { FileFacade } from "#app/domain/file/facade";
-import type { UserFacade } from "#app/domain/user/facade";
+import type { UiFileFacade } from "#app/domain/file/facade";
+import type { UiUserFacade } from "#app/domain/user/facade";
 import type { JwtDecoder, JwtDto } from "rilata/core";
 
 export type BootstrapResolves = {
-  userFacade: UserFacade,
-  fileFacade: FileFacade,
+  userFacade: UiUserFacade,
+  fileFacade: UiFileFacade,
   jwtDecoder: JwtDecoder<JwtDto>,
 }
 

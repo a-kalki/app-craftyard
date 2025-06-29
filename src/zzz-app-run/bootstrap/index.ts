@@ -10,10 +10,12 @@ import { filesModule } from "src/files/ui/module";
 import { FileBackendLocalApi } from "#files/ui/files-api";
 import { ModelsBackendApi } from "#models/ui/models-api";
 import { WorkshopsBackendApi } from "#workshop/ui/workshops-api";
-import type { UserFacade } from "#app/domain/user/facade";
-import type { FileFacade } from "#app/domain/file/facade";
-import type { ModelsFacade } from "#models/domain/facade";
-import type { WorkshopsFacade } from "#workshop/domain/facade";
+import type { UiUserFacade } from "#app/domain/user/facade";
+import type { UiFileFacade } from "#app/domain/file/facade";
+import type { UiModelsFacade } from "#models/domain/facade";
+import type { UiWorkshopsFacade } from "#workshop/domain/facade";
+import { userContentModule } from "#user-contents/ui/module";
+import { ThesisSetBackendApi } from "#user-contents/ui/thesis-set-api";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,
@@ -27,6 +29,7 @@ const debugAuthUser: TelegramWidgetUserData = {
 
 const modules: Module[] = [
   filesModule,
+  userContentModule,
   usersModule,
   workshopsModule,
   modelsModule,
@@ -50,13 +53,14 @@ const otherApis = {
   ...resolves,
   modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
   workshopApi: new WorkshopsBackendApi(jwtDecoder, cacheTtlAsMin),
+  thesisSetApi: new ThesisSetBackendApi(jwtDecoder, cacheTtlAsMin),
 }
 
 type Facades = {
-  userApi: UserFacade,
-  fileApi: FileFacade,
-  modelFacade: ModelsFacade,
-  workshopFacade: WorkshopsFacade,
+  userApi: UiUserFacade,
+  fileApi: UiFileFacade,
+  modelFacade: UiModelsFacade,
+  workshopFacade: UiWorkshopsFacade,
 }
 
 const withFacades: BootstrapResolves & Facades = {

@@ -10,7 +10,7 @@ import type { AuthData, AuthUserSuccess, TokenType } from '#app/domain/user/stru
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 import type { Module } from '../base/module';
 import type { BootstrapResolves } from './run-types';
-import type { UserFacade } from '#app/domain/user/facade';
+import type { UiUserFacade } from '#app/domain/user/facade';
 
 export class Bootstrap {
   protected  appRouter = new AppRouter();
@@ -19,7 +19,7 @@ export class Bootstrap {
 
   protected isTelegramMiniApp = false;
 
-  protected userApi: UserFacade;
+  protected userApi: UiUserFacade;
 
   constructor(
     protected modules: Module[],

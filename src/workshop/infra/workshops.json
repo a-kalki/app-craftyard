@@ -5,25 +5,7 @@
     "description": "Главная мастерская проекта Craftyard, где мы опробываем и внедряем в жизнь все наши идеи.",
     "about": {
       "logo": "/uploads/avatars/logo_full.svg",
-      "location": "г. Уральск, ул. Айтиева, 24",
-      "customContent": [
-        {
-          "id": "contact-info",
-          "title": "Контактная информация",
-          "content": "**Тел:** +7 777 2878182\n\n**Телеграм:** [Пишите!](https://t.me/anzUralsk)\n\n**Сообщество:** [Развиваемся вместе!](https://t.me/ws_dedok)\n\n**Сайт:** [Куда мы идем!](https://dedok.life)",
-          "contentType": "markdown",
-          "order": 1,
-          "icon": "telephone"
-        },
-        {
-          "id": "working-hours",
-          "title": "Часы работы",
-          "content": "**10:00 - 18:00**\n\nЕсли вам интересны другие временные интервалы, то пишите в телеграм.",
-          "contentType": "markdown",
-          "order": 2,
-          "icon": "clock"
-        }
-      ]
+      "location": "г. Уральск, ул. Айтиева, 24"
     },
     "memberships": [
       {

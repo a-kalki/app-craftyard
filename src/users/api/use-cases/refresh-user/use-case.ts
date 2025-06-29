@@ -1,6 +1,6 @@
-import type { RequestScope, RunDomainResult } from "rilata/api";
+import type { RequestScope, DomainResult } from "rilata/api";
 import { AssertionException, failure, success, type UcResult } from "rilata/core";
-import { UserUseCase } from "#users/api/base-use-case";
+import { UserUseCase } from "#users/api/base-uc";
 import { refreshUserValidator } from "./v-map";
 import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
 
@@ -30,7 +30,7 @@ export class RefreshUserUseCase extends UserUseCase<RefreshUserMeta> {
     });
   }
 
-  runDomain(input: RefreshUserCommand, requestData: RequestScope): Promise<RunDomainResult<RefreshUserMeta>> {
+  runDomain(input: RefreshUserCommand, requestData: RequestScope): Promise<DomainResult<RefreshUserMeta>> {
     throw new AssertionException('not domain logic');
   }
 }

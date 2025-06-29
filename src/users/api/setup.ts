@@ -4,6 +4,8 @@ import { GetUserUC } from "./use-cases/get-user/use-case";
 import { EditUserUseCase } from "./use-cases/edit-user/use-case";
 import { AuthUserUseCase } from "./use-cases/auth-user/use-case";
 import { usersApiUrl } from "#users/constants";
+import type { CraftYardResolvers } from "#app/api/resolvers";
+import type { PerformCheckerService } from "#app/api/perform-checker-service";
 
 export const usersModuleConfig: ModuleConfig = {
   moduleUrls: [usersApiUrl],
@@ -14,4 +16,8 @@ export const usersModuleUseCases: UseCase[] = [
   new GetUsersUC(),
   new GetUserUC(),
   new EditUserUseCase(),
+]
+
+export const usersModulePermissionCheckers: PerformCheckerService<CraftYardResolvers>[] = [
+
 ]

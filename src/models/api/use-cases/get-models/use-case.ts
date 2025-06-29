@@ -1,6 +1,6 @@
 import type { GetModelsCommand, GetModelsMeta } from "#models/domain/struct/get-models";
-import type { RequestScope, RunDomainResult } from "rilata/api";
-import { ModelUseCase } from "../../base-use-case";
+import type { RequestScope, DomainResult } from "rilata/api";
+import { ModelUseCase } from "../../base-uc";
 import { getModelsValidator } from "./v-map";
 import { success } from "rilata/core";
 
@@ -15,8 +15,8 @@ export class GetModelsUC extends ModelUseCase<GetModelsMeta> {
 
     protected validator = getModelsValidator;
 
-    async runDomain(input: GetModelsCommand, requestData: RequestScope): Promise<RunDomainResult<GetModelsMeta>> {
-      return success(await this.moduleResolver.db.getModels());
+    async runDomain(input: GetModelsCommand, requestData: RequestScope): Promise<DomainResult<GetModelsMeta>> {
+      return success(await this.moduleResolver.modelRepo.getModels());
     }
 
 }

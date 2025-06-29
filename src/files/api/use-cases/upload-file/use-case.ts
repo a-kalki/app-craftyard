@@ -1,6 +1,6 @@
-import type { RequestScope, RunDomainResult } from "rilata/api";
+import type { RequestScope, DomainResult } from "rilata/api";
 import { AssertionException, failure, success, type AuthUser } from "rilata/core";
-import { FileUseCase } from "../../base-use-case";
+import { FileUseCase } from "../../base-uc";
 import { uploadFileValidator } from "./v-map";
 import path from "node:path";
 import { uuidUtility } from "rilata/api-helper";
@@ -21,7 +21,7 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
 
   async runDomain(
     input: UploadFileCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<UploadFileUcMeta>> {
+  ): Promise<DomainResult<UploadFileUcMeta>> {
     const { file, comment, access } = input.attrs;
 
     if (!(file instanceof File)) {
@@ -32,32 +32,32 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
       })
     }
 
+    const id = uuidUtility.getNewUuidV7();
     const extension = path.extname(file.name);
-    const uuidFileName = `${crypto.randomUUID()}${extension}`;
-    const subDir = input.attrs.subDir ?? '';
+    const uuidFileName = `/${id}${extension}`;
+    const subDir = input.attrs.subDir ? `/${input.attrs.subDir}` : '';
     const destinationPath = path.join(this.moduleResolver.fileDir, subDir, uuidFileName);
-    const url = `${this.moduleResolver.fileUrlPath}/${subDir}/${uuidFileName}`
+    const url = `${this.moduleResolver.fileUrlPath}${subDir}${uuidFileName}`
       .replace(/\/+/g, '/');
 
     await Bun.write(destinationPath, file);
 
     const fileEntry: FileEntryAttrs = {
-        id: uuidUtility.getNewUuidV7(),
+        id,
         url,
         mimeType: file.type,
         size: file.size,
         ownerId: (requestData.caller as AuthUser).id,
-        access: access ?? { type: 'public' },
+        access: access ?? 'public',
         comment,
         uploadedAt: Date.now(),
     }
     new FileAr(fileEntry); // checkInveriants;
-    const dbResult = await this.moduleResolver.db.addFile(fileEntry);
+    const dbResult = await this.moduleResolver.fileRepo.addFile(fileEntry);
     if (dbResult.changes === 1) {
       return success({ id: fileEntry.id })
     };
 
     throw new AssertionException('Failed to save file');
-    console.log(`[FileUploadMiddleware] File saved: ${destinationPath}`);
   }
 }

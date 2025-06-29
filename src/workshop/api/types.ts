@@ -1,12 +1,12 @@
-import type { CreaftYardServerResolver } from "#app/api/server-resolver"
+import type { CraftYardServerResolver } from "#app/api/resolvers"
 import type { WorkshopRepo } from "#workshop/domain/repo"
 
 export type WorkshopsModuleResolver = {
-    db: WorkshopRepo,
+  workshopRepo: WorkshopRepo,
 }
 
 export type WorkshopsModuleResolvers = {
-  serverResolver: CreaftYardServerResolver,
+  serverResolver: CraftYardServerResolver,
   moduleResolver: WorkshopsModuleResolver
 }
 

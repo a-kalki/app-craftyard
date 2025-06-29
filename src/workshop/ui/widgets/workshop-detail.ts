@@ -191,18 +191,6 @@ export class WorkshopDetailsEntity extends BaseElement {
 
       <sl-divider></sl-divider>
 
-      ${this.workshop.about.customContent?.length ? html`
-        <sl-details>
-          <div slot="summary" class="section-title">
-            <sl-icon name="info-circle"></sl-icon>
-            Дополнительная информация
-          </div>
-          <workshop-basic-info .customContent=${this.workshop.about.customContent}></workshop-basic-info>
-        </sl-details>
-
-        <sl-divider></sl-divider>
-      ` : ''}
-
       <sl-details>
         <div slot="summary" class="section-title">
           <sl-icon name="gear-wide-connected"></sl-icon>

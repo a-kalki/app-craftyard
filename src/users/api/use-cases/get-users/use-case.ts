@@ -1,7 +1,7 @@
-import type { RequestScope, RunDomainResult } from "rilata/api";
+import type { RequestScope, DomainResult } from "rilata/api";
 import { success } from "rilata/core";
 import { getUsersValidator } from "./v-map";
-import { UserUseCase } from "#users/api/base-use-case";
+import { UserUseCase } from "#users/api/base-uc";
 import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users";
 
 export class GetUsersUC extends UserUseCase<GetUsersMeta> {
@@ -17,7 +17,7 @@ export class GetUsersUC extends UserUseCase<GetUsersMeta> {
 
   async runDomain(
     input: GetUsersCommand, requestData: RequestScope,
-  ): Promise<RunDomainResult<GetUsersMeta>> {
-    return success(await this.moduleResolver.db.getUsers());
+  ): Promise<DomainResult<GetUsersMeta>> {
+    return success(await this.moduleResolver.userRepo.getUsers());
   }
 }

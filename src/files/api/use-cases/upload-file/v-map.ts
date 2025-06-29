@@ -1,5 +1,5 @@
 import type { UploadFileCommand } from "#app/domain/file/struct/upload-file";
-import { fileAccessVmap, fileEntryAttrsVmap } from "#app/domain/file/v-map";
+import { fileEntryAttrsVmap } from "#app/domain/file/v-map";
 import {
   DtoFieldValidator, type ValidatorMap, NotValidateFieldValidator,
   LiteralFieldValidator, StringChoiceValidationRule,
@@ -9,8 +9,7 @@ import { fileSubDirs } from "src/files/constants";
 const uploadFileVmap: ValidatorMap<UploadFileCommand['attrs']> = {
     file: new NotValidateFieldValidator('file'),
     comment: fileEntryAttrsVmap.comment,
-    // @ts-expect-error
-    access: new DtoFieldValidator('access', false, { isArray: false }, 'dto', fileAccessVmap),
+    access: fileEntryAttrsVmap.access.cloneWithRequired(false),
     subDir: new LiteralFieldValidator('subDir', false, { isArray: false }, 'string', [
       new StringChoiceValidationRule(fileSubDirs),
     ]),

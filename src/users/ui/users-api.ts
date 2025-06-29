@@ -7,9 +7,9 @@ import { BaseBackendApi } from "#app/ui/base/base-api";
 import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
 import { usersApiUrl } from "#users/constants";
-import type { UserFacade } from "#app/domain/user/facade";
+import type { UiUserFacade } from "#app/domain/user/facade";
 
-export class UsersBackendApi extends BaseBackendApi<UserAttrs> implements UserFacade {
+export class UsersBackendApi extends BaseBackendApi<UserAttrs> implements UiUserFacade {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
     super(usersApiUrl, jwtDecoder, cacheTtlAsMin);
   }
