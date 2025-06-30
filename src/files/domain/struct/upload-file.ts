@@ -1,22 +1,21 @@
-import type { BackendResultByMeta } from "rilata/core";
-import type { FileEntryAttrs, SubDir } from "./attrs";
+import type { BackendResultByMeta, OwnerAggregateAttrs } from "rilata/core";
+import type { FileEntryAttrs } from "./attrs";
 import type { FileEntryArMeta } from "../meta";
+import type { AddingIsNotPermittedError } from "#app/domain/errors";
 
-export type UploadFileInput = {
+export type UploadFileInput = OwnerAggregateAttrs & {
   comment?: string;
-  access: 'public' | 'private';
   file: File;
-  subDir?: SubDir;
   onProgress?: (progress: number) => void;
 };
 
 export type UploadFileCommand = {
   name: 'upload-file',
-  attrs: Partial<Pick<FileEntryAttrs, 'comment' | 'access'>> & { file: unknown, subDir?: SubDir },
+  attrs: OwnerAggregateAttrs & Pick<FileEntryAttrs, 'comment'> & { file: unknown },
   requestId: string,
 };
 
-export type UploadFileSuccess = { id: string };
+export type UploadFileSuccess = { id: string, url: string };
 
 export type BadFileError = {
   name: 'Bad file Error',
@@ -28,7 +27,7 @@ export type UploadFileUcMeta = {
   name: 'Upload File Use Case'
   in: UploadFileCommand,
   success: UploadFileSuccess,
-  errors: BadFileError,
+  errors: BadFileError | AddingIsNotPermittedError,
   events: never,
   aRoot: FileEntryArMeta,
 }

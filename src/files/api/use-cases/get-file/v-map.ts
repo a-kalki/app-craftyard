@@ -1,5 +1,5 @@
-import type { GetFileCommand } from "#app/domain/file/struct/get-file";
-import { fileEntryAttrsVmap } from "#app/domain/file/v-map";
+import type { GetFileCommand } from "#files/domain/struct/get-file";
+import { fileEntryAttrsVmap } from "#files/domain/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const getFileVmap: ValidatorMap<GetFileCommand['attrs']> = {

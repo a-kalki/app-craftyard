@@ -1,11 +1,11 @@
-import { failure, success, type JwtDecoder, type JwtDto, type ResultDTO } from "rilata/core";
+import { failure, success, type JwtDecoder, type JwtDto, type OwnerAggregateAttrs, type ResultDTO } from "rilata/core";
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { fileApiUrls, formFileName } from "../constants";
-import type { UiFileFacade } from "#app/domain/file/facade";
-import type { FileUploadResult, UploadFileInput, UploadFileUcMeta } from "#app/domain/file/struct/upload-file";
-import type { GetFileCommand, GetFileEntryResult, GetFileUcMeta } from "#app/domain/file/struct/get-file";
-import type { UpdateFileCommand, UpdateFileResult, UpdateFileUcMeta } from "#app/domain/file/struct/update-file";
-import type { DeleteFileCommand, DeleteFileResult, DeleteFileUcMeta } from "#app/domain/file/struct/delete-file";
+import type { UiFileFacade } from "./facade";
+import type { FileUploadResult, UploadFileInput, UploadFileUcMeta } from "#files/domain/struct/upload-file";
+import type { GetFileCommand, GetFileEntryResult, GetFileUcMeta } from "#files/domain/struct/get-file";
+import type { UpdateFileCommand, UpdateFileResult, UpdateFileUcMeta } from "#files/domain/struct/update-file";
+import type { DeleteFileCommand, DeleteFileResult, DeleteFileUcMeta } from "#files/domain/struct/delete-file";
 
 /** Реализация для файлового хранилища сохраняющего прямо на сервере (не в s3) */
 export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFileFacade {
@@ -24,12 +24,17 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
         await this.updateAccessToken();
       }
 
-      const { file, access, comment, subDir, onProgress } = options;
+      const { file, comment, onProgress } = options;
+      const ownerAttrs: OwnerAggregateAttrs = {
+        ownerId: options.ownerId,
+        ownerName: options.ownerName,
+        context: options.context,
+        access: options.access
+      }
 
       const formData = new FormData();
       formData.append(formFileName, file);
-      formData.append('access', JSON.stringify(access));
-      if (subDir) formData.append('subDir', subDir);
+      formData.append('ownerAttrs', JSON.stringify(ownerAttrs));
       if (comment) formData.append('comment', comment);
 
       const res = await this.sendFormDataWithProgress(formData, onProgress);

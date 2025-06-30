@@ -4,7 +4,7 @@
     "title": "Коворкинг мастерская \"Дедок\"",
     "description": "Главная мастерская проекта Craftyard, где мы опробываем и внедряем в жизнь все наши идеи.",
     "about": {
-      "logo": "/uploads/avatars/logo_full.svg",
+      "logo": "/assets/app/logo_full.svg",
       "location": "г. Уральск, ул. Айтиева, 24"
     },
     "memberships": [

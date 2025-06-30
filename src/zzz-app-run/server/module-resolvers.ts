@@ -8,17 +8,16 @@ import { workshopsRepo } from "#workshop/infra/repo";
 import type { FilesModuleResolvers } from "src/files/api/types";
 import { fileRepo } from "src/files/infra/repo";
 import { join } from 'path';
-import { existsSync, mkdirSync } from 'fs';
-import { fileSubDirs } from 'src/files/constants';
+import { existsSync } from 'fs';
 import { craftYardServerResolver } from './server-resolver';
 import { FilesModule } from '#files/api/module';
 import { UsersModule } from '#users/api/module';
 import { WorkshopsModule } from '#workshop/api/module';
-import { FilesBackendFacade } from '#files/api/backend-facade';
 import { ModelModule } from '#models/api/module';
 import { UserContentModule } from '#user-contents/api/module';
 import type { UserContentModuleResolvers } from '#user-contents/api/types';
 import { thesisSetRepo } from '#user-contents/infra/thesis-set/repo';
+import { FileModuleBackendFacade } from '#files/api/facade';
 
 const PROJECT_PATH = cwd();
 const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
@@ -26,13 +25,6 @@ const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
 function setUploadDir(): void {
   if (!existsSync(PATH_TO_UPLOADS)) {
     throw Error('Uploads path does not exist: ' + PATH_TO_UPLOADS);
-  }
-
-  for (const dir of fileSubDirs) {
-    const subPath = join(PATH_TO_UPLOADS, dir);
-    if (!existsSync(subPath)) {
-      mkdirSync(subPath, { recursive: true });
-    }
   }
 }
 
@@ -50,7 +42,6 @@ export const fileModuleResolvers: FilesModuleResolvers = {
 }
 
 export const filesBackendModule = new FilesModule(fileModuleResolvers);
-export const filesBackendFacade = new FilesBackendFacade(filesBackendModule);
 
 // +++++++++++++ user-content module ++++++++++++++
 export const userContentModuleResolvers: UserContentModuleResolvers = {
@@ -87,7 +78,7 @@ export const modelModuleResolvers: ModelModuleResolvers = {
   serverResolver: craftYardServerResolver,
   moduleResolver: {
     modelRepo: modelsRepo,
-    fileFacade: filesBackendFacade,
+    fileFacade: new FileModuleBackendFacade(filesBackendModule),
   }
 }
 

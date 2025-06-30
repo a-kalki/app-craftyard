@@ -1,8 +1,8 @@
 import type { FilesModuleMeta, FilesModuleResolver, FilesModuleResolvers } from "./types";
 import { filesModuleConfig, filesModulePermissionCheckers, filesModuleUseCases } from "./setup";
 import { FileModuleController } from "./controller";
-import { FileAr } from "#app/domain/file/a-root";
 import { CraftYardModule } from "#app/api/module";
+import { FileAr } from "#files/domain/a-root";
 
 export class FilesModule extends CraftYardModule<FilesModuleMeta> {
     name = "Files Module" as const;

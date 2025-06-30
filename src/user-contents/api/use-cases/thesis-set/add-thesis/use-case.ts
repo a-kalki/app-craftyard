@@ -1,8 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { addThesisValidator } from "./v-map";
-import type { AbstractAggregateAttrs } from "rilata/api-server";
-import { failure, success } from "rilata/core";
+import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
 import type { AddingIsNotPermittedError } from "#app/domain/errors";
 import type { AddThesisCommand, AddThesisMeta } from "#user-contents/domain/thesis-set/struct/thesis/add";
 import type { Thesis, ThesisSetAttrs } from "#user-contents/domain/thesis-set/struct/attrs";

@@ -2,12 +2,14 @@ import { LitElement, html, css, type TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { imageUtils } from '#app/ui/utils/image';
 import { keyboardUtils } from '#app/ui/utils/keyboard';
-import type { UiFileFacade } from '#app/domain/file/facade';
 import type { App } from '#app/ui/base/app';
 import { ref } from 'lit/directives/ref.js';
+import type { UiFileFacade } from '#files/ui/facade';
+import type { OwnerAggregateAttrs } from 'rilata/core';
 
 @customElement('model-images')
 export class ModelImages extends LitElement {
+  @property({ type: Object }) ownerAttrs?: OwnerAggregateAttrs;
   @property({ type: Array }) imageIds: string[] = [];
   @property({ type: Boolean }) canEdit = false;
 
@@ -345,6 +347,8 @@ export class ModelImages extends LitElement {
   }
 
   private openFileDialog() {
+    if (!this.ownerAttrs) return;
+
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -357,15 +361,15 @@ export class ModelImages extends LitElement {
       for (const file of files) {
         this.uploadProgress = 0;
         const compressed = await imageUtils.compressImage(file, 0.7, 1920);
-        const res = await this.fileFacade.uploadFile({
+        const uploadResult = await this.fileFacade.uploadFile({
+          ...this.ownerAttrs!,
           file: compressed,
-          access: 'public',
-          subDir: 'model-images',
-          onProgress: p => this.uploadProgress = p,
+          onProgress: (p: number) => this.uploadProgress = p,
         });
-        if (res.isSuccess()) addedIds.push(res.value.id);
-        else this.app.error('Ошибка при загрузке файла', { file });
+        if (uploadResult.isSuccess()) addedIds.push(uploadResult.value.id);
+        else this.app.error('Ошибка при загрузке файла', { ownerAttrs: this.ownerAttrs, file });
       }
+
       this.uploadProgress = 100;
       this.isUploading = false;
       this.dispatchEvent(new CustomEvent('addImages', {
@@ -415,6 +419,10 @@ export class ModelImages extends LitElement {
   render() {
     if (this.imageUrls.length === 0) {
       return this.renderNoImages();
+    }
+
+    if (this.canEdit && !this.ownerAttrs) {
+      return html`<p style="color: red">model-image not corrected init...</p>`;
     }
 
     return html`

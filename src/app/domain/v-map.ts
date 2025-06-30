@@ -2,7 +2,7 @@ import { DtoFieldValidator, LiteralFieldValidator, PositiveNumberValidationRule,
 import type { Cost, Currency } from "./types";
 import type { UnionToTuple } from "rilata/core";
 
-const currencies: UnionToTuple<Currency> = ['KZT'];
+const currencies: UnionToTuple<keyof Currency> = ['KZT'];
 
 export const costVmap: ValidatorMap<Cost> = {
   price: new LiteralFieldValidator('price', true, { isArray: false }, 'number', [

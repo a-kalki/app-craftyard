@@ -5,6 +5,8 @@ import type { ContributionKey } from '#app/domain/contributions/types';
 import { UserPolicy } from '#app/domain/user/policy';
 import type { EditUserCommand } from '#app/domain/user/struct/edit-user';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import type { UserArMeta } from '#app/domain/user/meta';
+import type { OwnerAggregateAttrs } from 'rilata/core';
 
 @customElement('user-edit')
 export class UserEditFeature extends BaseElement {
@@ -118,6 +120,8 @@ export class UserEditFeature extends BaseElement {
   @state()
   private skills: [string, string][] = [];
 
+  private urlIsValid = true;
+
   async connectedCallback() {
     super.connectedCallback();
     await this.loadUser();
@@ -144,6 +148,7 @@ export class UserEditFeature extends BaseElement {
     this.name = result.value.name;
     this.telegramUsername = result.value.profile.telegramNickname ?? '';
     this.avatarUrl = result.value.profile.avatarUrl ?? '';
+    this.urlIsValid = !!this.avatarUrl;
     this.skills = Object.entries(result.value.profile.skills ?? {});
   }
 
@@ -270,12 +275,25 @@ export class UserEditFeature extends BaseElement {
     return true;
   }
 
+  handleAvatarChanged(e: CustomEvent<{ isValid: boolean, url: string }>): void {
+    this.urlIsValid = e.detail.isValid;
+    this.avatarUrl = e.detail.url;
+    e.preventDefault();
+  };
+
   render() {
     if (this.user === undefined) {
       return html`<sl-spinner></sl-spinner>`;
     }
 
     const canEditStats = this.canEditStatistics();
+    const ownerName: UserArMeta['name'] = 'UserAr';
+    const ownerAttrs: OwnerAggregateAttrs = {
+      ownerId: this.user.id,
+      ownerName,
+      context: 'avatar',
+      access: 'public'
+    }
 
     return html`
       <h2>Редактирование профиля</h2>
@@ -289,25 +307,12 @@ export class UserEditFeature extends BaseElement {
         @sl-input=${(e: CustomEvent) => this.name = (e.target as HTMLInputElement).value}
       ></sl-input>
       
-      <div class="avatar-row">
-        <div class="avatar-input">
-          <sl-input
-            label="Аватар URL"
-            help-text="Укажи свой аватар!"
-            style="height: 100%;"
-            .value=${this.avatarUrl}
-            @sl-input=${(e: CustomEvent) => this.avatarUrl = (e.target as HTMLInputElement).value}
-          ></sl-input>
-        </div>
-
-        ${this.avatarUrl && this.avatarUrl.startsWith('http') ? html`
-          <user-avatar
-            size="96"
-            .user=${this.user}
-            .shape=${this.avatarUrl.includes('gravatar') ? 'circle' : 'rounded'}
-          ></user-avatar>
-        ` : ''}
-      </div>
+      <single-image-upload
+        .url=${this.user.profile.avatarUrl}
+        .ownerAttrs=${ownerAttrs}
+        .aspectRatio=${1/1}
+        @image-loaded=${this.handleAvatarChanged}
+      ></single-image-upload>
       
       <sl-input
         label="Ник в Телеграм"

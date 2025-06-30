@@ -60,6 +60,8 @@ export class ThesisSetDetails extends BaseElement {
   @property({ type: Object }) thesisSet!: ThesisSetAttrs;
   @property({ type: Boolean }) canEdit = false;
 
+  protected isLoading = false;
+
   render() {
     const { title, theses, icon } = this.thesisSet;
 

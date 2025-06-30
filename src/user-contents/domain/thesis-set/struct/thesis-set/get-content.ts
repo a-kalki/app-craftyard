@@ -1,5 +1,6 @@
-import type { GetContentPayload, NotContentToDeliveryError } from "rilata/api-server";
+import type { GetContentPayload } from "rilata/api-server";
 import type { ThesisSetArMeta } from "../../meta";
+import type { NotContentToDeliveryError } from "rilata/core";
 
 // ========== commands ============
 export type GetThesisSetContentCommand = {

@@ -19,7 +19,7 @@ await Bun.build({
   outdir: buildOutdir,
   target: 'browser',
   format: 'esm',
-  sourcemap: 'external',
+  sourcemap: 'linked',
   minify: false,
 });
 
@@ -32,12 +32,6 @@ const hash = createHash('sha256').update(content).digest('hex').slice(0, 8);
 const hashedJsName = `index-${hash}.js`;
 const hashedJsPath = join(buildOutdir, hashedJsName);
 await rename(jsOut, hashedJsPath);
-
-// Переименовываем sourcemap (если есть)
-const sourcemapPath = join(buildOutdir, 'index.js.map');
-try {
-  await rename(sourcemapPath, join(buildOutdir, `index-${hash}.js.map`));
-} catch {}
 
 // Обновляем HTML
 let html = await readFile(join(bootstrapDir, 'index.html'), 'utf8');

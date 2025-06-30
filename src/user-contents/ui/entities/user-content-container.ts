@@ -1,11 +1,11 @@
 import { html, css, type TemplateResult, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { type OwnerAggregateAttrs } from 'rilata/api-server';
 import { BaseElement } from '#app/ui/base/base-element';
 import type { ThesisSetAttrs } from '#user-contents/domain/thesis-set/struct/attrs';
 import type { GetThesisSetContentCommand } from '#user-contents/domain/thesis-set/struct/thesis-set/get-content';
 import { markdownUtils } from '#app/ui/utils/markdown';
 import { keyboardUtils } from '#app/ui/utils/keyboard';
+import type { OwnerAggregateAttrs } from 'rilata/core';
 
 @customElement('user-content-container')
 export class UserContentContainer extends BaseElement {
@@ -312,7 +312,7 @@ export class UserContentContainer extends BaseElement {
     const body = this.newContent?.body ?? 'Создайте свой первый раздел, чтобы начать добавлять контент используя разметку markdown.';
     return html`
       <div class="empty-state">
-        ${markdownUtils.parseWithClasses(title, 'title')}
+        ${markdownUtils.parseWithOptions(title, { class: 'title' })}
         ${markdownUtils.parse(body)}
         <p class="instruction">Чтобы добавить раздел нажмите кнопку: <sl-icon name="three-dots-vertical"></sl-icon> на правом верхнем углу</p>
       </div>

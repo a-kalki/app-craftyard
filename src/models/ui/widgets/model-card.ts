@@ -1,5 +1,5 @@
 import { html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
@@ -79,14 +79,30 @@ export class ModelCardWidget extends BaseElement {
   @property({ type: Object })
   model!: ModelAttrs;
 
+  @state()
+  private previewUrl = '';
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.loadPreview();
+  }
+
+  async loadPreview(): Promise<void> {
+    const imageId = this.model.imageIds[0];
+    if (!imageId) return;
+
+    const getResult = await this.fileApi.getFile(imageId);
+    if (getResult.isFailure()) return;
+    this.previewUrl = getResult.value.url;
+  }
+
   render() {
-    const previewUrl = this.model.imageIds[0];
     const categories = this.model.categories.map(cat => MODEL_CATEGORY_TITLES[cat]);
 
     return html`
       <sl-card>
-        ${previewUrl
-          ? html`<img slot="image" class="preview" src=${previewUrl} alt="preview" />`
+        ${this.previewUrl
+          ? html`<img slot="image" class="preview" src=${this.previewUrl} alt="preview" />`
           : ''}
 
         <div class="content">

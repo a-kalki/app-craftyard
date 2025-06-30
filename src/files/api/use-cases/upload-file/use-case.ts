@@ -1,12 +1,13 @@
+import path from "node:path";
+import { mkdirSync } from 'fs';
 import type { RequestScope, DomainResult } from "rilata/api";
-import { AssertionException, failure, success, type AuthUser } from "rilata/core";
+import { AssertionException, failure, success } from "rilata/core";
 import { FileUseCase } from "../../base-uc";
 import { uploadFileValidator } from "./v-map";
-import path from "node:path";
 import { uuidUtility } from "rilata/api-helper";
-import type { UploadFileCommand, UploadFileUcMeta } from "#app/domain/file/struct/upload-file";
-import type { FileEntryAttrs } from "#app/domain/file/struct/attrs";
-import { FileAr } from "#app/domain/file/a-root";
+import type { UploadFileCommand, UploadFileUcMeta } from "#files/domain/struct/upload-file";
+import type { FileEntryAttrs } from "#files/domain/struct/attrs";
+import { FileAr } from "#files/domain/a-root";
 
 export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
   arName = "FileEntryAr" as const;
@@ -20,10 +21,19 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
   protected validator = uploadFileValidator;
 
   async runDomain(
-    input: UploadFileCommand, requestData: RequestScope,
+    input: UploadFileCommand, reqScope: RequestScope,
   ): Promise<DomainResult<UploadFileUcMeta>> {
-    const { file, comment, access } = input.attrs;
+    const id = uuidUtility.getNewUuidV7();
+    const canPerform = await this.canPerform({ id, ...input.attrs }, reqScope);
+    if (!canPerform) {
+      return failure({
+        name: 'AddingIsNotPermittedError',
+        description: 'Создание (добавление) файла не разрешено.',
+        type: 'domain-error',
+      });
+    }
 
+    const { file, comment, access, context, ownerName, ownerId } = input.attrs;
     if (!(file instanceof File)) {
       return failure({
         name: 'Bad file Error',
@@ -32,32 +42,42 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
       })
     }
 
-    const id = uuidUtility.getNewUuidV7();
-    const extension = path.extname(file.name);
-    const uuidFileName = `/${id}${extension}`;
-    const subDir = input.attrs.subDir ? `/${input.attrs.subDir}` : '';
-    const destinationPath = path.join(this.moduleResolver.fileDir, subDir, uuidFileName);
-    const url = `${this.moduleResolver.fileUrlPath}${subDir}${uuidFileName}`
-      .replace(/\/+/g, '/');
+    try {
+      const extension = path.extname(file.name);
+      const uuidFileName = `/${id}${extension}`;
+      const contexDir = `/${input.attrs.context}`;
+      const destinationDir = path.join(this.moduleResolver.fileDir, contexDir);
+      mkdirSync(path.dirname(destinationDir), { recursive: true });
+      const destinationPath = path.join(destinationDir, uuidFileName);
 
-    await Bun.write(destinationPath, file);
+      await Bun.write(destinationPath, file);
 
-    const fileEntry: FileEntryAttrs = {
-        id,
-        url,
-        mimeType: file.type,
-        size: file.size,
-        ownerId: (requestData.caller as AuthUser).id,
-        access: access ?? 'public',
-        comment,
-        uploadedAt: Date.now(),
+      const url = `${this.moduleResolver.fileUrlPath}${contexDir}${uuidFileName}`.replace(/\/+/g, '/');
+      const fileEntry: FileEntryAttrs = {
+          id,
+          url,
+          mimeType: file.type,
+          size: file.size,
+          ownerId,
+          ownerName,
+          access,
+          context,
+          comment,
+          uploadedAt: Date.now(),
+      }
+      new FileAr(fileEntry); // checkInveriants;
+      const dbResult = await this.moduleResolver.fileRepo.addFile(fileEntry);
+      if (dbResult.changes === 1) {
+        return success({ id, url });
+      };
+
+      throw new AssertionException(`db retruned not changes.`);
+    } catch (err) {
+      throw this.logger.error(
+        `[${this.constructor.name}]: upload file failed.`,
+        { input, reqScope },
+        err as Error,
+      )
     }
-    new FileAr(fileEntry); // checkInveriants;
-    const dbResult = await this.moduleResolver.fileRepo.addFile(fileEntry);
-    if (dbResult.changes === 1) {
-      return success({ id: fileEntry.id })
-    };
-
-    throw new AssertionException('Failed to save file');
   }
 }

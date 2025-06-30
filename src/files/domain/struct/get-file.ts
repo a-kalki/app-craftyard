@@ -1,6 +1,7 @@
 import type { BackendResultByMeta } from "rilata/core";
 import type { FileEntryAttrs } from "./attrs";
 import type { FileEntryArMeta } from "../meta";
+import type { GettingIsNotPermittedError } from "#app/domain/errors";
 
 // ========== command ============
 export type GetFileCommand = {
@@ -16,18 +17,12 @@ export type FileNotFoundError = {
   type: 'domain-error',
 }
 
-export type GettingFileIsNotPermittedError = {
-  name: 'GettingFileIsNotPermittedError',
-  description?: string,
-  type: 'domain-error',
-}
-
 // ========== meta ============
 export type GetFileUcMeta = {
   name: 'Get File Use Case'
   in: GetFileCommand,
   success: FileEntryAttrs,
-  errors: FileNotFoundError | GettingFileIsNotPermittedError,
+  errors: FileNotFoundError | GettingIsNotPermittedError,
   events: never,
   aRoot: FileEntryArMeta,
 }

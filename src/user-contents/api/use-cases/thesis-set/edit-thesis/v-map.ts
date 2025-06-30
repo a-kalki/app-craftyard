@@ -1,4 +1,3 @@
-import type { EditThesisSetMeta } from "#user-contents/domain/thesis-set/struct/thesis-set/edit";
 import type { EditThesisCommand } from "#user-contents/domain/thesis-set/struct/thesis/edit";
 import { thesisVmap, thesisSetAttrsVmap } from "#user-contents/domain/thesis-set/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";

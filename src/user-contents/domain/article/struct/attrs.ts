@@ -1,4 +1,4 @@
-import type { AbstractAggregateAttrs } from "rilata/api-server";
+import type { AbstractAggregateAttrs } from "rilata/core";
 
 export type ArticleAttrs = AbstractAggregateAttrs & {
   title: string,

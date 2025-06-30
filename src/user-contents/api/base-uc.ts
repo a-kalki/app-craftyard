@@ -1,11 +1,11 @@
 import { QueryUseCase, type RequestScope } from "rilata/api";
-import { failure, success, type Result, type UCMeta } from "rilata/core";
+import { failure, success, type AbstractAggregateAttrs, type Result, type UCMeta } from "rilata/core";
 import type { UserContentModuleResolvers } from "./types";
 import type { AggregateDoesNotExistError } from "#app/domain/errors";
 import type { ThesisSetRepo } from "#user-contents/domain/thesis-set/repo";
 import type { ThesisSetAttrs } from "#user-contents/domain/thesis-set/struct/attrs";
 import { ThesisSetAr } from "#user-contents/domain/thesis-set/a-root";
-import type { AbstractAggregateAttrs, CanPerformPayload } from "rilata/api-server";
+import type { CanPerformPayload } from "rilata/api-server";
 
 export abstract class UserContentUseCase<META extends UCMeta> extends QueryUseCase<
   UserContentModuleResolvers, META

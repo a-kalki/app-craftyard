@@ -1,5 +1,5 @@
-import type { GetContentPayload, NotContentToDeliveryError } from "rilata/api-server";
-import type { Caller, Result } from "rilata/core";
+import type { GetContentPayload } from "rilata/api-server";
+import type { Caller, NotContentToDeliveryError, Result } from "rilata/core";
 import type { CraftYardResolvers } from "./resolvers";
 
 export abstract class ContentDelivererService<R extends CraftYardResolvers> {

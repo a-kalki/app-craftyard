@@ -1,5 +1,5 @@
 import type { CraftYardServerResolver } from "#app/api/resolvers"
-import type { FileRepo } from "#app/domain/file/repo"
+import type { FileRepo } from "#files/domain/repo"
 import type { formFileName } from "../constants"
 
 export type FilesModuleResolver = {

@@ -11,11 +11,11 @@ import { FileBackendLocalApi } from "#files/ui/files-api";
 import { ModelsBackendApi } from "#models/ui/models-api";
 import { WorkshopsBackendApi } from "#workshop/ui/workshops-api";
 import type { UiUserFacade } from "#app/domain/user/facade";
-import type { UiFileFacade } from "#app/domain/file/facade";
 import type { UiModelsFacade } from "#models/domain/facade";
 import type { UiWorkshopsFacade } from "#workshop/domain/facade";
 import { userContentModule } from "#user-contents/ui/module";
 import { ThesisSetBackendApi } from "#user-contents/ui/thesis-set-api";
+import type { UiFileFacade } from "#files/ui/facade";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,
@@ -45,12 +45,12 @@ const jwtDecoder = new BaseJwtDecoder(expiredTimeShiftAsMs);
 
 const resolves: BootstrapResolves = {
   userFacade: new UsersBackendApi(jwtDecoder, cacheTtlAsMin),
-  fileFacade: new FileBackendLocalApi(jwtDecoder, cacheTtlAsMin),
   jwtDecoder,
 }
 
 const otherApis = {
   ...resolves,
+  fileFacade: new FileBackendLocalApi(jwtDecoder, cacheTtlAsMin),
   modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
   workshopApi: new WorkshopsBackendApi(jwtDecoder, cacheTtlAsMin),
   thesisSetApi: new ThesisSetBackendApi(jwtDecoder, cacheTtlAsMin),

@@ -1,9 +1,8 @@
 import { WebModuleController, type RilataRequest } from "rilata/api";
 import type { FilesModule } from "./module";
-import { failure, success, type BadRequestError, type Result } from "rilata/core";
+import { failure, success, type BadRequestError, type OwnerAggregateAttrs, type Result } from "rilata/core";
 import { uuidUtility } from "rilata/api-helper";
-import type { UploadFileCommand } from "#app/domain/file/struct/upload-file";
-import type { SubDir } from "#app/domain/file/struct/attrs";
+import type { UploadFileCommand } from "#files/domain/struct/upload-file";
 
 export class FileModuleController extends WebModuleController {
   declare protected module: FilesModule
@@ -33,14 +32,20 @@ export class FileModuleController extends WebModuleController {
         });
       }
 
-      const access = formData.get('access') as string;
+      const rawOwnerAttrs = formData.get('ownerAttrs') as string;
+      if (!rawOwnerAttrs) {
+        throw this.module.getLogger().error(
+          `[${this.constructor}]: not find owner attrs`,
+          { ownerAttrs: rawOwnerAttrs }
+        );
+      }
+      const ownerAttrs = JSON.parse(rawOwnerAttrs) as OwnerAggregateAttrs;
       const inputDto: UploadFileCommand = {
         name: "upload-file",
         attrs: {
           file: file as File,
-          access: access ? JSON.parse(access) : undefined,
+          ...ownerAttrs,
           comment: formData.get('comment') as string,
-          subDir: formData.get('subDir') as SubDir ,
         },
         requestId: uuidUtility.getNewUuidV7(),
       }

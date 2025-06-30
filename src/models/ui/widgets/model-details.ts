@@ -5,9 +5,9 @@ import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { BaseElement } from '#app/ui/base/base-element';
 import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
 import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
-import type { OwnerAggregateAttrs } from 'rilata/api-server';
 import type { ModelArMeta } from '#models/domain/meta';
 import { costUtils } from '#app/domain/utils/cost/cost-utils';
+import type { OwnerAggregateAttrs } from 'rilata/core';
 
 @customElement('model-details')
 export class ModelDetails extends BaseElement {
@@ -34,6 +34,13 @@ export class ModelDetails extends BaseElement {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
 
     .title {
@@ -147,6 +154,16 @@ export class ModelDetails extends BaseElement {
     this.requestUpdate();
   }
 
+  private async openEditModelModal() {
+    const modal = document.createElement('edit-model-modal');
+    document.body.appendChild(modal);
+
+    const result = await modal.show(this.model!);
+    if (result === 'success') {
+      await this.loadModel();
+    }
+  }
+
   render() {
     if (!this.model) {
       return html`
@@ -156,7 +173,7 @@ export class ModelDetails extends BaseElement {
     }
 
     const modelName: ModelArMeta['name'] = 'ModelAr';
-    const additionalInfoOwnerAttrs: OwnerAggregateAttrs = {
+    const ownerAttrs: OwnerAggregateAttrs = {
       ownerId: this.model.id,
       ownerName: modelName,
       context: 'additional-info',
@@ -166,11 +183,19 @@ export class ModelDetails extends BaseElement {
 
     return html`
       <div class="model-details">
-        <div class="header">
-          <h1 class="title">${this.model.title}</h1>
+        <div class="section-header">
+          <h2>Описание модели</h2>
+          ${this.canEdit ? html`
+            <sl-icon-button
+              name="pencil"
+              label="Редактировать"
+              @click=${this.openEditModelModal}
+            ></sl-icon-button>
+          ` : ''}
         </div>
 
         <model-images
+          .ownerAttrs=${ownerAttrs}
           .imageIds=${this.model.imageIds}
           .canEdit=${this.canEdit}
           @addImages=${this.handleAddImages}
@@ -198,11 +223,17 @@ export class ModelDetails extends BaseElement {
           </div>
 
           <user-content-container
-            .ownerAttrs=${additionalInfoOwnerAttrs}
-            .canEdit=${modelPolicy.canEditUserContent(additionalInfoOwnerAttrs)}
+            .ownerAttrs=${ownerAttrs}
+            .canEdit=${modelPolicy.canEditUserContent(ownerAttrs)}
           ></user-content-container>
         </div>
       </div>
     `;
   }
 }
+
+ declare global {
+   interface HTMLElementTagNameMap {
+     'model-details': ModelDetails;
+   }
+ }

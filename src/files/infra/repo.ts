@@ -1,9 +1,9 @@
-import type { FileRepo } from "#app/domain/file/repo";
-import type { FileEntryAttrs } from "#app/domain/file/struct/attrs";
-import type { UpdateFileCommand } from "#app/domain/file/struct/update-file";
+import type { FileRepo } from "#files/domain/repo";
+import type { FileEntryAttrs } from "#files/domain/struct/attrs";
+import type { UpdateFileCommand } from "#files/domain/struct/update-file";
 import { JsonRepository } from "../../app/infra/json-repo";
 
-const path = import.meta.dir + '/files.json';
+const path = import.meta.dir + '/domains.json';
 
 class FileJsonRepo implements FileRepo {
   protected jsonRepo: JsonRepository<FileEntryAttrs>;

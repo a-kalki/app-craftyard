@@ -12,6 +12,30 @@ export class MarkdownProcessor {
     const parsed = marked.parseInline(content.trim()) as string;
     return html`${unsafeHTML(parsed)}`;
   }
+
+  parseWithOptions(
+    content: string,
+    options: {
+      tag?: string;
+      class?: string;
+      id?: string;
+      [attr: string]: string | undefined;
+    } = { tag: 'p' }
+  ): TemplateResult {
+    const tag = options.tag || 'p';
+    delete options.tag;
+    
+    const attrStr = Object.entries(options)
+      .filter(([_, val]) => val !== undefined)
+      .map(([key, val]) => `${key}="${val}"`)
+      .join(' ');
+
+    const tagOpen = `<${tag}${attrStr ? ' ' + attrStr : ''}>`;
+    const tagClose = `</${tag}>`;
+
+    const parsed = marked.parseInline(content.trim()) as string;
+    return html`${unsafeHTML(tagOpen + parsed + tagClose)}`;
+  }
 }
 
 export const markdownUtils = new MarkdownProcessor();

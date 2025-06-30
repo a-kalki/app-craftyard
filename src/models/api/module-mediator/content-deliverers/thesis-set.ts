@@ -4,8 +4,8 @@ import type { ModelArMeta } from "#models/domain/meta";
 import type { ThesisSetArMeta } from "#user-contents/domain/thesis-set/meta";
 import type { GetThesisSetContentMeta } from "#user-contents/domain/thesis-set/struct/thesis-set/get-content";
 import type { DomainResult } from "rilata/api";
-import type { GetContentPayload, NotContentToDeliveryError } from "rilata/api-server";
-import { type Caller, type AnonymousUser, success, type Result, type DTO, failure } from "rilata/core";
+import type { GetContentPayload } from "rilata/api-server";
+import { type Caller, type AnonymousUser, success, type Result, type DTO, failure, type NotContentToDeliveryError } from "rilata/core";
 
 export class ThesisSetContentDeliverer extends ContentDelivererService<CraftYardResolvers> {
   abstractArName: ThesisSetArMeta['name'] = 'ThesisSetAr';

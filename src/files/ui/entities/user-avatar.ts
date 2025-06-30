@@ -1,9 +1,9 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { BaseElement } from '../base/base-element';
 import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
 import { UserAr } from '#app/domain/user/a-root';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import { BaseElement } from '#app/ui/base/base-element';
 
 @customElement('user-avatar')
 export class UserAvatarEntity extends BaseElement {
@@ -14,12 +14,11 @@ export class UserAvatarEntity extends BaseElement {
 
     .avatar {
       object-fit: cover;
-      width: 100%; /* По умолчанию, будет переопределено инлайн-стилем, если 'size' установлен */
-      height: auto; /* По умолчанию, будет переопределено инлайн-стилем, если 'size' установлен */
+      width: 100%;
+      height: auto;
       aspect-ratio: 1 / 1;
       background-color: var(--sl-color-neutral-100);
       box-shadow: var(--sl-shadow-small);
-      /* border-radius будет применен инлайн для лучшей гибкости */
     }
 
     .avatar--circle {
@@ -36,23 +35,16 @@ export class UserAvatarEntity extends BaseElement {
       justify-content: center;
       background-color: var(--sl-color-neutral-100);
       color: var(--sl-color-neutral-600);
-      width: 100%; /* По умолчанию, будет переопределено инлайн-стилем, если 'size' установлен */
+      width: 100%;
       aspect-ratio: 1 / 1;
-      /* font-size: 100% удален, так как он устанавливается динамически через инлайн-стиль */
     }
 
     .icon-avatar sl-icon {
-      /*
-       * Иконка должна масштабироваться по font-size, унаследованному от родителя.
-       * Мы удаляем width: 100% и height: 100%, чтобы icon-font не пытался
-       * растянуться до размеров контейнера до того, как font-size его увеличит.
-       * Flexbox центрирует иконку после того, как font-size определит ее размер.
-       */
-      font-size: inherit; /* Наследуем рассчитанный font-size от .icon-avatar */
-      line-height: 1; /* Часто полезно для выравнивания иконочных шрифтов */
-      display: block; /* Убедитесь, что иконка ведет себя как блочный элемент для лучшего центрирования */
-      flex-shrink: 0; /* Предотвращаем сжатие иконки в flex-контейнере */
-      flex-grow: 0; /* Предотвращаем растяжение иконки в flex-контейнере */
+      font-size: inherit;
+      line-height: 1;
+      display: block;
+      flex-shrink: 0;
+      flex-grow: 0;
     }
   `;
 

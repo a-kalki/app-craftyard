@@ -1,7 +1,6 @@
 import { LitElement } from 'lit';
 import type { App } from '../base/app';
 import type { WorkshopsBackendApi } from '#workshop/ui/workshops-api';
-import type { UiFileFacade } from '#app/domain/file/facade';
 import type { UsersBackendApi } from '#users/ui/users-api';
 import type { ModelsBackendApi } from '#models/ui/models-api';
 import type { FileBackendLocalApi } from '#files/ui/files-api';
@@ -9,6 +8,7 @@ import type { UiUserFacade } from '#app/domain/user/facade';
 import type { UiModelsFacade } from '#models/domain/facade';
 import type { UiWorkshopsFacade } from '#workshop/domain/facade';
 import type { ThesisSetBackendApi } from '#user-contents/ui/thesis-set-api';
+import type { UiFileFacade } from '#files/ui/facade';
 
 export abstract class BaseElement extends LitElement {
   protected globalAttr<T>(key: string): T {
@@ -53,6 +53,6 @@ export abstract class BaseElement extends LitElement {
   }
 
   get thesisSetApi(): ThesisSetBackendApi {
-    return this.globalAttr('thesisSetApi');
+    return this.globalAttr('thesisSetApi')
   }
 }

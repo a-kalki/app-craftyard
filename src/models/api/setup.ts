@@ -12,7 +12,7 @@ import type { ContentDelivererService } from "#app/api/content-deliverer-service
 import { ThesisSetContentDeliverer } from "./module-mediator/content-deliverers/thesis-set";
 
 export const modelModuleConfig: ModuleConfig = {
-    moduleUrls: [modelApiUrl]
+  moduleUrls: [modelApiUrl],
 }
 
 export const modelModuleUseCases: UseCase[] = [

@@ -1,10 +1,10 @@
 import type { CraftYardServerResolver } from "#app/api/resolvers"
-import type { ApiFileFacade } from "#app/domain/file/facade"
+import type { FileModuleFacade } from "#files/domain/facade"
 import type { ModelRepo } from "#models/domain/repo"
 
 export type ModelModuleResolver = {
   modelRepo: ModelRepo,
-  fileFacade: ApiFileFacade,
+  fileFacade: FileModuleFacade
 }
 
 export type ModelModuleResolvers = {

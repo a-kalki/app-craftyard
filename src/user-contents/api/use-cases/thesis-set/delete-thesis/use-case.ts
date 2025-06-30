@@ -1,8 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { deleteThesisValidator } from "./v-map";
-import type { AbstractAggregateAttrs } from "rilata/api-server";
-import { failure, success } from "rilata/core";
+import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
 import type { DeleteThesisCommand, DeleteThesisMeta } from "#user-contents/domain/thesis-set/struct/thesis/delete";
 import { ThesisSetAr } from "#user-contents/domain/thesis-set/a-root";
 import type { DeletingIsNotPermittedError } from "#app/domain/errors";

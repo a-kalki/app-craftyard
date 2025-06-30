@@ -1,6 +1,5 @@
 import type { RequestScope, DomainResult } from "rilata/api";
-import type { AbstractAggregateAttrs } from "rilata/api-server";
-import { failure, success } from "rilata/core";
+import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
 import type { DeletingIsNotPermittedError } from "#app/domain/errors";
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { DeleteThesisSetCommand, DeleteThesisSetMeta } from "#user-contents/domain/thesis-set/struct/thesis-set/delete";

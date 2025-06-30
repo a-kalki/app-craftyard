@@ -3,7 +3,7 @@ import { type AddThesisSetCommand } from "#user-contents/domain/thesis-set/struc
 import { thesisSetAttrsVmap } from "#user-contents/domain/thesis-set/v-map";
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import type { OwnerAggregateAttrs } from "rilata/api-server";
+import type { OwnerAggregateAttrs } from "rilata/core";
 
 type AddThesisSetType = Pick<AddThesisSetCommand['attrs'], 'title' | 'icon'>;
 

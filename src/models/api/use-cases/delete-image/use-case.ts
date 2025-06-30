@@ -3,7 +3,7 @@ import type { RequestScope, DomainResult } from "rilata/api";
 import { ModelUseCase } from "../../base-uc";
 import { failure, success } from "rilata/core";
 import { deleteModelImageValidator } from "./v-map";
-import type { DeleteFileCommand } from "#app/domain/file/struct/delete-file";
+import type { DeleteFileCommand } from "#files/domain/struct/delete-file";
 
 export class DeleteModelImageUC extends ModelUseCase<DeleteModelImageMeta> {
   arName = 'ModelAr' as const;
