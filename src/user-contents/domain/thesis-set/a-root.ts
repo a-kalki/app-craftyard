@@ -2,10 +2,10 @@ import type { DeletingIsNotPermittedError, EditingIsNotPermittedError } from "#a
 import type { ThesisSetArMeta } from "#user-contents/domain/thesis-set/meta";
 import type { Thesis, ThesisSetAttrs } from "#user-contents/domain/thesis-set/struct/attrs";
 import { thesisSetValidator } from "#user-contents/domain/thesis-set/v-map";
-import { failure, success, type Result } from "rilata/core";
+import { failure, success, type PatchValue, type Result } from "rilata/core";
 import { AggregateRoot } from "rilata/domain";
-import type { AddThesisCommand } from "./struct/thesis/add";
 import type { EditThesisCommand } from "./struct/thesis/edit";
+import { dtoUtility } from "rilata/utils";
 
 export class ThesisSetAr extends AggregateRoot<ThesisSetArMeta> {
     name = "ThesisSetAr" as const;
@@ -23,6 +23,13 @@ export class ThesisSetAr extends AggregateRoot<ThesisSetArMeta> {
       this.checkInvariants();
     }
 
+    editAttrs(patchAttrs: PatchValue<ThesisSetAttrs>): void {
+      const oldAttrs = this.getAttrs();
+      const patch = { ...patchAttrs, updateAt: Date.now() };
+      this.attrs = dtoUtility.applyPatch(oldAttrs, patch);
+      this.checkInvariants();
+    }
+
     editThesis(
       patchAttrs: EditThesisCommand['attrs']['thesis'],
     ): Result<EditingIsNotPermittedError, undefined> {
@@ -37,7 +44,8 @@ export class ThesisSetAr extends AggregateRoot<ThesisSetArMeta> {
       }
 
       const oldThesis = this.attrs.theses[thesisIndex];
-      const updatedThesis: Thesis = { ...oldThesis, ...patchAttrs, updateAt: Date.now() };
+      const patch = { ...patchAttrs, updateAt: Date.now() };
+      const updatedThesis: Thesis = dtoUtility.applyPatch(oldThesis, patch);
       this.attrs.theses[thesisIndex] = updatedThesis;
 
       this.checkInvariants();

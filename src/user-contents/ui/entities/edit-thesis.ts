@@ -5,6 +5,8 @@ import { thesisVmap } from "#user-contents/domain/thesis-set/v-map";
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
+type EditAttrs = EditThesisCommand['attrs']['thesis'];
+
 @customElement('edit-thesis-modal')
 export class EditThesisModal extends ValidatableElement<keyof Thesis> {
   static styles = css`
@@ -33,7 +35,7 @@ export class EditThesisModal extends ValidatableElement<keyof Thesis> {
   protected validatorMap = thesisVmap;
 
   @state() private isLoading = false;
-  @state() private formData!: Thesis;
+  @state() private formData!: EditAttrs;
   protected iconIsValid = true;
   private resolve?: (value: 'success' | null) => void;
 
@@ -57,7 +59,7 @@ export class EditThesisModal extends ValidatableElement<keyof Thesis> {
   private hasChanged(): boolean {
     const keysLengthNotEqual = Object.keys(this.thesis).length !== Object.keys(this.formData).length;
     const valuesIsNotEqual = Object.entries(this.thesis)
-      .some(([key, value]) => value !== this.formData[key as keyof Thesis])
+      .some(([key, value]) => value !== this.formData[key as keyof EditAttrs])
     return keysLengthNotEqual || valuesIsNotEqual;
   }
 
@@ -193,11 +195,14 @@ export class EditThesisModal extends ValidatableElement<keyof Thesis> {
     `;
   }
 
-  protected getFieldValue(field: keyof Thesis): unknown {
+  protected getFieldValue(field: keyof EditAttrs): unknown {
     return this.formData[field];
   }
 
-  protected setFieldValue(field: keyof Thesis, value: unknown): void {
+  protected setFieldValue(field: keyof EditAttrs, value: unknown): void {
+    if (this.formData[field] !== undefined && value === undefined) {
+      value = null;
+    }
     this.formData = { ...this.formData, [field]: value };
   }
 }

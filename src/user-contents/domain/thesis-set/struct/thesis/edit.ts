@@ -1,13 +1,14 @@
 import type { AggregateDoesNotExistError, EditingIsNotPermittedError } from "#app/domain/errors";
 import type { Thesis } from "../attrs";
 import type { ThesisSetArMeta } from "../../meta";
+import type { PatchValue } from "rilata/core";
 
 // ========== commands ============
 export type EditThesisCommand = {
   name: 'edit-thesis',
   attrs: {
     id: string,
-    thesis: Omit<Thesis, 'createAt' | 'updateAt'>,
+    thesis: PatchValue<Omit<Thesis, 'createAt' | 'updateAt'>>,
   },
   requestId: string,
 };
