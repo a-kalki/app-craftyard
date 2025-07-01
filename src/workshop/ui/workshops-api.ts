@@ -1,7 +1,7 @@
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import type { WorkshopAttrs } from "#workshop/domain/struct/attrs";
-import type { GetWorkshopCommand, GetWorkshopMeta } from "#workshop/domain/struct/get-workshop";
+import type { GetWorkshopCommand, GetWorkshopMeta } from "#workshop/domain/struct/get-workshop/contract";
 import type { UiWorkshopsFacade } from "#workshop/domain/facade";
 import { workshopsApiUrl } from "#workshop/constants";
 

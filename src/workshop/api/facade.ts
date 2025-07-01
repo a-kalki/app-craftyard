@@ -1,5 +1,5 @@
 import type { ApiWorkshopsFacade } from "#workshop/domain/facade";
-import type { GetWorkshopCommand, GetWorkshopMeta } from "#workshop/domain/struct/get-workshop";
+import type { GetWorkshopCommand, GetWorkshopMeta } from "#workshop/domain/struct/get-workshop/contract";
 import type { Caller, BackendResultByMeta } from "rilata/core";
 import type { WorkshopsModule } from "./module";
 

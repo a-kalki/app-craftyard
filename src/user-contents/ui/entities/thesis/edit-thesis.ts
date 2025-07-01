@@ -1,6 +1,6 @@
 import { ValidatableElement } from "#app/ui/base/validatable-element";
-import { editThesisContentVmap } from "#user-contents/api/use-cases/section/user-content/edit-content/v-map";
-import type { EditThesistAttrs } from "#user-contents/domain/content/struct/edit";
+import type { EditThesistAttrs } from "#user-contents/domain/content/struct/edit-content/contract";
+import { editThesisContentVmap } from "#user-contents/domain/content/struct/edit-content/v-map";
 import type { ThesisContent } from "#user-contents/domain/content/struct/thesis-attrs";
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";

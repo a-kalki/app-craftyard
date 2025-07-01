@@ -1,9 +1,9 @@
 import { ValidatableElement } from "#app/ui/base/validatable-element";
-import { contentSectionVmap } from "#user-contents/domain/section/v-map";
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { ContentSectionAttrs } from "#user-contents/domain/section/struct/attrs";
-import type { EditContentSectionCommand } from "#user-contents/domain/section/struct/edit";
+import type { EditContentSectionCommand } from "#user-contents/domain/section/struct/edit-section/contract";
+import { editContentSectionVmap } from "#user-contents/domain/section/struct/edit-section/v-map";
 
 type EditContentSectionType = EditContentSectionCommand['attrs'];
 
@@ -31,12 +31,7 @@ export class ContentSectionEditModal extends ValidatableElement<keyof EditConten
 
   private resolve?: (id: boolean) => void;
 
-  protected validatorMap = {
-    id: contentSectionVmap.id,
-    title: contentSectionVmap.title,
-    icon: contentSectionVmap.icon,
-    order: contentSectionVmap.order,
-  };
+  protected validatorMap = editContentSectionVmap;
 
   protected getFieldValue(field: keyof Omit<EditContentSectionType, 'id'>): unknown {
     return this.formData[field];

@@ -1,7 +1,7 @@
 import type { ModuleConfig, UseCase } from "rilata/api";
 import { fileApiUrls } from "../constants";
-import { UploadFileUC } from "./use-cases/upload-file/use-case";
-import { GetFileUC } from "./use-cases/get-file/use-case";
+import { UploadFileUC } from "./use-cases/upload-file.uc.ts";
+import { GetFileUC } from "./use-cases/get-file.uc.ts";
 import type { CraftYardResolvers } from "#app/api/resolvers";
 import type { PerformCheckerService } from "#app/api/perform-checker-service";
 

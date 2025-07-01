@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { imageUtils } from '#app/ui/utils/image';
-import type { UploadFileInput } from '#files/domain/struct/upload-file';
+import type { UploadFileInput } from '#files/domain/struct/upload-file/contract';
 import type { CyOwnerAggregateAttrs } from '#app/domain/types';
 
 type CompressionMode = 'low' | 'medium' | 'high';

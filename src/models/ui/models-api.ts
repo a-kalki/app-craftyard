@@ -1,13 +1,13 @@
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { modelApiUrl } from "#models/constants";
 import type { UiModelsFacade } from "#models/domain/facade";
-import type { AddModelImagesCommand, AddModelImagesMeta } from "#models/domain/struct/add-images";
 import type { ModelAttrs } from "#models/domain/struct/attrs";
-import type { DeleteModelImageCommand, DeleteModelImageMeta } from "#models/domain/struct/delete-image";
-import type { EditModelCommand, EditModelMeta } from "#models/domain/struct/edit-model";
-import type { GetModelCommand, GetModelMeta } from "#models/domain/struct/get-model";
-import type { GetModelsCommand, GetModelsMeta } from "#models/domain/struct/get-models";
-import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images";
+import type { AddModelImagesCommand, AddModelImagesMeta } from "#models/domain/struct/add-images/contract";
+import type { DeleteModelImageCommand, DeleteModelImageMeta } from "#models/domain/struct/delete-image/contract";
+import type { EditModelCommand, EditModelMeta } from "#models/domain/struct/edit-model/contract";
+import type { GetModelCommand, GetModelMeta } from "#models/domain/struct/get-model/contract";
+import type { GetModelsCommand, GetModelsMeta } from "#models/domain/struct/get-models/contract";
+import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images/contract";
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 
 export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements UiModelsFacade {

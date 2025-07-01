@@ -1,17 +1,17 @@
 import type { CraftYardResolvers } from "#app/api/resolvers";
 import { userContentsApiUrls } from "#user-contents/constants";
 import type { ModuleConfig, UseCase } from "rilata/api";
-import { AddContentSectionUC } from "./use-cases/section/add-content-section/use-case";
-import { EditContentSectionUC } from "./use-cases/section/edit-content-section/use-case";
-import { GetContentSectionUC } from "./use-cases/section/get-content-section/use-case";
-import { DeleteContentSectionUC } from "./use-cases/section/delete-content-section/use-case";
-import { GetOwnerArContentSectionsUC } from "./use-cases/section/get-owner-content-sections/use-case";
+import { AddContentSectionUC } from "./use-cases/section/add-section.uc.ts";
+import { EditContentSectionUC } from "./use-cases/section/edit-section.uc.ts";
+import { GetContentSectionUC } from "./use-cases/section/get-section.uc.ts";
+import { DeleteContentSectionUC } from "./use-cases/section/delete-section.uc.ts";
+import { GetOwnerArContentSectionsUC } from "./use-cases/section/get-owner-sections.uc.ts";
 import type { PerformCheckerService } from "#app/api/perform-checker-service";
-import { AddUserContentUC } from "./use-cases/section/user-content/add-content/use-case";
-import { EditUserContentUC } from "./use-cases/section/user-content/edit-content/use-case";
-import { DeleteUserContentUC } from "./use-cases/section/user-content/delete-content/use-case";
-import { GetUserContentUC } from "./use-cases/section/user-content/get-content/use-case";
-import { GetSectionContentsUC } from "./use-cases/section/user-content/get-section-contents/use-case";
+import { AddUserContentUC } from "./use-cases/content/add-content.uc.ts";
+import { EditUserContentUC } from "./use-cases/content/edit-content.uc.ts";
+import { DeleteUserContentUC } from "./use-cases/content/delete-content.uc.ts";
+import { GetUserContentUC } from "./use-cases/content/get-content.uc.ts";
+import { GetSectionContentsUC } from "./use-cases/content/get-section-contents.uc.ts";
 
 export const userContentModuleConfig: ModuleConfig = {
   moduleUrls: [userContentsApiUrls],

@@ -1,5 +1,5 @@
 import type { FileModuleFacade } from "#files/domain/facade";
-import type { DeleteFileCommand, DeleteFileUcMeta } from "#files/domain/struct/delete-file";
+import type { DeleteFileCommand, DeleteFileUcMeta } from "#files/domain/struct/delete-file/contract";
 import type { BackendResultByMeta, Caller } from "rilata/core";
 import type { FilesModule } from "./module";
 

@@ -1,6 +1,6 @@
 import type { MaybePromise } from "rilata/core";
 import type { FileEntryAttrs } from "./struct/attrs";
-import type { UpdateFileCommand } from "./struct/update-file";
+import type { UpdateFileCommand } from "./struct/update-file/contract";
 
 export interface FileRepo {
   findFile(id: string): MaybePromise<FileEntryAttrs | undefined>

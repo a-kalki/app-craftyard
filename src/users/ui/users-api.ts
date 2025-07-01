@@ -1,10 +1,10 @@
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
-import { type GetUserCommand, type GetUserMeta } from "#app/domain/user/struct/get-user";
-import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users";
-import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user";
-import type { AuthData, AuthUserCommand, AuthUserMeta } from "#app/domain/user/struct/auth-user";
+import { type GetUserCommand, type GetUserMeta } from "#app/domain/user/struct/get-user/contract";
+import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users/contract";
+import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user/contract";
+import type { AuthData, AuthUserCommand, AuthUserMeta } from "#app/domain/user/struct/auth-user/contract";
+import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user/contract";
 import { BaseBackendApi } from "#app/ui/base/base-api";
-import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user";
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
 import { usersApiUrl } from "#users/constants";
 import type { UiUserFacade } from "#app/domain/user/facade";

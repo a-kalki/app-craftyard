@@ -4,10 +4,10 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { MODEL_CATEGORY_KEYS, MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
 import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
-import type { EditModelCommand } from '#models/domain/struct/edit-model';
-import { editModelVmap } from '#models/api/use-cases/edit-model/v-map';
+import type { EditModelCommand } from '#models/domain/struct/edit-model/contract';
 import { dtoUtility } from 'rilata/utils';
 import { costVmap } from '#app/domain/v-map';
+import { editModelVmap } from '#models/domain/struct/edit-model/v-map';
 
 type EditModelAttrs = Omit<EditModelCommand['attrs'], 'cost'> & { price: number };
 

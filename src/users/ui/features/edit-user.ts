@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { ContributionKey } from '#app/domain/contributions/types';
 import { UserPolicy } from '#app/domain/user/policy';
-import type { EditUserCommand } from '#app/domain/user/struct/edit-user';
+import type { EditUserCommand } from '#app/domain/user/struct/edit-user/contract';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 import type { UserArMeta } from '#app/domain/user/meta';
 import type { CyOwnerAggregateAttrs } from '#app/domain/types';

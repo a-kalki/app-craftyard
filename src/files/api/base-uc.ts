@@ -4,7 +4,7 @@ import type { FilesModuleResolvers } from "./types";
 import type { CanPerformPayload } from "rilata/api-server";
 import type { FileRepo } from "#files/domain/repo";
 import type { FileEntryArMeta } from "#files/domain/meta";
-import type { FileNotFoundError } from "#files/domain/struct/get-file";
+import type { FileNotFoundError } from "#files/domain/struct/get-file/contract";
 import type { FileEntryAttrs } from "#files/domain/struct/attrs";
 import { FileAr } from "#files/domain/a-root";
 

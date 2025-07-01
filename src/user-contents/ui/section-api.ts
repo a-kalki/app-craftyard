@@ -1,12 +1,12 @@
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { userContentsApiUrls } from "#user-contents/constants";
-import type { GetContentSectionCommand, GetContentSectionMeta } from "#user-contents/domain/section/struct/get";
 import type { ContentSectionAttrs } from "#user-contents/domain/section/struct/attrs";
-import type { GetOwnerArContentSectionsCommand, GetOwnerArContentSectionsMeta } from "#user-contents/domain/section/struct/get-owner-ar-sets";
-import type { AddContentSectionCommand, AddContentSectionMeta } from "#user-contents/domain/section/struct/add";
-import type { DeleteContentSectionCommand, DeleteContentSectionMeta } from "#user-contents/domain/section/struct/delete";
-import type { EditContentSectionCommand, EditContentSectionMeta } from "#user-contents/domain/section/struct/edit";
+import type { GetContentSectionCommand, GetContentSectionMeta } from "#user-contents/domain/section/struct/get-section/contract";
+import type { GetOwnerArContentSectionsCommand, GetOwnerArContentSectionsMeta } from "#user-contents/domain/section/struct/get-owner-sections/contract";
+import type { AddContentSectionCommand, AddContentSectionMeta } from "#user-contents/domain/section/struct/add-section/contract";
+import type { DeleteContentSectionCommand, DeleteContentSectionMeta } from "#user-contents/domain/section/struct/delete-section/contract";
+import type { EditContentSectionCommand, EditContentSectionMeta } from "#user-contents/domain/section/struct/edit-section/contract";
 export class ContentSectionBackendApi extends BaseBackendApi<ContentSectionAttrs> {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
     super(userContentsApiUrls, jwtDecoder, cacheTtlAsMin);

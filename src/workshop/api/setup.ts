@@ -1,5 +1,5 @@
 import type { ModuleConfig, UseCase } from "rilata/api";
-import { GetWorkshopUC } from "./use-cases/get-workshop/use-case";
+import { GetWorkshopUC } from "./use-cases/get-workshop.uc.ts";
 import { workshopsApiUrl } from "#workshop/constants";
 import type { CraftYardResolvers } from "#app/api/resolvers";
 import type { PerformCheckerService } from "#app/api/perform-checker-service";

@@ -1,8 +1,8 @@
-import type { AddContentSectionCommand } from "./add"
-import type { DeleteContentSectionCommand } from "./delete"
-import type { EditContentSectionCommand } from "./edit"
-import type { GetContentSectionCommand } from "./get"
-import type { GetOwnerArContentSectionsCommand } from "./get-owner-ar-sets"
+import type { AddContentSectionCommand } from "./add-section/contract"
+import type { DeleteContentSectionCommand } from "./delete-section/contract"
+import type { EditContentSectionCommand } from "./edit-section/contract"
+import type { GetOwnerArContentSectionsCommand } from "./get-owner-sections/contract"
+import type { GetContentSectionCommand } from "./get-section/contract"
 
 export type ContentSectionMutableActions =
   AddContentSectionCommand['name'] |

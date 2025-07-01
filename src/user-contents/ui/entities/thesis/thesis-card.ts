@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import { markdownUtils } from '#app/ui/utils/markdown';
 import type { ThesisContent } from '#user-contents/domain/content/struct/thesis-attrs';
-import type { DeleteUserContentCommand } from '#user-contents/domain/content/struct/delete';
+import type { DeleteUserContentCommand } from '#user-contents/domain/content/struct/delete-content/contract';
 
 @customElement('thesis-card')
 export class ThesisCard extends BaseElement {

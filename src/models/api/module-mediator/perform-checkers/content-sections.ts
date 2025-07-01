@@ -4,10 +4,10 @@ import type { Caller, AnonymousUser } from "rilata/core";
 import { ModelPolicy } from "#models/domain/policy";
 import { PerformCheckerService } from "#app/api/perform-checker-service";
 import type { ModelModuleResolvers } from "#models/api/types";
-import type { GetOwnerArContentSectionsCommand } from "#user-contents/domain/section/struct/get-owner-ar-sets";
-import type { GetContentSectionCommand } from "#user-contents/domain/section/struct/get";
 import type { ContentSectionArMeta } from "#user-contents/domain/section/meta";
 import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { GetOwnerArContentSectionsCommand } from "#user-contents/domain/section/struct/get-owner-sections/contract";
+import type { GetContentSectionCommand } from "#user-contents/domain/section/struct/get-section/contract";
 
 const isNotMutableActions: [
   GetOwnerArContentSectionsCommand['name'],

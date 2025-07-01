@@ -3,7 +3,7 @@ import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { BackendResultByMeta } from 'rilata/core';
 import type { WorkshopAttrs } from '#workshop/domain/struct/attrs';
-import type { GetWorkshopMeta } from '#workshop/domain/struct/get-workshop';
+import type { GetWorkshopMeta } from '#workshop/domain/struct/get-workshop/contract';
 import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
 
 @customElement('workshop-details')

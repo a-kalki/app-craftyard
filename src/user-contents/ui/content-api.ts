@@ -1,11 +1,11 @@
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { userContentsApiUrls } from "#user-contents/constants";
 import type { UserContent } from "#user-contents/domain/content/meta";
-import type { AddUserContentCommand, AddUserContentMeta } from "#user-contents/domain/content/struct/add";
-import type { DeleteUserContentCommand, DeleteUserContentMeta } from "#user-contents/domain/content/struct/delete";
-import type { EditUserContentCommand, EditUserContentMeta } from "#user-contents/domain/content/struct/edit";
-import type { GetUserContentCommand, GetUserContentMeta } from "#user-contents/domain/content/struct/get";
-import type { GetSectionContentsCommand, GetSectionContentsMeta, GetSectionContentsSuccess } from "#user-contents/domain/content/struct/get-section-contents";
+import type { AddUserContentCommand, AddUserContentMeta } from "#user-contents/domain/content/struct/add-content/contract";
+import type { DeleteUserContentCommand, DeleteUserContentMeta } from "#user-contents/domain/content/struct/delete-content/contract";
+import type { EditUserContentCommand, EditUserContentMeta } from "#user-contents/domain/content/struct/edit-content/contract";
+import type { GetUserContentCommand, GetUserContentMeta } from "#user-contents/domain/content/struct/get-content/contract";
+import type { GetSectionContentsCommand, GetSectionContentsMeta, GetSectionContentsSuccess } from "#user-contents/domain/content/struct/get-section-contents/contract";
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 
 export class UserContentApi extends BaseBackendApi<UserContent> {

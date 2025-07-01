@@ -6,7 +6,7 @@ import { AppRouter } from '../base/app-router';
 import { AppNotifier } from '../base/app-notifier';
 import { localStore } from 'rilata/ui';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './constants';
-import type { AuthData, AuthUserSuccess, TokenType } from '#app/domain/user/struct/auth-user';
+import type { AuthData, AuthUserSuccess, TokenType } from '#app/domain/user/struct/auth-user/contract';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 import type { Module } from '../base/module';
 import type { BootstrapResolves } from './run-types';
