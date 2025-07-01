@@ -46,4 +46,4 @@ class FileJsonRepo implements FileRepo {
   }
 }
 
-export const fileRepo = new FileJsonRepo();
+export const fileJsonRepo = new FileJsonRepo();

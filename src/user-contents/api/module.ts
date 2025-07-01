@@ -1,7 +1,8 @@
 import type { UserContentModuleMeta, UserContentModuleResolver, UserContentModuleResolvers } from "./types";
 import { userContentModuleConfig, userContentModulePermissionCheckers, userContentModuleUseCases } from "./setup";
 import { CraftYardModule } from "#app/api/module";
-import { ThesisSetAr } from "#user-contents/domain/thesis-set/a-root";
+import { ContentSectionAr } from "#user-contents/domain/section/a-root";
+import { UserContentAr } from "#user-contents/domain/content/a-root";
 
 export class UserContentModule extends CraftYardModule<UserContentModuleMeta> {
     name = "User Content Module" as const;
@@ -21,7 +22,10 @@ export class UserContentModule extends CraftYardModule<UserContentModuleMeta> {
     }
 
     async checkArInvariants(): Promise<void> {
-      const thesisSets = await this.resolvers.moduleResolver.thesisSetRepo.getThesisSets();
-      thesisSets.forEach(attrs => new ThesisSetAr(attrs));
+      const sections = await this.resolvers.moduleResolver.contentSectionRepo.getContentSections();
+      sections.forEach(section => new ContentSectionAr(section));
+
+      const contents = await this.resolvers.moduleResolver.userContentRepo.filterContent({});
+      contents.forEach((content => new UserContentAr(content)));
     }
 }

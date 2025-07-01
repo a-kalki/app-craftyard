@@ -1,6 +1,6 @@
+import type { CyOwnerAggregateAttrs } from "#app/domain/types";
 import { UserPolicy } from "#app/domain/user/policy";
 import type { JwtUser } from "#app/domain/user/struct/attrs";
-import type { OwnerAggregateAttrs } from "rilata/core";
 import type { ModelAttrs } from "./struct/attrs";
 
 export class ModelPolicy {
@@ -22,20 +22,20 @@ export class ModelPolicy {
     return this.currentUser.id === this.model.ownerId;
   }
 
-  canEditUserContent(ownerAttrs: OwnerAggregateAttrs): boolean {
+  canEditUserContent(ownerAttrs: CyOwnerAggregateAttrs): boolean {
     return this.canEdit();
   }
 
-  canGetUserContent(ownerAttrs: OwnerAggregateAttrs): boolean {
+  canGetUserContent(ownerAttrs: CyOwnerAggregateAttrs): boolean {
     return this.canEdit();
   }
 
-  canGetFile(ownerAttrs: OwnerAggregateAttrs): boolean {
+  canGetFile(ownerAttrs: CyOwnerAggregateAttrs): boolean {
     return this.canEdit();
   }
 
 
-  canEditFile(ownerAttrs: OwnerAggregateAttrs): boolean {
+  canEditFile(ownerAttrs: CyOwnerAggregateAttrs): boolean {
     return this.canEdit();
   }
 }

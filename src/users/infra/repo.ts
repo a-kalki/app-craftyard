@@ -40,4 +40,4 @@ class UserJsonRepo implements UserRepo {
   }
 }
 
-export const usersRepo = new UserJsonRepo();
+export const usersJsonRepo = new UserJsonRepo();

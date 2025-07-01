@@ -1,12 +1,12 @@
 import { cwd } from 'process';
 import type { ModelModuleResolvers } from "#models/api/types";
-import { modelsRepo } from "#models/infra/repo";
+import { modelsJsonRepo } from "#models/infra/repo";
 import type { UsersModuleResolvers } from "#users/api/types";
-import { usersRepo } from "#users/infra/repo";
+import { usersJsonRepo } from "#users/infra/repo";
 import type { WorkshopsModuleResolvers } from "#workshop/api/types";
-import { workshopsRepo } from "#workshop/infra/repo";
+import { workshopsJsonRepo } from "#workshop/infra/repo";
 import type { FilesModuleResolvers } from "src/files/api/types";
-import { fileRepo } from "src/files/infra/repo";
+import { fileJsonRepo } from "src/files/infra/repo";
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { craftYardServerResolver } from './server-resolver';
@@ -16,8 +16,9 @@ import { WorkshopsModule } from '#workshop/api/module';
 import { ModelModule } from '#models/api/module';
 import { UserContentModule } from '#user-contents/api/module';
 import type { UserContentModuleResolvers } from '#user-contents/api/types';
-import { thesisSetRepo } from '#user-contents/infra/thesis-set/repo';
 import { FileModuleBackendFacade } from '#files/api/facade';
+import { contentSectionJsonRepo } from '#user-contents/infra/content-section/repo';
+import { userContentJsonRepo } from '#user-contents/infra/user-content/repo';
 
 const PROJECT_PATH = cwd();
 const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
@@ -34,7 +35,7 @@ setUploadDir();
 export const fileModuleResolvers: FilesModuleResolvers = {
   serverResolver: craftYardServerResolver,
   moduleResolver: {
-    fileRepo: fileRepo,
+    fileRepo: fileJsonRepo,
     fileDir: PATH_TO_UPLOADS,
     fileUrlPath: '/uploads',
     formFieldName: 'file'
@@ -47,7 +48,8 @@ export const filesBackendModule = new FilesModule(fileModuleResolvers);
 export const userContentModuleResolvers: UserContentModuleResolvers = {
   serverResolver: craftYardServerResolver,
   moduleResolver: {
-    thesisSetRepo: thesisSetRepo
+    contentSectionRepo: contentSectionJsonRepo,
+    userContentRepo: userContentJsonRepo,
   }
 }
 
@@ -57,7 +59,7 @@ export const userContentsBackendModule = new UserContentModule(userContentModule
 export const userModuleResolvers: UsersModuleResolvers = {
   serverResolver: craftYardServerResolver,
   moduleResolver: {
-    userRepo: usersRepo
+    userRepo: usersJsonRepo
   }
 }
 
@@ -67,7 +69,7 @@ export const userBackendModule = new UsersModule(userModuleResolvers);
 export const workshopModuleResolvers: WorkshopsModuleResolvers = {
   serverResolver: craftYardServerResolver,
   moduleResolver: {
-    workshopRepo: workshopsRepo
+    workshopRepo: workshopsJsonRepo
   }
 }
 
@@ -77,7 +79,7 @@ export const workshopBackendModule = new WorkshopsModule(workshopModuleResolvers
 export const modelModuleResolvers: ModelModuleResolvers = {
   serverResolver: craftYardServerResolver,
   moduleResolver: {
-    modelRepo: modelsRepo,
+    modelRepo: modelsJsonRepo,
     fileFacade: new FileModuleBackendFacade(filesBackendModule),
   }
 }

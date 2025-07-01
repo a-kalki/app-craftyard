@@ -1,8 +1,9 @@
 import { WebModuleController, type RilataRequest } from "rilata/api";
 import type { FilesModule } from "./module";
-import { failure, success, type BadRequestError, type OwnerAggregateAttrs, type Result } from "rilata/core";
+import { failure, success, type BadRequestError, type Result } from "rilata/core";
 import { uuidUtility } from "rilata/api-helper";
 import type { UploadFileCommand } from "#files/domain/struct/upload-file";
+import type { CyOwnerAggregateAttrs } from "#app/domain/types";
 
 export class FileModuleController extends WebModuleController {
   declare protected module: FilesModule
@@ -39,7 +40,7 @@ export class FileModuleController extends WebModuleController {
           { ownerAttrs: rawOwnerAttrs }
         );
       }
-      const ownerAttrs = JSON.parse(rawOwnerAttrs) as OwnerAggregateAttrs;
+      const ownerAttrs = JSON.parse(rawOwnerAttrs) as CyOwnerAggregateAttrs;
       const inputDto: UploadFileCommand = {
         name: "upload-file",
         attrs: {

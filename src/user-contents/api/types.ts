@@ -1,8 +1,10 @@
 import type { CraftYardServerResolver } from "#app/api/resolvers"
-import type { ThesisSetRepo } from "#user-contents/domain/thesis-set/repo"
+import type { UserContentRepo } from "#user-contents/domain/content/repo"
+import type { ContentSectionRepo } from "#user-contents/domain/section/repo"
 
 export type UserContentModuleResolver = {
-  thesisSetRepo: ThesisSetRepo,
+  contentSectionRepo: ContentSectionRepo,
+  userContentRepo: UserContentRepo
 }
 
 export type UserContentModuleResolvers = {

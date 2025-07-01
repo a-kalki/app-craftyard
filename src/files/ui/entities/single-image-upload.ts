@@ -4,7 +4,7 @@ import { BaseElement } from '#app/ui/base/base-element';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { imageUtils } from '#app/ui/utils/image';
 import type { UploadFileInput } from '#files/domain/struct/upload-file';
-import type { OwnerAggregateAttrs } from 'rilata/core';
+import type { CyOwnerAggregateAttrs } from '#app/domain/types';
 
 type CompressionMode = 'low' | 'medium' | 'high';
 
@@ -36,7 +36,7 @@ export class SingleImageUpload extends BaseElement {
     }
   `;
 
-  @property({ type: Object }) ownerAttrs!: OwnerAggregateAttrs;
+  @property({ type: Object }) ownerAttrs!: CyOwnerAggregateAttrs;
   @property({ type: String }) compression: CompressionMode = 'medium';
   @property({ type: Number }) aspectRatio?: number;
   @property({ type: String }) url?: string;

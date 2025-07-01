@@ -4,6 +4,7 @@ import type { UiModelsFacade } from "#models/domain/facade";
 import type { AddModelImagesCommand, AddModelImagesMeta } from "#models/domain/struct/add-images";
 import type { ModelAttrs } from "#models/domain/struct/attrs";
 import type { DeleteModelImageCommand, DeleteModelImageMeta } from "#models/domain/struct/delete-image";
+import type { EditModelCommand, EditModelMeta } from "#models/domain/struct/edit-model";
 import type { GetModelCommand, GetModelMeta } from "#models/domain/struct/get-model";
 import type { GetModelsCommand, GetModelsMeta } from "#models/domain/struct/get-models";
 import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images";
@@ -25,6 +26,20 @@ export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements UiMo
     const result = await this.request<GetModelMeta>(command);
     if (result.isSuccess()) {
       this.setCacheById(result.value.id, result.value);
+    }
+    return result;
+  }
+
+  async editModel(attrs: EditModelCommand['attrs']): Promise<BackendResultByMeta<EditModelMeta>> {
+    const command: EditModelCommand = {
+      name: "edit-model",
+      attrs,
+      requestId: crypto.randomUUID(),
+    }
+    const result = await this.request<EditModelMeta>(command);
+    if (result.isSuccess()) {
+      this.removeFromCacheById(attrs.id);
+      this.removeListCache();
     }
     return result;
   }

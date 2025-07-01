@@ -21,4 +21,4 @@ class WorkshopsJsonRepo implements WorkshopRepo {
   }
 }
 
-export const workshopsRepo = new WorkshopsJsonRepo();
+export const workshopsJsonRepo = new WorkshopsJsonRepo();

@@ -15,10 +15,12 @@
     ],
     "difficultyLevel": "BEGINNER",
     "estimatedTime": "Два дня.",
-    "costPerAccess": {
+    "cost": {
       "price": 250,
       "currency": "KZT"
-    }
+    },
+    "createAt": 1751109315000,
+    "updateAt": 1751109315000
   },
   "5c62a9ba-a686-4472-9ffe-b40aa7296e17": {
     "id": "5c62a9ba-a686-4472-9ffe-b40aa7296e17",
@@ -29,15 +31,16 @@
       "0197bc84-76d3-779e-86cf-ce2b670cd6a9"
     ],
     "categories": [
-      "GARDEN",
-      "FURNITURE"
+      "GARDEN"
     ],
     "estimatedTime": "Два дня.",
     "difficultyLevel": "BEGINNER",
-    "costPerAccess": {
-      "price": 250,
+    "cost": {
+      "price": 1000,
       "currency": "KZT"
-    }
+    },
+    "createAt": 1751109617000,
+    "updateAt": 1751384854484
   },
   "272fc7f4-2354-4858-93b4-19223f200980": {
     "id": "272fc7f4-2354-4858-93b4-19223f200980",
@@ -51,10 +54,12 @@
     ],
     "estimatedTime": "Два дня.",
     "difficultyLevel": "BEGINNER",
-    "costPerAccess": {
+    "cost": {
       "price": 250,
       "currency": "KZT"
-    }
+    },
+    "createAt": 1751110255000,
+    "updateAt": 1751110255000
   },
   "0401267a-e1c0-431b-b759-68f5da16f13c": {
     "id": "0401267a-e1c0-431b-b759-68f5da16f13c",
@@ -68,9 +73,11 @@
     ],
     "estimatedTime": "Два дня.",
     "difficultyLevel": "BEGINNER",
-    "costPerAccess": {
+    "cost": {
       "price": 250,
       "currency": "KZT"
-    }
+    },
+    "createAt": 1751124794000,
+    "updateAt": 1751124794000
   }
 }

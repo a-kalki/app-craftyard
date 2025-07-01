@@ -12,5 +12,7 @@ export type ModelAttrs = {
   categories: ModelCategory[],
   difficultyLevel: SkillLevel,
   estimatedTime: string,
-  costPerAccess: Cost,
+  cost: Cost,
+  createAt: number,
+  updateAt: number,
 }

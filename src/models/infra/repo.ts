@@ -19,10 +19,10 @@ class ModelsJsonRepo implements ModelRepo {
     return this.jsonRepo.find(id);
   }
 
-  async update(attrs: ModelAttrs): Promise<true> {
+  async update(attrs: ModelAttrs): Promise<{ changes: number }> {
     await this.jsonRepo.update(attrs.id, attrs);
-    return true;
+    return { changes: 1 };
   }
 }
 
-export const modelsRepo = new ModelsJsonRepo();
+export const modelsJsonRepo = new ModelsJsonRepo();

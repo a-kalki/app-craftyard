@@ -1,1 +1,1 @@
-export const userConentsApiUrls = '/api/user-contents';
+export const userContentsApiUrls = '/api/user-contents';

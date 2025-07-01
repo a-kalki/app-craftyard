@@ -1,7 +1,8 @@
-import {} from './entities/thesis-set-details';
-import {} from './entities/user-content-container';
-import {} from './entities/thesis-card';
-import {} from './entities/add-thesis';
-import {} from './entities/edit-thesis';
-import {} from './entities/add-thesis-set';
-import {} from './entities/edit-thesis-set';
+import {} from './feature/content-container';
+
+import {} from './entities/content-section';
+import {} from './entities/add-content-section';
+import {} from './entities/edit-content-section';
+import {} from './entities/thesis/thesis-card';
+import {} from './entities/thesis/add-thesis';
+import {} from './entities/thesis/edit-thesis';

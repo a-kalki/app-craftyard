@@ -6,7 +6,7 @@ import { UserPolicy } from '#app/domain/user/policy';
 import type { EditUserCommand } from '#app/domain/user/struct/edit-user';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 import type { UserArMeta } from '#app/domain/user/meta';
-import type { OwnerAggregateAttrs } from 'rilata/core';
+import type { CyOwnerAggregateAttrs } from '#app/domain/types';
 
 @customElement('user-edit')
 export class UserEditFeature extends BaseElement {
@@ -288,7 +288,7 @@ export class UserEditFeature extends BaseElement {
 
     const canEditStats = this.canEditStatistics();
     const ownerName: UserArMeta['name'] = 'UserAr';
-    const ownerAttrs: OwnerAggregateAttrs = {
+    const ownerAttrs: CyOwnerAggregateAttrs = {
       ownerId: this.user.id,
       ownerName,
       context: 'avatar',

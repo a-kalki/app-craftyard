@@ -5,5 +5,5 @@ export interface ModelRepo {
 
   findModel(id: string): Promise<ModelAttrs | undefined>
 
-  update(attrs: ModelAttrs): Promise<true>
+  update(attrs: ModelAttrs): Promise<{ changes: number }>
 }

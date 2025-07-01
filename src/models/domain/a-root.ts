@@ -2,6 +2,8 @@ import { AggregateRoot } from "rilata/domain";
 import type { ModelArMeta } from "./meta";
 import type { ModelAttrs } from "./struct/attrs";
 import { modelValidator } from "./v-map";
+import { dtoUtility } from "rilata/utils";
+import type { PatchValue } from "rilata/core";
 
 export class ModelAr extends AggregateRoot<ModelArMeta> {
     name = "ModelAr" as const;
@@ -12,6 +14,13 @@ export class ModelAr extends AggregateRoot<ModelArMeta> {
 
     constructor(attrs: ModelAttrs) {
       super(attrs, modelValidator);
+    }
+
+    editModel(attrs: Partial<PatchValue<ModelAttrs>>): void {
+      const excludeAttrs: Array<keyof ModelAttrs> = ['imageIds', 'ownerId', 'createAt', 'id'];
+      const patch = dtoUtility.excludeAttrs(attrs, excludeAttrs);
+      // @ts-expect-error: непонятная ошибка типа в updateAt;
+      this.attrs = dtoUtility.applyPatch(this.attrs, { ...patch, updateAt: Date.now() });
     }
 
     addImages(ids: string[]): void {

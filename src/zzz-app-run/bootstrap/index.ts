@@ -14,8 +14,9 @@ import type { UiUserFacade } from "#app/domain/user/facade";
 import type { UiModelsFacade } from "#models/domain/facade";
 import type { UiWorkshopsFacade } from "#workshop/domain/facade";
 import { userContentModule } from "#user-contents/ui/module";
-import { ThesisSetBackendApi } from "#user-contents/ui/thesis-set-api";
 import type { UiFileFacade } from "#files/ui/facade";
+import { ContentSectionBackendApi } from "#user-contents/ui/section-api";
+import { UserContentApi } from "#user-contents/ui/content-api";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,
@@ -53,7 +54,8 @@ const otherApis = {
   fileFacade: new FileBackendLocalApi(jwtDecoder, cacheTtlAsMin),
   modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
   workshopApi: new WorkshopsBackendApi(jwtDecoder, cacheTtlAsMin),
-  thesisSetApi: new ThesisSetBackendApi(jwtDecoder, cacheTtlAsMin),
+  contentSectionApi: new ContentSectionBackendApi(jwtDecoder, cacheTtlAsMin),
+  userContentApi: new UserContentApi(jwtDecoder, cacheTtlAsMin),
 }
 
 type Facades = {

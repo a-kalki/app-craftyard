@@ -1,4 +1,4 @@
-import { failure, success, type JwtDecoder, type JwtDto, type OwnerAggregateAttrs, type ResultDTO } from "rilata/core";
+import { failure, success, type JwtDecoder, type JwtDto, type ResultDTO } from "rilata/core";
 import { BaseBackendApi } from "#app/ui/base/base-api";
 import { fileApiUrls, formFileName } from "../constants";
 import type { UiFileFacade } from "./facade";
@@ -6,6 +6,7 @@ import type { FileUploadResult, UploadFileInput, UploadFileUcMeta } from "#files
 import type { GetFileCommand, GetFileEntryResult, GetFileUcMeta } from "#files/domain/struct/get-file";
 import type { UpdateFileCommand, UpdateFileResult, UpdateFileUcMeta } from "#files/domain/struct/update-file";
 import type { DeleteFileCommand, DeleteFileResult, DeleteFileUcMeta } from "#files/domain/struct/delete-file";
+import type { CyOwnerAggregateAttrs } from "#app/domain/types";
 
 /** Реализация для файлового хранилища сохраняющего прямо на сервере (не в s3) */
 export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFileFacade {
@@ -25,7 +26,7 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
       }
 
       const { file, comment, onProgress } = options;
-      const ownerAttrs: OwnerAggregateAttrs = {
+      const ownerAttrs: CyOwnerAggregateAttrs = {
         ownerId: options.ownerId,
         ownerName: options.ownerName,
         context: options.context,

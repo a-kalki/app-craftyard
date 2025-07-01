@@ -5,11 +5,11 @@ import { keyboardUtils } from '#app/ui/utils/keyboard';
 import type { App } from '#app/ui/base/app';
 import { ref } from 'lit/directives/ref.js';
 import type { UiFileFacade } from '#files/ui/facade';
-import type { OwnerAggregateAttrs } from 'rilata/core';
+import type { CyOwnerAggregateAttrs } from '#app/domain/types';
 
 @customElement('model-images')
 export class ModelImages extends LitElement {
-  @property({ type: Object }) ownerAttrs?: OwnerAggregateAttrs;
+  @property({ type: Object }) ownerAttrs?: CyOwnerAggregateAttrs;
   @property({ type: Array }) imageIds: string[] = [];
   @property({ type: Boolean }) canEdit = false;
 

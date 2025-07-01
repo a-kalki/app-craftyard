@@ -1,9 +1,10 @@
-import type { BackendResultByMeta, OwnerAggregateAttrs } from "rilata/core";
+import type { BackendResultByMeta } from "rilata/core";
 import type { FileEntryAttrs } from "./attrs";
 import type { FileEntryArMeta } from "../meta";
 import type { AddingIsNotPermittedError } from "#app/domain/errors";
+import type { CyOwnerAggregateAttrs } from "#app/domain/types";
 
-export type UploadFileInput = OwnerAggregateAttrs & {
+export type UploadFileInput = CyOwnerAggregateAttrs & {
   comment?: string;
   file: File;
   onProgress?: (progress: number) => void;
@@ -11,7 +12,7 @@ export type UploadFileInput = OwnerAggregateAttrs & {
 
 export type UploadFileCommand = {
   name: 'upload-file',
-  attrs: OwnerAggregateAttrs & Pick<FileEntryAttrs, 'comment'> & { file: unknown },
+  attrs: CyOwnerAggregateAttrs & Pick<FileEntryAttrs, 'comment'> & { file: unknown },
   requestId: string,
 };
 

@@ -7,12 +7,13 @@ import { DeleteModelImageUC } from "./use-cases/delete-image/use-case";
 import { ReoderModelImagesUC } from "./use-cases/reorder-images/use-case";
 import type { CraftYardResolvers } from "#app/api/resolvers";
 import type { PerformCheckerService } from "#app/api/perform-checker-service";
-import { ThesisSetPerformCheckersService } from "./module-mediator/perform-checkers/thesis-set";
 import type { ContentDelivererService } from "#app/api/content-deliverer-service";
-import { ThesisSetContentDeliverer } from "./module-mediator/content-deliverers/thesis-set";
+import { FilesPerformCheckersService } from "./module-mediator/perform-checkers/files";
+import { ContentSectionPerformCheckersService } from "./module-mediator/perform-checkers/content-sections";
+import { EditModelUC } from "./use-cases/edit-model/use-case";
 
 export const modelModuleConfig: ModuleConfig = {
-  moduleUrls: [modelApiUrl],
+    moduleUrls: [modelApiUrl]
 }
 
 export const modelModuleUseCases: UseCase[] = [
@@ -21,12 +22,13 @@ export const modelModuleUseCases: UseCase[] = [
   new AddModelImagesUC(),
   new ReoderModelImagesUC(),
   new DeleteModelImageUC(),
+  new EditModelUC(),
 ]
 
 export const modelModulePermissionCheckers: PerformCheckerService<CraftYardResolvers>[] = [
-  new ThesisSetPerformCheckersService(),
+  new ContentSectionPerformCheckersService(),
+  new FilesPerformCheckersService(),
 ]
 
 export const modelModuleContentDeliverer: ContentDelivererService<CraftYardResolvers>[] = [
-  new ThesisSetContentDeliverer(),
 ]

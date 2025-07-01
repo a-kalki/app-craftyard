@@ -1,6 +1,6 @@
-//import {} from "./widgets/model-details.svelte";
 import {} from "./entity/model-images";
+import {} from "./entity/edit-model";
 
-import {} from "./widgets/model-details";
-import {} from "./widgets/model-card";
+import {} from "./feature/model-details";
+import {} from "./feature/model-card";
 import {} from "./widgets/models";

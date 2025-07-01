@@ -7,8 +7,9 @@ import type { FileBackendLocalApi } from '#files/ui/files-api';
 import type { UiUserFacade } from '#app/domain/user/facade';
 import type { UiModelsFacade } from '#models/domain/facade';
 import type { UiWorkshopsFacade } from '#workshop/domain/facade';
-import type { ThesisSetBackendApi } from '#user-contents/ui/thesis-set-api';
 import type { UiFileFacade } from '#files/ui/facade';
+import type { ContentSectionBackendApi } from '#user-contents/ui/section-api';
+import type { UserContentApi } from '#user-contents/ui/content-api';
 
 export abstract class BaseElement extends LitElement {
   protected globalAttr<T>(key: string): T {
@@ -52,7 +53,11 @@ export abstract class BaseElement extends LitElement {
     return this.globalAttr('workshopFacade');
   }
 
-  get thesisSetApi(): ThesisSetBackendApi {
-    return this.globalAttr('thesisSetApi')
+  get contentSectionApi(): ContentSectionBackendApi {
+    return this.globalAttr('contentSectionApi')
+  }
+
+  get userContentApi(): UserContentApi {
+    return this.globalAttr('userContentApi');
   }
 }

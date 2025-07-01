@@ -2,22 +2,27 @@ import { QueryUseCase, type RequestScope } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs, type Result, type UCMeta } from "rilata/core";
 import type { UserContentModuleResolvers } from "./types";
 import type { AggregateDoesNotExistError } from "#app/domain/errors";
-import type { ThesisSetRepo } from "#user-contents/domain/thesis-set/repo";
-import type { ThesisSetAttrs } from "#user-contents/domain/thesis-set/struct/attrs";
-import { ThesisSetAr } from "#user-contents/domain/thesis-set/a-root";
+import type { ContentSectionRepo } from "#user-contents/domain/section/repo";
+import type { ContentSectionAttrs } from "#user-contents/domain/section/struct/attrs";
+import { ContentSectionAr } from "#user-contents/domain/section/a-root";
 import type { CanPerformPayload } from "rilata/api-server";
+import type { UserContentRepo } from "#user-contents/domain/content/repo";
 
 export abstract class UserContentUseCase<META extends UCMeta> extends QueryUseCase<
   UserContentModuleResolvers, META
 > {
   protected transactionStrategy!: never;
 
-  getThesisSetRepo(): ThesisSetRepo {
-    return this.moduleResolver.thesisSetRepo;
+  getContentSectionRepo(): ContentSectionRepo {
+    return this.moduleResolver.contentSectionRepo;
   }
 
-  async getThesisSetAttrs(id: string): Promise<Result<AggregateDoesNotExistError, ThesisSetAttrs>> {
-    const thesisSetAttrs = await this.moduleResolver.thesisSetRepo.findThesisSet(id);
+  getUserContentRepo(): UserContentRepo {
+    return this.moduleResolver.userContentRepo
+  }
+
+  async getContentSectionAttrs(id: string): Promise<Result<AggregateDoesNotExistError, ContentSectionAttrs>> {
+    const thesisSetAttrs = await this.moduleResolver.contentSectionRepo.findContentSection(id);
     if (!thesisSetAttrs) {
       return failure({
         name: 'AggregateDoesNotExistError',
@@ -28,10 +33,10 @@ export abstract class UserContentUseCase<META extends UCMeta> extends QueryUseCa
     return success(thesisSetAttrs);
   }
 
-  async getFileAr(id: string): Promise<Result<AggregateDoesNotExistError, ThesisSetAr>> {
-    const res = await this.getThesisSetAttrs(id);
+  async getFileAr(id: string): Promise<Result<AggregateDoesNotExistError, ContentSectionAr>> {
+    const res = await this.getContentSectionAttrs(id);
     if (res.isFailure()) return failure(res.value);
-    return success(new ThesisSetAr(res.value));
+    return success(new ContentSectionAr(res.value));
   }
 
   async canAction(aggrData: AbstractAggregateAttrs, reqData: RequestScope): Promise<boolean> {

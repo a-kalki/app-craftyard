@@ -1,0 +1,37 @@
+{
+  "0197b4c3-8076-7f98-bfb1-2977b9173d08": {
+    "id": "0197b4c3-8076-7f98-bfb1-2977b9173d08",
+    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
+    "ownerName": "ModelAr",
+    "context": "additional-info",
+    "access": "public",
+    "title": "Для новичков (дома)",
+    "icon": "person-check",
+    "createAt": 1751084400759,
+    "updateAt": 1751084400759,
+    "type": "thesis-set"
+  },
+  "0197b72b-9662-7183-af32-cebc9e84b37a": {
+    "id": "0197b72b-9662-7183-af32-cebc9e84b37a",
+    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
+    "ownerName": "ModelAr",
+    "context": "additional-info",
+    "access": "public",
+    "title": "Для мастеров (цех)",
+    "icon": "person-fill-check",
+    "createAt": 1751124776548,
+    "updateAt": 1751124776548,
+    "type": "thesis-set"
+  },
+  "0197c6b8-5237-74d2-8111-197524fae061": {
+    "id": "0197c6b8-5237-74d2-8111-197524fae061",
+    "ownerId": "5c62a9ba-a686-4472-9ffe-b40aa7296e17",
+    "context": "additional-info",
+    "ownerName": "ModelAr",
+    "access": "public",
+    "title": "Для новичков",
+    "icon": "star-fill",
+    "createAt": 1751385657915,
+    "updateAt": 1751385657915
+  }
+}
