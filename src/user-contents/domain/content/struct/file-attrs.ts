@@ -3,8 +3,8 @@ import type { ContentAttrs } from "./attrs";
 export type FileType = 'PDF' | 'VIDEO';
 
 export type FileContent = ContentAttrs & {
-  fileId: string;
   type: 'FILE';
+  fileId: string;
   fileType: FileType;
   thumbnailId?: string;
   description?: string; // maybe markdown

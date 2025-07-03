@@ -49,7 +49,7 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
     }
   }
 
-  async getFile(id: string): Promise<GetFileEntryResult> {
+  async getFileEntry(id: string): Promise<GetFileEntryResult> {
     const command: GetFileCommand = {
       name: 'get-file',
       attrs: { id },
@@ -58,7 +58,7 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
     return this.request<GetFileUcMeta>(command);
   }
 
-  async updateFile(id: string, patch: UpdateFileCommand['attrs']['patch']): Promise<UpdateFileResult> {
+  async updateFileEntry(id: string, patch: UpdateFileCommand['attrs']['patch']): Promise<UpdateFileResult> {
     const command: UpdateFileCommand = {
        name: 'update-file',
        attrs: { id, patch },
@@ -67,7 +67,7 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
     return this.request<UpdateFileUcMeta>(command);
   }
 
-  async deleteFile(id: string): Promise<DeleteFileResult> {
+  async deleteFileEntry(id: string): Promise<DeleteFileResult> {
     const command: DeleteFileCommand = {
       name: "delete-file", attrs: { id }, requestId: crypto.randomUUID()
     }

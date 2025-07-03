@@ -12,6 +12,9 @@ export const userContentVmap: ValidatorMap<ContentAttrs> = {
   title: new LiteralFieldValidator('title', true, { isArray: false }, 'string', [
     new MinCharsCountValidationRule(5, 'Название должно содержать не менее 5 символов'),
   ]),
+  footer: new LiteralFieldValidator('footer', false, { isArray: false }, 'string', [
+    new MinCharsCountValidationRule(10, 'Футер должен содержать не менее 10 символов'),
+  ]),
   order: new LiteralFieldValidator('order', false, { isArray: false }, 'number', [
     new PositiveNumberValidationRule(),
   ]),
@@ -29,9 +32,6 @@ export const thesisVmap: ValidatorMap<ThesisContent> = {
   body: new LiteralFieldValidator('body', true, { isArray: false }, 'string', [
     new MinCharsCountValidationRule(10, 'Тезис должен содержать не менее 10 символов'),
   ]),
-  footer: new LiteralFieldValidator('footer', false, { isArray: false }, 'string', [
-    new MinCharsCountValidationRule(10, 'Футер должен содержать не менее 10 символов'),
-  ]),
 }
 
 export const thesisContentValidator = new DtoFieldValidator<string, true, false, DTO>(
@@ -45,7 +45,7 @@ export const fileTypes: UnionToTuple<FileType> = ['PDF', 'VIDEO'];
 
 export const fileContentVmap: ValidatorMap<FileContent> = {
   ...userContentVmap,
-  type: new StrictEqualFieldValidator('type', thesisContentType),
+  type: new StrictEqualFieldValidator('type', fileContentType),
   description: new LiteralFieldValidator('description', false, { isArray: false }, 'string', []),
   fileId: uuidFieldValidator.cloneWithName('fileId'),
   fileType: new LiteralFieldValidator('fileType', true, { isArray: false }, 'string', [
@@ -55,5 +55,5 @@ export const fileContentVmap: ValidatorMap<FileContent> = {
 }
 
 export const fileContentValidator = new DtoFieldValidator<string, true, false, DTO>(
-  'fileContent', true, { isArray: false }, 'dto', thesisVmap,
+  'fileContent', true, { isArray: false }, 'dto', fileContentVmap,
 )

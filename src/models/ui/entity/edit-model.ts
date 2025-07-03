@@ -6,16 +6,12 @@ import { MODEL_CATEGORY_KEYS, MODEL_CATEGORY_TITLES } from '#models/domain/struc
 import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
 import type { EditModelCommand } from '#models/domain/struct/edit-model/contract';
 import { dtoUtility } from 'rilata/utils';
-import { costVmap } from '#app/domain/v-map';
 import { editModelVmap } from '#models/domain/struct/edit-model/v-map';
 
-type EditModelAttrs = Omit<EditModelCommand['attrs'], 'cost'> & { price: number };
-
-const { cost, ...rest } = editModelVmap;
-const validatorMap = { ...rest, price: costVmap.price };
+type EditModelAttrs = EditModelCommand['attrs'];
 
 @customElement('edit-model-modal')
-export class EditModelModal extends ValidatableElement<keyof EditModelAttrs> {
+export class EditModelModal extends ValidatableElement<EditModelAttrs> {
   @property({ type: Object }) model!: ModelAttrs;
   @property({ type: Boolean, reflect: true }) open = false;
 
@@ -40,11 +36,11 @@ export class EditModelModal extends ValidatableElement<keyof EditModelAttrs> {
     }
   `;
 
-  protected validatorMap = validatorMap;
+  protected validatorMap = editModelVmap;
 
   async show(model: ModelAttrs): Promise<{ id: string } | null> {
     this.model = model;
-    this.formData = dtoUtility.excludeAttrs( { ...model, price: model.cost.price }, 'cost' );
+    this.formData = { ...model };
     this.open = true;
     this.isLoading = false;
 
@@ -70,11 +66,13 @@ export class EditModelModal extends ValidatableElement<keyof EditModelAttrs> {
     this.isLoading = true;
     try {
       const command: EditModelCommand['attrs'] = {
-        cost: { 
-          price: this.formData.price,
-          currency: 'KZT',
-        },
-        ...dtoUtility.excludeAttrs(this.formData, 'price'),
+        id: this.formData.id,
+        title: this.formData.title,
+        description: this.formData.description,
+        categories: this.formData.categories,
+        difficultyLevel: this.formData.difficultyLevel,
+        estimatedTime: this.formData.estimatedTime,
+        cost: this.formData.cost,
       };
       const result = await this.modelApi.editModel(command);
       if (result.isFailure()) {
@@ -154,10 +152,10 @@ export class EditModelModal extends ValidatableElement<keyof EditModelAttrs> {
           <sl-input
             label="Цена"
             type="number"
-            .value=${this.formData.price.toString()}
-            @sl-input=${this.createValidateHandler('price')}
+            .value=${this.formData.cost.price.toString()}
+            @sl-input=${this.createValidateHandler('cost')}
           ></sl-input>
-          ${this.renderFieldErrors('price')}
+          ${this.renderFieldErrors('cost')}
         </div>
 
         <sl-button slot="footer" @click=${this.hide}>Отмена</sl-button>
@@ -175,17 +173,21 @@ export class EditModelModal extends ValidatableElement<keyof EditModelAttrs> {
   }
 
   protected getFieldValue(field: keyof EditModelAttrs): unknown {
+    if (field === 'cost') return this.formData.cost.price;
     return this.formData[field];
   }
 
   protected setFieldValue(field: keyof EditModelAttrs, value: unknown): void {
-    if (this.formData[field] !== undefined && value === undefined) {
-      // @ts-expect-error: будет выведена ошибка валидации
-      this.formData[field] = null;
-      return;
+    let toSetValue = value;
+    if (this.formData[field] !== undefined && toSetValue === undefined) {
+      toSetValue = null;
     }
-    // @ts-expect-error: будет выведена ошибка валидации
-    this.formData[field] = value;
+    if (field === 'cost') {
+      this.formData.cost.price = Number(toSetValue);
+      return
+    }
+    // @ts-expect-error: ошибка типов будет обработана валидацией
+    this.formData[field] = toSetValue;
   }
 }
 

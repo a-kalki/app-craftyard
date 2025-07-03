@@ -91,7 +91,7 @@ export class ModelCardWidget extends BaseElement {
     const imageId = this.model.imageIds[0];
     if (!imageId) return;
 
-    const getResult = await this.fileApi.getFile(imageId);
+    const getResult = await this.fileApi.getFileEntry(imageId);
     if (getResult.isFailure()) return;
     this.previewUrl = getResult.value.url;
   }

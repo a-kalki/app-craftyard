@@ -1,4 +1,3 @@
-import { exists } from 'node:fs/promises';
 import { join } from 'node:path';
 import { FileController } from "rilata/api";
 import { responseUtility, type ResponseFileOptions } from "rilata/api-helper";

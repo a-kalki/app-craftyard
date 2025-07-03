@@ -8,7 +8,7 @@ import { customElement, property, state } from "lit/decorators.js";
 type AddContentSectionType = Pick<AddContentSectionCommand['attrs'], 'title' | 'icon'>;
 
 @customElement('add-content-section-modal')
-export class AddContentSectionModal extends ValidatableElement<keyof AddContentSectionType> {
+export class AddContentSectionModal extends ValidatableElement<AddContentSectionType> {
   @property({ type: Object }) ownerAttrs!: CyOwnerAggregateAttrs;
   @property({ type: Boolean, reflect: true }) open = false;;
 

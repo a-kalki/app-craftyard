@@ -3,6 +3,7 @@ export type ContentAttrs = {
   sectionId: string,
   type: string;
   title: string;
+  footer?: string;
   order?: number;
   icon?: string;
   createAt: number;

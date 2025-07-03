@@ -6,10 +6,10 @@ import type { FileUploadResult, UploadFileInput } from "#files/domain/struct/upl
 export interface UiFileFacade {
   uploadFile(options: UploadFileInput): Promise<FileUploadResult>;
 
-  getFile(id: string): Promise<GetFileEntryResult>;
+  getFileEntry(id: string): Promise<GetFileEntryResult>;
 
-  updateFile(id: string, attrs: UploadFileInput): Promise<UpdateFileResult>;
+  updateFileEntry(id: string, attrs: UploadFileInput): Promise<UpdateFileResult>;
 
-  deleteFile(id: string): Promise<DeleteFileResult>
+  deleteFileEntry(id: string): Promise<DeleteFileResult>
 }
 

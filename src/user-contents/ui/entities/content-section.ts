@@ -2,9 +2,9 @@ import { html, css, type TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import type { ContentSectionAttrs } from '#user-contents/domain/section/struct/attrs';
-import type { UserContent } from '#user-contents/domain/content/meta';
-import type { ThesisContent } from '#user-contents/domain/content/struct/thesis-attrs';
-import type { FileContent } from '#user-contents/domain/content/struct/file-attrs';
+import type { ContentTypes, UserContent } from '#user-contents/domain/content/meta';
+import { ContentComponentManager } from '#user-contents/ui/content-component-manager'; // Импортируем менеджер
+import type { CyOwnerAggregateAttrs } from '#app/domain/types';
 
 @customElement('content-section')
 export class ContentSection extends BaseElement {
@@ -64,8 +64,12 @@ export class ContentSection extends BaseElement {
   @property({ type: Boolean }) canEdit = false;
 
   @state() sectionContents: UserContent[] = [];
-
   protected isLoading = false;
+
+  // Создаем экземпляр менеджера. Поскольку он без состояния, его можно создать один раз.
+  private contentComponentManager = new ContentComponentManager();
+
+  protected lastUsedIcon: ContentTypes = 'THESIS';
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -81,106 +85,12 @@ export class ContentSection extends BaseElement {
       );
       return;
     }
-    this.sectionContents = [ ...getResult.value ];
+    this.sectionContents = [...getResult.value];
     this.sortContents();
   }
 
   private sortContents() {
     this.sectionContents = [...this.sectionContents].sort((a, b) => (a.order || 0) - (b.order || 0));
-  }
-
-
-  render() {
-    const { title, icon } = this.contentSection;
-
-    return html`
-      <div class="content-section">
-          <div class="header">
-            <div class="title-container">
-              ${icon ? html`<sl-icon name=${icon}></sl-icon>` : ''}
-              <h2 class="title">${title}</h2>
-            </div>
-            
-            ${this.canEdit ? html`
-              <div class="actions">
-                <sl-tooltip content="Добавить тезис" placement="bottom">
-                  <sl-button 
-                    class="action-btn"
-
-                    size="small"
-                    @click=${this.handleAddThesis}
-                    @contextmenu=${(e: Event) => e.preventDefault()}
-                  >
-                    <sl-icon name="plus-lg"></sl-icon>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip content="Редактировать раздел" placement="bottom">
-                  <sl-button 
-                    class="action-btn"
-                    size="small"
-                    @click=${this.handleEditContentSection}
-                    @contextmenu=${(e: Event) => e.preventDefault()}
-                  >
-                    <sl-icon name="pencil"></sl-icon>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip content="Удалить раздел" placement="bottom">
-                  <sl-button 
-                    class="action-btn"
-                    size="small"
-                    variant="danger"
-                    @click=${this.handleDeleteContentSection}
-                    @contextmenu=${(e: Event) => e.preventDefault()}
-                  >
-                    <sl-icon name="trash"></sl-icon>
-                  </sl-button>
-                </sl-tooltip>
-              </div>
-            ` : ''}
-          </div>
-
-          ${this.sectionContents.length > 0 ? html`
-            <div class="theses-container">
-              ${this.sectionContents.map(content => {
-                if (content.type === 'THESIS') return this.renderThesisContent(content)
-                else if (content.type === 'FILE') return this.renderFileContent(content)
-                return '';
-              })}
-            </div>
-          ` : ''}
-      </div>
-    `;
-  }
-
-  private renderThesisContent(thesis: ThesisContent): TemplateResult {
-    return html`
-      <thesis-card 
-        .thesis=${thesis}
-        .canEdit=${this.canEdit}
-        @thesis-edited=${() => this.loadContents(true)}
-        @thesis-deleted=${() => this.loadContents(true)}
-      ></thesis-card>
-    `
-  }
-
-  private renderFileContent(fileContent: FileContent): TemplateResult {
-    return html` <p>скоро будет реализовано...</p> `;
-  }
-
-  private async handleAddThesis() {
-    const modal = document.createElement('add-thesis-modal');
-    
-    try {
-      this.isLoading = true;
-      const newContentId = await modal.show(this.contentSection.id);
-      if (!newContentId) return;
-
-      this.loadContents(true);
-    } catch (error) {
-      this.app.error(`[${this.constructor.name}]: Ошибка при добавлении тезиса.`, { error })
-    } finally {
-      this.isLoading = false;
-    }
   }
 
   private async dispatchEditedEvent(): Promise<void> {
@@ -192,7 +102,7 @@ export class ContentSection extends BaseElement {
 
   private async handleEditContentSection() {
     const modal = document.createElement('content-section-edit-modal');
-    
+
     try {
       const result = await modal.show(this.contentSection);
       if (result) {
@@ -222,10 +132,103 @@ export class ContentSection extends BaseElement {
       return;
     }
     this.app.info('Раздел успешно удален.');
-    
+
     this.dispatchEvent(new CustomEvent('content-section-deleted', {
       detail: { id: this.contentSection.id },
     }));
+  }
+
+  /** Добавление нового контента. Модальное окно рендерится менеджером контентов. */
+  private async handleAddByType(type: ContentTypes) {
+    try {
+      this.lastUsedIcon = type;
+      this.isLoading = true;
+      const ownerAttrs: CyOwnerAggregateAttrs = {
+        ownerId: this.contentSection.ownerId,
+        ownerName: this.contentSection.ownerId,
+        access: this.contentSection.access,
+        context: this.contentSection.context,
+      }
+      const modal = this.contentComponentManager.getAddContentModal(type)
+      const result = await modal.show(this.contentSection.id, ownerAttrs);
+      if (result) {
+        this.loadContents(true);
+      }
+    } catch (error) {
+      this.app.error(`[${this.constructor.name}]: Ошибка при добавлении контента.`, { error });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  render() {
+    const { title, icon } = this.contentSection;
+    const ownerAttrs: CyOwnerAggregateAttrs = {
+      ownerId: this.contentSection.ownerId,
+      ownerName: this.contentSection.ownerName,
+      access: this.contentSection.access,
+      context: this.contentSection.context,
+    }
+
+    return html`
+      <div class="content-section">
+        <div class="header">
+          <div class="title-container">
+            ${icon ? html`<sl-icon name=${icon}></sl-icon>` : ''}
+            <h2 class="title">${title}</h2>
+          </div>
+
+          ${this.canEdit ? html`
+            <div class="actions">
+              ${this.renderButtons()}
+            </div>
+          ` : ''}
+        </div>
+
+        ${this.sectionContents.length > 0 ? html`
+          <div class="theses-container">
+            ${this.sectionContents.map(content =>
+              this.contentComponentManager.renderContent(
+                content,
+                ownerAttrs,
+                this.canEdit,
+                this.loadContents.bind(this),
+              )
+            )}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  protected renderButtons(): TemplateResult {
+    return html`
+      ${this.contentComponentManager.renderAddContentControls(
+        this.lastUsedIcon,
+        this.handleAddByType.bind(this),
+      )}
+      <sl-tooltip content="Редактировать раздел" placement="bottom">
+        <sl-button
+          class="action-btn"
+          size="small"
+          @click=${this.handleEditContentSection}
+          @contextmenu=${(e: Event) => e.preventDefault()}
+        >
+          <sl-icon name="pencil"></sl-icon>
+        </sl-button>
+      </sl-tooltip>
+      <sl-tooltip content="Удалить раздел" placement="bottom">
+        <sl-button
+          class="action-btn"
+          size="small"
+          variant="danger"
+          @click=${this.handleDeleteContentSection}
+          @contextmenu=${(e: Event) => e.preventDefault()}
+        >
+          <sl-icon name="trash"></sl-icon>
+        </sl-button>
+      </sl-tooltip>
+    `;
   }
 }
 

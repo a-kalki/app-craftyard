@@ -307,12 +307,12 @@ export class UserEditFeature extends BaseElement {
         @sl-input=${(e: CustomEvent) => this.name = (e.target as HTMLInputElement).value}
       ></sl-input>
       
-      <single-image-upload
+      <image-upload
         .url=${this.user.profile.avatarUrl}
         .ownerAttrs=${ownerAttrs}
         .aspectRatio=${1/1}
         @image-loaded=${this.handleAvatarChanged}
-      ></single-image-upload>
+      ></image-upload>
       
       <sl-input
         label="Ник в Телеграм"

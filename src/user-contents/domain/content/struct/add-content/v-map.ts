@@ -25,7 +25,8 @@ export const addFileContentVmap: ValidatorMap<AddFileContentAttrs> = {
   description: fileContentVmap.description,
   fileId: fileContentVmap.fileId,
   fileType: fileContentVmap.fileType,
-  thumbnailId: fileContentVmap.thumbnailId
+  thumbnailId: fileContentVmap.thumbnailId,
+  footer: fileContentVmap.footer
 }
 
 export const addFileContentValidator = new DtoFieldValidator(

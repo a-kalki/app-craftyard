@@ -171,7 +171,7 @@ export class ModelImages extends LitElement {
   private async updateImageUrlsFromIds() {
     const newUrls: string[] = [];
     for (const id of this.imageIds) {
-      const res = await this.fileFacade.getFile(id);
+      const res = await this.fileFacade.getFileEntry(id);
       if (res.isSuccess()) {
         newUrls.push(res.value.url);
       } else {

@@ -8,7 +8,7 @@ import { editContentSectionVmap } from "#user-contents/domain/section/struct/edi
 type EditContentSectionType = EditContentSectionCommand['attrs'];
 
 @customElement('content-section-edit-modal')
-export class ContentSectionEditModal extends ValidatableElement<keyof EditContentSectionCommand['attrs']> {
+export class ContentSectionEditModal extends ValidatableElement<EditContentSectionCommand['attrs']> {
   @property({ type: Object }) thesisSet!: ContentSectionAttrs;
   @property({ type: Boolean, reflect: true }) open = false;
 

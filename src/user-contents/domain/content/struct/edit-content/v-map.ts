@@ -22,6 +22,7 @@ export const editFileContentVmap: ValidatorMap<EditFileContentAttrs> = {
   sectionId: fileContentVmap.sectionId,
   type: fileContentVmap.type,
   title: fileContentVmap.title,
+  footer: fileContentVmap.footer,
   description: fileContentVmap.description,
   order: fileContentVmap.order,
   icon: fileContentVmap.icon,

@@ -1,8 +1,10 @@
-import type { LiteralFieldValidator } from "rilata/validator";
 import { BaseElement } from "./base-element";
-import type { ArrayLiteralFieldErrors, LiteralFieldErrors } from "node_modules/rilata/src/domain/validator/field-validator/types";
+import type { ArrayLiteralFieldErrors, LiteralFieldErrors, ValidatorMap } from "node_modules/rilata/src/domain/validator/field-validator/types";
 import { state } from "lit/decorators.js";
 import { html } from "lit";
+import type { DTO } from "rilata/core";
+import { LiteralFieldValidator } from "rilata/validator";
+import type { LiteralDataType } from "node_modules/rilata/src/domain/validator/rules/types";
 
 type ValidationResult = {
   isValid: false;
@@ -12,11 +14,8 @@ type ValidationResult = {
   errors?: undefined,
 };
 
-export abstract class ValidatableElement<T extends string> extends BaseElement {
-  protected abstract validatorMap: Record<
-    T, 
-    LiteralFieldValidator<T, boolean, boolean, any>
-  >;
+export abstract class ValidatableElement<T extends DTO> extends BaseElement {
+  protected abstract validatorMap: ValidatorMap<T>;
 
   protected errorsStyleTemplate = `
     .error {
@@ -26,13 +25,13 @@ export abstract class ValidatableElement<T extends string> extends BaseElement {
     }
   `;
 
-  protected abstract getFieldValue(field: T): unknown;
+  protected abstract getFieldValue(field: keyof T): unknown;
 
-  protected abstract setFieldValue(field: T, value: unknown): void;
+  protected abstract setFieldValue(field: keyof T, value: unknown): void;
 
-  @state() protected fieldErrors: Partial<Record<T, string[]>> = {};
+  @state() protected fieldErrors: Partial<Record<keyof T, string[]>> = {};
 
-  protected createValidateHandler(field: T) {
+  protected createValidateHandler(field: keyof T & string) {
     return (e: Event) => {
       const target = e.target as HTMLInputElement;
       const value =
@@ -46,7 +45,7 @@ export abstract class ValidatableElement<T extends string> extends BaseElement {
     };
   }
 
-  protected validateAndUpdateField(field: T) {
+  protected validateAndUpdateField(field: keyof T & string) {
     const { isValid, errors } = this.validateField(field);
     
     if (isValid) {
@@ -56,8 +55,18 @@ export abstract class ValidatableElement<T extends string> extends BaseElement {
     }
   }
 
-  protected validateField(field: T): ValidationResult {
+  protected getValidator(
+    field: keyof T & string,
+  ): LiteralFieldValidator<string, boolean, boolean, LiteralDataType> {
     const validator = this.validatorMap[field];
+    if (validator instanceof LiteralFieldValidator) {
+      return validator;
+    }
+    throw Error('finded validator not LiteralFieldValidator: ' + validator?.constructor.name)
+  }
+
+  protected validateField(field: keyof T & string): ValidationResult {
+    const validator = this.getValidator(field);
     if (!validator) throw Error(`Validator not found for ${field}`);
 
     const value = this.getFieldValue(field);
@@ -72,27 +81,27 @@ export abstract class ValidatableElement<T extends string> extends BaseElement {
   }
 
   protected validateAll(): boolean {
-    let isValid = true;
+    let result = true;
     
-    (Object.keys(this.validatorMap) as T[]).forEach(field => {
-      const { isValid: fieldValid } = this.validateField(field);
-      if (!fieldValid) isValid = false;
+    (Object.keys(this.validatorMap) as Array<keyof T & string>).forEach(field => {
+      const { isValid } = this.validateField(field);
+      if (!isValid) result = false;
     });
 
-    return isValid;
+    return result;
   }
 
-  protected setFieldError(field: T, errors: string[]): void {
+  protected setFieldError(field: keyof T & string, errors: string[]): void {
     this.fieldErrors = { ...this.fieldErrors, [field]: errors };
   }
 
-  protected clearFieldError(field: T): void {
+  protected clearFieldError(field: keyof T): void {
     const newErrors = { ...this.fieldErrors };
     delete newErrors[field];
     this.fieldErrors = newErrors;
   }
 
-  protected renderFieldErrors(field: T) {
+  protected renderFieldErrors(field: keyof T) {
     return this.fieldErrors[field]?.map(error => 
       html`<div class="error">${error}</div>`
     );
@@ -100,7 +109,7 @@ export abstract class ValidatableElement<T extends string> extends BaseElement {
 
   private extractErrors(
     errors: LiteralFieldErrors | ArrayLiteralFieldErrors,
-    field: T,
+    field: keyof T & string,
   ): string[] {
     if (!errors || typeof errors !== 'object') return [];
 
@@ -112,7 +121,7 @@ export abstract class ValidatableElement<T extends string> extends BaseElement {
     return (errors as LiteralFieldErrors)[field].map(err => err.text);
   }
 
-  private extractArrayErrors(errors: ArrayLiteralFieldErrors, field: T): string[] {
+  private extractArrayErrors(errors: ArrayLiteralFieldErrors, field: keyof T & string): string[] {
     return Object.entries(errors).flatMap(([index, itemErrors]) => {
       const fieldErrors = itemErrors[field];
       if (!fieldErrors) return [];
