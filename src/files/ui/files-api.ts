@@ -33,14 +33,10 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
         access: options.access
       }
 
-      const formData = new FormData();
-      formData.append(formFileName, file);
-      formData.append('ownerAttrs', JSON.stringify(ownerAttrs));
-      if (comment) formData.append('comment', comment);
-
-      const res = await this.sendFormDataWithProgress(formData, onProgress);
+      const res = await this.sendFileWithProgress(file, ownerAttrs, comment, onProgress);
       return res.success ? success(res.payload) : failure(res.payload);
     } catch (err) {
+      console.log(err);
       return failure({
         name: 'Internal error',
         description: 'При загрузке файла произошла ошибка',
@@ -74,17 +70,31 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
     return this.request<DeleteFileUcMeta>(command);
   }
 
-  protected sendFormDataWithProgress(
-    formData: FormData,
+  protected sendFileWithProgress(
+    file: File,
+    ownerAttrs: CyOwnerAggregateAttrs,
+    comment?: string,
     onProgress?: (progress: number) => void,
-  ): Promise<ResultDTO<UploadFileUcMeta['errors'], UploadFileUcMeta['success']>>  {
+  ): Promise<ResultDTO<UploadFileUcMeta['errors'], UploadFileUcMeta['success']>> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
-      xhr.open('POST', this.moduleUrl);
+      // Добавляем метаданные в заголовки или URL-параметры
+      const baseUrl = window.location.origin;
+      const url = new URL(this.moduleUrl, baseUrl);
+      url.searchParams.append('ownerAttrs', JSON.stringify(ownerAttrs));
+      url.searchParams.append('name', file.name);
+      url.searchParams.append('size', file.size.toString());
+      url.searchParams.append('mimeType', file.type);
+      if (comment) url.searchParams.append('comment', comment);
+
+      xhr.open('POST', url.toString());
       if (this.accessToken) {
         xhr.setRequestHeader('Authorization', `Bearer ${this.accessToken}`);
       }
+      // Устанавливаем Content-Type как для бинарных данных
+      xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream'); // Важно!
+      xhr.setRequestHeader('X-File-Operation', 'upload');
 
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable && onProgress) {
@@ -106,7 +116,7 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
         reject(new Error('File upload failed'));
       };
 
-      xhr.send(formData);
+      xhr.send(file); // Отправляем сам файл как тело запроса
     });
   }
 }

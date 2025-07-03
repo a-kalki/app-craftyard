@@ -23,7 +23,7 @@ export class VideoUploadInput extends BaseFileUpload {
     super();
     this.label = 'URL видео';
     this.fileAccept = 'video/*';
-    this.uploadIcon = 'play-btn';
+    this.uploadIcon = 'download';
   }
 
   protected renderPreview(): TemplateResult | null {

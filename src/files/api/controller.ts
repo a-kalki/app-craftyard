@@ -17,45 +17,40 @@ export class FileModuleController extends WebModuleController {
       });
     }
 
-    const contentType = req.headers.get('content-type');
-    if (!contentType?.startsWith('multipart/form-data')) {
-      return super.getInputData(req); // обычный json запрос
+    const fileOperationHeader = req.headers.get('X-File-Operation');
+    if ( fileOperationHeader !== 'upload') return super.getInputData(req);
+
+    const url = new URL(req.url);
+    const rawOwnerAttrs = url.searchParams.get('ownerAttrs');
+    const comment = url.searchParams.get('comment') ?? undefined;
+    const name = url.searchParams.get('name') ?? ''; // пустую строку поймает валидатор
+    const size = Number(url.searchParams.get('size') ?? -1); // -1 поймает валидатор
+    const mimeType = url.searchParams.get('mimeType') ?? ''; // пустую строку поймает валидатор
+
+    if (!rawOwnerAttrs) {
+      throw this.module.getLogger().error(
+        `[${this.constructor}]: not find owner attrs`,
+        { ownerAttrs: rawOwnerAttrs }
+      );
     }
+    const ownerAttrs = JSON.parse(rawOwnerAttrs) as CyOwnerAggregateAttrs;
 
-    try {
-      const formData = await req.formData();
-      const file = formData.get(this.module.getModuleResolver().formFieldName);
-      if (!file || !(file instanceof File)) {
-        return failure({
-          name: 'Bad request error',
-          description: 'No file provided',
-          type: 'app-error',
-        });
-      }
-
-      const rawOwnerAttrs = formData.get('ownerAttrs') as string;
-      if (!rawOwnerAttrs) {
-        throw this.module.getLogger().error(
-          `[${this.constructor}]: not find owner attrs`,
-          { ownerAttrs: rawOwnerAttrs }
-        );
-      }
-      const ownerAttrs = JSON.parse(rawOwnerAttrs) as CyOwnerAggregateAttrs;
-      const inputDto: UploadFileCommand = {
-        name: "upload-file",
-        attrs: {
-          file: file as File,
-          ...ownerAttrs,
-          comment: formData.get('comment') as string,
+    const inputDto: UploadFileCommand = {
+      name: "upload-file",
+      attrs: {
+        fileData: {
+          file: req.body as ReadableStream<Uint8Array>,
+          size,
+          mimeType,
+          name,
         },
-        requestId: uuidUtility.getNewUuidV7(),
-      }
-      return success(inputDto);
-    } catch (e) {
-      return failure({
-        name: 'Bad request error',
-        type: 'app-error',
-      });
-    }
+        entryData: {
+          ...ownerAttrs,
+          comment
+        }
+      },
+      requestId: uuidUtility.getNewUuidV7(),
+    };
+    return success(inputDto);
   }
 }

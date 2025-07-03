@@ -24,7 +24,7 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
     input: UploadFileCommand, reqScope: RequestScope,
   ): Promise<DomainResult<UploadFileUcMeta>> {
     const id = uuidUtility.getNewUuidV7();
-    const canPerform = await this.canPerform({ id, ...input.attrs }, reqScope);
+    const canPerform = await this.canPerform({ id, ...input.attrs.entryData }, reqScope);
     if (!canPerform) {
       return failure({
         name: 'AddingIsNotPermittedError',
@@ -33,8 +33,9 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
       });
     }
 
-    const { file, comment, access, context, ownerName, ownerId } = input.attrs;
-    if (!(file instanceof File)) {
+    const { file, size, mimeType, name } = input.attrs.fileData;
+    const { comment, access, context, ownerName, ownerId } = input.attrs.entryData;
+    if (!(file instanceof ReadableStream)) {
       return failure({
         name: 'Bad file Error',
         description: 'Полученный данные не являются файлом.',
@@ -43,21 +44,21 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
     }
 
     try {
-      const extension = path.extname(file.name);
+      const extension = path.extname(name);
       const uuidFileName = `/${id}${extension}`;
-      const contexDir = `/${input.attrs.context}`;
+      const contexDir = `/${context}`;
       const destinationDir = path.join(this.moduleResolver.fileDir, contexDir);
       mkdirSync(path.dirname(destinationDir), { recursive: true });
       const destinationPath = path.join(destinationDir, uuidFileName);
 
-      await Bun.write(destinationPath, file);
+      await this.saveToFile(file, destinationPath);
 
       const url = `${this.moduleResolver.fileUrlPath}${contexDir}${uuidFileName}`.replace(/\/+/g, '/');
       const fileEntry: FileEntryAttrs = {
           id,
           url,
-          mimeType: file.type,
-          size: file.size,
+          mimeType,
+          size,
           ownerId,
           ownerName,
           access,
@@ -78,6 +79,20 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
         { input, reqScope },
         err as Error,
       )
+    }
+  }
+
+  protected async saveToFile(file: ReadableStream, destinationPath: string): Promise<void> {
+    const writer = Bun.file(destinationPath).writer();
+    const reader = file.getReader();
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+            writer.end();
+            break;
+        }
+        writer.write(value);
     }
   }
 }

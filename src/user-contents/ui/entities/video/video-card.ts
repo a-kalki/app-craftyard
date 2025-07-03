@@ -5,9 +5,6 @@ import type { FileContent } from '#user-contents/domain/content/struct/file-attr
 import { BaseContentCard } from '../base-content/content-card';
 import type { EditUserContentModalDialog } from '../base-content/types';
 
-import '#user-contents/ui/entities/video/edit-video-content';
-
-
 @customElement('video-card')
 export class VideoCard extends BaseContentCard<FileContent> {
   static styles = [

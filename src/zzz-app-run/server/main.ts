@@ -10,6 +10,7 @@ import { IndexHtmlFileController } from "#app/api/controllers/index-html-file";
 import { AssetFilesController } from "#app/api/controllers/asset-files";
 import {} from '../../app/bot/app.ts';
 import { UploadsFilesController } from "#app/api/controllers/uploads-files.ts";
+import { maxFileSizeByte } from "#files/constants.ts";
 
 const PROJECT_PATH = cwd();
 
@@ -36,7 +37,7 @@ const controllers: Controller[] = [
 ]
 
 const server = new CraftyardServer(
-  getServerConfig(),
+  getServerConfig({ maxUploadFileSizeByte: maxFileSizeByte }),
   craftYardServerResolver,
   modules,
   middlewares,

@@ -11,6 +11,7 @@ import type { CyOwnerAggregateAttrs } from '#app/domain/types';
  * URL поле ввода всегда в режиме "только чтение".
  * Диспатчит событие 'file-loaded' после успешной загрузки файла.
  * Добавлена кнопка для очистки URL, если он установлен.
+ * Включает визуализатор прогресса загрузки.
  */
 export abstract class BaseFileUpload extends BaseElement {
   static styles: CSSResultGroup = css`
@@ -41,10 +42,11 @@ export abstract class BaseFileUpload extends BaseElement {
   @property({ type: String }) label: string = 'URL файла'; // Метка для поля ввода
   @property({ type: String }) fileAccept: string = '*/*'; // Типы файлов, которые принимает input (например, 'image/*', 'application/pdf')
   @property({ type: String }) uploadIcon: string = 'upload'; // Иконка для кнопки загрузки с диска
-  @property({ type: Boolean }) clearable: boolean = true; // NEW: Разрешает показывать кнопку очистки
+  @property({ type: Boolean }) clearable: boolean = true; // Разрешает показывать кнопку очистки
 
   protected fileInput: Ref<HTMLInputElement> = createRef();
   @state() protected isUploading = false;
+  @state() protected uploadProgress = 0; // NEW: Состояние для прогресса загрузки (0-100)
 
   @state() protected url?: string;
 
@@ -98,18 +100,21 @@ export abstract class BaseFileUpload extends BaseElement {
             ></sl-icon-button>
             ${this.fileId && this.clearable
               ? html`
-                <sl-icon-button
-                  slot="suffix"
-                  name="trash"
-                  variant="danger"
-                  label="Удалить"
-                  ?disabled=${this.isUploading}
-                  @click=${this.handleClearUrl}
-                  style="margin-inline-start: var(--sl-spacing-x-small);"
-                ></sl-icon-button>
+                  <sl-icon-button
+                    slot="suffix"
+                    name="trash"
+                    variant="danger"
+                    label="Удалить"
+                    ?disabled=${this.isUploading}
+                    @click=${this.handleClearUrl}
+                    style="margin-inline-start: var(--sl-spacing-x-small);"
+                  ></sl-icon-button>
                 `
               : null}
           </sl-input>
+          ${this.isUploading ? html`
+            <sl-progress-bar value=${this.uploadProgress} style="margin-top: 0.5rem;"></sl-progress-bar>
+          ` : null}
         </div>
         ${this.renderPreview()}
       </div>
@@ -136,7 +141,7 @@ export abstract class BaseFileUpload extends BaseElement {
   }
 
   /**
-   * NEW: Обработчик для кнопки очистки URL.
+   * Обработчик для кнопки очистки URL.
    * Очищает текущий URL и диспатчит событие file-loaded.
    */
   private async handleClearUrl(): Promise<void> {
@@ -155,6 +160,8 @@ export abstract class BaseFileUpload extends BaseElement {
     }
 
     this.isUploading = true;
+    this.uploadProgress = 0; // Сбрасываем прогресс в начале загрузки
+
     try {
       const processedFile = await this.processFileBeforeUpload(file);
       if (!processedFile) {
@@ -166,11 +173,19 @@ export abstract class BaseFileUpload extends BaseElement {
       const uploadInput: UploadFileInput = {
         ...this.ownerAttrs,
         file: processedFile,
+        // NEW: Передаем onProgress колбэк для обновления состояния
+        onProgress: (progress) => {
+          this.uploadProgress = progress;
+        }
       };
 
       const result = await this.fileApi.uploadFile(uploadInput);
 
       if (result.isFailure()) {
+        if (result.value.name === 'File Size Limit Exceeded Error') {
+          this.app.error('Превышен лимит по размеру файла', { error: result.value });
+          return;
+        }
         this.app.error(`[${this.constructor.name}]: не удалось загрузить файл.`, {
           ownerAttrs: this.ownerAttrs,
           file: { size: processedFile.size, type: processedFile.type, name: processedFile.name }
@@ -184,6 +199,8 @@ export abstract class BaseFileUpload extends BaseElement {
       this.app.error('Ошибка при обработке файла', { err });
     } finally {
       this.isUploading = false;
+      this.uploadProgress = 0; // NEW: Сбрасываем прогресс по завершении
+      input.value = ''; // Очищаем input[type="file"] чтобы можно было загрузить тот же файл снова
     }
   }
 }

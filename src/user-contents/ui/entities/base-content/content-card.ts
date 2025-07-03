@@ -157,7 +157,7 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
     if (this.content.thumbnailId) {
       const thumbResult = await this.fileApi.getFileEntry(this.content.thumbnailId);
       if (thumbResult.isSuccess()) {
-        this.thumbUrl = thumbResult.value.url; // Ошибка была здесь - должно быть thumbResult.value.url
+        this.thumbUrl = thumbResult.value.url;
       } else {
         this.app.error(
           `[${this.constructor.name}]: Не удалось загрузить URL миниатюры для ID: ${this.content.thumbnailId}`,

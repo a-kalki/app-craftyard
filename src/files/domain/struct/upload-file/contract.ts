@@ -12,7 +12,16 @@ export type UploadFileInput = CyOwnerAggregateAttrs & {
 
 export type UploadFileCommand = {
   name: 'upload-file',
-  attrs: CyOwnerAggregateAttrs & Pick<FileEntryAttrs, 'comment'> & { file: unknown },
+  attrs: {
+    fileData: {
+      file: unknown,
+      size: number,
+      mimeType: string,
+      name: string,
+    },
+    entryData: CyOwnerAggregateAttrs & Pick<FileEntryAttrs, 'comment'>,
+
+  },
   requestId: string,
 };
 
@@ -24,11 +33,17 @@ export type BadFileError = {
   type: 'domain-error',
 }
 
+export type FileSizeLimitExceededError = {
+  name: 'File Size Limit Exceeded Error',
+  description: string,
+  type: 'domain-error',
+}
+
 export type UploadFileUcMeta = {
   name: 'Upload File Use Case'
   in: UploadFileCommand,
   success: UploadFileSuccess,
-  errors: BadFileError | AddingIsNotPermittedError,
+  errors: BadFileError | AddingIsNotPermittedError | FileSizeLimitExceededError,
   events: never,
   aRoot: FileEntryArMeta,
 }
