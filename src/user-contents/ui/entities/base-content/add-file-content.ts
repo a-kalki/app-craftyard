@@ -57,7 +57,7 @@ export abstract class BaseAddFileModal extends BaseAddContentModal<AddFileConten
         label="Предпросмотр (необязательно)"
         placeholder="Добавьте миниатюру для файла."
         .ownerAttrs=${thumbOwnerAttrs}
-        .url=${this.fileUrl}
+        .url=${this.thumbnailUrl}
         @file-id-changed=${
           (e: CustomEvent<{url: string, id: string}>) => this.handleFileUrlChanged('thumbnailId', e)
         }

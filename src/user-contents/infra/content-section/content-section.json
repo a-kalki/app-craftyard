@@ -22,16 +22,5 @@
     "createAt": 1751124776548,
     "updateAt": 1751124776548,
     "type": "thesis-set"
-  },
-  "0197c6b8-5237-74d2-8111-197524fae061": {
-    "id": "0197c6b8-5237-74d2-8111-197524fae061",
-    "ownerId": "5c62a9ba-a686-4472-9ffe-b40aa7296e17",
-    "context": "additional-info",
-    "ownerName": "ModelAr",
-    "access": "public",
-    "title": "Для новичков",
-    "icon": "star-fill",
-    "createAt": 1751385657915,
-    "updateAt": 1751385657915
   }
 }

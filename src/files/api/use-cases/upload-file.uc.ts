@@ -48,8 +48,8 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
       const uuidFileName = `/${id}${extension}`;
       const contexDir = `/${context}`;
       const destinationDir = path.join(this.moduleResolver.fileDir, contexDir);
-      mkdirSync(path.dirname(destinationDir), { recursive: true });
       const destinationPath = path.join(destinationDir, uuidFileName);
+      mkdirSync(path.dirname(destinationPath), { recursive: true });
 
       await this.saveToFile(file, destinationPath);
 
@@ -74,6 +74,7 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
 
       throw new AssertionException(`db retruned not changes.`);
     } catch (err) {
+      console.log(err);
       throw this.logger.error(
         `[${this.constructor.name}]: upload file failed.`,
         { input, reqScope },
