@@ -1,5 +1,5 @@
 import type { GetContentSectionCommand } from "./contract";
-import { contentSectionVmap } from "#user-contents/domain/section/v-map";
+import { contentSectionVmap } from "../v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const getContentSectionVmap: ValidatorMap<GetContentSectionCommand['attrs']> = {

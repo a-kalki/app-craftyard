@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { ModelPolicy } from '#models/domain/policy';
-import type { ModelAttrs } from '#models/domain/struct/attrs';
+import type { ModelAttrs, ModelContentContextTypes } from '#models/domain/struct/attrs';
 import { BaseElement } from '#app/ui/base/base-element';
 import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
 import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
@@ -16,6 +16,7 @@ export class ModelDetails extends BaseElement {
 
   @state() private model: ModelAttrs | null = null;
   @state() private canEdit = false;
+  @state() private modelInfo: ContentSectionAttrs[] = [];
 
   constructor() {
     super();
@@ -174,9 +175,10 @@ export class ModelDetails extends BaseElement {
 
     const ownerName: ModelArMeta['name'] = 'ModelAr';
     const access: ContentSectionAttrs['access'] = 'public';
+    const context: ModelContentContextTypes = 'model-info';
     const ownerAttrs: CyOwnerAggregateAttrs = {
       ownerId: this.model.id,
-      context: 'additional-info',
+      context,
       ownerName,
       access
     }

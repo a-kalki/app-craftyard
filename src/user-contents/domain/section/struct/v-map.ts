@@ -2,7 +2,7 @@ import {
     DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule,
     StringChoiceValidationRule, type ValidatorMap,
 } from "rilata/validator";
-import type { AccessType, ContentSectionAttrs } from "./struct/attrs";
+import type { AccessType, ContentSectionAttrs } from "./attrs";
 import {
   timeStampValidator, shoelaceIconValidator, updateAtValidator, uuidFieldValidator,
 } from "#app/domain/base-validators";

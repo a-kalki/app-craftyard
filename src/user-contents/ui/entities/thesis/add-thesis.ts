@@ -26,7 +26,7 @@ export class AddThesisModal extends BaseAddContentModal<AddThesisAttrs> {
         label="Основной текст (Markdown)"
         help-text="Содержание тезиса"
         rows=10
-        .value=${this.commandBody.body ?? ''}
+        .value=${this.formData.body ?? ''}
         @sl-input=${this.createValidateHandler('body')}
       ></sl-textarea>
       ${this.renderFieldErrors('body')}

@@ -5,7 +5,9 @@ import type { AddUserContentCommand, AddUserContentMeta } from "#user-contents/d
 import type { DeleteUserContentCommand, DeleteUserContentMeta } from "#user-contents/domain/content/struct/delete-content/contract";
 import type { EditUserContentCommand, EditUserContentMeta } from "#user-contents/domain/content/struct/edit-content/contract";
 import type { GetUserContentCommand, GetUserContentMeta } from "#user-contents/domain/content/struct/get-content/contract";
-import type { GetSectionContentsCommand, GetSectionContentsMeta, GetSectionContentsSuccess } from "#user-contents/domain/content/struct/get-section-contents/contract";
+import type {
+  GetSectionContentsCommand, GetSectionContentsMeta, GetSectionContentsSuccess,
+} from "#user-contents/domain/content/struct/get-section-contents/contract";
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 
 export class UserContentApi extends BaseBackendApi<UserContent> {

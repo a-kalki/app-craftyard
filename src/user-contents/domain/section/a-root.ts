@@ -3,7 +3,7 @@ import { AggregateRoot } from "rilata/domain";
 import { dtoUtility } from "rilata/utils";
 import type { ContentSectionArMeta } from "./meta";
 import type { ContentSectionAttrs } from "./struct/attrs";
-import { contentSectionValidator } from "./v-map";
+import { contentSectionValidator } from "./struct/v-map";
 
 export class ContentSectionAr extends AggregateRoot<ContentSectionArMeta> {
   name = 'ContentSectionAr' as const;

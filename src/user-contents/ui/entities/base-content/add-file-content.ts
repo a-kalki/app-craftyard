@@ -48,7 +48,7 @@ export abstract class BaseAddFileModal extends BaseAddContentModal<AddFileConten
         label="Описание (необязательно, Markdown)"
         help-text="Дополнительное описание файла"
         rows=5
-        .value=${this.commandBody.description ?? ''}
+        .value=${this.formData.description ?? ''}
         @sl-input=${this.createValidateHandler('description')}
       ></sl-textarea>
       ${this.renderFieldErrors('description')}

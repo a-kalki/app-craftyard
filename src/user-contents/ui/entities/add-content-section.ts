@@ -1,11 +1,11 @@
 import type { CyOwnerAggregateAttrs } from "#app/domain/types";
 import { ValidatableElement } from "#app/ui/base/validatable-element";
 import { type AddContentSectionCommand } from "#user-contents/domain/section/struct/add-section/contract";
-import { contentSectionVmap } from "#user-contents/domain/section/v-map";
+import { contentSectionVmap } from "#user-contents/domain/section/struct/v-map";
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-type AddContentSectionType = Pick<AddContentSectionCommand['attrs'], 'title' | 'icon'>;
+type AddContentSectionType = Pick<AddContentSectionCommand['attrs'], 'title' | 'icon' | 'order'>;
 
 @customElement('add-content-section-modal')
 export class AddContentSectionModal extends ValidatableElement<AddContentSectionType> {
@@ -33,6 +33,7 @@ export class AddContentSectionModal extends ValidatableElement<AddContentSection
   protected validatorMap = {
     title: contentSectionVmap.title,
     icon: contentSectionVmap.icon,
+    order: contentSectionVmap.order,
   };
 
   protected getFieldValue(field: keyof AddContentSectionType): unknown {
@@ -68,6 +69,7 @@ export class AddContentSectionModal extends ValidatableElement<AddContentSection
       const attrs: AddContentSectionCommand['attrs'] = {
         ...this.ownerAttrs,
         title: this.formData.title,
+        order: this.formData.order,
         ...(this.iconIsValid && { icon: this.formData.icon })
       };
 
@@ -127,6 +129,15 @@ export class AddContentSectionModal extends ValidatableElement<AddContentSection
             ?disabled=${this.isLoading}
           ></sl-input>
           ${this.renderFieldErrors('title')}
+
+          <sl-input
+            label="Порядковый номер (необязательно)"
+            help-text="Управляйте порядком отображения"
+            value=${this.formData.title ?? ''}
+            @sl-input=${this.createValidateHandler('order')}
+            ?disabled=${this.isLoading}
+          ></sl-input>
+          ${this.renderFieldErrors('order')}
 
           <icon-picker
             label="Иконка"
