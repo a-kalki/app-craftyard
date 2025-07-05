@@ -1,7 +1,7 @@
 import { AggregateRoot } from "rilata/domain";
 import type { ModelArMeta } from "./meta";
 import type { ModelAttrs } from "./struct/attrs";
-import { modelValidator } from "./v-map";
+import { modelValidator } from "./struct/v-map";
 import { dtoUtility } from "rilata/utils";
 import type { PatchValue } from "rilata/core";
 

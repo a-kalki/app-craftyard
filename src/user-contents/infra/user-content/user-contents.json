@@ -79,17 +79,5 @@
     "icon": "check2-circle",
     "createAt": 1751262235520,
     "updateAt": 1751265028271
-  },
-  "0197d1c6-b6a9-7e1e-a391-c29a5c273e64": {
-    "id": "0197d1c6-b6a9-7e1e-a391-c29a5c273e64",
-    "fileId": "0197d1c6-5204-70b3-9057-723719b88b24",
-    "sectionId": "0197b4c3-8076-7f98-bfb1-2977b9173d08",
-    "type": "FILE",
-    "fileType": "PDF",
-    "title": "Чертеж",
-    "description": "",
-    "createAt": 1751571150505,
-    "updateAt": 1751571172784,
-    "order": 5
   }
 }

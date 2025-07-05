@@ -1,5 +1,5 @@
 import type { ReorderModelImagesCommand } from "#models/domain/struct/reorder-images/contract";
-import { modelAttrsVmap } from "#models/domain/v-map";
+import { modelAttrsVmap } from "#models/domain/struct/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const reorderModelImagesVmap: ValidatorMap<ReorderModelImagesCommand['attrs']> = {

@@ -3,7 +3,7 @@ import type { ExpenseItem, ModelCreationOfferAttrs, BaseOfferAttrs, OfferStatus 
 import { descriptionValidator, editorIdsValidator, ownerIdValidator, titleValidator, uuidFieldValidator } from "#app/domain/base-validators";
 import { costValidator } from "#app/domain/v-map";
 import type { UnionToTuple } from "rilata/core";
-import { modelAttrsVmap } from "#models/domain/v-map";
+import { modelAttrsVmap } from "#models/domain/struct/v-map";
 import { workshopVmap } from "#workshop/domain/struct/v-map";
 
 export const offerStatuses: UnionToTuple<OfferStatus> = ['active', 'archived', 'pending_moderation'];

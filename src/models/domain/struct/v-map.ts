@@ -2,9 +2,9 @@ import {
   DtoFieldValidator, LiteralFieldValidator,
   StringChoiceValidationRule, type ValidatorMap,
 }from "rilata/validator";
-import type { ModelAttrs } from "./struct/attrs";
+import type { ModelAttrs } from "./attrs";
 import { SKILL_LEVEL_KEYS } from "#app/domain/constants";
-import { MODEL_CATEGORY_KEYS } from "./struct/constants";
+import { MODEL_CATEGORY_KEYS } from "./constants";
 import {
   descriptionValidator, createAtValidator, titleValidator, updateAtValidator,
   userIdValidator, uuidFieldValidator,

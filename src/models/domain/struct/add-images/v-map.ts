@@ -1,5 +1,5 @@
 import type { AddModelImagesCommand } from "#models/domain/struct/add-images/contract";
-import { modelAttrsVmap } from "#models/domain/v-map";
+import { modelAttrsVmap } from "#models/domain/struct/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const addModelImagesVmap: ValidatorMap<AddModelImagesCommand['attrs']> = {
