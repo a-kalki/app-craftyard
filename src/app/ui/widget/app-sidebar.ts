@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { SidebarItem } from '../base/types';
 import { BaseElement } from '../base/base-element';
@@ -15,27 +15,46 @@ export class AppSidebarWidget extends BaseElement {
       display: block;
       width: 250px;
       border-right: 1px solid var(--sl-color-neutral-200);
-      overscroll-behavior: contain;
-    }
-
-    sl-tree {
       padding: 0.5rem;
-      --indent-guide-width: 2px;
+      box-sizing: border-box;
+      overscroll-behavior: contain;
+      font-family: var(--sl-font-sans);
     }
 
-    sl-tree-item::part(base) {
-      padding: 0.75rem;
+    .sidebar-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-item a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
       border-radius: var(--sl-border-radius-small);
-      transition: background 0.2s;
+      color: var(--sl-color-neutral-900);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
     }
 
-    sl-tree-item[selected]::part(base) {
+    .sidebar-item a:hover {
+      background: var(--sl-color-primary-100);
+    }
+
+    .sidebar-item a[selected] {
       background: var(--sl-color-primary-200);
       font-weight: bold;
     }
 
-    sl-tree-item:not([selected]):hover::part(base) {
+    .sidebar-children {
+      margin-left: 1rem;
+      border-left: 2px solid var(--sl-color-neutral-200);
+      padding-left: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .sidebar-item a.active {
       background: var(--sl-color-primary-100);
+      font-weight: bold;
     }
 
     @media (max-width: 768px) {
@@ -50,18 +69,9 @@ export class AppSidebarWidget extends BaseElement {
 
   connectedCallback() {
     super.connectedCallback();
-    if (!this.activeItem && this.items.length > 0) {
-      this.activeItem = this.items[this.items.length - 1].name;
-    }
 
-    this.unsubscribe = this.app.router.subscribe(() => {
-      const path = this.app.router.getPath();
-      this.items.forEach(item => {
-        if(`/${item.name}` === path) {
-          this.activeItem = item.name;
-        }
-      })
-    })
+    this.setActiveByPath();
+    this.unsubscribe = this.app.router.subscribe(() => this.setActiveByPath());
   }
 
   disconnectedCallback(): void {
@@ -71,20 +81,35 @@ export class AppSidebarWidget extends BaseElement {
 
   render() {
     return html`
-      <sl-tree>
-        ${this.items.map(
-          item => html`
-            <sl-tree-item
-              ?selected=${item.name === this.activeItem}
-              @click=${(e: MouseEvent) => this.handleSelect(e, item)}
-            >
-              <sl-icon name=${item.icon}></sl-icon>
-              ${item.title}
-            </sl-tree-item>
-          `
-        )}
-      </sl-tree>
+      <nav class="sidebar">
+        ${this.renderItems(this.items)}
+      </nav>
     `;
+  }
+
+  private renderItems(items: SidebarItem[]): TemplateResult[] {
+    return items.map(item => {
+      const isActive = this.activeItem === item.name;
+
+      return html`
+        <div class="sidebar-item">
+          <a
+            href=${item.url}
+            class=${isActive ? 'active' : ''}
+            @click=${(e: MouseEvent) => this.handleSelect(e, item)}
+          >
+            <sl-icon name=${item.icon}></sl-icon>
+            <span>${item.title}</span>
+          </a>
+
+          ${item.children?.length
+            ? html`<div class="sidebar-children">
+                ${this.renderItems(item.children)}
+              </div>`
+            : null}
+        </div>
+      `;
+    });
   }
 
   private handleSelect(event: MouseEvent, item: SidebarItem) {
@@ -97,4 +122,21 @@ export class AppSidebarWidget extends BaseElement {
       this.closeSidebar();
     }
   }
+
+  private setActiveByPath(): void {
+    const path = this.app.router.getPath();
+
+    const findActive = (items: SidebarItem[]): string | undefined => {
+      for (const item of items) {
+        if (path.startsWith(item.url)) return item.name;
+        if (item.children) {
+          const found = findActive(item.children);
+          if (found) return found;
+        }
+      }
+    };
+
+    const foundName = findActive(this.items);
+    if (foundName) this.activeItem = foundName;
+  };
 }

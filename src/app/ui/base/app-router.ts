@@ -1,4 +1,8 @@
-import type { RoutableCustomComponent, RoutableElementEntry, RouteRedirect, UrlParams } from "./types";
+import type { RoutableCustomComponent, RouteRedirect, UrlParams } from "./types";
+
+type RoutableElementEntry = {
+  matcher: (url: string) => UrlParams | undefined
+} & RoutableCustomComponent
 
 export class AppRouter {
   private listeners: (() => void)[] = [];
