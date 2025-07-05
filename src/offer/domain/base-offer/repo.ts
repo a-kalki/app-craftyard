@@ -3,4 +3,8 @@ import type { OfferAttrs } from "../offers";
 
 export interface OfferRepo {
   findOffer(id: string): MaybePromise<OfferAttrs | undefined>
+
+  filterOffers(attrs: Partial<OfferAttrs>): MaybePromise<OfferAttrs[]>
+
+  getOffers(): MaybePromise<OfferAttrs[]>
 }

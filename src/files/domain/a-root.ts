@@ -1,7 +1,7 @@
 import { AggregateRoot } from "rilata/domain";
 import type { FileEntryArMeta } from "./meta";
 import type { FileEntryAttrs } from "./struct/attrs";
-import { fileEntryValidator } from "./v-map";
+import { fileEntryValidator } from "./struct/v-map";
 
 export class FileAr extends AggregateRoot<FileEntryArMeta> {
   name = 'FileEntryAr' as const;

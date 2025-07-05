@@ -1,15 +1,15 @@
 import type { EditModelCommand } from "#models/domain/struct/edit-model/contract";
-import { modelVmap } from "#models/domain/v-map";
+import { modelAttrsVmap } from "#models/domain/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 export const editModelVmap: ValidatorMap<EditModelCommand['attrs']> = {
-    id: modelVmap.id,
-    title: modelVmap.title,
-    description: modelVmap.description,
-    categories: modelVmap.categories,
-    difficultyLevel: modelVmap.difficultyLevel,
-    estimatedTime: modelVmap.estimatedTime,
-    cost: modelVmap.cost,
+    id: modelAttrsVmap.id,
+    title: modelAttrsVmap.title,
+    description: modelAttrsVmap.description,
+    categories: modelAttrsVmap.categories,
+    difficultyLevel: modelAttrsVmap.difficultyLevel,
+    estimatedTime: modelAttrsVmap.estimatedTime,
+    cost: modelAttrsVmap.cost,
 }
 
 export const editModelValidator = new DtoFieldValidator(

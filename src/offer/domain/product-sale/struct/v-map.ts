@@ -15,6 +15,7 @@ export const productSaleOfferVmap: ValidatorMap<ProductSaleOfferAttrs> = {
     status: modelCreateionOfferVmap.status,
     estimatedExpenses: modelCreateionOfferVmap.estimatedExpenses,
     offerParticipantId: modelCreateionOfferVmap.offerParticipantId,
+    editorIds: modelCreateionOfferVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(productSaleOfferType),
     ]),

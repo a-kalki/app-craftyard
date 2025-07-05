@@ -1,9 +1,9 @@
 import type { DeleteModelImageCommand } from "#models/domain/struct/delete-image/contract";
-import { modelVmap } from "#models/domain/v-map";
+import { modelAttrsVmap } from "#models/domain/v-map";
 import { DtoFieldValidator, LiteralFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const deleteModelImageVmap: ValidatorMap<DeleteModelImageCommand['attrs']> = {
-  id: modelVmap.id,
+  id: modelAttrsVmap.id,
   imageId: new LiteralFieldValidator('imageId', true, { isArray: false }, 'string', []),
 }
 

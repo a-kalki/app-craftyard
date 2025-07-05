@@ -64,7 +64,8 @@ export class UploadFileUC extends FileUseCase<UploadFileUcMeta> {
           access,
           context,
           comment,
-          uploadedAt: Date.now(),
+          createAt: Date.now(),
+          updateAt: Date.now(),
       }
       new FileAr(fileEntry); // checkInveriants;
       const dbResult = await this.moduleResolver.fileRepo.addFile(fileEntry);

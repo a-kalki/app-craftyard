@@ -4,7 +4,6 @@ import { BaseElement } from '../../../app/ui/base/base-element';
 import type { BackendResultByMeta } from 'rilata/core';
 import type { WorkshopAttrs } from '#workshop/domain/struct/attrs';
 import type { GetWorkshopMeta } from '#workshop/domain/struct/get-workshop/contract';
-import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
 
 @customElement('workshop-details')
 export class WorkshopDetailsEntity extends BaseElement {
@@ -71,58 +70,6 @@ export class WorkshopDetailsEntity extends BaseElement {
       margin-bottom: 1.5rem;
     }
 
-    sl-divider {
-      margin: .6rem 0;
-    }
-
-    sl-details {
-      margin-bottom: .6rem;
-      border: 1px solid var(--sl-color-neutral-200);
-      border-radius: var(--sl-border-radius-medium);
-      box-shadow: var(--sl-shadow-small);
-      background: var(--sl-color-neutral-0);
-    }
-
-    sl-details::part(header) {
-      padding: 1rem;
-      font-weight: 600;
-      font-size: 1.25rem;
-      color: var(--sl-color-primary-800);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      border-bottom: 1px solid var(--sl-color-neutral-200);
-      background-color: var(--sl-color-neutral-50);
-      border-radius: var(--sl-border-radius-medium) var(--sl-border-radius-medium) 0 0;
-    }
-
-    sl-details[open]::part(header) {
-        border-bottom: 1px solid var(--sl-color-neutral-200);
-    }
-
-    sl-details::part(content) {
-      padding: 1rem;
-      background-color: var(--sl-color-neutral-0);
-      border-radius: 0 0 var(--sl-border-radius-medium) var(--sl-border-radius-medium);
-    }
-
-    sl-details::part(summary-icon) {
-        font-size: 1.25rem; /* Icon size for summary */
-    }
-
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--sl-color-primary-800);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .section-title sl-icon {
-      font-size: 1.25rem;
-    }
-
     @media (max-width: 600px) {
       .header {
         flex-direction: column;
@@ -146,24 +93,25 @@ export class WorkshopDetailsEntity extends BaseElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    const workshopId = this.getWorkshopId();
-    const result = await this.loadWorkshop(workshopId);
-    if (result.isFailure()) {
-      this.app.error('Не удалось загрузить данные мастерской', {
-        workshopId,
-        description: 'Мастерской с таким id не существует'
-      });
-      return;
-    }
-    this.workshop = result.value;
+    this.loadWorkshop();
   }
 
   protected getWorkshopId(): string {
     return this.app.router.getParams().workshopId;
   }
 
-  private async loadWorkshop(workshopId: string): Promise<BackendResultByMeta<GetWorkshopMeta>> {
-    return this.workshopApi.getWorkshop(workshopId);
+  private async loadWorkshop(): Promise<void> {
+    const workshopId = this.getWorkshopId();
+    const getResult = await this.workshopApi.getWorkshop(workshopId);
+    if (getResult.isFailure()) {
+      this.app.error('Не удалось загрузить данные мастерской', {
+        workshopId,
+        description: 'Мастерской с таким id не существует'
+      });
+      return;
+    }
+
+    this.workshop = getResult.value;
   }
 
   render() {
@@ -188,37 +136,6 @@ export class WorkshopDetailsEntity extends BaseElement {
           <p class="description">${this.workshop.description}</p>
         </div>
       </div>
-
-      <sl-divider></sl-divider>
-
-      <sl-details>
-        <div slot="summary" class="section-title">
-          <sl-icon name="gear-wide-connected"></sl-icon>
-          О мастерской
-        </div>
-        <workshop-rooms-section .rooms=${this.workshop.rooms}></workshop-rooms-section>
-      </sl-details>
-      <sl-divider></sl-divider>
-
-      <sl-details>
-        <div slot="summary" class="section-title">
-          <sl-icon name="${CONTRIBUTIONS_DETAILS['HOBBIST'].icon}"></sl-icon>
-          Для хоббистов
-        </div>
-        <workshop-hobbyists-section .plans=${this.workshop.subscriptionPlans}></workshop-hobbyists-section>
-      </sl-details>
-      <sl-divider></sl-divider>
-
-      <sl-details>
-        <div slot="summary" class="section-title">
-          <sl-icon name="${CONTRIBUTIONS_DETAILS['MAKER'].icon}"></sl-icon>
-          Для мастеров и менторов
-        </div>
-        <workshop-masters-section 
-          .commissionStrategy=${this.workshop.commissionStrategy}
-          .individualCommissions=${this.workshop.individualCommissions}
-        ></workshop-masters-section>
-      </sl-details>
     `;
   }
 }

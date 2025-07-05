@@ -5,5 +5,6 @@ export type FileEntryAttrs = AbstractAggregateAttrs & {
   mimeType: string;
   size: number;
   comment?: string;
-  uploadedAt: number;
+  createAt: number;
+  updateAt: number;
 };

@@ -1,9 +1,9 @@
 import type { GetModelCommand } from "#models/domain/struct/get-model/contract";
-import { modelVmap } from "#models/domain/v-map";
+import { modelAttrsVmap } from "#models/domain/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const getModelVmap: ValidatorMap<GetModelCommand['attrs']> = {
-  id: modelVmap.id,
+  id: modelAttrsVmap.id,
 }
 
 export const getModelValidator = new DtoFieldValidator(

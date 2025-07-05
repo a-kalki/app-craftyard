@@ -4,7 +4,7 @@ import {
 } from "rilata/validator";
 import type { AccessType, ContentSectionAttrs } from "./struct/attrs";
 import {
-  timeStampValidator, shoelaceIconValidator, updateAtValidator, uuidFieldValidator,
+  createAtValidator, shoelaceIconValidator, updateAtValidator, uuidFieldValidator,
 } from "#app/domain/base-validators";
 import { ownerArAttrsVmap, type UnionToTuple } from "rilata/core";
 
@@ -23,7 +23,7 @@ export const contentSectionVmap: ValidatorMap<ContentSectionAttrs> = {
         new PositiveNumberValidationRule(),
     ]),
     icon: shoelaceIconValidator.cloneWithRequired(false),
-    createAt: timeStampValidator,
+    createAt: createAtValidator,
     updateAt: updateAtValidator,
 }
 

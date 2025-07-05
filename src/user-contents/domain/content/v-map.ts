@@ -1,6 +1,6 @@
 import { DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule, StrictEqualFieldValidator, StringChoiceValidationRule, type ValidatorMap } from "rilata/validator";
 import type { ContentAttrs } from "./struct/attrs";
-import { shoelaceIconValidator, timeStampValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import { shoelaceIconValidator, createAtValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
 import type { ThesisContent } from "./struct/thesis-attrs";
 import type { DTO, UnionToTuple } from "rilata/core";
 import type { FileContent, FileType } from "./struct/file-attrs";
@@ -19,7 +19,7 @@ export const userContentVmap: ValidatorMap<ContentAttrs> = {
     new PositiveNumberValidationRule(),
   ]),
   icon: shoelaceIconValidator.cloneWithRequired(false),
-  createAt: timeStampValidator,
+  createAt: createAtValidator,
   updateAt: updateAtValidator,
 }
 

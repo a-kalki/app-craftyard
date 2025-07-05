@@ -1,8 +1,8 @@
 import {
   DtoFieldValidator, LiteralFieldValidator, PositiveNumberValidationRule, type ValidatorMap,
 } from "rilata/validator";
-import type { FileEntryAttrs } from "./struct/attrs";
-import { timeStampValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import type { FileEntryAttrs } from "./attrs";
+import { createAtValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
 import { ownerArAttrsVmap } from "rilata/core";
 
 export const fileEntryAttrsVmap: ValidatorMap<FileEntryAttrs> = {
@@ -17,7 +17,8 @@ export const fileEntryAttrsVmap: ValidatorMap<FileEntryAttrs> = {
     context: ownerArAttrsVmap.context,
     access: ownerArAttrsVmap.access,
     comment: new LiteralFieldValidator('comment', false, { isArray: false }, 'string', []),
-    uploadedAt: timeStampValidator.cloneWithName('uploadedAt'),
+    createAt: createAtValidator,
+    updateAt: updateAtValidator,
 }
 
 export const fileEntryValidator = new DtoFieldValidator(

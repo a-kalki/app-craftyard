@@ -1,7 +1,7 @@
 import { AggregateRoot } from "rilata/domain";
 import type { WorkshopArMeta } from "./meta";
 import type { WorkshopAttrs } from "./struct/attrs";
-import { workshopValidator } from "./v-map";
+import { workshopValidator } from "./struct/v-map";
 
 export class WorkshopAr extends AggregateRoot<WorkshopArMeta> {
     name = "WorkshopAr" as const;

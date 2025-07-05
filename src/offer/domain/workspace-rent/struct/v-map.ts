@@ -1,19 +1,20 @@
 import { DtoFieldValidator, LiteralFieldValidator, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
-import { modelCreateionOfferVmap } from "#offer/domain/base-offer/struct/v-map";
+import { offerAttrsVmap } from "#offer/domain/base-offer/struct/v-map";
 import { positiveNumberValidator } from "#app/domain/base-validators";
 import type { WorkspaceRentOfferAttrs } from "./attrs";
 
-const workspaceRentOfferType: WorkspaceRentOfferAttrs['type'] = 'WorkspaceRent';
+const workspaceRentOfferType: WorkspaceRentOfferAttrs['type'] = 'WorkspaceRentOffer';
 
 export const workspaceRentOfferVmap: ValidatorMap<WorkspaceRentOfferAttrs> = {
-    id: modelCreateionOfferVmap.id,
-    title: modelCreateionOfferVmap.title,
-    description: modelCreateionOfferVmap.description,
-    cost: modelCreateionOfferVmap.cost,
-    workshopId: modelCreateionOfferVmap.workshopId,
-    status: modelCreateionOfferVmap.status,
-    estimatedExpenses: modelCreateionOfferVmap.estimatedExpenses,
-    offerParticipantId: modelCreateionOfferVmap.offerParticipantId,
+    id: offerAttrsVmap.id,
+    title: offerAttrsVmap.title,
+    description: offerAttrsVmap.description,
+    cost: offerAttrsVmap.cost,
+    workshopId: offerAttrsVmap.workshopId,
+    status: offerAttrsVmap.status,
+    estimatedExpenses: offerAttrsVmap.estimatedExpenses,
+    offerParticipantId: offerAttrsVmap.offerParticipantId,
+    editorIds: offerAttrsVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(workspaceRentOfferType),
     ]),

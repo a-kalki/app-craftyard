@@ -1,5 +1,5 @@
 import type { UploadFileCommand } from "#files/domain/struct/upload-file/contract";
-import { fileEntryAttrsVmap } from "#files/domain/v-map";
+import { fileEntryAttrsVmap } from "#files/domain/struct/v-map";
 import {
   DtoFieldValidator, type ValidatorMap, NotValidateFieldValidator,
   LiteralFieldValidator,

@@ -17,6 +17,7 @@ export const hobbyKitOfferVmap: ValidatorMap<HobbyKitOfferAttrs> = {
     status: modelCreateionOfferVmap.status,
     estimatedExpenses: modelCreateionOfferVmap.estimatedExpenses,
     offerParticipantId: modelCreateionOfferVmap.offerParticipantId,
+    editorIds: modelCreateionOfferVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(hobbyKitOfferType),
     ]),
