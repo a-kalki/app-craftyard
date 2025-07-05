@@ -32,7 +32,7 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
 
   protected sectionId!: string;
   @state() protected isLoading = false;
-  @state() protected commandBody!: T;
+  @state() protected formData!: T;
 
   protected ownerAttrs!: CyOwnerAggregateAttrs;
 
@@ -50,7 +50,7 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
   ): Promise<{ contentId: string } | null> {
     this.sectionId = sectionId;
     this.ownerAttrs = ownerAttrs;
-    this.commandBody = this.createDefaultContent();
+    this.formData = this.createDefaultContent();
     this.open = true;
     this.isLoading = false;
 
@@ -75,7 +75,7 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
       const addResult = await this.userContentApi.addContent(command);
       if (addResult.isFailure()) {
         this.app.error(`Не удалось добавить контент.`, {
-          attrs: this.commandBody, result: addResult.value,
+          attrs: this.formData, result: addResult.value,
         });
         return;
       }
@@ -86,7 +86,7 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
       this.hide();
     } catch (err) {
       this.app.error(`Ошибка при добавлении контента`, {
-        attrs: this.commandBody, error: err
+        attrs: this.formData, error: err
       });
     } finally {
       this.isLoading = false;
@@ -94,7 +94,7 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
   }
 
   protected getCommandToApi(): AddUserContentCommand['attrs'] {
-      const contentToSave = { ...this.commandBody };
+      const contentToSave = { ...this.formData };
       if (!this.iconIsValid) {
         delete contentToSave.icon;
       }
@@ -115,16 +115,16 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
 
   protected handleIconUpdated(e: CustomEvent<{ isValid: boolean, name: string }>): void {
     this.iconIsValid = e.detail.isValid;
-    this.commandBody.icon = e.detail.name;
+    this.formData.icon = e.detail.name;
     e.preventDefault();
     this.requestUpdate();
   }
 
   protected getFieldValue(field: keyof T): unknown {
-    return this.commandBody[field]
+    return this.formData[field]
   }
   protected setFieldValue(field: keyof T, value: unknown): void {
-    this.commandBody = { ...this.commandBody, [field]: value };
+    this.formData = { ...this.formData, [field]: value };
   }
 
   render() {
@@ -160,7 +160,7 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
       <sl-input
         label="Заголовок карточки"
         help-text="Основное название"
-        .value=${this.commandBody.title ?? ''}
+        .value=${this.formData.title ?? ''}
         @sl-input=${this.createValidateHandler('title')}
       ></sl-input>
       ${this.renderFieldErrors('title')}
@@ -172,7 +172,7 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
       <sl-input
         label="Футер (необязательно)"
         help-text="Дополнительная информация в подвале карточки"
-        .value=${this.commandBody.footer || ''}
+        .value=${this.formData.footer || ''}
         @sl-input=${this.createValidateHandler('footer')}
       ></sl-input>
       ${this.renderFieldErrors('footer')}
@@ -181,14 +181,14 @@ export abstract class BaseAddContentModal<T extends AddUserContentCommand['attrs
         label="Порядковый номер (необязательно)"
         help-text="Управляйте порядком отображения"
         type="number"
-        .value=${this.commandBody.order?.toString() || ''}
+        .value=${this.formData.order?.toString() || ''}
         @sl-input=${this.createValidateHandler('order')}
       ></sl-input>
       ${this.renderFieldErrors('order')}
 
       <icon-picker
         label="Иконка"
-        value=${this.commandBody.icon ?? ''}
+        value=${this.formData.icon ?? ''}
         ?disabled=${this.isLoading}
         @sl-change=${this.createValidateHandler('icon')}
         @icon-updated=${this.handleIconUpdated}
