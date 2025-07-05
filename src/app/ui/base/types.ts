@@ -19,16 +19,13 @@ export type RouteRedirect = {
   to: string, // '/my-profile'
 }
 
-export type RoutableElementEntry = {
-  matcher: (url: string) => UrlParams | undefined
-} & RoutableCustomComponent
-
 export type SidebarItem = {
   name: string;
   url: string;
   title: string;
-  icon: string
-}
+  icon: string;
+  children?: SidebarItem[];
+};
 
 export type ToastVariant = 'info' | 'success' | 'warning' | 'danger';
 
