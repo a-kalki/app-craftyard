@@ -1,7 +1,7 @@
 import { AggregateRoot } from "rilata/domain";
 import { userInvariantsValidator } from "./v-map";
-import type { ContributionKey, Contributions } from "../contributions/types";
-import { CONTRIBUTIONS_DETAILS } from "../contributions/constants";
+import type { UserContributionKey, UserContributions } from "../user-contributions/types";
+import { USER_CONTRIBUTIONS_DETAILS } from "../user-contributions/constants";
 import type { UserArMeta } from "./meta";
 import type { Skills, UserAttrs } from "./struct/attrs";
 
@@ -16,23 +16,23 @@ export class UserAr extends AggregateRoot<UserArMeta> {
     return this.getAttrs().name
   }
 
-  getContributions(): Contributions {
+  getContributions(): UserContributions {
     return this.getAttrs().statistics.contributions;
   }
   
-  getContributionKeys(): ContributionKey[] {
-    return Object.keys(this.getAttrs().statistics.contributions) as ContributionKey[];
+  getContributionKeys(): UserContributionKey[] {
+    return Object.keys(this.getAttrs().statistics.contributions) as UserContributionKey[];
   }
 
-  getTopContributionKeyByOrder(): ContributionKey {
+  getTopContributionKeyByOrder(): UserContributionKey {
     const keys = this.getContributionKeys();
     return keys.sort((a, b) => (
-      CONTRIBUTIONS_DETAILS[b].orderNumber - CONTRIBUTIONS_DETAILS[a].orderNumber
+      USER_CONTRIBUTIONS_DETAILS[b].orderNumber - USER_CONTRIBUTIONS_DETAILS[a].orderNumber
     ))[0];
   }
 
   // Метод для проверки, есть ли у пользователя определённая роль
-  hasContribution(key: ContributionKey): boolean {
+  hasContribution(key: UserContributionKey): boolean {
     return this.getContributionKeys().includes(key);
   }
 

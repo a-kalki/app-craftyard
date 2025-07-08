@@ -1,5 +1,5 @@
 /** модуль содержит валидаторы которые могут повторно переиспользоваться в разных агрегатах. */
-import { CannotBeEmptyStringValidationRule, IsTimeStampValidationRule, LiteralFieldValidator, MinCharsCountValidationRule, MinDateStampValidationRule, PositiveNumberValidationRule, RegexMatchesValueValidationRule, UuidField } from "rilata/validator";
+import { CannotBeEmptyStringValidationRule, IsTimeStampValidationRule, LiteralFieldValidator, MinCharsCountValidationRule, MinDateStampValidationRule, PositiveNumberValidationRule, RegexMatchesValueValidationRule, UuidField, UUIDFormatValidationRule } from "rilata/validator";
 
 // *********************** rules ***************************
 export const cannotBeEmptyRule = new CannotBeEmptyStringValidationRule();
@@ -7,6 +7,8 @@ export const cannotBeEmptyRule = new CannotBeEmptyStringValidationRule();
 export const positiveNumberRule = new PositiveNumberValidationRule();
 
 export const onlyDigitsRule = new RegexMatchesValueValidationRule(/^\d+$/, 'Строка должна содержать только цифры');
+
+export const uuidRule = new UUIDFormatValidationRule();
 
 // *********************** validators ***************************
 export const shoelaceIconValidator = new LiteralFieldValidator('icon', true, { isArray: false }, 'string', []);

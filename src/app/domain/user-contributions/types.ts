@@ -1,6 +1,6 @@
 export type TrackingMethod = 'BOT' | 'APP' | 'MANUAL' | 'BOTH';
 
-export type ContributionDetails = {
+export type UserContributionDetails = {
   title: string;
   description: string;
   action: string;
@@ -11,7 +11,7 @@ export type ContributionDetails = {
   implemented: boolean;
 }
 
-export type ContributionKey =
+export type UserContributionKey =
   | 'NEWBIE'
   | 'REACTOR'
   | 'WRITER'
@@ -31,10 +31,10 @@ export type ContributionKey =
   | 'REVIEWER'
   | 'WORKSHOP_CREATOR';
 
-export type ContributionCounter = {
+export type UserContributionCounter = {
   count: number;
   firstAt: number;
   lastAt: number;
 };
 
-export type Contributions = {[key in ContributionKey]?: ContributionCounter};
+export type UserContributions = {[key in UserContributionKey]?: UserContributionCounter};

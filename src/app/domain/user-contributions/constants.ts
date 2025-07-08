@@ -1,8 +1,8 @@
-import type { ContributionDetails, ContributionKey, TrackingMethod } from "./types";
+import type { UserContributionDetails, UserContributionKey, TrackingMethod } from "./types";
 
 export const TRACKING_METHODS: TrackingMethod[] = ['BOT', 'APP', 'MANUAL', 'BOTH'];
 
-export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails> = {
+export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContributionDetails> = {
   NEWBIE: {
     title: 'Новичок',
     description: 'Только что присоединился к сообществу.',
@@ -185,4 +185,4 @@ export const CONTRIBUTIONS_DETAILS: Record<ContributionKey, ContributionDetails>
   },
 };
 
-export const CONTRIBUTION_KEYS: ContributionKey[] = Object.keys(CONTRIBUTIONS_DETAILS) as ContributionKey[];
+export const USER_CONTRIBUTION_KEYS: UserContributionKey[] = Object.keys(USER_CONTRIBUTIONS_DETAILS) as UserContributionKey[];

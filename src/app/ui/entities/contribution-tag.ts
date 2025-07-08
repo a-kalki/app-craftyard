@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { ContributionKey } from '#app/domain/contributions/types';
-import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
+import type { UserContributionKey } from '#app/domain/user-contributions/types';
+import { USER_CONTRIBUTIONS_DETAILS } from '#app/domain/user-contributions/constants';
 import { BaseElement } from '../base/base-element';
 
 @customElement('user-contribution-tag')
@@ -46,12 +46,12 @@ export class ContributionTag extends BaseElement {
   `;
 
   @property({ type: String })
-  contributionKey!: ContributionKey;
+  contributionKey!: UserContributionKey;
 
   getDetails(): { icon: string; title: string; description: string } {
-    const icon = CONTRIBUTIONS_DETAILS[this.contributionKey].icon;
-    const title = CONTRIBUTIONS_DETAILS[this.contributionKey].title;
-    const description = CONTRIBUTIONS_DETAILS[this.contributionKey].description;
+    const icon = USER_CONTRIBUTIONS_DETAILS[this.contributionKey].icon;
+    const title = USER_CONTRIBUTIONS_DETAILS[this.contributionKey].title;
+    const description = USER_CONTRIBUTIONS_DETAILS[this.contributionKey].description;
     return { icon, title, description };
   }
 

@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { ContributionKey } from '#app/domain/contributions/types';
+import type { UserContributionKey } from '#app/domain/user-contributions/types';
 import { UserPolicy } from '#app/domain/user/policy';
 import type { EditUserCommand } from '#app/domain/user/struct/edit-user/contract';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
@@ -158,7 +158,7 @@ export class UserEditFeature extends BaseElement {
     return userPolicy.isModerator();
   }
 
-  private updateContriburionCount(key: ContributionKey, count: number) {
+  private updateContriburionCount(key: UserContributionKey, count: number) {
     if (!this.user || isNaN(count)) return;
     
     this.user = {
@@ -175,7 +175,7 @@ export class UserEditFeature extends BaseElement {
     };
   }
 
-  private updateContributionDate(key: ContributionKey, field: 'firstAt' | 'lastAt', dateString: string) {
+  private updateContributionDate(key: UserContributionKey, field: 'firstAt' | 'lastAt', dateString: string) {
     if (!this.user || !dateString) return;
     
     const timestamp = new Date(dateString).getTime();
@@ -343,7 +343,7 @@ export class UserEditFeature extends BaseElement {
                     ?disabled=${!canEditStats} <!-- Отключено, если не модератор -->
                     @sl-change=${
                       (e: CustomEvent) => this.updateContriburionCount(
-                        key as ContributionKey, parseInt((e.target as HTMLInputElement).value)
+                        key as UserContributionKey, parseInt((e.target as HTMLInputElement).value)
                       )
                     }
                   ></sl-input>
@@ -355,7 +355,7 @@ export class UserEditFeature extends BaseElement {
                     ?disabled=${!canEditStats} <!-- Отключено, если не модератор -->
                     @sl-change=${
                       (e: CustomEvent) => this.updateContributionDate(
-                        key as ContributionKey, 'firstAt', (e.target as HTMLInputElement).value
+                        key as UserContributionKey, 'firstAt', (e.target as HTMLInputElement).value
                       )
                     }
                   ></sl-input>
@@ -367,7 +367,7 @@ export class UserEditFeature extends BaseElement {
                     ?disabled=${!canEditStats} <!-- Отключено, если не модератор -->
                     @sl-change=${
                       (e: CustomEvent) => this.updateContributionDate(
-                        key as ContributionKey, 'lastAt', (e.target as HTMLInputElement).value
+                        key as UserContributionKey, 'lastAt', (e.target as HTMLInputElement).value
                       )
                     }
                   ></sl-input>

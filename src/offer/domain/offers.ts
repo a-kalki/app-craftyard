@@ -8,3 +8,5 @@ export type OfferAttrs =
   | ProductSaleOfferAttrs
   | HobbyKitOfferAttrs
   | CourseOfferAttrs
+
+export type OfferTypes = OfferAttrs['type'];

@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
+import { USER_CONTRIBUTIONS_DETAILS } from '#app/domain/user-contributions/constants';
 import { UserAr } from '#app/domain/user/a-root';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 import { BaseElement } from '#app/ui/base/base-element';
@@ -91,7 +91,7 @@ export class UserAvatarEntity extends BaseElement {
           `font-size: ${iconFontSize};`
         ].filter(Boolean).join(' ')}
       >
-        <sl-icon name=${CONTRIBUTIONS_DETAILS[key].icon}></sl-icon>
+        <sl-icon name=${USER_CONTRIBUTIONS_DETAILS[key].icon}></sl-icon>
       </div>
     `;
   }

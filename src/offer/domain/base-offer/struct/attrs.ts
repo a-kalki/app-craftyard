@@ -18,11 +18,11 @@ export type BaseOfferAttrs = {
   id: string;
   title: string;
   description: string;
-  workshopId: string; // Ссылка на мастерскую для которого актуально предложение
+  organizationId: string; // Ссылка на мастерскую для которого актуально предложение
+  offerExecutorsId: string; // Ссылка на кооперацию исполнителей
   cost: Cost; // Конечная стоимость для покупателя в тенге
   status: OfferStatus; // Статус предложения
   estimatedExpenses: ExpenseItem[]; // Предполагаемая расходная часть предложения
-  offerParticipantId: string; // исполнители и выгодополучатели предложения
   editorIds: UserId;
 }
 

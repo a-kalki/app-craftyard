@@ -11,10 +11,10 @@ export const productSaleOfferVmap: ValidatorMap<ProductSaleOfferAttrs> = {
     title: modelCreateionOfferVmap.title,
     description: modelCreateionOfferVmap.description,
     cost: modelCreateionOfferVmap.cost,
-    workshopId: modelCreateionOfferVmap.workshopId,
+    organizationId: modelCreateionOfferVmap.organizationId,
     status: modelCreateionOfferVmap.status,
     estimatedExpenses: modelCreateionOfferVmap.estimatedExpenses,
-    offerParticipantId: modelCreateionOfferVmap.offerParticipantId,
+    offerExecutorsId: modelCreateionOfferVmap.offerExecutorsId,
     editorIds: modelCreateionOfferVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(productSaleOfferType),

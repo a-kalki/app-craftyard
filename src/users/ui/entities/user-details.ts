@@ -2,7 +2,7 @@ import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import { UserAr } from '#app/domain/user/a-root';
-import type { ContributionCounter, ContributionKey } from '#app/domain/contributions/types';
+import type { UserContributionCounter, UserContributionKey } from '#app/domain/user-contributions/types';
 import type { BackendResultByMeta } from 'rilata/core';
 import type { GetUserMeta } from '#app/domain/user/struct/get-user/contract';
 import { UserPolicy } from '#app/domain/user/policy';
@@ -194,7 +194,7 @@ export class UserDetailsEntity extends BaseElement {
     }
 
     const userAR = new UserAr(this.user);
-    const keys: ContributionKey[] = userAR.getContributionKeys();
+    const keys: UserContributionKey[] = userAR.getContributionKeys();
     const skillsEntries = Object.entries(userAR.getSkills());
     const profile = userAR.getAttrs().profile;
     const contributions = userAR.getContributions();
@@ -207,7 +207,7 @@ export class UserDetailsEntity extends BaseElement {
             <div class="name">${this.user.name}</div>
             <div class="join-date">
               <sl-icon name="person-plus" style="font-size: 0.9rem;"></sl-icon>
-              <span style="margin-left: 0.25rem;">${this.formatDate(this.user.joinedAt)}</span>
+              <span style="margin-left: 0.25rem;">${this.formatDate(this.user.createAt)}</span>
             </div>
           </div>
         </div>
@@ -247,12 +247,12 @@ export class UserDetailsEntity extends BaseElement {
           </thead>
           <tbody>
             ${keys.map(key => {
-              const contribution = contributions[key] as ContributionCounter;
+              const contribution = contributions[key] as UserContributionCounter;
               return html`
                 <tr>
                   <td>
                     <div class="status-badge">
-                      <user-contribution-tag .contributionKey=${key}></user-status-tag>
+                      <user-contribution-tag .contributionKey=${key}></user-contribution-tag>
                     </div>
                   </td>
                   <td>${contribution.count || 0}</td>

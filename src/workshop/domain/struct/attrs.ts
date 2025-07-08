@@ -6,6 +6,9 @@ export type WorkshopAttrs = {
   description: string;
   about: WorkshopAbout;
   editorIds: string[];
+  employeeIds: string[];
+  masterIds: string[];
+  mentorIds: string[];
   createAt: number;
   updateAt: number;
 };

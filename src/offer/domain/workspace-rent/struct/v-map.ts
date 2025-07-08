@@ -10,10 +10,10 @@ export const workspaceRentOfferVmap: ValidatorMap<WorkspaceRentOfferAttrs> = {
     title: offerAttrsVmap.title,
     description: offerAttrsVmap.description,
     cost: offerAttrsVmap.cost,
-    workshopId: offerAttrsVmap.workshopId,
+    organizationId: offerAttrsVmap.organizationId,
     status: offerAttrsVmap.status,
     estimatedExpenses: offerAttrsVmap.estimatedExpenses,
-    offerParticipantId: offerAttrsVmap.offerParticipantId,
+    offerExecutorsId: offerAttrsVmap.offerExecutorsId,
     editorIds: offerAttrsVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(workspaceRentOfferType),

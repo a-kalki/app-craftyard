@@ -110,7 +110,8 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
           }
         }
       },
-      joinedAt: Date.now(),
+      createAt: Date.now(),
+      updateAt: Date.now(),
     }
 
     const user = new UserAr(userAttrs);

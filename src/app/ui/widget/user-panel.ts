@@ -2,7 +2,7 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../base/base-element';
 import { UserAr } from '#app/domain/user/a-root';
-import { CONTRIBUTIONS_DETAILS } from '#app/domain/contributions/constants';
+import { USER_CONTRIBUTIONS_DETAILS } from '#app/domain/user-contributions/constants';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 
 @customElement('user-panel')
@@ -50,7 +50,7 @@ export class UserPanelWidget extends BaseElement {
   render() {
     const userAr = new UserAr(this.user);
     const topKey = userAr.getTopContributionKeyByOrder();
-    const title = CONTRIBUTIONS_DETAILS[topKey].title;
+    const title = USER_CONTRIBUTIONS_DETAILS[topKey].title;
 
     return html`
       <user-avatar .user=${this.user} shape="circle" size="36"></user-avatar>

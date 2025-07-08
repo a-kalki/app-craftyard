@@ -17,6 +17,9 @@ export const workshopVmap: ValidatorMap<WorkshopAttrs> = {
     description: descriptionValidator,
     about: new DtoFieldValidator('about', true, { isArray: false }, 'dto', workshopAbout),
     editorIds: editorIdsValidator,
+    employeeIds: editorIdsValidator.cloneWithName('employeeIds'),
+    masterIds: editorIdsValidator.cloneWithName('masterIds'),
+    mentorIds: editorIdsValidator.cloneWithName('mentorIds'),
     createAt: createAtValidator,
     updateAt: updateAtValidator
 }

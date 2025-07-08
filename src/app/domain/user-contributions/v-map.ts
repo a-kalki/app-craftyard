@@ -1,9 +1,9 @@
 import { DtoFieldValidator, IsTimeStampValidationRule, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule, StringChoiceValidationRule, type ValidatorMap } from "rilata/validator"
-import type { ContributionCounter, ContributionDetails, ContributionKey, Contributions } from "./types"
+import type { UserContributionCounter, UserContributionDetails, UserContributionKey, UserContributions } from "./types"
 import { TRACKING_METHODS } from "./constants"
 import type { UserStatistics } from "../user/struct/attrs"
 
-export const userContribuitionDetailsVmap: ValidatorMap<ContributionDetails> = {
+export const userContribuitionDetailsVmap: ValidatorMap<UserContributionDetails> = {
   description: new LiteralFieldValidator('description', true, { isArray: false }, 'string', [
     new MinCharsCountValidationRule(20, 'Описание должно содержать не менее 20 символов'),
   ]),
@@ -26,7 +26,7 @@ export const userContribuitionDetailsVmap: ValidatorMap<ContributionDetails> = {
   implemented: new LiteralFieldValidator('implemented', true, { isArray: false }, 'boolean', []),
 }
 
-const contribuitionCounterVmap: ValidatorMap<ContributionCounter> = {
+const contribuitionCounterVmap: ValidatorMap<UserContributionCounter> = {
     count: new LiteralFieldValidator('count', true, { isArray: false }, 'number', [
       new PositiveNumberValidationRule(),
     ]),
@@ -38,11 +38,11 @@ const contribuitionCounterVmap: ValidatorMap<ContributionCounter> = {
     ]),
 }
 
-const getContributionDetailsVMap = <K extends ContributionKey>(c: K): DtoFieldValidator<K, false, false, ContributionCounter> => {
+const getContributionDetailsVMap = <K extends UserContributionKey>(c: K): DtoFieldValidator<K, false, false, UserContributionCounter> => {
   return new DtoFieldValidator(c, false, { isArray: false }, 'dto', contribuitionCounterVmap)
 }
 
-export const userContribuitionsVmap: ValidatorMap<Contributions> = {
+export const userContribuitionsVmap: ValidatorMap<UserContributions> = {
     NEWBIE: getContributionDetailsVMap('NEWBIE'),
     REACTOR: getContributionDetailsVMap('REACTOR'),
     WRITER: getContributionDetailsVMap('WRITER'),

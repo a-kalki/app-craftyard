@@ -21,13 +21,13 @@ export const offerAttrsVmap: ValidatorMap<BaseOfferAttrs> = {
     id: uuidFieldValidator,
     title: titleValidator,
     description: descriptionValidator,
-    workshopId: workshopVmap.id.cloneWithName('workshopId'),
+    organizationId: workshopVmap.id.cloneWithName('organizationId'),
+    offerExecutorsId: uuidFieldValidator.cloneWithName('offerExecutorsId'),
     cost: costValidator,
     status: new LiteralFieldValidator('status', true, { isArray: false }, 'string', [
         new StringChoiceValidationRule(offerStatuses),
     ]),
     estimatedExpenses: new DtoFieldValidator('estimatedExpenses', true, { isArray: true }, 'dto', expensesVMap),
-    offerParticipantId: uuidFieldValidator.cloneWithName('offerParticipantId'),
     editorIds: editorIdsValidator,
 }
 

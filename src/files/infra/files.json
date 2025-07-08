@@ -1,14 +1,14 @@
 {
-  "0197d88c-8411-7b1e-a5b8-b7c2ffce6219": {
-    "id": "0197d88c-8411-7b1e-a5b8-b7c2ffce6219",
-    "url": "/uploads/model-info/0197d88c-8411-7b1e-a5b8-b7c2ffce6219.jpg",
+  "0197d916-6f8b-7572-9549-ada6abfc36b3": {
+    "id": "0197d916-6f8b-7572-9549-ada6abfc36b3",
+    "url": "/uploads/model-info/0197d916-6f8b-7572-9549-ada6abfc36b3.jpg",
     "mimeType": "image/jpeg",
-    "size": 97918,
+    "size": 107081,
     "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
     "ownerName": "ModelAr",
     "access": "public",
     "context": "model-info",
-    "createAt": 1751571124744,
-    "updateAt": 1751571124744
+    "createAt": 1751693815693,
+    "updateAt": 1751693815693
   }
 }

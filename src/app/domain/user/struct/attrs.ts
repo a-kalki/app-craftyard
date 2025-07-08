@@ -1,4 +1,4 @@
-import type { Contributions } from "#app/domain/contributions/types";
+import type { UserContributions } from "#app/domain/user-contributions/types";
 
 export type Skills = Record<string, string>;
 
@@ -9,7 +9,7 @@ export type UserProfile = {
 };
 
 export type UserStatistics = {
-  contributions: Contributions,
+  contributions: UserContributions,
 }
 
 export type UserAttrs = {
@@ -20,7 +20,8 @@ export type UserAttrs = {
   }
   profile: UserProfile,
   statistics: UserStatistics,
-  joinedAt: number,
+  createAt: number,
+  updateAt: number,
 };
 
 export type JwtUser = {

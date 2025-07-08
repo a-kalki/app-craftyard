@@ -1,4 +1,4 @@
-import { userStatisticsVMap } from "#app/domain/contributions/v-map";
+import { userStatisticsVMap } from "#app/domain/user-contributions/v-map";
 import type { EditUserCommand } from "#app/domain/user/struct/edit-user/contract";
 import { userVMap } from "#app/domain/user/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
