@@ -1,5 +1,5 @@
 import { CraftYardModule } from "#app/api/module";
-import { offerFactory } from "#offer/domain/base-offer/factory";
+import { offerFactory } from "#offer/domain/factory";
 import { offerModuleConfig, offerModuleUseCases } from "./setup";
 import type { OfferModuleMeta, OfferModuleResolvers } from "./types";
 
@@ -17,6 +17,6 @@ export class OfferModule extends CraftYardModule<OfferModuleMeta> {
 
     async checkArInvariants(): Promise<void> {
       const offers = await this.resolvers.moduleResolver.offerRepo.getOffers();
-      offers.forEach(attrs => offerFactory.create(attrs));
+      offers.forEach(attrs => offerFactory.restore(attrs));
     }
 }

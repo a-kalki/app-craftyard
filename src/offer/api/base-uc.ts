@@ -1,12 +1,11 @@
 import { QueryUseCase } from "rilata/api";
 import { AssertionException, failure, success, type Caller, type Result, type UCMeta } from "rilata/core";
 import type { AggregateDoesNotExistError } from "#app/domain/errors";
-import type { OfferAttrs } from "#offer/domain/offers";
+import type { OfferAr, OfferAttrs } from "#offer/domain/types";
 import type { OfferModuleResolvers } from "./types";
-import type { OfferRepo } from "#offer/domain/base-offer/repo";
-import { OfferPolicy } from "#offer/domain/base-offer/policy";
-import type { GetOfferClass } from "#offer/domain/base-offer/types";
-import { offerFactory } from "#offer/domain/base-offer/factory";
+import type { OfferRepo } from "#offer/domain/repo";
+import { OfferPolicy } from "#offer/domain/policy";
+import { offerFactory } from "#offer/domain/factory";
 
 export abstract class OfferUseCase<META extends UCMeta> extends QueryUseCase<
   OfferModuleResolvers, META
@@ -35,12 +34,10 @@ export abstract class OfferUseCase<META extends UCMeta> extends QueryUseCase<
     return success(attrs);
   }
 
-  async getOfferAr<
-    AR extends OfferAttrs
-  >(id: string): Promise<Result<AggregateDoesNotExistError, GetOfferClass<AR>>> {
+  async getOfferAr<AR extends OfferAr>(id: string): Promise<Result<AggregateDoesNotExistError, AR>> {
     const res = await this.getOfferAttrs(id);
     return res.isSuccess()
-      ? success(offerFactory.create(res.value) as GetOfferClass<AR>)
+      ? success(offerFactory.restore(res.value) as AR)
       : failure(res.value);
   }
 }

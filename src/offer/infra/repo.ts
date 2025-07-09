@@ -1,6 +1,6 @@
 import { JsonRepository } from "#app/infra/json-repo";
-import type { OfferRepo } from "#offer/domain/base-offer/repo";
-import type { OfferAttrs } from "#offer/domain/offers";
+import type { OfferRepo } from "#offer/domain/repo";
+import type { OfferAttrs } from "#offer/domain/types";
 import type { MaybePromise } from "rilata/core";
 
 const repoPath = import.meta.dir + '/offers.json';

@@ -9,7 +9,7 @@ export type CourseOfferContentType = 'course-program';
  * @description Предложение обучающего курса/мастер-класса.
  */
 export type CourseOfferAttrs = ModelCreationOfferAttrs & {
-  type: 'CourseOffer';
+  type: 'COURSE_OFFER';
   durationDays: number; // Сколько дней займет курс от начала до конца
   activeWorkshopHours: number; // Какое время работы в мастерской нужно для изготовления Изделия
   minStudents: number;

@@ -4,7 +4,7 @@ import { positiveNumberValidator } from "#app/domain/base-validators";
 import type { HobbyKitOfferAttrs } from "./attrs";
 import { workspaceRentOfferVmap } from "#offer/domain/workspace-rent/struct/v-map";
 
-const hobbyKitOfferType: HobbyKitOfferAttrs['type'] = 'HobbyKitOffer';
+const hobbyKitOfferType: HobbyKitOfferAttrs['type'] = 'HOBBY_KIT_OFFER';
 
 export const hobbyKitOfferVmap: ValidatorMap<HobbyKitOfferAttrs> = {
     id: modelCreateionOfferVmap.id,

@@ -1,5 +1,5 @@
 import type { CraftYardServerResolver } from "#app/api/resolvers"
-import type { OfferRepo } from "#offer/domain/base-offer/repo"
+import type { OfferRepo } from "#offer/domain/repo"
 
 export type OfferModuleResolver = {
   offerRepo: OfferRepo,

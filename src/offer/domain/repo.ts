@@ -1,5 +1,5 @@
 import type { MaybePromise } from "rilata/core";
-import type { OfferAttrs } from "../offers";
+import type { OfferAttrs } from "./types";
 
 export interface OfferRepo {
   findOffer(id: string): MaybePromise<OfferAttrs | undefined>

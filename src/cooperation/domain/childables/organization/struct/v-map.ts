@@ -12,6 +12,7 @@ export const organizationCooperationVmap: ValidatorMap<OrganizationCooperationAt
   responsibilities: cooperationAttrsVmap.responsibilities,
   childrenIds: cooperationAttrsVmap.childrenIds,
   fatherId: offerCooperationContributionVmap.fatherId.cloneWithRequired(false),
+  editorIds: cooperationAttrsVmap.editorIds,
   type: new LiteralFieldValidator(
     'type', true, { isArray: false }, 'string', [
       new TextStrictEqualValidationRule(organizationCooperationType)

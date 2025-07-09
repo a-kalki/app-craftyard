@@ -9,7 +9,7 @@ export type HobbyKitOfferContentType = 'hobby-kit';
  * @description Предложение набора для самостоятельного изготовления (хобби).
  */
 export type HobbyKitOfferAttrs = ModelCreationOfferAttrs & {
-  type: 'HobbyKitOffer';
+  type: 'HOBBY_KIT_OFFER';
   workshopOfferId: string; // Автоматический абонемент для хобби
   materialPreparationHours: number; // Срок подготовки материалов в часах
 }

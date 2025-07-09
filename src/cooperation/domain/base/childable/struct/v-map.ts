@@ -12,5 +12,6 @@ export const cooperationAttrsVmap: ValidatorMap<ChildableAttrs> = {
   childrenIds: new LiteralFieldValidator(
       'childrenIds', true, { isArray: true }, 'string', [uuidRule]
   ),
+  editorIds: cooperationNodeVMap.editorIds,
   type: cooperationNodeVMap.type,
 }

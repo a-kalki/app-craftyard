@@ -9,20 +9,21 @@ export const commandCooperationType: CommandCooperationAttrs['type'] =
   'COMMAND_COOPERATION';
 
 export const commandCooperationVmap: ValidatorMap<CommandCooperationAttrs> = {
-    id: cooperationAttrsVmap.id,
-    title: cooperationAttrsVmap.title,
-    responsibilities: cooperationAttrsVmap.responsibilities,
-    childrenIds: cooperationAttrsVmap.childrenIds,
-    type: new LiteralFieldValidator(
-        'type', true, { isArray: false }, 'string', [
-        new TextStrictEqualValidationRule(commandCooperationType)
+  id: cooperationAttrsVmap.id,
+  title: cooperationAttrsVmap.title,
+  responsibilities: cooperationAttrsVmap.responsibilities,
+  childrenIds: cooperationAttrsVmap.childrenIds,
+  editorIds: cooperationAttrsVmap.editorIds,
+  type: new LiteralFieldValidator(
+    'type', true, { isArray: false }, 'string', [
+      new TextStrictEqualValidationRule(commandCooperationType)
     ]
-    ),
-    profitePercentage: new LiteralFieldValidator(
-        'profitePercentage', true, { isArray: false }, 'number', [
-        new RangeNumberValidationRule(0, 100),
+  ),
+  profitePercentage: new LiteralFieldValidator(
+    'profitePercentage', true, { isArray: false }, 'number', [
+      new RangeNumberValidationRule(0, 100),
     ]
-    ),
+  ),
 }
 
 export const commandCooperationValidator = new DtoFieldValidator(

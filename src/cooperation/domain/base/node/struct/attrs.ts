@@ -4,4 +4,5 @@ export type CooperationNodeAttrs = {
   title: string, 
   responsibilities: string[],
   type: string,
+  editorIds: string[],
 }
