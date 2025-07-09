@@ -1,19 +1,32 @@
 import type { ExecutorArMeta } from "./meta";
-import { CooperationNodeAr } from "../base/node/a-root";
+import { NodeAr } from "../base/node/a-root";
 import type { ExecutorAttrs } from "./struct/attrs";
 import { executorValidator } from "./struct/v-map";
-import type { CheckStructureData } from "../base/childable/struct/types";
-import type { CooperationValidationError } from "../base/node/struct/types";
-import type { Childable, CommandCooperation, Executable, Executor, Fatherble, OfferCooperation, OrganizationCooperation } from "../base/node/struct/interfaces";
+import type { CooperationValidationError } from "../base/interfaces/types";
+import type {
+  Childable, CommandCooperation, Executable, Executor, Fatherble,
+  OfferCooperation, OrganizationCooperation,
+} from "../base/interfaces/api";
+import type { Cost } from "#app/domain/types";
+import { costUtils } from "#app/domain/utils/cost/cost-utils";
+import type { StructureContext } from "../base/interfaces/node";
 
 export class ExecutorAr
-  extends CooperationNodeAr<ExecutorArMeta>
+  extends NodeAr<ExecutorArMeta>
   implements Executor
 {
   name = "ExecutorAr" as const;
 
   constructor(attrs: ExecutorAttrs) {
     super(attrs, executorValidator);
+  }
+
+  distributeProfit(amount: Cost, context: StructureContext): void {
+    context.recordDistributionResult(this.getId(), amount);
+
+    console.log(
+      `"${this.attrs.title}" получил ${costUtils.costToString(amount)}.`,
+    );
   }
 
   isChildable(): this is Childable {
@@ -48,27 +61,11 @@ export class ExecutorAr
     return this.attrs.ownerId;
   }
 
-  getProfit(): number {
+  getProfitProcentage(): number {
     return this.attrs.profitPercentage;
   }
 
-  public checkStructure(structData: CheckStructureData): CooperationValidationError[] {
-    const errors: CooperationValidationError[] = [];
-
-    if (structData.childrenDistributionShares) {
-      errors.push(this.getValidationResult(
-        'FoundedChildrens',
-        `[${this.getShortName} (${this.getId()})]: найдено ненужное свойство childrenDistributionShares.`,
-        'system-error',
-      ));
-    }
-    if (structData.fatherDistributionShare) {
-      errors.push(this.getValidationResult(
-        'FoundedFather',
-        `[${this.getShortName} (${this.getId()})]: найдено ненужное свойство fatherDistributionShare.`,
-        'system-error',
-      ));
-    }
-    return errors;
+  public checkStructure(context: StructureContext): CooperationValidationError[] {
+    return [];
   }
 }

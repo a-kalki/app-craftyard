@@ -1,16 +1,18 @@
-import { AssertionException } from "rilata/core";
-import type { CooperationAr } from "../types";
-import type { CooperationStructureValidationResult, CooperationValidationError } from "../base/node/struct/types";
-import type { CheckStructureData } from "../base/childable/struct/types";
+import { AssertionException, type UuidType } from "rilata/core";
+import type { CooperationStructureValidationResult, CooperationValidationError } from "../base/interfaces/types";
+import type { StructureContext, Node } from "../base/interfaces/node";
+import type { Cost } from "#app/domain/types";
+import { StructureContextObject } from "./context";
 
 /**
  * Отвечает за построение дерева из плоского списка агрегатов
  * и выполнение кросс-узловой валидации.
  */
 export class CooperationStructure {
-  private treeNodes: Map<string, CooperationAr>;
-  private rootNode: CooperationAr;
-  private fatherNode: CooperationAr | undefined;
+  private treeNodes: Map<string, Node>;
+  private rootNode: Node;
+  private fatherNode: Node | undefined;
+  private context: StructureContext;
   private validationErrors: CooperationValidationError[] = [];
   private validationSysErrors: CooperationValidationError[] = [];
   private validationWarnings: CooperationValidationError[] = [];
@@ -18,44 +20,56 @@ export class CooperationStructure {
   /**
    * @throws AssertionException если невозможно создать корректную структуру
    */
-  constructor(rootNodeId: string, aggregates: CooperationAr[]) {
+  constructor(rootNodeId: string, nodes: Node[]) {
     this.treeNodes = new Map();
 
-    if (aggregates.length === 0) {
-      throw new AssertionException('COOPERATION_STRUCTURE: Cannot build structure from an empty list of aggregates.');
+    if (nodes.length === 0) {
+      throw new AssertionException('COOPERATION_STRUCTURE: Cannot build structure from an empty list of nodes.');
     }
     if (!rootNodeId) {
       throw new AssertionException('COOPERATION_STRUCTURE: Root node ID must be provided.');
     }
 
-    const foundRootNode = aggregates.find(ar => ar.getId() === rootNodeId);
+    const foundRootNode = nodes.find(n => n.getId() === rootNodeId);
     if (!foundRootNode) {
       throw new AssertionException(
-        `COOPERATION_STRUCTURE: Root node with ID "${rootNodeId}" not found in the provided aggregates.`,
+        `COOPERATION_STRUCTURE: Root node with ID "${rootNodeId}" not found in the provided nodes.`,
       );
     }
     this.rootNode = foundRootNode;
 
     const uniqueIds = new Set<string>();
     const fatherId = this.rootNode.isFatherable()
-      ? this.rootNode.getAttrs().fatherId
+      ? this.rootNode.getFatherId()
       : undefined;
-    for (const aggregate of aggregates) {
-      if (uniqueIds.has(aggregate.getId())) {
+    for (const node of nodes) {
+      if (uniqueIds.has(node.getId())) {
         throw new AssertionException(
-          `COOPERATION_STRUCTURE: Duplicate aggregate ID found in the provided list: "${aggregate.getId()}".`,
+          `COOPERATION_STRUCTURE: Duplicate node ID found in the provided list: "${node.getId()}".`,
         );
       }
-      uniqueIds.add(aggregate.getId());
+      uniqueIds.add(node.getId());
 
       // в дерево входят только корень и его дети.
       // валидация проходит только для дерева, не проверяем отца.
-      if (aggregate.getId() === fatherId) {
-        this.fatherNode = aggregate;
+      if (node.getId() === fatherId) {
+        this.fatherNode = node;
       } else {
-        this.treeNodes.set(aggregate.getId(), aggregate);
+        this.treeNodes.set(node.getId(), node);
       }
     }
+
+    this.context = new StructureContextObject(this.treeNodes, this.fatherNode);
+  }
+
+  getFlatExecutorResults(): Map<string, Cost> {
+    return this.context.getFlatDistributionResults();
+  }
+
+  /** Распределить прибыль между участниками структуры. */
+  public distributeProfit(amount: Cost): void {
+    this.assertValid();
+    this.rootNode.distributeProfit(amount, this.context);
   }
 
   /**
@@ -86,11 +100,11 @@ export class CooperationStructure {
     }
   }
 
-  public getTreeNode(nodeId: string): CooperationAr | undefined {
+  public getTreeNode(nodeId: string): Node | undefined {
     return this.treeNodes.get(nodeId);
   }
 
-  public getRootNode(): CooperationAr {
+  public getRootNode(): Node {
     return this.rootNode;
   }
 
@@ -104,51 +118,16 @@ export class CooperationStructure {
 
     // 2. Запуск проверок индивидуальных правил каждого узла.
     for (const node of this.treeNodes.values()) {
-      const checkData = this.prepareCheckStructureData(node);
-      const nodeValidationResults = node.checkStructure(checkData);
+      const nodeValidationResults = node.checkStructure(this.context);
       nodeValidationResults.forEach(result => {
         if (result.type === 'error') this.addError(result);
         else if (result.type === 'system-error') this.addSystemError(result);
         else this.addWarning(result);
       });
     }
-  }
 
-  /**
-   * Собирает и возвращает дочерей и родителя узла
-   */
-  private prepareCheckStructureData(currentNode: CooperationAr): CheckStructureData {
-    if (currentNode.isExecutor()) return {};
-
-    const childrenDistributionShares: CooperationAr[] = [];
-    let fatherDistributionShare: CooperationAr | undefined = undefined;
-
-    // Собираем данные о детях текущего узла.
-    if (currentNode.isChildable()) {
-      const childrenIds = currentNode.getChildrenIds();
-      for (const childId of childrenIds) {
-        const childNode = this.getTreeNode(childId);
-        if (!childNode) continue;
-
-        childrenDistributionShares.push(childNode);
-      }
-    }
-
-    // Собираем данные о родителе текущего узла.
-    if (currentNode.isFatherable()) {
-      const fatherId = currentNode.getFatherId();
-      if (fatherId) {
-        fatherDistributionShare = this.getTreeNode(fatherId);
-        if (!fatherDistributionShare && fatherId === this.fatherNode?.getId()) {
-          fatherDistributionShare = this.fatherNode;
-        }
-      }
-    }
-
-    return {
-      childrenDistributionShares,
-      fatherDistributionShare,
-    };
+    // 3. Ищем узлы с несколькими родителями.
+    this.checkMultipleParents();
   }
 
   /**
@@ -159,11 +138,12 @@ export class CooperationStructure {
     const visited = new Set<string>();
     const recursionStack = new Map<string, string>();
 
-    const dfs = (node: CooperationAr, path: string[] = []): void => {
-      const { id: nodeId, title: nodeTitle } = node.getAttrs();
+    const dfs = (node: Node, path: string[] = []): void => {
+      const nodeId = node.getId();
+      const nodeTitle = node.getTitle();
       // Проверяем на цикл: если узел уже в стеке рекурсии, то это цикл
       if (recursionStack.has(node.getId())) {
-        const cyclePath = [...path, node.getShortName()];
+        const cyclePath = [...path, node.getTitle()];
 
         this.addError({
           nodeId,
@@ -175,7 +155,7 @@ export class CooperationStructure {
       }
 
       // Если узел уже посещен (но не в текущем стеке рекурсии), значит, это не цикл,
-      // а просто другой путь к уже пройденному узлу.
+      // а просто другой путь к уже пройденному узлу, будет обрабатываться в checkMultipleParents
       if (visited.has(nodeId)) {
         return;
       }
@@ -190,29 +170,84 @@ export class CooperationStructure {
 
       for (const childId of childrenIds) {
         const childNode = this.resolveNode(childId, path);
-        if (childNode) dfs(childNode, [...path, childNode.getShortName()]);
+        if (childNode) dfs(childNode, [...path, childNode.getTitle()]);
       }
 
-      recursionStack.delete(nodeId); // Удаляем узел из стека рекурсии при выходе
+      // Удаляем узел из стека рекурсии при выходе
+      recursionStack.delete(nodeId);
     };
 
     dfs(this.rootNode);
 
     // Проверяем, что все узлы были посещены (связность с корнем).
     if (visited.size !== this.treeNodes.size) {
-      const disconnectedNodes = Array.from(this.treeNodes.values()).filter(ar => !visited.has(ar.getId()));
-      const disconnectedIds = disconnectedNodes.map(ar => ar.getId());
-      const disconnectedTitles = disconnectedNodes.map(ar => ar.getShortName());
+      const disconnectedNodes = Array.from(this.treeNodes.values()).filter(n => !visited.has(n.getId()));
+      const disconnectedIds = disconnectedNodes.map(n => n.getId());
+      const disconnectedTitles = disconnectedNodes.map(n => n.getTitle());
       this.addSystemError({
         nodeId: 'STRUCTURE',
         nodeTitle: 'Общая структура',
         errName: 'DisconnectedNodes',
-        description: `Не все узлы подключены к корневому узлу "${this.rootNode.getShortName()}". Отключенные узлы: ${disconnectedTitles.join(', ')};\n (IDs: ${disconnectedIds.join(', ')}).`,
+        description: `Не все узлы подключены к корневому узлу "${this.rootNode.getTitle()}". Отключенные узлы: ${disconnectedTitles.join(', ')};\n (IDs: ${disconnectedIds.join(', ')}).`,
       });
     }
   }
 
-  private resolveNode(nodeId: string, pathes: string[]): CooperationAr | undefined {
+  /**
+   * Проверяет, что у каждого узла (кроме корня) есть только один родитель,
+   * или что исполнители имеют несколько родителей (предупреждение).
+   */
+  private checkMultipleParents(): void {
+    const childToParentsMap = new Map<UuidType, UuidType[]>();
+
+    // Шаг 1: Заполняем карту "ребенок -> список родителей"
+    this.treeNodes.forEach(node => {
+      if (node.isChildable()) {
+        const childableNode = node;
+        for (const childId of childableNode.getChildrenIds()) {
+          if (!childToParentsMap.has(childId)) {
+            childToParentsMap.set(childId, []);
+          }
+          childToParentsMap.get(childId)!.push(node.getId());
+        }
+      }
+    });
+
+    // Шаг 2: Анализируем карту на наличие множественных родителей
+    for (const [childId, parentIds] of childToParentsMap.entries()) {
+      if (parentIds.length > 1) {
+        const childNode = this.getTreeNode(childId);
+        if (!childNode) {
+          // Отсутствующий узел уже обработан в checkAllNodesConnectedAndNoCycles (MissingReferredNode)
+          continue;
+        }
+
+        const parentTitles = parentIds
+          .map(pId => this.getTreeNode(pId)?.getTitle() || 'Неизвестный узел')
+          .join(', ');
+
+        if (childNode.isExecutor()) {
+          // Исполнитель может иметь несколько родителей (это предупреждение)
+          this.addWarning({
+            errName: 'ExecutorHasMultipleParents',
+            description: `Узел "${childNode.getTitle()}" (${childId}) имеет несколько родителей: ${parentTitles}. Это допустимо, но рекомендуется для каждой роли создать свою запись исполнителя.`,
+            nodeId: childId,
+            nodeTitle: childNode.getTitle()
+          });
+        } else {
+          // Контейнеры (Offer, Organization, Command) не должны иметь нескольких родителей (это ошибка)
+          this.addError({
+            errName: 'ContainerHasMultipleParents',
+            description: `Узел кооперации ${childNode.getTitle()}(${childId}) имеет несколько родителей: ${parentTitles}. Это недопустимо, для каждого узла кооперации (команды) нужно создать свой уникальный узел.`,
+            nodeId: childId,
+            nodeTitle: childNode.getTitle()
+          });
+        }
+      }
+    }
+  }
+
+  private resolveNode(nodeId: string, pathes: string[]): Node | undefined {
     const node = this.treeNodes.get(nodeId);
     if (!node) {
       this.addSystemError({

@@ -4,6 +4,8 @@ import { CommandCooperationAr } from '../childables/command/a-root';
 import { ExecutorAr } from '../executor/a-root';
 import { uuidUtility } from "rilata/api-helper";
 import type { UuidType } from "rilata/core";
+import type { CooperationStructureValidationResult } from '../base/interfaces/types';
+import { expect } from 'bun:test';
 
 // Карта для хранения ключей и соответствующих им UUID
 const idMap: Map<string, UuidType> = new Map();
@@ -108,3 +110,24 @@ export function createExecutor({
   });
 }
 
+export function expectValidationResult(
+  result: CooperationStructureValidationResult,
+  expectedValid: boolean,
+  names: {
+    expectedErrorNames?: string[],
+    expectedSysErrorNames?: string[],
+    expectedWarningNames?: string[],
+  } = {}
+): void {
+  //console.log(result)
+
+  expect(result.isValid).toBe(expectedValid);
+
+  const actualErrorNames = result.errors.map(e => e.errName).sort();
+  const actualSysErrorNames = result.sysErrors.map(s => s.errName).sort();
+  const actualWarningNames = result.warnings.map(w => w.errName).sort();
+
+  expect(actualErrorNames).toEqual((names.expectedErrorNames ?? []).sort());
+  expect(actualSysErrorNames).toEqual((names.expectedSysErrorNames ?? []).sort());
+  expect(actualWarningNames).toEqual((names.expectedWarningNames ?? []).sort());
+};

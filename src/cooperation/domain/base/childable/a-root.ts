@@ -1,12 +1,15 @@
-import { CooperationNodeAr } from "../node/a-root";
+import type { Cost } from "#app/domain/types";
+import { AssertionException } from "rilata/core";
+import type { Childable } from "../interfaces/api";
+import type { StructureContext } from "../interfaces/node";
+import type { CooperationValidationError } from "../interfaces/types";
+import { NodeAr } from "../node/a-root";
 import type { ChildableArMeta } from "./meta";
-import type { Childable } from "../node/struct/interfaces";
-import type { CheckStructureData } from "./struct/types";
-import type { CooperationValidationError } from "../node/struct/types";
+import { costUtils } from "#app/domain/utils/cost/cost-utils";
 
 /** Кооперация различных команд. */
 export abstract class ChildableAr<META extends ChildableArMeta>
-  extends CooperationNodeAr<META>
+  extends NodeAr<META>
   implements Childable
 {
   getChildrenIds(copy?: boolean): string[] {
@@ -17,61 +20,30 @@ export abstract class ChildableAr<META extends ChildableArMeta>
     return true;
   }
 
-  checkStructure(structData: CheckStructureData): CooperationValidationError[] {
-    return this.checkChildrenRules(structData)
-      .concat(this.checkFatherRules(structData));
+  checkStructure(context: StructureContext): CooperationValidationError[] {
+    return this.checkChildrenRules(context)
+      .concat(this.checkFatherRules(context));
   }
 
-  protected checkChildrenRules(structData: CheckStructureData): CooperationValidationError[] {
+  protected distributeProfitToChilds(amount: Cost, context: StructureContext): void {
+    this.getChildrenIds().forEach(id => {
+      const childNode = context.getNode(id);
+      if (!childNode.isExecutable()) {
+        throw new AssertionException(
+          `[${this.constructor.name}]: executable child not founded: ${this.getShortName()} (${this.getId()})`
+        );
+      }
+      const childAmount = costUtils.percent(amount, childNode.getProfitProcentage());
+      childNode.distributeProfit(childAmount, context);
+    });
+  }
+
+  protected checkChildrenRules(context: StructureContext): CooperationValidationError[] {
     if (!this.isChildable()) return [];
     const errors: CooperationValidationError[] = [];
-
-    const childrenShares = structData.childrenDistributionShares;
     const childrenIds = this.getChildrenIds();
 
-    // ********** sys-errors ***********
-    if (!childrenShares) {
-      errors.push(this.getValidationResult(
-        'NotFoundChildrens',
-        `[${this.getShortName} (${this.getId()})]: не найдено свойство childrenDistributionShares для валидации структуры.`,
-        'system-error',
-      ));
-      return errors;
-    }
-
-    if (childrenShares.length !== childrenIds.length) {
-      errors.push(this.getValidationResult(
-        'ChildrensLengthNotEqual',
-        `[${this.getShortName} (${this.getId()})]: количество детей в агрегате (${childrenIds.length}) и структуре валидации (${childrenShares.length}) не равны.`,
-        'system-error',
-      ));
-    }
-
-    const sharedExtraIds = new Set(childrenShares.map(ar => ar.getId()))
-      .difference(new Set(childrenIds))
-      .values()
-      .toArray()
-    const childsExtraIds = new Set(childrenIds)
-      .difference(new Set(childrenShares.map(ar => ar.getId())))
-      .values()
-      .toArray()
-    if (sharedExtraIds.length + childsExtraIds.length > 0) {
-      const childIdsAsStr = childsExtraIds.length > 0
-        ? `\nЛишние id в агрегате: ${childsExtraIds.values().toArray().join(', ')}.`
-        : '';
-      const sharedIdsAsStr = sharedExtraIds.length > 0
-        ? `\nЛишние id в структуре валидации: ${childsExtraIds.values().toArray().join(', ')}.`
-        : '';
-
-      errors.push(this.getValidationResult(
-        'ChildrensIdsNotEqual',
-        `[${this.getShortName} (${this.getId()})]: id детей в агрегате и структуре валидации не одинаковые. ${childIdsAsStr} ${sharedIdsAsStr}`,
-        'system-error',
-      ));
-    }
-
     // ********** validations ***********
-
     if (childrenIds.length === 0) {
       errors.push(this.getValidationResult(
         'NotFoundChildrens',
@@ -80,7 +52,7 @@ export abstract class ChildableAr<META extends ChildableArMeta>
       return errors;
     }
 
-    const onlyExecutors = childrenShares.every(ar => ar.isExecutable());
+    const onlyExecutors = childrenIds.every(id => context.getNode(id).isExecutable());
     if (!onlyExecutors) {
       errors.push(this.getValidationResult(
         'NotSupportedNodeType',
@@ -88,9 +60,10 @@ export abstract class ChildableAr<META extends ChildableArMeta>
       ));
     }
 
-    const totalShare = childrenShares
+    const totalShare = childrenIds
+      .map(id => context.getNode(id))
       .filter(ar => ar.isExecutable())
-      .reduce((sum, ar) => sum + ar.getProfit(), 0);
+      .reduce((sum, ar) => sum + ar.getProfitProcentage(), 0);
 
     if (Math.abs(totalShare - 1.0) > 0.0001) {
       errors.push(this.getValidationResult(
@@ -102,25 +75,14 @@ export abstract class ChildableAr<META extends ChildableArMeta>
     return errors;
   }
 
-  protected checkFatherRules(structData: CheckStructureData): CooperationValidationError[] {
+  protected checkFatherRules(context: StructureContext): CooperationValidationError[] {
     if (!this.isFatherable()) return [];
+    const fatherId = this.getFatherId();
 
     const errors: CooperationValidationError[] = [];
 
-    // ********** assertions ***********
-    const fatherShare = structData.fatherDistributionShare;
-
-    const notIdsEqual = fatherShare && fatherShare.getId() !== this.getId();
-    if(notIdsEqual) {
-      errors.push(this.getValidationResult(
-        'FatherIdNotEqual',
-        `[${this.getShortName} (${this.getId()})]: id родителя в агрегате (${this.getId()}) и структуре валидации ${fatherShare.getId()} не одинаковые. `,
-        'system-error',
-      ));
-    }
-
     // ********** validations ***********
-    if (this.isOrganization() && !fatherShare) {
+    if (this.isOrganization() && !fatherId) {
       errors.push(this.getValidationResult(
         'NotHaveNotRequiredFather',
         `У узла ${this.getShortName()} нет родительского узла, возможно надо добавить.`,
@@ -129,7 +91,7 @@ export abstract class ChildableAr<META extends ChildableArMeta>
       return errors;
     }
 
-    if (this.isOffer() && !fatherShare) {
+    if (this.isOffer() && !fatherId) {
       errors.push(this.getValidationResult(
         'NotHaveFatherButRequired',
         `Для узла ${this.getShortName()} должен быть указан родитель.`
@@ -137,15 +99,30 @@ export abstract class ChildableAr<META extends ChildableArMeta>
       return errors;
     }
 
-    if (!fatherShare) return []; // для очистки типа
-
-    if (!fatherShare.isOrganization()) {
-      return [this.getValidationResult(
-        'NotSupportedNodeType',
-        'Родительским узлом может быть только "Кооперация предприятия".'
-      )];
+    if (!fatherId) {
+      // по идее сюда мы никогда не должны попасть.
+      // fatherId есть в организация и офферах, оба случая мы обработали.
+      throw new AssertionException(
+        `[${this.constructor.name}]: fatherId is undefined!`
+      )
+    };
+    const fatherNode = context.getFather(fatherId);
+    if(!fatherNode) {
+      errors.push(this.getValidationResult(
+        'FatherNotFinded',
+        `Не найден родитель для агрегата: ${this.getShortName()} (${this.getId()}). `,
+        'system-error',
+      ));
+      return errors;
     }
 
-    return [];
+    if (!fatherNode.isOrganization()) {
+      errors.push(this.getValidationResult(
+        'NotSupportedNodeType',
+        'Родительским узлом может быть только "Кооперация предприятия".'
+      ));
+    }
+
+    return errors;
   }
 }

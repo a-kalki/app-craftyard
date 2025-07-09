@@ -1,6 +1,8 @@
+import type { Cost } from "#app/domain/types"
+
 /** Исполнитель, может получить свою долю выручки за свою работу */
 export interface Executable {
-  getProfit(): number
+  getProfitProcentage(): number
 }
 
 /** Конечный исполнитель. Лист в дереве.
@@ -31,3 +33,4 @@ export interface OfferCooperation extends Fatherble, Childable {}
 
 /** Команда исполнителей и выгодополучателей. */
 export interface CommandCooperation extends Executable, Childable {}
+

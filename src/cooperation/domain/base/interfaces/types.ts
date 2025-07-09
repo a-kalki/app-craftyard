@@ -1,3 +1,4 @@
+
 export type CooperationValidationError = {
   nodeId: string,
   nodeTitle: string,

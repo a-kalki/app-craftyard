@@ -1,39 +1,17 @@
 import { CooperationStructure } from './cooperation';
 import { beforeEach, describe, expect, test } from 'bun:test';
-import type { CooperationStructureValidationResult } from '../base/node/struct/types';
-import { clearUuidMap, createCommand, createExecutor, createOffer, createOrganization, getUuid } from './test-helpers';
+import { clearUuidMap, createCommand, createExecutor, createOffer, createOrganization, expectValidationResult, getUuid } from './test-helpers';
 
 // --- Набор тестов ---
 describe('CooperationStructure', () => {
-  describe('Validatrion', () => {
     // Вспомогательная функция для проверки результатов валидации
-    const expectValidationResult = (
-      result: CooperationStructureValidationResult,
-      expectedValid: boolean,
-      names: {
-        expectedErrorNames?: string[],
-        expectedSysErrorNames?: string[],
-        expectedWarningNames?: string[],
-      } = {}
-    ) => {
-      //console.log(result)
-
-      expect(result.isValid).toBe(expectedValid);
-
-      const actualErrorNames = result.errors.map(e => e.errName).sort();
-      const actualSysErrorNames = result.sysErrors.map(s => s.errName).sort();
-      const actualWarningNames = result.warnings.map(w => w.errName).sort();
-
-      expect(actualErrorNames).toEqual((names.expectedErrorNames ?? []).sort());
-      expect(actualSysErrorNames).toEqual((names.expectedSysErrorNames ?? []).sort());
-      expect(actualWarningNames).toEqual((names.expectedWarningNames ?? []).sort());
-    };
 
     // Очищаем idMap перед каждым тестом, чтобы UUID были уникальными для каждого теста
     beforeEach(() => {
       clearUuidMap();
     });
 
+  describe('Validatrion', () => {
     // --- Тесты, часть 1: Базовая валидация и инициализация ---
     describe('Базовая валидация и инициализация', () => {
       // --- Тест-кейс: Базовая валидная структура ---
@@ -93,7 +71,6 @@ describe('CooperationStructure', () => {
           offer1, executor1
         ])).toThrow('COOPERATION_STRUCTURE: Root node with ID');
       });
-    });
 
       // --- Тест-кейс: Невалидная структура с родителем родителя организациями ---
       // должно передаваться только родитель корня, все остальные узлы должны относиться к корню
@@ -113,9 +90,10 @@ describe('CooperationStructure', () => {
         expectValidationResult(result, false, {
           expectedErrorNames: ['NotFoundChildrens'],
           expectedSysErrorNames: ['DisconnectedNodes'],
-          expectedWarningNames: ['NotHaveNotRequiredFather'],
-        }, );
+          expectedWarningNames: ['NotHaveNotRequiredFather']
+        });
       });
+    });
 
     // --- Тесты, часть 2: Ошибки инициализации и связности ---
     describe('Ошибки инициализации и связности', () => {
@@ -127,7 +105,7 @@ describe('CooperationStructure', () => {
 
         expect(() => new CooperationStructure(getUuid('org1'), [
           org1, offer1, executor1, executor1
-        ])).toThrow('COOPERATION_STRUCTURE: Duplicate aggregate ID found in the provided list:');
+        ])).toThrow('COOPERATION_STRUCTURE: Duplicate node ID found in the provided list:');
       });
 
       // --- Тест-кейс: Отключенные узлы (не все узлы достижимы от корня) ---
@@ -187,7 +165,7 @@ describe('CooperationStructure', () => {
 
     describe('У команды всегда должны быть 100% долей в детях', () => {
       // --- Тест-кейс: Недобор процентов ---
-      test('должна выдать ошибку несоответствия долей команды', () => {
+      test('должна выдать ошибку несоответствия <недобор> долей команды', () => {
         // Сценарий: cmd1 -> (exec1, exec2)
         const executor1 = createExecutor({ key: 'exec1', profitPercentage: .4 });
         const executor2 = createExecutor({ key: 'exec2', profitPercentage: .55 });
@@ -200,6 +178,38 @@ describe('CooperationStructure', () => {
 
         expectValidationResult(result, false, {
           expectedErrorNames: ['ChildsIsNotFullPersentage']
+        });
+      });
+
+      // --- Тест-кейс: Перебор процентов ---
+      test('должна выдать ошибку несоответствия <перебор> долей команды', () => {
+        // Сценарий: cmd1 -> (exec1, exec2)
+        const executor1 = createExecutor({ key: 'exec1', profitPercentage: .4 });
+        const executor2 = createExecutor({ key: 'exec2', profitPercentage: .605 });
+        const cmd1 = createCommand({ key: 'cmd1', childrenKeys: ['exec1', 'exec2'] });
+
+        const structure = new CooperationStructure(getUuid('cmd1'), [
+          executor1, executor2, cmd1
+        ]);
+        const result = structure.getValidationResult();
+
+        expectValidationResult(result, false, {
+          expectedErrorNames: ['ChildsIsNotFullPersentage']
+        });
+      });
+
+      // --- Тест-кейс: У команды не указаны дети ---
+      test('должна выдать ошибку что надо добавить детей', () => {
+        // Сценарий: cmd1 -> ()
+        const cmd1 = createCommand({ key: 'cmd1', childrenKeys: [] });
+
+        const structure = new CooperationStructure(getUuid('cmd1'), [
+          cmd1
+        ]);
+        const result = structure.getValidationResult();
+
+        expectValidationResult(result, false, {
+          expectedErrorNames: ['NotFoundChildrens']
         });
       });
     });
@@ -246,11 +256,12 @@ describe('CooperationStructure', () => {
       test('должна сообщить об ошибке организации родительского узла', () => {
         // Сценарий: offer2 <- org1 -> exec1
         const executor1 = createExecutor({ key: 'exec1', profitPercentage: 1 });
+        const executor2 = createExecutor({ key: 'exec2', profitPercentage: 1 });
         const org1 = createOrganization({ key: 'org1', childrenKeys: ['exec1'] });
-        const org2 = createOrganization({ key: 'org2', childrenKeys: ['exec1', 'org1'] });
+        const org2 = createOrganization({ key: 'org2', childrenKeys: ['exec2', 'org1'] });
 
         const structure = new CooperationStructure(getUuid('org2'), [
-          executor1, org1, org2
+          executor1, org1, org2, executor2
         ]);
         const result = structure.getValidationResult();
 
@@ -260,5 +271,56 @@ describe('CooperationStructure', () => {
         });
       });
     });
-  })
+  });
+
+  // --- Тест-кейс: Множественные родители ---
+  describe('Multiple Parents Check', () => {
+      // --- Тест-кейс: Конечный исполнитель может быть в двух командах ---
+    test('должна выдать предупреждение что лучше явно задавать роли для конечных исполнителей.', () => {
+        // Сценарий: cmdZ -> (execA, cmdY -> (execC, cmdX -> execA, execC))
+      const executorA = createExecutor({ key: 'execA', profitPercentage: .5 });
+      const executorB = createExecutor({ key: 'execB', profitPercentage: .5 });
+      const executorC = createExecutor({ key: 'execC', profitPercentage: .5 });
+      const commandX = createCommand({ key: 'cmdX', childrenKeys: ['execA', 'execB'], profitPercentage: .5 });
+      const commandY = createCommand({ key: 'cmdY', childrenKeys: ['execC', 'cmdX'], profitPercentage: .5 });
+      const commandZ = createCommand({ key: 'cmdZ', childrenKeys: ['cmdY', 'execA'], profitPercentage: .5 });
+
+      const structure = new CooperationStructure(getUuid('cmdZ'), [
+        commandZ, commandX, commandY, executorA, executorB, executorC,
+      ]);
+      const result = structure.getValidationResult();
+
+      expectValidationResult(result, true, {
+        expectedWarningNames: ['ExecutorHasMultipleParents'],
+      });
+
+      expect(result.warnings.some(e =>
+        e.errName === 'ExecutorHasMultipleParents'
+        && e.nodeId === getUuid('execA')
+      )).toBe(true);
+    });
+
+    // --- Тест-кейс: Команда не может быть в двух разных контейнерах ---
+    test('должна выдать ошибку, контейнеры-кооперации не могут быть в детях разных контейнеров.', () => {
+        // Сценарий: cmdZ -> (cmdX -> (execA, execC), cmdY -> (execC, cmdX -> execA, execC))
+      const executorA = createExecutor({ key: 'execA', profitPercentage: 1 });
+      const executorB = createExecutor({ key: 'execB', profitPercentage: .5 });
+      const commandX = createCommand({ key: 'cmdX', childrenKeys: ['execA'], profitPercentage: .5 });
+      const commandY = createCommand({ key: 'cmdY', childrenKeys: ['execB', 'cmdX'], profitPercentage: .5 });
+      const commandZ = createCommand({ key: 'cmdZ', childrenKeys: ['cmdY', 'cmdX'], profitPercentage: .5 });
+
+      const structure = new CooperationStructure(getUuid('cmdZ'), [
+        commandZ, commandX, commandY, executorA, executorB,
+      ]);
+      const result = structure.getValidationResult();
+
+      expectValidationResult(result, false, {
+        expectedErrorNames: ['ContainerHasMultipleParents'],
+      });
+      expect(result.errors.some(e =>
+        e.errName === 'ContainerHasMultipleParents'
+        && e.nodeId === getUuid('cmdX')
+      )).toBe(true);
+    });
+  });
 })

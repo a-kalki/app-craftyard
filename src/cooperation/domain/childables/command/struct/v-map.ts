@@ -1,4 +1,7 @@
-import { DtoFieldValidator, LiteralFieldValidator, RangeNumberValidationRule, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
+import {
+  DtoFieldValidator, LiteralFieldValidator, RangeNumberValidationRule,
+  TextStrictEqualValidationRule, type ValidatorMap,
+} from "rilata/validator";
 import type { CommandCooperationAttrs } from "./attrs";
 import { cooperationAttrsVmap } from "#cooperation/domain/base/childable/struct/v-map";
 
