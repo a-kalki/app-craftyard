@@ -1,0 +1,172 @@
+{
+  "f47ac10b-58cc-4372-a567-0e02b2c3d479": {
+    "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "title": "Организация работы мастерской-бизнеса. Аренда.",
+    "responsibilities": [],
+    "type": "ORGANIZATION_COOPERATION",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [
+      "b3a9d7f0-4c12-4e89-9a21-7f8e3c1d2e0a",
+      "d8e7c6b5-2a10-4f93-8b7c-0a1b2c3d4e5f"
+    ],
+    "commissionPercentage": 0.3,
+    "editorIds": [
+      "773084180"
+    ],
+    "masterId": "773084180"
+  },
+  "b1cc7792-f61c-4e72-bf8a-0935f179f1fe": {
+    "id": "b1cc7792-f61c-4e72-bf8a-0935f179f1fe",
+    "title": "Организация работы мастерской-бизнеса. Мастера.",
+    "responsibilities": [],
+    "type": "ORGANIZATION_COOPERATION",
+    "contextType": [
+      "product-sale", "course", "hobby-kit"
+    ],
+    "childrenIds": [
+      "b3a9d7f0-4c12-4e89-9a21-7f8e3c1d2e0a",
+      "d8e7c6b5-2a10-4f93-8b7c-0a1b2c3d4e5f"
+    ],
+    "commissionPercentage": 0.2,
+    "editorIds": [
+      "773084180"
+    ],
+    "masterId": "773084180"
+  },
+  "b3a9d7f0-4c12-4e89-9a21-7f8e3c1d2e0a": {
+    "id": "b3a9d7f0-4c12-4e89-9a21-7f8e3c1d2e0a",
+    "title": "Общие организационные работы: Абонемент",
+    "responsibilities": [],
+    "type": "COMMAND_COOPERATION",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [
+      "e0f1d2c3-a4b5-4c6d-7e8f-9a0b1c2d3e4f",
+      "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      "5f6e7d8c-9b0a-1f2e-3d4c-5b6a7f8e9d0c"
+    ],
+    "profitPercentage": 0.5
+  },
+  "e0f1d2c3-a4b5-4c6d-7e8f-9a0b1c2d3e4f": {
+    "id": "e0f1d2c3-a4b5-4c6d-7e8f-9a0b1c2d3e4f",
+    "title": "Обеспечение ресурсами жизнедеятельности",
+    "responsibilities": [],
+    "type": "EXECUTOR",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [],
+    "profitPercentage": 0.4,
+    "ownerId": "773084180"
+  },
+  "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d": {
+    "id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+    "title": "Обеспечение развития мастерской",
+    "responsibilities": [],
+    "type": "EXECUTOR",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [],
+    "profitPercentage": 0.5,
+    "ownerId": "773084180"
+  },
+  "5f6e7d8c-9b0a-1f2e-3d4c-5b6a7f8e9d0c": {
+    "id": "5f6e7d8c-9b0a-1f2e-3d4c-5b6a7f8e9d0c",
+    "title": "Развитие франшиз",
+    "responsibilities": [],
+    "type": "EXECUTOR",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [],
+    "profitPercentage": 0.1,
+    "ownerId": "773084180"
+  },
+  "d8e7c6b5-2a10-4f93-8b7c-0a1b2c3d4e5f": {
+    "id": "d8e7c6b5-2a10-4f93-8b7c-0a1b2c3d4e5f",
+    "title": "Выкладка материалов в приложении",
+    "responsibilities": [],
+    "type": "EXECUTOR",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [],
+    "profitPercentage": 0.5,
+    "ownerId": "773084180"
+  },
+  "04f59841-fc2d-43c8-be08-aec70ce27b2e": {
+    "id": "04f59841-fc2d-43c8-be08-aec70ce27b2e",
+    "title": "Предложения: мастера, ментора",
+    "responsibilities": [],
+    "type": "OFFER_COOPERATION",
+    "contextType": [
+      "product-sale", "course", "hobby-kit"
+    ],
+    "childrenIds": [
+      "36ed0568-1bac-43fc-a9b0-a9f0c55945af"
+    ],
+    "fatherId": "b1cc7792-f61c-4e72-bf8a-0935f179f1fe",
+    "editorIds": [
+      "773084180"
+    ],
+    "masterId": "773084180"
+  },
+  "36ed0568-1bac-43fc-a9b0-a9f0c55945af": {
+    "id": "36ed0568-1bac-43fc-a9b0-a9f0c55945af",
+    "title": "Выполнение работы мастера, ментора",
+    "responsibilities": [],
+    "type": "EXECUTOR",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [],
+    "profitPercentage": 1,
+    "ownerId": "773084180"
+  },
+  "f0e1d2c3-b4a5-6d7e-8f9a-0b1c2d3e4f5a": {
+    "id": "f0e1d2c3-b4a5-6d7e-8f9a-0b1c2d3e4f5a",
+    "title": "Организация работ по абонементам",
+    "responsibilities": [],
+    "type": "OFFER_COOPERATION",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [
+      "68493d9d-c7ad-400d-a5ba-33dbb699ec8e",
+      "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e"
+    ],
+    "fatherId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "editorIds": [
+      "773084180"
+    ],
+    "masterId": "773084180"
+  },
+  "68493d9d-c7ad-400d-a5ba-33dbb699ec8e": {
+    "id": "68493d9d-c7ad-400d-a5ba-33dbb699ec8e",
+    "title": "Инструктор-цеха, работа с клиентами",
+    "responsibilities": [],
+    "type": "EXECUTOR",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [],
+    "profitPercentage": 0.5,
+    "ownerId": "773084180"
+  },
+  "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e": {
+    "id": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e",
+    "title": "Менеджер по работе с клиентами",
+    "responsibilities": [],
+    "type": "EXECUTOR",
+    "contextType": [
+      "rent"
+    ],
+    "childrenIds": [],
+    "profitPercentage": 0.5,
+    "ownerId": "773084180"
+  }
+}

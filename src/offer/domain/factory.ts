@@ -3,16 +3,15 @@ import { HobbyKitOfferAR } from "#offer/domain/hobby-kit/a-root";
 import { ProductSaleOfferAR } from "#offer/domain/product-sale/a-root";
 import { WorkspaceRentOfferAR } from "#offer/domain/workspace-rent/a-root";
 import { AssertionException } from "rilata/core";
-import type { OfferAr, OfferDbo } from "./types";
+import type { OfferAr, OfferAttrs } from "./types";
 import type { CourseOfferAttrs } from "./course/struct/attrs";
 import type { HobbyKitOfferAttrs } from "./hobby-kit/struct/attrs";
 import type { ProductSaleOfferAttrs } from "./product-sale/struct/attrs";
 import type { WorkspaceRentOfferAttrs } from "./workspace-rent/struct/attrs";
 
 class OfferFactory {
-  restore<AR extends OfferAr>(dbo: OfferDbo): AR {
-    const attrs = dbo as unknown;
-    switch (dbo.type){
+  restore<AR extends OfferAr>(attrs: OfferAttrs): AR {
+    switch (attrs.type){
       case 'COURSE_OFFER':
         return new CourseOfferAR(attrs as CourseOfferAttrs) as AR;
       case 'HOBBY_KIT_OFFER':

@@ -1,6 +1,9 @@
 import { CooperationStructure } from './cooperation';
 import { beforeEach, describe, expect, test } from 'bun:test';
-import { clearUuidMap, createCommand, createExecutor, createOffer, createOrganization, expectValidationResult, getUuid } from './test-helpers';
+import {
+  clearUuidMap, createCommand, createExecutor, createOffer, createOrganization,
+  expectValidationResult, getUuid
+}from './test-helpers';
 
 // --- Набор тестов ---
 describe('CooperationStructure', () => {

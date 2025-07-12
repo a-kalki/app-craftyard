@@ -1,5 +1,5 @@
 /** модуль содержит валидаторы которые могут повторно переиспользоваться в разных агрегатах. */
-import { CannotBeEmptyStringValidationRule, IsTimeStampValidationRule, LiteralFieldValidator, MinCharsCountValidationRule, MinDateStampValidationRule, PositiveNumberValidationRule, RegexMatchesValueValidationRule, UuidField, UUIDFormatValidationRule } from "rilata/validator";
+import { CannotBeEmptyStringValidationRule, IsTimeStampValidationRule, LiteralFieldValidator, MinCharsCountValidationRule, MinDateStampValidationRule, PositiveNumberValidationRule, RangeNumberValidationRule, RegexMatchesValueValidationRule, UuidField, UUIDFormatValidationRule } from "rilata/validator";
 
 // *********************** rules ***************************
 export const cannotBeEmptyRule = new CannotBeEmptyStringValidationRule();
@@ -42,10 +42,17 @@ export const notLimitedTimeStampValidator = new LiteralFieldValidator(
   'createAt', true, { isArray: false }, 'number', [ new IsTimeStampValidationRule() ]
 )
 
-export const editorIdsValidator = new LiteralFieldValidator('editorIds', true, { isArray: true, minElementsCount: 1 }, 'string', [
-  onlyDigitsRule,
-])
+export const editorIdsValidator: LiteralFieldValidator<'editorIds', true, true, string> =
+  new LiteralFieldValidator(
+  'editorIds', true, { isArray: true, minElementsCount: 1 }, 'string', [
+      onlyDigitsRule,
+  ]
+)
 
 export const positiveNumberValidator = new LiteralFieldValidator('price', true, { isArray: false }, 'number', [
   positiveNumberRule
+]);
+
+export const percentageValidator = new LiteralFieldValidator('comissionPercentage', true, { isArray: false }, 'number', [
+  new RangeNumberValidationRule(0, 100),
 ]);

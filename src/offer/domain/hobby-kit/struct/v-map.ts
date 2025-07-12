@@ -1,6 +1,6 @@
 import { DtoFieldValidator, LiteralFieldValidator, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
 import { modelCreateionOfferVmap } from "#offer/domain/base-offer/struct/v-map";
-import { positiveNumberValidator } from "#app/domain/base-validators";
+import { createAtValidator, positiveNumberValidator, updateAtValidator, userIdValidator } from "#app/domain/base-validators";
 import type { HobbyKitOfferAttrs } from "./attrs";
 import { workspaceRentOfferVmap } from "#offer/domain/workspace-rent/struct/v-map";
 
@@ -11,18 +11,20 @@ export const hobbyKitOfferVmap: ValidatorMap<HobbyKitOfferAttrs> = {
     modelId: modelCreateionOfferVmap.modelId,
     title: modelCreateionOfferVmap.title,
     description: modelCreateionOfferVmap.description,
-    ownerId: modelCreateionOfferVmap.ownerId,
-    cost: modelCreateionOfferVmap.cost,
     organizationId: modelCreateionOfferVmap.organizationId,
+    masterId: userIdValidator.cloneWithName('masterId'),
+    offerCooperationId: modelCreateionOfferVmap.offerCooperationId,
     status: modelCreateionOfferVmap.status,
+    cost: modelCreateionOfferVmap.cost,
     estimatedExpenses: modelCreateionOfferVmap.estimatedExpenses,
-    offerExecutorsId: modelCreateionOfferVmap.offerExecutorsId,
     editorIds: modelCreateionOfferVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(hobbyKitOfferType),
     ]),
     workshopOfferId: workspaceRentOfferVmap.id.cloneWithName('workshopOfferId'),
     materialPreparationHours: positiveNumberValidator.cloneWithName('materialPreparationHours'),
+    createAt: createAtValidator,
+    updateAt: updateAtValidator,
 }
 
 export const hobbyKitOfferValidator = new DtoFieldValidator(

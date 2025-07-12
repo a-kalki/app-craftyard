@@ -18,26 +18,36 @@ export class OrganizationCooperationAr
     super(attrs, organizationCooperationValidator);
   }
 
+  info(): string {
+    return `${this.getType()}: comission: ${Math.round(this.attrs.commissionPercentage * 100)}%`
+  }
+
   distributeProfit(amount: Cost, context: StructureContext): void {
     context.recordDistributionResult(this.getId(), amount);
 
-    let childsAmount = amount;
-    const fatherId = this.getFatherId();
-    if (fatherId) {
-      const fatherNode = context.getFather(fatherId);
-      if (!fatherNode || !fatherNode.isOrganization()) {
-        throw new AssertionException(
-          `[${this.constructor.name}]: not founded father node or not organization: ${this.getShortName()} (${this.getId()})`,
-        );
+    try {
+      let childsAmount = amount;
+      const fatherId = this.getFatherId();
+      if (fatherId) {
+        const fatherNode = context.getFather(fatherId);
+        if (!fatherNode || !fatherNode.isOrganization()) {
+          throw new AssertionException(
+            `[${this.constructor.name}]: not founded father node or not organization: ${this.getShortName()} (${this.getId()})`,
+          );
+        }
+
+        const fatherAmount = costUtils.percent(amount, fatherNode.commissionPercentage());
+        fatherNode.distributeProfit(fatherAmount, context);
+
+        childsAmount = costUtils.diff(amount, fatherAmount);
       }
-
-      const fatherAmount = costUtils.percent(amount, fatherNode.commissionPercentage());
-      fatherNode.distributeProfit(fatherAmount, context);
-
-      childsAmount = costUtils.diff(amount, fatherAmount);
+      this.distributeProfitToChilds(childsAmount, context);
+    } catch (err) {
+      // Если распределение пришло с offer, то детей данного узла в контексте не будет.
+      // Распределение потока от offer, должно выполняться с другого дерева CooperationStructure.
+      if ((err as Error).message.startsWith('[StructureContextObject]: not founded node by id:')) return;
+      throw err;
     }
-
-    this.distributeProfitToChilds(childsAmount, context);
   }
 
   isFatherable(): this is Fatherble {

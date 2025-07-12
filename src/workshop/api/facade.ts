@@ -6,7 +6,14 @@ import type { WorkshopsModule } from "./module";
 export class WorkshopBackendFacade implements ApiWorkshopsFacade {
   constructor(private module: WorkshopsModule) {}
 
-  getWorkshop(input: GetWorkshopCommand, caller: Caller): Promise<BackendResultByMeta<GetWorkshopMeta>> {
-    throw new Error("Method not implemented.");
+  async getWorkshop(workshopId: string, caller: Caller): Promise<BackendResultByMeta<GetWorkshopMeta>> {
+    const command: GetWorkshopCommand = {
+        name: "get-workshop",
+        attrs: {
+            id: workshopId
+        },
+        requestId: crypto.randomUUID(),
+    }
+    return this.module.handleRequest(command, { caller }) as unknown as BackendResultByMeta<GetWorkshopMeta>;
   }
 }

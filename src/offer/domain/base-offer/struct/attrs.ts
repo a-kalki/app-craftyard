@@ -5,7 +5,8 @@ import type { UserId } from "rilata/core";
  * @description Детализация расходной части предложения.
  */
 export type  ExpenseItem = {
-  name: string;
+  title: string;
+  description?: string,
   amount: number;
 }
 
@@ -19,11 +20,12 @@ export type BaseOfferAttrs = {
   title: string;
   description: string;
   organizationId: string; // Ссылка на мастерскую для которого актуально предложение
-  offerExecutorsId: string; // Ссылка на кооперацию исполнителей
+  offerCooperationId: string; // Ссылка на кооперацию исполнителей
   cost: Cost; // Конечная стоимость для покупателя в тенге
   status: OfferStatus; // Статус предложения
-  estimatedExpenses: ExpenseItem[]; // Предполагаемая расходная часть предложения
-  editorIds: UserId;
+  editorIds: UserId[];
+  createAt: number,
+  updateAt: number,
 }
 
 /**
@@ -31,5 +33,6 @@ export type BaseOfferAttrs = {
  */
 export type ModelCreationOfferAttrs = BaseOfferAttrs & {
   modelId: string; // Ссылка на Model
-  ownerId: string; // Ссылка на ответственного мастера
+  masterId: string; // Ссылка на ответственного мастера
+  estimatedExpenses: ExpenseItem[]; // Предполагаемая расходная часть предложения
 }

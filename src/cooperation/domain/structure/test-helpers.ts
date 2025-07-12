@@ -29,6 +29,7 @@ export function createOrganization({
   key,
   commissionPercentage = 0.1,
   childrenKeys = [],
+  contextType = ['rent'],
   fatherKey,
   title = `Организация ${key}`,
   editorIds = [userId],
@@ -36,6 +37,7 @@ export function createOrganization({
   key: string;
   title?: string;
   commissionPercentage?: number;
+  contextType?: ['rent'],
   childrenKeys?: string[];
   fatherKey?: string;
   editorIds?: string[];
@@ -45,6 +47,7 @@ export function createOrganization({
     title,
     responsibilities: [],
     editorIds: editorIds,
+    contextType,
     type: 'ORGANIZATION_COOPERATION',
     childrenIds: childrenKeys.map(key => getUuid(key)),
     commissionPercentage,
@@ -56,12 +59,14 @@ export function createOffer({
   key,
   fatherKey,
   childrenKeys = [],
+  contextType = ['rent'],
   title = `Предложение ${key}`,
   editorIds = [userId],
 }: {
   key: string;
   title?: string;
   childrenKeys?: string[];
+  contextType?: ['rent'],
   fatherKey: string;
   editorIds?: string[];
 }): OfferCooperationAr {
@@ -70,6 +75,7 @@ export function createOffer({
     title,
     responsibilities: [],
     type: 'OFFER_COOPERATION',
+    contextType,
     childrenIds: childrenKeys.map(key => getUuid(key)),
     editorIds: editorIds,
     fatherId: getUuid(fatherKey),
@@ -80,23 +86,23 @@ export function createCommand({
   key,
   childrenKeys = [],
   profitPercentage = .6,
+  contextType = ['rent'],
   title = `Команда ${key}`,
-  editorIds = [userId],
 }: {
   key: string;
   title?: string;
   profitPercentage?: number;
+  contextType?: ['rent'],
   childrenKeys?: string[];
-  editorIds?: string[];
 }): CommandCooperationAr {
   return new CommandCooperationAr({
     id: getUuid(key),
     title,
     responsibilities: [],
+    contextType,
     type: 'COMMAND_COOPERATION',
-    profitePercentage: profitPercentage,
+    profitPercentage: profitPercentage,
     childrenIds: childrenKeys.map(key => getUuid(key)),
-    editorIds: editorIds,
   });
 }
 
@@ -104,23 +110,23 @@ export function createExecutor({
   key,
   profitPercentage = 1.0,
   ownerKey = 'defaultOwner',
+  contextType = ['rent'],
   title = `Исполнитель ${key}`,
-  editorIds = [userId],
 }: {
   key: string;
   title?: string;
   profitPercentage?: number;
   ownerKey?: string;
-  editorIds?: string[];
+  contextType?: ['rent'],
 }): ExecutorAr {
   return new ExecutorAr({
     id: getUuid(key),
     title,
     responsibilities: [],
     type: 'EXECUTOR',
+    contextType,
     profitPercentage,
     ownerId: getUuid(ownerKey),
-    editorIds: editorIds,
   });
 }
 

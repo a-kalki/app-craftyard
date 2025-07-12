@@ -2,9 +2,9 @@ import {
   DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, type ValidatorMap,
 } from "rilata/validator";
 import { createAtValidator, descriptionValidator, editorIdsValidator, titleValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
-import type { WorkshopAbout, WorkshopAttrs } from "./attrs";
+import type { OrganizationAbout, WorkshopAttrs } from "./attrs";
 
-const workshopAbout: ValidatorMap<WorkshopAbout> = {
+const workshopAbout: ValidatorMap<OrganizationAbout> = {
   logo: new LiteralFieldValidator('logo', false, { isArray: false }, 'string', []),
   location: new LiteralFieldValidator('location', true, { isArray: false }, 'string', [
     new MinCharsCountValidationRule(5, 'Местоположение должно содержать не менее 5 символов'),

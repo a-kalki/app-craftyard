@@ -1,6 +1,6 @@
 import { DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, RangeNumberValidationRule, StringChoiceValidationRule, type ValidatorMap } from "rilata/validator";
 import type { ExpenseItem, ModelCreationOfferAttrs, BaseOfferAttrs, OfferStatus } from "./attrs";
-import { descriptionValidator, editorIdsValidator, ownerIdValidator, titleValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import { createAtValidator, descriptionValidator, editorIdsValidator, ownerIdValidator, titleValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
 import { costValidator } from "#app/domain/v-map";
 import type { UnionToTuple } from "rilata/core";
 import { modelAttrsVmap } from "#models/domain/struct/v-map";
@@ -9,30 +9,31 @@ import { workshopVmap } from "#workshop/domain/struct/v-map";
 export const offerStatuses: UnionToTuple<OfferStatus> = ['active', 'archived', 'pending_moderation'];
 
 export const expensesVMap: ValidatorMap<ExpenseItem> = {
-  name: new LiteralFieldValidator('name', true, { isArray: false }, 'string', [
-    new MinCharsCountValidationRule(5, 'Имя должно состоять не менее чем из 5 символов.'),
-  ]),
+  title: titleValidator,
+  description: descriptionValidator.cloneWithRequired(false),
   amount: new LiteralFieldValidator('amount', true, { isArray: false }, 'number', [
     new RangeNumberValidationRule(0, 100),
   ]),
 }
 
 export const offerAttrsVmap: ValidatorMap<BaseOfferAttrs> = {
-    id: uuidFieldValidator,
-    title: titleValidator,
-    description: descriptionValidator,
-    organizationId: workshopVmap.id.cloneWithName('organizationId'),
-    offerExecutorsId: uuidFieldValidator.cloneWithName('offerExecutorsId'),
-    cost: costValidator,
-    status: new LiteralFieldValidator('status', true, { isArray: false }, 'string', [
-        new StringChoiceValidationRule(offerStatuses),
-    ]),
-    estimatedExpenses: new DtoFieldValidator('estimatedExpenses', true, { isArray: true }, 'dto', expensesVMap),
-    editorIds: editorIdsValidator,
+  id: uuidFieldValidator,
+  title: titleValidator,
+  description: descriptionValidator,
+  organizationId: workshopVmap.id.cloneWithName('organizationId'),
+  offerCooperationId: uuidFieldValidator.cloneWithName('offerCooperationId'),
+  cost: costValidator,
+  status: new LiteralFieldValidator('status', true, { isArray: false }, 'string', [
+      new StringChoiceValidationRule(offerStatuses),
+  ]),
+  editorIds: editorIdsValidator,
+  createAt: createAtValidator,
+  updateAt: updateAtValidator
 }
 
 export const modelCreateionOfferVmap: ValidatorMap<ModelCreationOfferAttrs> = {
   ...offerAttrsVmap,
   modelId: modelAttrsVmap.id.cloneWithName('modelId'),
-  ownerId: ownerIdValidator,
+  masterId: ownerIdValidator.cloneWithName('masterId'),
+  estimatedExpenses: new DtoFieldValidator('estimatedExpenses', true, { isArray: true }, 'dto', expensesVMap),
 }

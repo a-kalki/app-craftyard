@@ -32,6 +32,8 @@ export interface Node extends Distributable {
 
   getType(): string
 
+  info(): string
+
   isChildable(): this is Childable
 
   isFatherable(): this is Fatherble

@@ -8,7 +8,6 @@ import type {
   OfferCooperation, OrganizationCooperation,
 } from "../base/interfaces/api";
 import type { Cost } from "#app/domain/types";
-import { costUtils } from "#app/domain/utils/cost/cost-utils";
 import type { StructureContext } from "../base/interfaces/node";
 
 export class ExecutorAr
@@ -21,12 +20,12 @@ export class ExecutorAr
     super(attrs, executorValidator);
   }
 
+  info(): string {
+    return `${this.getType()}: comission: ${Math.round(this.attrs.profitPercentage * 100)}%`
+  }
+
   distributeProfit(amount: Cost, context: StructureContext): void {
     context.recordDistributionResult(this.getId(), amount);
-
-    console.log(
-      `"${this.attrs.title}" получил ${costUtils.costToString(amount)}.`,
-    );
   }
 
   isChildable(): this is Childable {

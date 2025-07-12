@@ -7,5 +7,6 @@ import type { ChildableAttrs } from "#cooperation/domain/base/childable/struct/a
 export type OrganizationCooperationAttrs = ChildableAttrs & {
   fatherId?: string
   commissionPercentage: number;
+  editorIds: string[],
   type: 'ORGANIZATION_COOPERATION',
 }

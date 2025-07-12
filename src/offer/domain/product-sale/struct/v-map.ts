@@ -14,13 +14,15 @@ export const productSaleOfferVmap: ValidatorMap<ProductSaleOfferAttrs> = {
     organizationId: modelCreateionOfferVmap.organizationId,
     status: modelCreateionOfferVmap.status,
     estimatedExpenses: modelCreateionOfferVmap.estimatedExpenses,
-    offerExecutorsId: modelCreateionOfferVmap.offerExecutorsId,
+    offerCooperationId: modelCreateionOfferVmap.offerCooperationId,
     editorIds: modelCreateionOfferVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(productSaleOfferType),
     ]),
-    ownerId: modelCreateionOfferVmap.ownerId,
+    masterId: modelCreateionOfferVmap.masterId,
     productionTimeDays: positiveNumberValidator.cloneWithName('productionTimeDays'),
+    createAt: modelCreateionOfferVmap.createAt,
+    updateAt: modelCreateionOfferVmap.updateAt
 }
 
 export const productSaleOfferValidator = new DtoFieldValidator(

@@ -5,5 +5,6 @@ import type { ChildableAttrs } from "#cooperation/domain/base/childable/struct/a
 */
 export type OfferCooperationAttrs = ChildableAttrs & {
   fatherId: string,
+  editorIds: string[],
   type: 'OFFER_COOPERATION',
 }

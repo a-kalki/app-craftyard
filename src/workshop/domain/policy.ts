@@ -11,8 +11,16 @@ export class WorkshopPolicy {
     this.userPolicy = new UserPolicy(this.user);
   }
 
-  canEdit(): boolean {
+  isEditor(): boolean {
     return this.workshop.editorIds.includes(this.user.id) || this.userPolicy.isModerator();
+  }
+
+  isEmpoyee(): boolean {
+    return this.workshop.employeeIds.includes(this.user.id);
+  }
+
+  canAddWorkshopRentOffer(): boolean {
+    return this.workshop.editorIds.includes(this.user.id);
   }
 
   canAddProductSaleOffer(): boolean {
@@ -24,10 +32,6 @@ export class WorkshopPolicy {
   }
 
   canAddCourseOffer(): boolean {
-    return this.workshop.mentorIds.includes(this.user.id);
-  }
-
-  isEmpoyee(): boolean {
     return this.workshop.mentorIds.includes(this.user.id);
   }
 }

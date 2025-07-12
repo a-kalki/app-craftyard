@@ -12,14 +12,15 @@ export const workspaceRentOfferVmap: ValidatorMap<WorkspaceRentOfferAttrs> = {
     cost: offerAttrsVmap.cost,
     organizationId: offerAttrsVmap.organizationId,
     status: offerAttrsVmap.status,
-    estimatedExpenses: offerAttrsVmap.estimatedExpenses,
-    offerExecutorsId: offerAttrsVmap.offerExecutorsId,
+    offerCooperationId: offerAttrsVmap.offerCooperationId,
     editorIds: offerAttrsVmap.editorIds,
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(workspaceRentOfferType),
     ]),
     accessHours: positiveNumberValidator.cloneWithName('accessHours'),
     mastersDiscount: positiveNumberValidator.cloneWithName('mastersDiscount'),
+    createAt: offerAttrsVmap.createAt,
+    updateAt: offerAttrsVmap.updateAt
 }
 
 export const worksspaceRentOfferValidator = new DtoFieldValidator(

@@ -32,9 +32,9 @@ export abstract class CooperationUseCase<META extends UCMeta> extends QueryUseCa
   async getCooperationAr<
     AR extends CooperationAr
   >(id: string): Promise<Result<AggregateDoesNotExistError, AR>> {
-    const dbo = await this.getRepo().find(id);
-    return dbo
-      ? success(cooperationFactory.restore(dbo.value) as AR)
+    const attrs = await this.getRepo().find(id);
+    return attrs
+      ? success(cooperationFactory.restore(attrs) as AR)
       : failure({
         name: 'AggregateDoesNotExistError',
         type: 'domain-error',

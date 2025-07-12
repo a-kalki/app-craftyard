@@ -12,7 +12,7 @@ export abstract class OfferUseCase<META extends UCMeta> extends QueryUseCase<
 > {
   protected transactionStrategy!: never;
 
-  getOfferPolicy(caller: Caller, offerAttrs: OfferAttrs): OfferPolicy {
+  getOfferPolicy(offerAttrs: OfferAttrs, caller: Caller): OfferPolicy {
     if (caller.type === 'AnonymousUser') {
       throw new AssertionException('Not be called by anonimous user');
     }
@@ -39,5 +39,14 @@ export abstract class OfferUseCase<META extends UCMeta> extends QueryUseCase<
     return res.isSuccess()
       ? success(offerFactory.restore(res.value) as AR)
       : failure(res.value);
+  }
+
+  protected async save(attrs: OfferAttrs): Promise<{ changes: number }> {
+    const repo = this.getRepo();
+    const result = await repo.editOffer(attrs);
+    if (result.changes !== 1) {
+      throw this.logger.error(`[${this.constructor.name}]: Не удалось добавить offer`, { attrs });
+    }
+    return result;
   }
 }

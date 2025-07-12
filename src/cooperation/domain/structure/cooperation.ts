@@ -1,8 +1,9 @@
 import { AssertionException, type UuidType } from "rilata/core";
-import type { CooperationStructureValidationResult, CooperationValidationError } from "../base/interfaces/types";
+import type { CooperationStructureValidationResult, CooperationValidationError, TreeDistributionResult } from "../base/interfaces/types";
 import type { StructureContext, Node } from "../base/interfaces/node";
 import type { Cost } from "#app/domain/types";
 import { StructureContextObject } from "./context";
+import type { CooperationType } from "../types";
 
 /**
  * Отвечает за построение дерева из плоского списка агрегатов
@@ -62,8 +63,43 @@ export class CooperationStructure {
     this.context = new StructureContextObject(this.treeNodes, this.fatherNode);
   }
 
-  getFlatExecutorResults(): Map<string, Cost> {
+  getFlatDistributeResults(): Map<string, Cost> {
     return this.context.getFlatDistributionResults();
+  }
+
+  getTreeDistributeResults(amount: Cost): TreeDistributionResult {
+    this.distributeProfit(amount);
+
+    const flatResult = this.getFlatDistributeResults();
+    const nodeResult = this.nodeDistribResult(this.rootNode, flatResult);
+    if (this.fatherNode) {
+      nodeResult[this.rootNode.getId()].father = {
+        [this.fatherNode.getId()]: {
+          title: this.fatherNode.getTitle(),
+          type: this.fatherNode.getType() as CooperationType,
+          inputValue: flatResult.get(this.fatherNode.getId())!,
+          flowType: this.fatherNode.isExecutor() ? 'profit' : 'transit',
+        }
+      };
+    }
+    return nodeResult;
+  }
+
+  private nodeDistribResult(node: Node, flatDistribResults: Map<string, Cost>): TreeDistributionResult {
+    const result: TreeDistributionResult = {};
+    const childIds = node.isChildable() ? node.getChildrenIds() : undefined;
+    const childsResult = childIds
+      ? { childs: childIds.map(n => this.nodeDistribResult(this.getTreeNode(n)!, flatDistribResults)) }
+      : {}
+
+    result[node.getId()] = {
+      title: node.getTitle(),
+      type: node.getType() as CooperationType,
+      inputValue: flatDistribResults.get(node.getId())!,
+      flowType: node.isExecutor() ? 'profit' : 'transit',
+      ...childsResult,
+    }
+    return result;
   }
 
   /** Распределить прибыль между участниками структуры. */

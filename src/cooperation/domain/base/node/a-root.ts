@@ -29,6 +29,8 @@ export abstract class NodeAr<META extends NodeArMeta>
     return this.attrs.type;
   }
 
+  abstract info(): string;
+
   abstract distributeProfit(amount: Cost, context: StructureContext): void
 
   abstract isChildable(): this is Childable

@@ -18,4 +18,21 @@ export class OfferJsonRepo implements OfferRepo {
     return this.jsonRepo.filter({});
   }
 
+  addOffer(attrs: OfferAttrs): MaybePromise<{ changes: number; }> {
+    return this.jsonRepo.update(attrs.id, attrs)
+      .then(() => ({ changes: 1 }));
+    
+  }
+  editOffer(attrs: OfferAttrs): MaybePromise<{ changes: number; }> {
+    return this.jsonRepo.update(attrs.id, attrs)
+      .then(() => ({ changes: 1 }));
+  }
+
+  getWorkshopOffers(organizationId: string): MaybePromise<OfferAttrs[]> {
+    return this.jsonRepo.filter({ organizationId });
+  }
+    
+  getMasterOffers(masterId: string): MaybePromise<OfferAttrs[]> {
+    return this.jsonRepo.filter({ masterId });
+  }
 }

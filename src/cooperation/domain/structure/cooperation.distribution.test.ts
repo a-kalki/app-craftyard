@@ -32,7 +32,7 @@ describe('CooperationStructure Profit Distribution', () => {
     const initialAmount = costUtils.create(1000, 'KZT');
     structure.distributeProfit(initialAmount);
 
-    const executorResults = structure.getFlatExecutorResults();
+    const executorResults = structure.getFlatDistributeResults();
     expect(executorResults.size).toBe(2);
     expect(costUtils.equal(
       executorResults.get(getUuid('cmd1'))!,
@@ -61,7 +61,7 @@ describe('CooperationStructure Profit Distribution', () => {
     const initialAmount = costUtils.create(2000, 'KZT');
     structure.distributeProfit(initialAmount);
 
-    const executorResults = structure.getFlatExecutorResults();
+    const executorResults = structure.getFlatDistributeResults();
     expect(executorResults.size).toBe(3);
     expect(costUtils.equal(
       executorResults.get(getUuid('execA'))!,
@@ -101,8 +101,8 @@ describe('CooperationStructure Profit Distribution', () => {
 ;   const initialAmount = costUtils.create(10000, 'KZT');
     structure.distributeProfit(initialAmount);
 
-    const flatResults = structure.getFlatExecutorResults();
-;   const allNodeResults = structure.getFlatExecutorResults();
+    const flatResults = structure.getFlatDistributeResults();
+;   const allNodeResults = structure.getFlatDistributeResults();
 
     // Ожидаемые расчеты:
     // Offer1. На входе 10000. Родителю: 10%. Детям: 9000.
@@ -152,7 +152,7 @@ describe('CooperationStructure Profit Distribution', () => {
     });
 
     structure.distributeProfit(initialAmount);
-    const flatResults = structure.getFlatExecutorResults();
+    const flatResults = structure.getFlatDistributeResults();
 
     // Ожидаемые расчеты:
     // CommandC на входе: 5000. Все отправляет детям.

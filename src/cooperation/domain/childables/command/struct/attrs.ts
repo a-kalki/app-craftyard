@@ -4,6 +4,6 @@ import type { ChildableAttrs } from "#cooperation/domain/base/childable/struct/a
     Распределяет обязанности и выручку между детьми.
 */
 export type CommandCooperationAttrs = ChildableAttrs & {
-  profitePercentage: number,
+  profitPercentage: number,
   type: 'COMMAND_COOPERATION',
 };

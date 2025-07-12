@@ -9,7 +9,6 @@ export const executorVmap: ValidatorMap<ExecutorAttrs> = {
   id: cooperationNodeVMap.id,
   title: cooperationNodeVMap.title,
   responsibilities: cooperationNodeVMap.responsibilities,
-  editorIds: cooperationNodeVMap.editorIds,
   profitPercentage: new LiteralFieldValidator(
     'profitPercentage', true, { isArray: false }, 'number', [
       new RangeNumberValidationRule(0, 100),
@@ -18,7 +17,8 @@ export const executorVmap: ValidatorMap<ExecutorAttrs> = {
   ownerId: ownerIdValidator,
   type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
     new TextStrictEqualValidationRule(executorType),
-  ])
+  ]),
+  contextType: cooperationNodeVMap.contextType,
 }
 
 export const executorValidator = new DtoFieldValidator(

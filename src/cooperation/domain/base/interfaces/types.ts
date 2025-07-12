@@ -1,3 +1,5 @@
+import type { Cost } from "#app/domain/types";
+import type { CooperationType } from "#cooperation/domain/types";
 
 export type CooperationValidationError = {
   nodeId: string,
@@ -13,3 +15,14 @@ export type CooperationStructureValidationResult = {
   warnings: CooperationValidationError[];
   sysErrors: CooperationValidationError[];
 };
+
+export type TreeDistributionResult = {
+  [id: string]: {
+    inputValue: Cost,
+    title: string,
+    flowType: 'transit' | 'profit';
+    type: CooperationType,
+    father?: TreeDistributionResult,
+    childs?: TreeDistributionResult[]
+  }
+}

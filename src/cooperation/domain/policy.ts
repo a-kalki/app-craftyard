@@ -10,7 +10,14 @@ export class CooperationPolicy {
   }
 
   canEdit(): boolean {
-    return this.userPolicy.isModerator() || this.attrs.editorIds.includes(this.user.id);
+    return this.userPolicy.isModerator() || this.isEditor();
+  }
+
+  isEditor(): boolean {
+    return (
+      this.attrs.type === 'OFFER_COOPERATION' || this.attrs.type === 'ORGANIZATION_COOPERATION'
+      && this.attrs.editorIds.includes(this.user.id)
+    )
   }
 
   canAdd(): boolean {

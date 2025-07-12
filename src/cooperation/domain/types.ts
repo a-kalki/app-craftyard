@@ -1,5 +1,3 @@
-import type { NodeAr } from "./base/node/a-root";
-import type { NodeArMeta } from "./base/node/meta";
 import type { CooperationNodeAttrs } from "./base/node/struct/attrs";
 import type { CommandCooperationAr } from "./childables/command/a-root";
 import type { CommandCooperationAttrs } from "./childables/command/struct/attrs";
@@ -24,24 +22,13 @@ export type CooperationAr =
   | OfferCooperationAr
   | OrganizationCooperationAr
 
-/** Объект записи в репозиторий */
-export type CooperationDbo =
-  Omit<
+type ConcreteCooperationAttrs =
   Partial<ExecutorAttrs>
   & Partial<CommandCooperationAttrs>
   & Partial<OfferCooperationAttrs>
   & Partial<OrganizationCooperationAttrs>
-  & CooperationNodeAttrs,
-  'type'
-  > & { type: CooperationType };
 
-export type GetCooperationAr<C extends CooperationAttrs> = 
-  C extends ExecutorAttrs
-    ? ExecutorAr
-    : C extends CommandCooperationAttrs
-      ? CommandCooperationAr
-      : C extends OfferCooperationAttrs
-        ? OfferCooperationAr
-        : C extends OrganizationCooperationAttrs
-          ? OrganizationCooperationAr
-          : NodeAr<NodeArMeta>
+type FullCooperationAttrs = Omit<ConcreteCooperationAttrs, keyof CooperationNodeAttrs> & CooperationNodeAttrs;
+
+/** Объект записи в репозиторий */
+export type CooperationDbo = Omit<FullCooperationAttrs, 'type'> & { type: CooperationType };

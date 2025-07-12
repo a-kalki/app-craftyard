@@ -7,4 +7,12 @@ export interface OfferRepo {
   filterOffers(attrs: Partial<OfferAttrs>): MaybePromise<OfferAttrs[]>
 
   getOffers(): MaybePromise<OfferAttrs[]>
+
+  addOffer(attrs: OfferAttrs): MaybePromise<{ changes: number }>
+
+  editOffer(attrs: OfferAttrs): MaybePromise<{ changes: number }>
+
+  getWorkshopOffers(workshopId: string): MaybePromise<OfferAttrs[]>
+
+  getMasterOffers(userId: string): MaybePromise<OfferAttrs[]>
 }

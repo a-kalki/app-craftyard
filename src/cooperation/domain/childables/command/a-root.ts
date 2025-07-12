@@ -18,6 +18,10 @@ export class CommandCooperationAr
     super(attrs, commandCooperationValidator);
   }
 
+  info(): string {
+    return `${this.getType()}: comission: ${Math.round(this.attrs.profitPercentage * 100)}%`
+  }
+
   distributeProfit(amount: Cost, context: StructureContext): void {
     context.recordDistributionResult(this.getId(), amount);
 
@@ -49,6 +53,6 @@ export class CommandCooperationAr
   }
 
   getProfitProcentage(): number {
-    return this.attrs.profitePercentage;
+    return this.attrs.profitPercentage;
   }
 }

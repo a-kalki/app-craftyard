@@ -20,6 +20,10 @@ export class OfferCooperationAr
     super(attrs, offerCooperationContributionValidator);
   }
 
+  info(): string {
+    return `${this.getType()}`;
+  }
+
   distributeProfit(amount: Cost, context: StructureContext): void {
     context.recordDistributionResult(this.getId(), amount);
 
