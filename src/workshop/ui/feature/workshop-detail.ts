@@ -1,12 +1,13 @@
-import { html, css } from 'lit';
+import { html, css, type TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { BackendResultByMeta } from 'rilata/core';
 import type { WorkshopAttrs } from '#workshop/domain/struct/attrs';
-import type { GetWorkshopMeta } from '#workshop/domain/struct/get-workshop/contract';
+import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { WorkshopArMeta } from '#workshop/domain/meta';
+import { WorkshopPolicy } from '#workshop/domain/policy';
 
 @customElement('workshop-details')
-export class WorkshopDetailsEntity extends BaseElement {
+export class WorkshopDetailsFeature extends BaseElement {
   static styles = css`
     :host {
       display: block;
@@ -89,7 +90,9 @@ export class WorkshopDetailsEntity extends BaseElement {
   };
 
   @state()
-  private workshop: WorkshopAttrs | null = null;
+  protected workshop: WorkshopAttrs | null = null;
+  @state()
+  protected canEdit = false;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -112,12 +115,27 @@ export class WorkshopDetailsEntity extends BaseElement {
     }
 
     this.workshop = getResult.value;
+    if (this.app.getState().currentUser) {
+      const policy = new WorkshopPolicy(
+        this.app.getState().currentUser,
+        this.workshop,
+      );
+      this.canEdit = policy.canEdit();
+    }
   }
 
   render() {
     if (!this.workshop) {
-      return html`<sl-spinner label="Загрузка мастерской..." style="width:48px; height:48px;"></sl-spinner>`;
+      return this.renderSpinner();
     }
+    return html`
+      ${this.renderHeader()}
+      ${this.renderSections()}
+    `
+  }
+
+  renderHeader(): TemplateResult {
+    if (!this.workshop) return html``; // очистка типа
 
     return html`
       <div class="header">
@@ -137,5 +155,25 @@ export class WorkshopDetailsEntity extends BaseElement {
         </div>
       </div>
     `;
+  }
+
+  renderSections(): TemplateResult {
+    const ownerName: WorkshopArMeta['name'] = 'WorkshopAr';
+    const ownerAttrs: CyOwnerAggregateAttrs = {
+      ownerId: this.workshop!.id,
+      ownerName,
+      access: 'public',
+      context: 'workshop-info',
+    }
+    return html`
+      <content-container
+        .ownerAttrs=${ownerAttrs}
+        .canEdit=${this.canEdit}
+      ></content-container>
+    `
+  }
+
+  renderSpinner(): TemplateResult {
+    return html`<sl-spinner label="Загрузка мастерской..." style="width:48px; height:48px;"></sl-spinner>`;
   }
 }

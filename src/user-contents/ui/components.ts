@@ -10,6 +10,10 @@ import {} from './entities/video/video-card';
 import {} from './entities/video/add-video-content';
 import {} from './entities/video/edit-video-content';
 
+import {} from './entities/images/images-card';
+import {} from './entities/images/add-images-content';
+import {} from './entities/images/edit-images-content';
+
 import {} from './entities/add-content-section';
 import {} from './entities/content-section';
 import {} from './entities/edit-content-section';

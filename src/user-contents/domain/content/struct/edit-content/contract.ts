@@ -3,15 +3,18 @@ import type { PatchValue } from "rilata/core";
 import type { ThesisContent } from "../thesis-attrs";
 import type { UserContentArMeta } from "../../meta";
 import type { FileContent } from "../file-attrs";
+import type { ImagesContent } from "../images-attrs";
 
 export type EditThesistAttrs = PatchValue<Omit<ThesisContent, 'createAt' | 'updateAt'>>; 
 
 export type EditFileContentAttrs = PatchValue<Omit<FileContent, 'createAt' | 'updateAt'>>; 
 
+export type EditImagesContentAttrs = PatchValue<Omit<ImagesContent, 'createAt' | 'updateAt'>>; 
+
 // ========== commands ============
 export type EditUserContentCommand = {
   name: 'edit-user-content',
-  attrs: EditThesistAttrs | EditFileContentAttrs,
+  attrs: EditThesistAttrs | EditFileContentAttrs | EditImagesContentAttrs,
   requestId: string,
 };
 

@@ -7,7 +7,7 @@ import type { FileContent } from "#user-contents/domain/content/struct/file-attr
 import type { ThesisContent } from "#user-contents/domain/content/struct/thesis-attrs";
 import type { DtoFieldValidator } from "rilata/validator";
 import { UserContentAr } from "#user-contents/domain/content/a-root";
-import { editFileContentValidator, editThesisContentValidator } from "#user-contents/domain/content/struct/edit-content/v-map";
+import { editFileContentValidator, editImagesContentValidator, editThesisContentValidator } from "#user-contents/domain/content/struct/edit-content/v-map";
 
 export class EditUserContentUC extends UserContentUseCase<EditUserContentMeta> {
   arName = "UserContentAr" as const;
@@ -79,6 +79,11 @@ export class EditUserContentUC extends UserContentUseCase<EditUserContentMeta> {
 
   protected getValidator(input: EditUserContentCommand): DtoFieldValidator<string, true, boolean, DTO> {
     if (input.attrs.type === 'THESIS') return editThesisContentValidator;
-    return editFileContentValidator;
+    if (input.attrs.type === 'FILE') return editFileContentValidator;
+    if (input.attrs.type === 'IMAGES') return editImagesContentValidator;
+    throw this.logger.error(
+      `[${this.constructor.name}]: not found validator for type: ${(input.attrs as any).type}.`,
+      { inputAttrs: input.attrs }
+    )
   }
 }

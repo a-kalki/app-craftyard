@@ -1,9 +1,10 @@
 import { DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule, StrictEqualFieldValidator, StringChoiceValidationRule, type ValidatorMap } from "rilata/validator";
 import type { ContentAttrs } from "./struct/attrs";
-import { shoelaceIconValidator, createAtValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import { shoelaceIconValidator, createAtValidator, updateAtValidator, uuidFieldValidator, descriptionValidator, uuidRule } from "#app/domain/base-validators";
 import type { ThesisContent } from "./struct/thesis-attrs";
 import type { DTO, UnionToTuple } from "rilata/core";
 import type { FileContent, FileType } from "./struct/file-attrs";
+import type { ImagesContent } from "./struct/images-attrs";
 
 export const userContentVmap: ValidatorMap<ContentAttrs> = {
   id: uuidFieldValidator,
@@ -56,4 +57,25 @@ export const fileContentVmap: ValidatorMap<FileContent> = {
 
 export const fileContentValidator = new DtoFieldValidator<string, true, false, DTO>(
   'fileContent', true, { isArray: false }, 'dto', fileContentVmap,
+)
+
+
+// ++++++++++++++ images ++++++++++++++++
+export const imagesContentType: ImagesContent['type'] = 'IMAGES';
+
+export const imagesVmap: ValidatorMap<ImagesContent> = {
+  ...userContentVmap,
+  type: new StrictEqualFieldValidator('type', imagesContentType),
+  description: descriptionValidator.cloneWithRequired(false),
+  imageIds: new LiteralFieldValidator(
+    'imageIds', true, { isArray: true }, 'string', [uuidRule]
+  )
+
+  //body: new LiteralFieldValidator('body', true, { isArray: false }, 'string', [
+  //  new MinCharsCountValidationRule(10, 'Тезис должен содержать не менее 10 символов'),
+  //]),
+}
+
+export const imagesContentValidator = new DtoFieldValidator<string, true, false, DTO>(
+  'imagesContent', true, { isArray: false }, 'dto', imagesVmap,
 )

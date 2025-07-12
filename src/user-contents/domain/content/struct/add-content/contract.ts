@@ -1,16 +1,19 @@
 import type { AddingIsNotPermittedError, AggregateDoesNotExistError } from "#app/domain/errors";
 import type { UserContentArMeta } from "../../meta";
 import type { FileContent } from "../file-attrs";
+import type { ImagesContent } from "../images-attrs";
 import type { ThesisContent } from "../thesis-attrs";
 
 export type AddThesisAttrs = Omit<ThesisContent, 'id'| 'createAt' | 'updateAt'>;
 
-export type AddFileContentAttrs = Omit<FileContent,  'id'| 'createAt' | 'updateAt'>;
+export type AddFileContentAttrs = Omit<FileContent,  'id' | 'createAt' | 'updateAt'>;
+
+export type AddImagesContentAttrs = Omit<ImagesContent, 'id' | 'createAt' | 'updateAt'>;
 
 // ========== commands ============
 export type AddUserContentCommand = {
   name: 'add-content',
-  attrs: AddThesisAttrs | AddFileContentAttrs,
+  attrs: AddThesisAttrs | AddFileContentAttrs | AddImagesContentAttrs,
   requestId: string,
 };
 

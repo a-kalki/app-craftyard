@@ -15,6 +15,10 @@ export class WorkshopPolicy {
     return this.workshop.editorIds.includes(this.user.id) || this.userPolicy.isModerator();
   }
 
+  canEdit(): boolean {
+    return this.isEditor() || this.userPolicy.isModerator()
+  }
+
   isEmpoyee(): boolean {
     return this.workshop.employeeIds.includes(this.user.id);
   }

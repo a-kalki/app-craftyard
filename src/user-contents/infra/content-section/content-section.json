@@ -22,5 +22,41 @@
     "createAt": 1751124776548,
     "updateAt": 1751124776548,
     "type": "thesis-set"
+  },
+  "0197fdc1-1dab-7a60-828f-6a4560de8a8f": {
+    "id": "0197fdc1-1dab-7a60-828f-6a4560de8a8f",
+    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "ownerName": "WorkshopAr",
+    "access": "public",
+    "context": "workshop-info",
+    "title": "Комнаты",
+    "order": 1,
+    "icon": "columns",
+    "createAt": 1752308981165,
+    "updateAt": 1752308981165
+  },
+  "0197fdc1-cd3d-72f4-857c-20034b0c1475": {
+    "id": "0197fdc1-cd3d-72f4-857c-20034b0c1475",
+    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "ownerName": "WorkshopAr",
+    "access": "public",
+    "context": "workshop-info",
+    "title": "Станки",
+    "order": 2,
+    "icon": "disc",
+    "createAt": 1752309026109,
+    "updateAt": 1752309026109
+  },
+  "0197fe8b-44aa-7fa4-b7c8-906b38838862": {
+    "id": "0197fe8b-44aa-7fa4-b7c8-906b38838862",
+    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "ownerName": "WorkshopAr",
+    "access": "public",
+    "context": "workshop-info",
+    "title": "Рабочие места",
+    "order": 3,
+    "icon": "back",
+    "createAt": 1752322229418,
+    "updateAt": 1752322229418
   }
 }

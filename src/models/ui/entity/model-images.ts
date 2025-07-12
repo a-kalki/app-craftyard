@@ -9,7 +9,7 @@ import type { CyOwnerAggregateAttrs } from '#app/domain/types';
 
 @customElement('model-images')
 export class ModelImages extends LitElement {
-  @property({ type: Object }) ownerAttrs?: CyOwnerAggregateAttrs;
+  @property({ type: Object }) ownerAttrs!: CyOwnerAggregateAttrs;
   @property({ type: Array }) imageIds: string[] = [];
   @property({ type: Boolean }) canEdit = false;
 

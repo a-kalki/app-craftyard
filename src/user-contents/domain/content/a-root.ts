@@ -1,6 +1,6 @@
 import { AggregateRoot } from "rilata/domain";
 import type { UserContent, UserContentArMeta } from "./meta";
-import { fileContentValidator, thesisContentValidator } from "./v-map";
+import { fileContentValidator, imagesContentValidator, thesisContentValidator } from "./v-map";
 import type { DtoFieldValidator } from "rilata/validator";
 import { AssertionException, type DTO, type PatchValue } from "rilata/core";
 import { dtoUtility } from "rilata/utils";
@@ -10,7 +10,8 @@ const invariantValidators: Record<
   DtoFieldValidator<string, boolean, boolean, DTO>
 > = {
   THESIS: thesisContentValidator,
-  FILE: fileContentValidator
+  FILE: fileContentValidator,
+  IMAGES: imagesContentValidator,
 }
 
 export class UserContentAr extends AggregateRoot<UserContentArMeta> {

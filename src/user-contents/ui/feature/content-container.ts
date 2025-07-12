@@ -9,62 +9,79 @@ import type { CyOwnerAggregateAttrs } from '#app/domain/types';
 @customElement('content-container')
 export class ContentContainer extends BaseElement {
   static styles = css`
-  :host {
-    display: block;
-    width: 100%;
-    position: relative;
-  }
+    :host {
+      display: block;
+      width: 100%;
+      position: relative;
+    }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background: var(--sl-color-gray-50);
-    border: 1px dashed var(--sl-color-gray-200);
-    border-radius: var(--sl-border-radius-medium);
-    padding: 16px;
-    position: relative;
-  }
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: var(--sl-color-gray-50);
+      border: 1px dashed var(--sl-color-gray-200);
+      border-radius: var(--sl-border-radius-medium);
+      padding: 16px;
+    }
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0px 0px 16px;
-  }
+    .header-and-tabs-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-  .title {
-    margin: 0;
-    font-size: 1.5rem;
-    color: var(--sl-color-gray-800);
-  }
+    .tabs-and-button-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 0 0 1rem;
+      margin: 0 -16px;
+      background-color: var(--sl-color-neutral-0);
+      border-bottom: 1px solid var(--sl-color-neutral-200);
+    }
 
-  .menu-trigger {
-    position: relative;
-    margin-left: 1rem;
-    margin-right: 0.5rem;
-  }
+    sl-tab-group {
+      flex-grow: 1;
+      margin-bottom: 0;
+      --track-color: transparent;
+      --indicator-color: var(--sl-color-primary-600);
+      --indicator-border-radius: 0;
+      --active-tab-color: var(--sl-color-primary-600);
+      --inactive-tab-color: var(--sl-color-neutral-600);
+      --focus-ring-width: 0;
+    }
 
-  sl-icon-button {
-    color: var(--sl-color-primary-600);
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--sl-color-primary-600);
-    border-radius: 4px;
-    background: none;
-    padding: 0.15rem;
-    transition: background-color 0.2s ease;
-  }
+    sl-tab-panel {
+      padding: 1rem 0;
+    }
 
-  sl-icon-button:hover {
-    background: rgba(37, 99, 235, 0.1);
-    border-radius: 4px;
-  }
+    .section-title {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--sl-color-gray-800);
+    }
+
+    .add-section-button sl-icon-button {
+      flex-shrink: 0;
+      color: var(--sl-color-primary-600);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: none;
+      padding: 0.15rem;
+      transition: background-color 0.2s ease;
+      margin-right: 20px;
+    }
+
+    .add-section-button sl-icon-button:hover {
+      background: rgba(37, 99, 235, 0.1);
+    }
 
     .empty-state {
       padding: 16px;
@@ -99,14 +116,14 @@ export class ContentContainer extends BaseElement {
       margin: 0.5rem 0;
       font-size: 1.1rem;
     }
-
   `;
 
-  @property({ type: String }) title = '';
+  @property({ type: String }) title = ''; // Свойство для заголовка
   @property({ type: Object }) ownerAttrs!: CyOwnerAggregateAttrs;
   @property({ type: Boolean }) canEdit = false;
   @state() private contentSections: ContentSectionAttrs[] = [];
   @state() private isLoading = false;
+  @state() private activeSectionId: string = '';
 
   protected emptyContentDefaults: { title?: string; body?: string } = {
     title: 'Начните добавлять разделы и контент.',
@@ -134,6 +151,9 @@ export class ContentContainer extends BaseElement {
       }
       this.contentSections = result.value.filter(cs => cs.context === this.ownerAttrs.context);
       this.sortContentSections();
+      if (this.contentSections.length > 0 && !this.activeSectionId) {
+          this.activeSectionId = this.contentSections[0].id;
+      }
     } catch (error) {
       this.app.error(
         'Ошибка при загрузке пользовательского контента.',
@@ -164,8 +184,9 @@ export class ContentContainer extends BaseElement {
       }
       this.contentSections = [...this.contentSections, getResult.value];
       this.sortContentSections();
+      this.activeSectionId = getResult.value.id;
     } catch (error) {
-      console.error('Failed to create thesis set:', error);
+      console.error('Failed to create content section:', error);
       this.app.error('Ошибка при создании раздела.', { error });
     }
   }
@@ -187,6 +208,20 @@ export class ContentContainer extends BaseElement {
 
   private handleContentSectionDelete(deletedId: string) {
     this.contentSections = this.contentSections.filter(ts => ts.id !== deletedId);
+    if (this.activeSectionId === deletedId) {
+      this.activeSectionId = this.contentSections.length > 0 ? this.contentSections[0].id : '';
+    }
+  }
+
+  private handleTabShow(event: CustomEvent) {
+    this.activeSectionId = event.detail.name;
+  }
+
+  private handleKeyAction(e: KeyboardEvent, action: () => void) {
+    if (keyboardUtils.isActionKey(e)) {
+      e.preventDefault();
+      action();
+    }
   }
 
   render() {
@@ -199,50 +234,56 @@ export class ContentContainer extends BaseElement {
     }
 
     return html`
-      <div class="container">
-        ${this.renderHeader()}
+      <div class="main-container">
+        ${this.renderHeaderAndTabs()}
 
         ${this.contentSections.length === 0
           ? this.renderEmptyContainer()
-          : this.contentSections.map(contentSection => html`
-            <content-section
-              .contentSection=${contentSection}
-              .canEdit=${this.canEdit}
-              @content-section-edited=${(e: CustomEvent<{ id: string }>) => 
-                this.handleContentSectionEdited(e.detail.id)}
-              @content-section-deleted=${(e: CustomEvent<{id: string}>) => 
-                this.handleContentSectionDelete(e.detail.id)}
-            ></content-section>
-          `)
+          : html`
+            ${this.contentSections.map(contentSection => html`
+              <sl-tab-panel name=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
+                <content-section
+                  .contentSection=${contentSection}
+                  .canEdit=${this.canEdit}
+                  @content-section-edited=${(e: CustomEvent<{ id: string }>) =>
+                    this.handleContentSectionEdited(e.detail.id)}
+                  @content-section-deleted=${(e: CustomEvent<{id: string}>) =>
+                    this.handleContentSectionDelete(e.detail.id)}
+                ></content-section>
+              </sl-tab-panel>
+            `)}
+          `
         }
       </div>
     `;
   }
 
-  protected renderHeader(): TemplateResult {
+  protected renderHeaderAndTabs(): TemplateResult {
     return html`
-      <div class="header">
-        <h2 class="title">${this.title || nothing}</h2>
-        ${this.canEdit ? html`
-          <div class="menu-trigger">
-            <sl-icon-button 
-              name="plus-square"
-              label="Добавить раздел"
-              tabindex="0"
-              @click=${this.handleAddContentSection}
-              @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, () => this.handleAddContentSection())}
-            ></sl-icon-button>
-          </div>
-        ` : ''}
+      <div class="header-and-tabs-wrapper">
+        ${this.title ? html`<h2 class="section-title">${this.title}</h2>` : nothing}
+        <div class="tabs-and-button-row">
+          <sl-tab-group @sl-tab-show=${this.handleTabShow} active-tab=${this.activeSectionId}>
+            ${this.contentSections.map(contentSection => html`
+              <sl-tab slot="nav" panel=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
+                ${contentSection.title}
+              </sl-tab>
+            `)}
+          </sl-tab-group>
+          ${this.canEdit ? html`
+            <div class="add-section-button">
+              <sl-icon-button 
+                name="plus-square"
+                label="Добавить раздел"
+                tabindex="0"
+                @click=${this.handleAddContentSection}
+                @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, () => this.handleAddContentSection())}
+              ></sl-icon-button>
+            </div>
+          ` : nothing}
+        </div>
       </div>
     `;
-  }
-
-  private handleKeyAction(e: KeyboardEvent, action: () => void) {
-    if (keyboardUtils.isActionKey(e)) {
-      e.preventDefault();
-      action();
-    }
   }
 
   protected renderEmptyContainer(): TemplateResult {

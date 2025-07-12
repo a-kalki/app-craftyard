@@ -1,5 +1,5 @@
-import type { EditFileContentAttrs, EditThesistAttrs } from "#user-contents/domain/content/struct/edit-content/contract";
-import { fileContentVmap, thesisVmap } from "#user-contents/domain/content/v-map";
+import type { EditFileContentAttrs, EditImagesContentAttrs, EditThesistAttrs } from "#user-contents/domain/content/struct/edit-content/contract";
+import { fileContentVmap, imagesVmap, thesisVmap } from "#user-contents/domain/content/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 export const editThesisContentVmap: ValidatorMap<EditThesistAttrs> = {
@@ -33,4 +33,20 @@ export const editFileContentVmap: ValidatorMap<EditFileContentAttrs> = {
 
 export const editFileContentValidator = new DtoFieldValidator(
   'edit-file-content', true, { isArray: false }, 'dto', editFileContentVmap
+)
+
+export const editImagesContentVmap: ValidatorMap<EditImagesContentAttrs> = {
+  id: imagesVmap.id,
+  sectionId: imagesVmap.sectionId,
+  type: imagesVmap.type,
+  title: imagesVmap.title,
+  footer: imagesVmap.footer,
+  order: imagesVmap.order,
+  icon: imagesVmap.icon,
+  description: imagesVmap.description,
+  imageIds: imagesVmap.imageIds
+}
+
+export const editImagesContentValidator = new DtoFieldValidator(
+  'edit-images-content', true, { isArray: false }, 'dto', editImagesContentVmap
 )

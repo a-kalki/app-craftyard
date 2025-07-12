@@ -40,6 +40,7 @@ export class AddContentSectionModal extends ValidatableElement<AddContentSection
     return this.formData[field]
   }
   protected setFieldValue(field: keyof AddContentSectionType, value: unknown): void {
+    value = field === 'order' ? Number(value) : value;
     this.formData = { ...this.formData, [field]: value };
   }
 
@@ -133,7 +134,7 @@ export class AddContentSectionModal extends ValidatableElement<AddContentSection
           <sl-input
             label="Порядковый номер (необязательно)"
             help-text="Управляйте порядком отображения"
-            value=${this.formData.title ?? ''}
+            value=${this.formData.order ?? ''}
             @sl-input=${this.createValidateHandler('order')}
             ?disabled=${this.isLoading}
           ></sl-input>

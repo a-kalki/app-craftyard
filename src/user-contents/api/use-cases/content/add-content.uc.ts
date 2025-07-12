@@ -1,6 +1,6 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
-import { failure, success, type AbstractAggregateAttrs, type DTO } from "rilata/core";
+import { AssertionException, failure, success, type AbstractAggregateAttrs, type DTO } from "rilata/core";
 import type { AddingIsNotPermittedError } from "#app/domain/errors";
 import { uuidUtility } from "rilata/api-helper";
 import type {
@@ -9,7 +9,7 @@ import type {
 import type { DtoFieldValidator } from "rilata/validator";
 import { UserContentAr } from "#user-contents/domain/content/a-root";
 import type { UserContent } from "#user-contents/domain/content/meta";
-import { addFileContentValidator, addThesisContentValidator } from "#user-contents/domain/content/struct/add-content/v-map";
+import { addFileContentValidator, addImagesContentValidator, addThesisContentValidator } from "#user-contents/domain/content/struct/add-content/v-map";
 
 export class AddUserContentUC extends UserContentUseCase<AddUserContentMeta> {
   arName = "UserContentAr" as const;
@@ -53,27 +53,32 @@ export class AddUserContentUC extends UserContentUseCase<AddUserContentMeta> {
   protected async addUserContent(
     attrs: AddUserContentCommand['attrs']
   ): Promise<DomainResult<AddUserContentMeta>> {
-    const newThesis: UserContent = {
+    const newContent: UserContent = {
       id: uuidUtility.getNewUuidV7(),
       ...attrs,
       createAt: Date.now(),
       updateAt: Date.now(),
     }
-    const contentAr = new UserContentAr(newThesis);
+    const contentAr = new UserContentAr(newContent);
 
     const repo = this.moduleResolver.userContentRepo;
     const result = await repo.addContent(contentAr.getAttrs());
     if (result.changes === 0) {
       throw this.serverResolver.logger.error(
         `[${this.constructor.name}]: fail to added thesis record at user content repo`,
-        { newThesis, attrs }
+        { newContent, attrs }
       )
     }
-    return success({ contentId: newThesis.id });
+    return success({ contentId: newContent.id });
   }
 
   protected getValidator(input: AddUserContentCommand): DtoFieldValidator<string, true, boolean, DTO> {
     if (input.attrs.type === 'THESIS') return addThesisContentValidator;
-    return addFileContentValidator;
+    if (input.attrs.type === 'FILE') return addFileContentValidator;
+    if (input.attrs.type === 'IMAGES') return addImagesContentValidator;
+    throw this.logger.error(
+      `[${this.constructor.name}]: not found validator for type: ${(input.attrs as any).type}.`,
+      { inputAttrs: input.attrs }
+    )
   }
 }

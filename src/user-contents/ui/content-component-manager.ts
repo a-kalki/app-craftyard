@@ -4,6 +4,7 @@ import type { ThesisContent } from "#user-contents/domain/content/struct/thesis-
 import type { FileContent } from "#user-contents/domain/content/struct/file-attrs";
 import type { AddUserContentModalDialog } from "./entities/base-content/types";
 import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { ImagesContent } from "#user-contents/domain/content/struct/images-attrs";
 
 /**
  * ContentComponentManager - Сервис без состояния для рендеринга компонентов контента.
@@ -16,6 +17,7 @@ export class ContentComponentManager {
       THESIS: 'file-earmark-text',
       PDF: 'file-earmark-pdf',
       VIDEO: 'camera-video',
+      IMAGES: 'file-earmark-image',
     };
     return icons[type];
   }
@@ -68,6 +70,10 @@ export class ContentComponentManager {
               <sl-icon slot="prefix" name="camera-video"></sl-icon>
               Видео
             </sl-menu-item>
+            <sl-menu-item @click=${() => handleAddByType('IMAGES')}>
+              <sl-icon slot="prefix" name="file-earmark-image"></sl-icon>
+              Изображения
+            </sl-menu-item>
           </sl-menu>
         </sl-dropdown>
       </sl-button-group>
@@ -79,6 +85,7 @@ export class ContentComponentManager {
       case 'THESIS': return 'тезис';
       case 'PDF': return 'файл';
       case 'VIDEO': return 'видео';
+      case 'IMAGES': return 'фотографии'
       default: return 'контент';
     }
   }
@@ -92,7 +99,8 @@ export class ContentComponentManager {
       return document.createElement('add-pdf-modal');
     } else if (type === 'VIDEO') {
       return document.createElement('add-video-modal');
-    }
+    } else if (type === 'IMAGES')
+      return document.createElement('add-images-modal')
     throw Error('not implement add modal for type: ' + type);
   }
 
@@ -117,6 +125,8 @@ export class ContentComponentManager {
         return this.renderPdfContent(content as FileContent, ownerAttrs, canEdit, loadContentsCallback);
       case 'VIDEO':
         return this.renderVideoContent(content as FileContent, ownerAttrs, canEdit, loadContentsCallback);
+      case 'IMAGES':
+        return this.renderImagesContent(content as ImagesContent, ownerAttrs, canEdit, loadContentsCallback);
       default:
         return html``;
     }
@@ -173,11 +183,29 @@ export class ContentComponentManager {
     `;
   }
 
+  private renderImagesContent(
+    imagesContent: ImagesContent,
+    ownerAttrs: CyOwnerAggregateAttrs,
+    canEdit: boolean,
+    loadContentsCallback: (forceRefresh?: boolean) => Promise<void>
+  ): TemplateResult {
+    return html`
+      <images-card
+        .content=${imagesContent}
+        .canEdit=${canEdit}
+        .ownerAttrs=${ownerAttrs}
+        @content-edited=${() => loadContentsCallback(true)}
+        @content-deleted=${() => loadContentsCallback(true)}
+      ></images-card>
+    `;
+  }
+
   private getContentType(content: UserContent): ContentTypes {
     if (content.type === 'THESIS') return 'THESIS';
     if (this.isFileContent(content)) {
       return content.fileType;
     }
+    if (content.type === 'IMAGES') return 'IMAGES';
     throw Error(`not correct content type: ` + JSON.stringify(content, null, 2));
   }
 
