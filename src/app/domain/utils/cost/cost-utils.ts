@@ -3,7 +3,7 @@ import type { Cost, Currency } from "#app/domain/types";
 import { AssertionException } from "rilata/core";
 
 class CostUtils {
-  costToString(cost: Cost): string {
+  toString(cost: Cost): string {
     return `${cost.price} ${currency[cost.currency]}`;
   }
 

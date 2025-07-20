@@ -16,7 +16,8 @@ export class CooperationModule extends CraftYardModule<CooperationModuleMeta> {
   }
 
   async checkArInvariants(): Promise<void> {
-    const cooperations = await this.resolvers.moduleResolver.cooperationRepo.getAll();
+    const repo = this.resolvers.moduleResolver.cooperationRepo;
+    const cooperations = await repo.getAll();
     cooperations.forEach(dbo => cooperationFactory.restore(dbo));
   }
 }

@@ -16,7 +16,11 @@ import type { UiWorkshopsFacade } from "#workshop/domain/facade";
 import { userContentModule } from "#user-contents/ui/module";
 import type { UiFileFacade } from "#files/ui/facade";
 import { ContentSectionBackendApi } from "#user-contents/ui/section-api";
-import { UserContentApi } from "#user-contents/ui/content-api";
+import { UserContentBackendApi } from "#user-contents/ui/content-api";
+import { OffersBackendApi } from "#offer/ui/offers-api";
+import { offersModule } from "#offer/ui/module";
+import { cooperationsModule } from "#cooperation/ui/module";
+import { CooperationBackendApi } from "#cooperation/ui/cooperation-api";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,
@@ -34,6 +38,8 @@ const modules: Module[] = [
   usersModule,
   workshopsModule,
   modelsModule,
+  offersModule,
+  cooperationsModule,
 ]
 
 // токен будет истекшим до наступления этот периода
@@ -55,7 +61,9 @@ const otherApis = {
   modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
   workshopApi: new WorkshopsBackendApi(jwtDecoder, cacheTtlAsMin),
   contentSectionApi: new ContentSectionBackendApi(jwtDecoder, cacheTtlAsMin),
-  userContentApi: new UserContentApi(jwtDecoder, cacheTtlAsMin),
+  userContentApi: new UserContentBackendApi(jwtDecoder, cacheTtlAsMin),
+  offerApi: new OffersBackendApi(jwtDecoder, cacheTtlAsMin),
+  cooperationApi: new CooperationBackendApi(jwtDecoder, cacheTtlAsMin),
 }
 
 type Facades = {
@@ -73,11 +81,12 @@ const withFacades: BootstrapResolves & Facades = {
   workshopFacade: otherApis.workshopApi,
 }
 
-// нужно удалить после удаления библиотеки lit;
 Object.keys(withFacades).forEach((key) => {
   // @ts-expect-error
   (window as any)[key] = withFacades[key];
-})
+});
+
+// все пользователи будут считаться привязанными к мастерской Дедок
+(window as any).userWorkshop = (await otherApis.workshopApi.getWorkshop('4e82828c-43c9-4fb5-9716-e31b03103c29')).value;
 
 new Bootstrap(modules, withFacades).start();
-

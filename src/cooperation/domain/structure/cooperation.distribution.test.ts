@@ -1,6 +1,5 @@
 import { test, expect, beforeAll, afterEach, describe } from "bun:test";
 import { CooperationStructure } from "./cooperation";
-import { AssertionException } from "rilata/core";
 import {
   clearUuidMap, getUuid,
   createExecutor, createCommand, createOffer, createOrganization,

@@ -14,8 +14,6 @@ export type OrganizationAttrs = {
   updateAt: number;
 }
 
-export type WorkshopContentTypes = 'rooms' | 'machines';
-
 export type WorkshopAttrs = OrganizationAttrs & {
   masterIds: string[];
   mentorIds: string[];

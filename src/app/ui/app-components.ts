@@ -1,11 +1,14 @@
-import {} from './page/app';
-import {} from './page/login';
+import './page/app';
+import './page/login';
 
-import {} from './widget/app-header';
-import {} from './widget/app-sidebar';
-import {} from './widget/user-panel';
+import './widget/app-header';
+import './widget/app-sidebar';
+import './widget/user-panel';
 
-import {} from './entities/content-not-found';
-import {} from './entities/internal-error';
-import {} from './entities/app-toaster';
-import {} from './entities/contribution-tag';
+import './entities/content-not-found';
+import './entities/internal-error';
+import './entities/app-toaster';
+import './entities/contribution-tag';
+import './entities/cost-input';
+import './entities/image-gallery-dialog.ts';
+import './entities/user-info-section.ts';

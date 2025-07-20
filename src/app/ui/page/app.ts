@@ -14,7 +14,6 @@ export class AppPage extends BaseElement {
       justify-content: stretch;
       align-items: center;
       background: var(--app-background, white);
-      overflow: hidden; /* Запрещаем скролл всей страницы */
     }
 
     .container {
@@ -28,41 +27,42 @@ export class AppPage extends BaseElement {
     main {
       display: grid;
       grid-template-columns: 250px 1fr;
-      height: 100%;
       padding-top: 56px;
+      min-width: 0;
+      overflow-x: hidden;
     }
 
     #content {
       width: 100%;
       max-width: none;
-      overflow-y: auto; /* Скролл только для контента */
-      height: calc(100vh - 56px); /* Высота минус header */
+      min-width: 0;
+      overflow: hidden;
     }
 
     app-sidebar {
-      height: calc(100vh - 56px); /* Высота минус header */
-      overflow-y: auto; /* Скролл внутри сайдбара, если контент не помещается */
+      height: calc(100vh - 56px);
+      overflow-y: auto;
       position: sticky;
       top: 56px;
       background: var(--app-background, white);
+      z-index: 10;
     }
 
     main.mobile {
       grid-template-columns: 1fr;
+      min-width: 0;
     }
 
     sl-drawer::part(base) {
       top: 56px !important;
       height: calc(100% - 48px) !important;
+      min-width: 0;
     }
 
     @media (max-width: 768px) {
       main {
         grid-template-columns: 1fr;
-      }
-      
-      #content {
-        height: calc(100vh - 56px);
+        min-width: 0;
       }
       
       app-sidebar {

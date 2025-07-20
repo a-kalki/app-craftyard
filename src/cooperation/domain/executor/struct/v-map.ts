@@ -14,6 +14,7 @@ export const executorVmap: ValidatorMap<ExecutorAttrs> = {
       new RangeNumberValidationRule(0, 100),
     ]
   ),
+  organizationId: cooperationNodeVMap.organizationId,
   ownerId: ownerIdValidator,
   type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
     new TextStrictEqualValidationRule(executorType),

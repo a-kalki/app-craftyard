@@ -9,4 +9,6 @@ export interface CooperationRepo {
   filter(attrs: Partial<CooperationAttrs>): MaybePromise<CooperationAttrs[]>
 
   getRootAttrs(rootId: string): MaybePromise<CooperationAttrs[]>
+
+  getWorkshopAttrs(workshopId: string): MaybePromise<CooperationAttrs[]>
 }

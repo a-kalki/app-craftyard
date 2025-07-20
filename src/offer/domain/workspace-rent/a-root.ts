@@ -1,3 +1,5 @@
+import type { Cost } from "#app/domain/types";
+import { costUtils } from "#app/domain/utils/cost/cost-utils";
 import { BaseOfferAr } from "../base-offer/a-root";
 import type { WorkspaceRentOfferMeta } from "./meta";
 import type { WorkspaceRentOfferAttrs } from "./struct/attrs";
@@ -8,5 +10,13 @@ export class WorkspaceRentOfferAR extends BaseOfferAr<WorkspaceRentOfferMeta> {
 
   constructor(attrs: WorkspaceRentOfferAttrs) {
     super(attrs, worksspaceRentOfferValidator);
+  }
+
+  getRentCost(): Cost {
+    return this.attrs.cost;
+  }
+
+  getMasterRentCost(): Cost {
+    return costUtils.percent(this.attrs.cost, 1 - this.attrs.mastersDiscount);
   }
 }

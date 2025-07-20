@@ -6,5 +6,7 @@ export interface UiWorkshopsFacade {
 }
 
 export interface ApiWorkshopsFacade {
-  getWorkshop(id: string, caller: Caller): Promise<BackendResultByMeta<GetWorkshopMeta>>
+  getWorkshop(
+    id: string, caller: Caller, reqId: string,
+  ): Promise<BackendResultByMeta<GetWorkshopMeta>>
 }

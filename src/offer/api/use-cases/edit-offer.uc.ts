@@ -26,7 +26,7 @@ export class EditOfferUseCase extends OfferUseCase<EditOfferMeta> {
     if (getResult.isFailure()) return failure(getResult.value);
     const offerAr = getResult.value;
 
-    if (await this.canEditOffer(offerAr.getAttrs(), checkedUser)) {
+    if (await this.canEditOffer(offerAr.getAttrs(), checkedUser, input.requestId)) {
       return failure({
         name: 'EditingIsNotPermittedError',
         description: 'У вас нет прав на добавление предложения.',
@@ -39,15 +39,17 @@ export class EditOfferUseCase extends OfferUseCase<EditOfferMeta> {
     return success('success');
   }
 
-  protected async canEditOffer(attrs: OfferAttrs, caller: CheckedCaller): Promise<boolean> {
+  protected async canEditOffer(
+    attrs: OfferAttrs, caller: CheckedCaller, requestId: string
+  ): Promise<boolean> {
     const { organizationId: workshopId, type } = attrs;
     const policy = this.getOfferPolicy(attrs, caller);
     if (type === 'WORKSPACE_RENT_OFFER') {
-      const workshopResult = await this.moduleResolver.workshopFacade.getWorkshop(workshopId, caller);
+      const workshopResult = await this.moduleResolver.workshopFacade.getWorkshop(workshopId, caller, requestId);
       if (workshopResult.isFailure()) {
         return policy.canEdit();
       }
-      return policy.canEditWorkshopRent(workshopResult.value);
+      return policy.canEditWorkspaceRent(workshopResult.value);
     };
     if (type === 'HOBBY_KIT_OFFER') return policy.canEditHobbiKit();
     if (type === 'PRODUCT_SALE_OFFER') return policy.canEditProductSale();

@@ -7,7 +7,7 @@ import type { PatchValue } from "rilata/core";
 export type EditHobbyKitAttrs = Pick<
   HobbyKitOfferAttrs,
   'id' | 'type' | 'title' | 'description' | 'offerCooperationId' |
-  'cost' | 'estimatedExpenses' | 'workshopOfferId' | 'materialPreparationHours'
+  'cost' | 'estimatedExpenses' | 'workspaceRentOfferId' | 'materialPreparationHours'
 >;
 
 export type EditWorkspaceRentAttrs = Pick<

@@ -2,6 +2,10 @@ import { marked } from 'marked';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { html, type TemplateResult } from 'lit';
 
+marked.setOptions({
+  breaks: true,
+});
+
 export class MarkdownProcessor {
   parse(content: string): TemplateResult {
     const parsed = marked.parse(content.trim()) as string;

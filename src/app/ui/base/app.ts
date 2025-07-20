@@ -1,4 +1,4 @@
-import type { AppState, SidebarItem, ToastVariant } from "./types";
+import type { AppCurrentUser, AppState, AppUserWorkshop, SidebarItem, ToastVariant } from "./types";
 import { AppRouter } from "./app-router";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
@@ -6,6 +6,7 @@ import { AppDialog, type DialogOptions } from "./app-dialog";
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
 import type { UiUserFacade } from "#app/domain/user/facade";
 import type { BootstrapResolves } from "../base-run/run-types";
+import type { WorkshopAttrs } from "#workshop/domain/struct/attrs";
 
 export class App {
   public router: AppRouter;
@@ -41,6 +42,51 @@ export class App {
     this.modules.forEach(m => m.init(this));
   }
 
+  get user(): AppCurrentUser {
+    return this.appState.currentUser
+      ? { isAuth: true, attrs: this.appState.currentUser }
+      : { isAuth: false }
+  }
+
+  /** Возвращает привязанный к текущему пользователю мастерскую */
+  get userWorkshop(): AppUserWorkshop {
+    return this.user.isAuth && ((window as any).userWorkshop)
+      ? { isBind: true, user: this.user.attrs, workshop: (window as any).userWorkshop }
+      : { isBind: false };
+  }
+
+  assertAuthUser(): UserAttrs | null {
+    if (!this.user.isAuth) {
+      this.error('Необходимо авторизоваться.');
+      return null;
+    }
+    return this.user.attrs;
+  }
+
+  assertUserWorkshop(): WorkshopAttrs | null {
+    if (!this.assertAuthUser()) {
+      return null;
+    }
+    if (!this.userWorkshop.isBind) {
+      this.error('Необходимо привязать свой аккаунт к мастерской.');
+      return null;
+    }
+    return this.userWorkshop.workshop;
+  }
+
+  get isTelegramMiniApp(): boolean {
+    return this.appState.isTelegramMiniApp;
+  }
+
+  get isMobile(): boolean {
+    return this.appState.isMobile;
+  }
+
+  toLoginPage(): Promise<boolean> {
+    this.error('to login page not implemented');
+    return Promise.resolve(false);
+  }
+
   logout(): void {
     (window as any).app = undefined;
     window.dispatchEvent(new Event('app-logout'));
@@ -62,6 +108,7 @@ export class App {
     this.appNotifier.error(text, details);
   }
 
+  /** @deprecated - использовать соответствующее app.api */
   public getState(copy = true): AppState {
     return copy ? { ...this.appState } : this.appState;
   }

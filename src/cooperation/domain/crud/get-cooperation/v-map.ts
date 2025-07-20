@@ -1,6 +1,6 @@
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 import type { GetCooperationCommand } from "./contract";
-import { cooperationNodeVMap } from "../v-map";
+import { cooperationNodeVMap } from "#cooperation/domain/base/node/struct/v-map";
 
 const getCooperationVmap: ValidatorMap<GetCooperationCommand['attrs']> = {
   id: cooperationNodeVMap.id

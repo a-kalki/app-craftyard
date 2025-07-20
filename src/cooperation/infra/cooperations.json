@@ -4,8 +4,9 @@
     "title": "Организация работы мастерской-бизнеса. Аренда.",
     "responsibilities": [],
     "type": "ORGANIZATION_COOPERATION",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [
       "b3a9d7f0-4c12-4e89-9a21-7f8e3c1d2e0a",
@@ -22,8 +23,9 @@
     "title": "Организация работы мастерской-бизнеса. Мастера.",
     "responsibilities": [],
     "type": "ORGANIZATION_COOPERATION",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "product-sale", "course", "hobby-kit"
+      "PRODUCT_SALE", "COURSE", "HOBBY_KIT"
     ],
     "childrenIds": [
       "b3a9d7f0-4c12-4e89-9a21-7f8e3c1d2e0a",
@@ -40,8 +42,9 @@
     "title": "Общие организационные работы: Абонемент",
     "responsibilities": [],
     "type": "COMMAND_COOPERATION",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [
       "e0f1d2c3-a4b5-4c6d-7e8f-9a0b1c2d3e4f",
@@ -55,8 +58,9 @@
     "title": "Обеспечение ресурсами жизнедеятельности",
     "responsibilities": [],
     "type": "EXECUTOR",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [],
     "profitPercentage": 0.4,
@@ -67,8 +71,9 @@
     "title": "Обеспечение развития мастерской",
     "responsibilities": [],
     "type": "EXECUTOR",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [],
     "profitPercentage": 0.5,
@@ -79,8 +84,9 @@
     "title": "Развитие франшиз",
     "responsibilities": [],
     "type": "EXECUTOR",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [],
     "profitPercentage": 0.1,
@@ -91,8 +97,9 @@
     "title": "Выкладка материалов в приложении",
     "responsibilities": [],
     "type": "EXECUTOR",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [],
     "profitPercentage": 0.5,
@@ -103,8 +110,9 @@
     "title": "Предложения: мастера, ментора",
     "responsibilities": [],
     "type": "OFFER_COOPERATION",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "product-sale", "course", "hobby-kit"
+      "PRODUCT_SALE", "COURSE", "HOBBY_KIT"
     ],
     "childrenIds": [
       "36ed0568-1bac-43fc-a9b0-a9f0c55945af"
@@ -120,8 +128,9 @@
     "title": "Выполнение работы мастера, ментора",
     "responsibilities": [],
     "type": "EXECUTOR",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [],
     "profitPercentage": 1,
@@ -132,8 +141,9 @@
     "title": "Организация работ по абонементам",
     "responsibilities": [],
     "type": "OFFER_COOPERATION",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [
       "68493d9d-c7ad-400d-a5ba-33dbb699ec8e",
@@ -150,8 +160,9 @@
     "title": "Инструктор-цеха, работа с клиентами",
     "responsibilities": [],
     "type": "EXECUTOR",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [],
     "profitPercentage": 0.5,
@@ -162,8 +173,9 @@
     "title": "Менеджер по работе с клиентами",
     "responsibilities": [],
     "type": "EXECUTOR",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
     "contextType": [
-      "rent"
+      "RENT"
     ],
     "childrenIds": [],
     "profitPercentage": 0.5,

@@ -12,6 +12,8 @@ export interface OfferRepo {
 
   editOffer(attrs: OfferAttrs): MaybePromise<{ changes: number }>
 
+  deleteOffer(offerId: string): MaybePromise<{ changes: number }>
+
   getWorkshopOffers(workshopId: string): MaybePromise<OfferAttrs[]>
 
   getMasterOffers(userId: string): MaybePromise<OfferAttrs[]>

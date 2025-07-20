@@ -1,4 +1,4 @@
-import { DtoFieldValidator, LiteralFieldValidator, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
+import { DtoFieldValidator, LiteralFieldValidator, RangeNumberValidationRule, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
 import { offerAttrsVmap } from "#offer/domain/base-offer/struct/v-map";
 import { positiveNumberValidator } from "#app/domain/base-validators";
 import type { WorkspaceRentOfferAttrs } from "./attrs";
@@ -18,7 +18,11 @@ export const workspaceRentOfferVmap: ValidatorMap<WorkspaceRentOfferAttrs> = {
         new TextStrictEqualValidationRule(workspaceRentOfferType),
     ]),
     accessHours: positiveNumberValidator.cloneWithName('accessHours'),
-    mastersDiscount: positiveNumberValidator.cloneWithName('mastersDiscount'),
+    mastersDiscount: new LiteralFieldValidator(
+      'mastersDiscount', true, { isArray: false }, 'number', [
+        new RangeNumberValidationRule(0, 1),
+      ]
+    ),
     createAt: offerAttrsVmap.createAt,
     updateAt: offerAttrsVmap.updateAt
 }

@@ -18,6 +18,7 @@ export const commandCooperationVmap: ValidatorMap<CommandCooperationAttrs> = {
       new TextStrictEqualValidationRule(commandCooperationType)
     ]
   ),
+  organizationId: childableAttrsVmap.organizationId,
   contextType: childableAttrsVmap.contextType,
   profitPercentage: new LiteralFieldValidator(
     'profitPercentage', true, { isArray: false }, 'number', [

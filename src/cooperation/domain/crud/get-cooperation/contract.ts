@@ -1,6 +1,6 @@
 import type { AggregateDoesNotExistError } from "#app/domain/errors";
+import type { NodeArMeta } from "#cooperation/domain/base/node/meta";
 import type { CooperationAttrs } from "#cooperation/domain/types";
-import type { NodeArMeta } from "../../meta";
 
 // ========== commands ============
 export type GetCooperationCommand = {

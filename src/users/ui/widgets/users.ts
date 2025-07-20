@@ -9,11 +9,16 @@ export class UsersWidget extends BaseElement {
   static styles = css`
     :host {
       display: block;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
       padding: 16px;
       box-sizing: border-box;
-      width: 100%;
-      max-width: 1200px; /* Ограничение по макету */
-      margin: 0 auto; /* Центрирование */
+    }
+
+    .users-list-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .grid {
@@ -21,25 +26,21 @@ export class UsersWidget extends BaseElement {
       gap: 16px;
       width: 100%;
       
-      /* Автоматическая адаптация с приоритетом на 3 колонки */
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 
-    /* Точные контрольные точки для 3 колонок */
     @media (min-width: 1150px) {
       .grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
-    /* На промежуточных размерах - 2 колонки */
     @media (min-width: 900px) and (max-width: 899px) {
       .grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    /* На узких экранах - 1 колонка */
     @media (max-width: 650px) {
       .grid {
         grid-template-columns: 1fr;
@@ -67,8 +68,9 @@ export class UsersWidget extends BaseElement {
 
   render() {
     return html`
-      <div class="grid">
-        ${this.users.map(user => html`<user-card .user=${user}></user-card>`)}
+      <div class="users-list-wrapper"> <div class="grid">
+          ${this.users.map(user => html`<user-card .user=${user}></user-card>`)}
+        </div>
       </div>
     `;
   }

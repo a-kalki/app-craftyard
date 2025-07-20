@@ -154,5 +154,29 @@
     "context": "workshop-info",
     "createAt": 1752322125438,
     "updateAt": 1752322125438
+  },
+  "01981d1b-60fd-7f83-ad4f-6f3a91ccecd5": {
+    "id": "01981d1b-60fd-7f83-ad4f-6f3a91ccecd5",
+    "url": "/uploads/model-info/01981d1b-60fd-7f83-ad4f-6f3a91ccecd5.jpg",
+    "mimeType": "image/jpeg",
+    "size": 97918,
+    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
+    "ownerName": "ModelAr",
+    "access": "public",
+    "context": "model-info",
+    "createAt": 1752834990335,
+    "updateAt": 1752834990335
+  },
+  "01981d1b-6125-7854-b70d-e5cf90d660c2": {
+    "id": "01981d1b-6125-7854-b70d-e5cf90d660c2",
+    "url": "/uploads/model-info/01981d1b-6125-7854-b70d-e5cf90d660c2.jpg",
+    "mimeType": "image/jpeg",
+    "size": 20032,
+    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
+    "ownerName": "ModelAr",
+    "access": "public",
+    "context": "model-info",
+    "createAt": 1752834990373,
+    "updateAt": 1752834990373
   }
 }

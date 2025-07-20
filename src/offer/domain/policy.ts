@@ -15,7 +15,7 @@ export class OfferPolicy {
     return this.userPolicy.isModerator() || this.isEditor() || this.isOfferMaster();
   }
 
-  canEditWorkshopRent(workshop: WorkshopAttrs): boolean {
+  canEditWorkspaceRent(workshop: WorkshopAttrs): boolean {
     const workshopPolicy = new WorkshopPolicy(this.user, workshop);
     return this.offer.type === 'WORKSPACE_RENT_OFFER' && (
       this.canEdit() || workshopPolicy.isEditor()

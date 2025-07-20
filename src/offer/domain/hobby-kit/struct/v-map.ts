@@ -21,7 +21,7 @@ export const hobbyKitOfferVmap: ValidatorMap<HobbyKitOfferAttrs> = {
     type: new LiteralFieldValidator('type', true, { isArray: false }, 'string', [
         new TextStrictEqualValidationRule(hobbyKitOfferType),
     ]),
-    workshopOfferId: workspaceRentOfferVmap.id.cloneWithName('workshopOfferId'),
+    workspaceRentOfferId: workspaceRentOfferVmap.id.cloneWithName('workspaceRentOfferId'),
     materialPreparationHours: positiveNumberValidator.cloneWithName('materialPreparationHours'),
     createAt: createAtValidator,
     updateAt: updateAtValidator,

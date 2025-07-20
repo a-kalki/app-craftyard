@@ -1,9 +1,9 @@
 import type {
   GetCooperationCommand, GetCooperationMeta
-} from "#cooperation/domain/base/node/struct/get-cooperation/contract";
+} from "#cooperation/domain/crud/get-cooperation/contract";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { CooperationUseCase } from "../base-uc";
-import { getCooperationValidator } from "#cooperation/domain/base/node/struct/get-cooperation/v-map";
+import { getCooperationValidator } from "#cooperation/domain/crud/get-cooperation/v-map";
 import { failure, success } from "rilata/core";
 
 export class GetCooperationUseCase extends CooperationUseCase<GetCooperationMeta> {

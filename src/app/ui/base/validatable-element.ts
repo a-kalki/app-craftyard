@@ -1,18 +1,12 @@
 import { BaseElement } from "./base-element";
-import type { ArrayLiteralFieldErrors, LiteralFieldErrors, ValidatorMap } from "node_modules/rilata/src/domain/validator/field-validator/types";
 import { state } from "lit/decorators.js";
 import { html } from "lit";
 import type { DTO } from "rilata/core";
-import { LiteralFieldValidator } from "rilata/validator";
-import type { LiteralDataType } from "node_modules/rilata/src/domain/validator/rules/types";
-
-type ValidationResult = {
-  isValid: false;
-  errors: string[];
-} | {
-  isValid: true;
-  errors?: undefined,
-};
+import {
+  LiteralFieldValidator, type ArrayLiteralFieldErrors, type LiteralDataType,
+  type LiteralFieldErrors, type ValidatorMap
+} from "rilata/validator";
+import type { ValidationResult } from "./types";
 
 export abstract class ValidatableElement<T extends DTO> extends BaseElement {
   protected abstract validatorMap: ValidatorMap<T>;
@@ -107,13 +101,13 @@ export abstract class ValidatableElement<T extends DTO> extends BaseElement {
     );
   }
 
-  private extractErrors(
+  protected extractErrors(
     errors: LiteralFieldErrors | ArrayLiteralFieldErrors,
     field: keyof T & string,
   ): string[] {
     if (!errors || typeof errors !== 'object') return [];
 
-    if (this.validatorMap[field].arrayConfig.isArray) {
+    if (this.getValidator(field).arrayConfig.isArray) {
       const r = this.extractArrayErrors(errors as ArrayLiteralFieldErrors, field);
       return r;
     }

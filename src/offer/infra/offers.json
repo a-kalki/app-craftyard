@@ -1,1 +1,172 @@
-{}
+{
+  "019808cb-41f0-746e-a74c-ec66741dab77": {
+    "id": "019808cb-41f0-746e-a74c-ec66741dab77",
+    "status": "active",
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "На час",
+    "description": "Абонемент на один час.\\n\\nУдобно использовать, если вам нужно быстренько что то сделать, например починить что то используя инструменты мастерской.",
+    "offerCooperationId": "f0e1d2c3-b4a5-6d7e-8f9a-0b1c2d3e4f5a",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "type": "WORKSPACE_RENT_OFFER",
+    "accessHours": 1,
+    "mastersDiscount": 0,
+    "cost": {
+      "price": 1000,
+      "currency": "KZT"
+    },
+    "createAt": 1752494195185,
+    "updateAt": 1752494195185
+  },
+  "01980938-d223-70b4-83a8-3562b254eb37": {
+    "id": "01980938-d223-70b4-83a8-3562b254eb37",
+    "status": "active",
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "На три часа",
+    "description": "Абонемент на три часа.\n\nЕсли вам нужно что то отремонтировать, но нужно больше времени.",
+    "offerCooperationId": "f0e1d2c3-b4a5-6d7e-8f9a-0b1c2d3e4f5a",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "type": "WORKSPACE_RENT_OFFER",
+    "accessHours": 3,
+    "mastersDiscount": 0,
+    "cost": {
+      "price": 2000,
+      "currency": "KZT"
+    },
+    "createAt": 1752501375524,
+    "updateAt": 1752501375524
+  },
+  "0198093b-5edf-72cc-b78a-c23cff082c5a": {
+    "id": "0198093b-5edf-72cc-b78a-c23cff082c5a",
+    "status": "active",
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "На один день",
+    "description": "Абонемент действует до конца рабочего дня, т.е. до закрытия мастреской.\n\nНа мой взгляд куда лучше взять сразу недельный абонемент, но решать вам.",
+    "offerCooperationId": "f0e1d2c3-b4a5-6d7e-8f9a-0b1c2d3e4f5a",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "type": "WORKSPACE_RENT_OFFER",
+    "accessHours": 24,
+    "mastersDiscount": 0,
+    "cost": {
+      "price": 5000,
+      "currency": "KZT"
+    },
+    "createAt": 1752501542623,
+    "updateAt": 1752501542623
+  },
+  "01980943-a93b-748f-8d6d-4ae94bd5db24": {
+    "id": "01980943-a93b-748f-8d6d-4ae94bd5db24",
+    "status": "active",
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "На неделю",
+    "description": "На семь календарных дней. Время в течении рабочего дня не ограничено.\n\nХорошо использовать для средних проектов.\n\nВключено помощь подсказки мастера инструктора в ходе выполнения проекта, но если навыков мало, то начните с курсов или с проектов уровня 'Новичок'.",
+    "offerCooperationId": "f0e1d2c3-b4a5-6d7e-8f9a-0b1c2d3e4f5a",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "type": "WORKSPACE_RENT_OFFER",
+    "accessHours": 168,
+    "mastersDiscount": 0.25,
+    "cost": {
+      "price": 10000,
+      "currency": "KZT"
+    },
+    "createAt": 1752502085947,
+    "updateAt": 1752502085947
+  },
+  "01980949-34de-7624-8c45-05778187b2e5": {
+    "id": "01980949-34de-7624-8c45-05778187b2e5",
+    "status": "active",
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "На месяц",
+    "description": "На тридцать календарных дней. Время в течении рабочего дня не ограничено.\n\nХорошо использовать для средних и крупных проектов.\n\nВключено помощь подсказки мастера инструктора в ходе выполнения проекта, но если навыков мало, то начните с курсов или с проектов уровня 'Новичок'.",
+    "offerCooperationId": "f0e1d2c3-b4a5-6d7e-8f9a-0b1c2d3e4f5a",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "type": "WORKSPACE_RENT_OFFER",
+    "accessHours": 720,
+    "mastersDiscount": 0.25,
+    "cost": {
+      "price": 30000,
+      "currency": "KZT"
+    },
+    "createAt": 1752502449375,
+    "updateAt": 1752502449375
+  },
+  "0198180b-389e-7dcf-b5af-7017e0d41496": {
+    "id": "0198180b-389e-7dcf-b5af-7017e0d41496",
+    "status": "active",
+    "estimatedExpenses": [],
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "Кресло \"Кентукки\"",
+    "description": "Данный набор включает в себя доступ к материалам модели (чертежи), недельный абонемент и все необходимые материалы.\\n\\nВам останется только лишь насладиться процессом приготовления кресла.",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "offerCooperationId": "04f59841-fc2d-43c8-be08-aec70ce27b2e",
+    "type": "HOBBY_KIT_OFFER",
+    "cost": {
+      "price": 15000,
+      "currency": "KZT"
+    },
+    "modelId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
+    "masterId": "773084180",
+    "workspaceRentOfferId": "01980943-a93b-748f-8d6d-4ae94bd5db24",
+    "materialPreparationHours": 4,
+    "createAt": 1752750045344,
+    "updateAt": 1752750045344
+  },
+  "0198187d-b219-7ea6-a724-c82dd1558ed9": {
+    "id": "0198187d-b219-7ea6-a724-c82dd1558ed9",
+    "status": "active",
+    "estimatedExpenses": [],
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "Кресло \"Кентукки\"",
+    "description": "Закажите изготовление кресла \"Кентукки\" и насладитесь отдыхом в своем саде.",
+    "offerCooperationId": "04f59841-fc2d-43c8-be08-aec70ce27b2e",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "type": "PRODUCT_SALE_OFFER",
+    "cost": {
+      "price": 15000,
+      "currency": "KZT"
+    },
+    "modelId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
+    "masterId": "773084180",
+    "productionTimeDays": 6,
+    "createAt": 1752757547545,
+    "updateAt": 1752757547545
+  },
+  "019818ee-e325-7d44-bd4a-4c46319b75e5": {
+    "id": "019818ee-e325-7d44-bd4a-4c46319b75e5",
+    "status": "active",
+    "estimatedExpenses": [],
+    "editorIds": [
+      "773084180"
+    ],
+    "title": "Кресло \"Кентукки\"",
+    "description": "На этих курсах вы сможете сделать себе один или несколько экземпляров кресла \"Кентукки\".\n\nА мы проведем вас через все дебри этого квеста.",
+    "organizationId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
+    "offerCooperationId": "04f59841-fc2d-43c8-be08-aec70ce27b2e",
+    "type": "COURSE_OFFER",
+    "cost": {
+      "price": 15000,
+      "currency": "KZT"
+    },
+    "modelId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
+    "masterId": "773084180",
+    "durationDays": 5,
+    "activeWorkshopHours": 20,
+    "minStudents": 2,
+    "maxStudents": 4,
+    "createAt": 1752764965670,
+    "updateAt": 1752764965670
+  }
+}

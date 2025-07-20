@@ -12,7 +12,7 @@ export const editHobbyKitContentVmap: ValidatorMap<EditHobbyKitAttrs> = {
   offerCooperationId: hobbyKitOfferVmap.offerCooperationId,
   cost: hobbyKitOfferVmap.cost,
   estimatedExpenses: hobbyKitOfferVmap.estimatedExpenses,
-  workshopOfferId: hobbyKitOfferVmap.workshopOfferId,
+  workspaceRentOfferId: hobbyKitOfferVmap.workspaceRentOfferId,
   materialPreparationHours: hobbyKitOfferVmap.materialPreparationHours,
 }
 

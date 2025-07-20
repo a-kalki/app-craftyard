@@ -1,4 +1,5 @@
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import type { WorkshopAttrs } from "#workshop/domain/struct/attrs";
 
 export type AppState = {
   currentUser: UserAttrs,
@@ -11,6 +12,21 @@ export type RoutableCustomComponent = {
   tag: string,
   type: 'wc',
 }
+
+type UserAuthentificated = {
+  isAuth: true;
+  attrs: UserAttrs;
+}
+
+export type AppCurrentUser = UserAuthentificated | { isAuth: false };
+
+type UserWorkshopBinded = {
+  isBind: true;
+  workshop: WorkshopAttrs;
+  user: UserAuthentificated['attrs']
+}
+
+export type AppUserWorkshop = UserWorkshopBinded | { isBind: false }
 
 export type UrlParams = Record<string, string>;
 
@@ -35,3 +51,11 @@ export type ToastMessage = {
   variant: ToastVariant;
   details?: unknown;
 }
+
+export type ValidationResult = {
+  isValid: false;
+  errors: string[];
+} | {
+  isValid: true;
+  errors?: undefined,
+};

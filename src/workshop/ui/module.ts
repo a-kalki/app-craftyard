@@ -11,12 +11,6 @@ const routeItems: SidebarItem[] = [
     icon: 'gear-wide-connected',
     children: [
       {
-        name: 'rooms',
-        url: '/workshops/4e82828c-43c9-4fb5-9716-e31b03103c29/rooms',
-        title: 'Комнаты',
-        icon: 'aspect-ratio',
-      },
-      {
         name: 'offers',
         url: '/workshops/4e82828c-43c9-4fb5-9716-e31b03103c29/offers',
         title: 'Предложения',

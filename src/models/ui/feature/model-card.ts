@@ -122,7 +122,7 @@ export class ModelCardWidget extends BaseElement {
           <sl-button size="small" variant="primary" @click=${this.navigateToDetails}>
             Подробнее
           </sl-button>
-          <span><strong>${costUtils.costToString(this.model.cost)}</strong></span>
+          <span><strong>${costUtils.toString(this.model.cost)}</strong></span>
         </div>
       </sl-card>
     `;

@@ -6,6 +6,8 @@ import type { OfferModuleResolvers } from "./types";
 import type { OfferRepo } from "#offer/domain/repo";
 import { OfferPolicy } from "#offer/domain/policy";
 import { offerFactory } from "#offer/domain/factory";
+import type { WorkshopAttrs } from "#workshop/domain/struct/attrs";
+import type { ModelAttrs } from "#models/domain/struct/attrs";
 
 export abstract class OfferUseCase<META extends UCMeta> extends QueryUseCase<
   OfferModuleResolvers, META
@@ -48,5 +50,39 @@ export abstract class OfferUseCase<META extends UCMeta> extends QueryUseCase<
       throw this.logger.error(`[${this.constructor.name}]: Не удалось добавить offer`, { attrs });
     }
     return result;
+  }
+
+  protected async getWorkshopAttrs(
+    id: string, caller: Caller, reqId: string
+  ): Promise<Result<AggregateDoesNotExistError, WorkshopAttrs>> {
+    const workshopResult = await this.moduleResolver.workshopFacade.getWorkshop(id, caller, reqId);
+    if (workshopResult.isFailure()) {
+      this.logger.error(
+        `[${this.constructor.name}]: Не удалось загрузить данные мастерской.`
+      )
+      return failure({
+        name: 'AggregateDoesNotExistError',
+        description: 'Не удалось загрузить данные мастерской.',
+        type: 'domain-error',
+      });
+    }
+    return workshopResult;
+  }
+
+  protected async getModelAttrs(
+    id: string, caller: Caller, reqId: string
+  ): Promise<Result<AggregateDoesNotExistError, ModelAttrs>> {
+    const modelResult = await this.moduleResolver.modelFacade.getModel(id, caller, reqId);
+    if (modelResult.isFailure()) {
+      this.logger.error(
+        `[${this.constructor.name}]: Не удалось загрузить данные модели.`
+      )
+      return failure({
+        name: 'AggregateDoesNotExistError',
+        description: 'Не удалось загрузить данные модели.',
+        type: 'domain-error',
+      });
+    }
+    return modelResult;
   }
 }

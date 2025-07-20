@@ -31,8 +31,8 @@ export type BaseOfferAttrs = {
 /**
  * @description Базовый абстрактный класс для предложений, связанных с конкретной Model.
  */
-export type ModelCreationOfferAttrs = BaseOfferAttrs & {
+export type ModelOfferAttrs = BaseOfferAttrs & {
   modelId: string; // Ссылка на Model
-  masterId: string; // Ссылка на ответственного мастера
+  masterId: string; // Ссылка на ответственного мастера (ментора)
   estimatedExpenses: ExpenseItem[]; // Предполагаемая расходная часть предложения
 }

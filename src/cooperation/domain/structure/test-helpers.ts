@@ -6,6 +6,8 @@ import { uuidUtility } from "rilata/api-helper";
 import type { UuidType } from "rilata/core";
 import type { CooperationStructureValidationResult } from '../base/interfaces/types';
 import { expect } from 'bun:test';
+import type { CooperationContextType } from '../base/node/struct/attrs';
+import { stringUtility } from 'rilata/utils';
 
 // Карта для хранения ключей и соответствующих им UUID
 const idMap: Map<string, UuidType> = new Map();
@@ -14,6 +16,8 @@ export function clearUuidMap(): void {
   idMap.clear();
 }
 
+const organizationId = uuidUtility.getNewUuidV4();
+
 export function getUuid(key: string): UuidType {
   if (!idMap.has(key)) {
     idMap.set(key, uuidUtility.getNewUuidV4());
@@ -21,7 +25,7 @@ export function getUuid(key: string): UuidType {
   return idMap.get(key)!;
 }
 
-const userId = uuidUtility.getNewUuidV4();
+const userId = stringUtility.random('dddddddd');
 
 // Вспомогательные функции для создания конкретных типов агрегатов для тестов
 // Теперь они принимают объект с 'key' и переопределяемыми свойствами
@@ -29,7 +33,7 @@ export function createOrganization({
   key,
   commissionPercentage = 0.1,
   childrenKeys = [],
-  contextType = ['rent'],
+  contextType = ['RENT'],
   fatherKey,
   title = `Организация ${key}`,
   editorIds = [userId],
@@ -37,7 +41,7 @@ export function createOrganization({
   key: string;
   title?: string;
   commissionPercentage?: number;
-  contextType?: ['rent'],
+  contextType?: CooperationContextType[],
   childrenKeys?: string[];
   fatherKey?: string;
   editorIds?: string[];
@@ -47,6 +51,7 @@ export function createOrganization({
     title,
     responsibilities: [],
     editorIds: editorIds,
+    organizationId,
     contextType,
     type: 'ORGANIZATION_COOPERATION',
     childrenIds: childrenKeys.map(key => getUuid(key)),
@@ -59,14 +64,14 @@ export function createOffer({
   key,
   fatherKey,
   childrenKeys = [],
-  contextType = ['rent'],
+  contextType = ['RENT'],
   title = `Предложение ${key}`,
   editorIds = [userId],
 }: {
   key: string;
   title?: string;
   childrenKeys?: string[];
-  contextType?: ['rent'],
+  contextType?: CooperationContextType[],
   fatherKey: string;
   editorIds?: string[];
 }): OfferCooperationAr {
@@ -74,6 +79,7 @@ export function createOffer({
     id: getUuid(key),
     title,
     responsibilities: [],
+    organizationId,
     type: 'OFFER_COOPERATION',
     contextType,
     childrenIds: childrenKeys.map(key => getUuid(key)),
@@ -86,19 +92,20 @@ export function createCommand({
   key,
   childrenKeys = [],
   profitPercentage = .6,
-  contextType = ['rent'],
+  contextType = ['RENT'],
   title = `Команда ${key}`,
 }: {
   key: string;
   title?: string;
   profitPercentage?: number;
-  contextType?: ['rent'],
+  contextType?: CooperationContextType[],
   childrenKeys?: string[];
 }): CommandCooperationAr {
   return new CommandCooperationAr({
     id: getUuid(key),
     title,
     responsibilities: [],
+    organizationId,
     contextType,
     type: 'COMMAND_COOPERATION',
     profitPercentage: profitPercentage,
@@ -110,19 +117,20 @@ export function createExecutor({
   key,
   profitPercentage = 1.0,
   ownerKey = 'defaultOwner',
-  contextType = ['rent'],
+  contextType = ['RENT'],
   title = `Исполнитель ${key}`,
 }: {
   key: string;
   title?: string;
   profitPercentage?: number;
   ownerKey?: string;
-  contextType?: ['rent'],
+  contextType?: CooperationContextType[],
 }): ExecutorAr {
   return new ExecutorAr({
     id: getUuid(key),
     title,
     responsibilities: [],
+    organizationId,
     type: 'EXECUTOR',
     contextType,
     profitPercentage,

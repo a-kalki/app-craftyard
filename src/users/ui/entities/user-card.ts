@@ -99,7 +99,7 @@ export class UserCardEntity extends BaseElement {
               </sl-button>
             </div>
             <div class="contribution-section">
-              <div class="section-title">Статусы:</div>
+              <div class="section-title">Вклад:</div>
               <div class="contribution-list">
                 ${contributionKeys.map(s => html`<user-contribution-tag .contributionKey=${s}></user-contribution-tag>`)}
               </div>

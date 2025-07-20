@@ -10,7 +10,7 @@ import type {
 } from "#user-contents/domain/content/struct/get-section-contents/contract";
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
 
-export class UserContentApi extends BaseBackendApi<UserContent> {
+export class UserContentBackendApi extends BaseBackendApi<UserContent> {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
     super(userContentsApiUrls, jwtDecoder, cacheTtlAsMin);
   }
@@ -58,8 +58,9 @@ export class UserContentApi extends BaseBackendApi<UserContent> {
 
   async getContent(
     attrs: GetUserContentCommand['attrs'],
+    forceRefresh?: boolean,
   ): Promise<BackendResultByMeta<GetUserContentMeta>> {
-    const cached = this.getFromCacheById(attrs.contentId);
+    const cached = this.getFromCacheById(attrs.contentId, forceRefresh);
     if (cached) return success(cached);
     const command: GetUserContentCommand = {
       name: "get-user-content",

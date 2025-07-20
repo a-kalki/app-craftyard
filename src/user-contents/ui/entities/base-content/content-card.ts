@@ -68,7 +68,27 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
     .markdown-content ul,
     .markdown-content ol {
       padding-left: 1.5rem;
-      margin: 0 0 1rem 0;
+      margin: 0;
+    }
+
+    .markdown-content p + ul,
+    .markdown-content p + ol {
+      margin-top: 0.5rem;
+    }
+
+    .markdown-content h1 + ul,
+    .markdown-content h2 + ul,
+    .markdown-content h3 + ul,
+    .markdown-content h4 + ul,
+    .markdown-content h5 + ul,
+    .markdown-content h6 + ul,
+    .markdown-content h1 + ol,
+    .markdown-content h2 + ol,
+    .markdown-content h3 + ol,
+    .markdown-content h4 + ol,
+    .markdown-content h5 + ol,
+    .markdown-content h6 + ol {
+      margin-top: 0.25rem;
     }
 
     .markdown-content h1,
@@ -77,7 +97,7 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
     .markdown-content h4,
     .markdown-content h5,
     .markdown-content h6 {
-      margin: 1.5rem 0 1rem 0;
+      margin: 1.5rem 0 0.5rem 0;
       font-weight: 600;
     }
 

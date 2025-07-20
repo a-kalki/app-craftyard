@@ -4,7 +4,8 @@ import { craftYardServerResolver } from "./server-resolver.ts";
 import { getServerConfig, InjectCallerMiddleware, LogResponseAfterware, ServerAfterware, type ServerMiddleware } from "rilata/api-server";
 import type { Controller, Module, ModuleMeta } from "rilata/api";
 import {
-  filesBackendModule, modelBackendModule, userBackendModule, userContentsBackendModule, workshopBackendModule,
+  cooperationBackendModule, filesBackendModule, modelBackendModule, offerBackendModule,
+  userBackendModule, userContentsBackendModule, workshopBackendModule,
 } from "./module-resolvers";
 import { IndexHtmlFileController } from "#app/api/controllers/index-html-file";
 import { AssetFilesController } from "#app/api/controllers/asset-files";
@@ -28,6 +29,8 @@ const modules: Module<ModuleMeta>[] = [
   userBackendModule,
   workshopBackendModule,
   modelBackendModule,
+  offerBackendModule,
+  cooperationBackendModule,
 ]
 
 const controllers: Controller[] = [

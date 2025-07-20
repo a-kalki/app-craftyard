@@ -13,6 +13,7 @@ export const offerCooperationContributionVmap: ValidatorMap<OfferCooperationAttr
   childrenIds: childableAttrsVmap.childrenIds,
   fatherId: uuidFieldValidator.cloneWithName('fatherId'),
   editorIds: editorIdsValidator,
+  organizationId: childableAttrsVmap.organizationId,
   type: new LiteralFieldValidator(
     'type', true, { isArray: false }, 'string', [
       new TextStrictEqualValidationRule(offerCooperationContributionType)

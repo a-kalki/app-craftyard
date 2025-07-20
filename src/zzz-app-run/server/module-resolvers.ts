@@ -19,6 +19,15 @@ import type { UserContentModuleResolvers } from '#user-contents/api/types';
 import { FileModuleBackendFacade } from '#files/api/facade';
 import { contentSectionJsonRepo } from '#user-contents/infra/content-section/repo';
 import { userContentJsonRepo } from '#user-contents/infra/user-content/repo';
+import type { OfferModuleResolvers } from '#offer/api/types';
+import { offerJsonRepo } from '#offer/infra/repo';
+import { WorkshopBackendFacade } from '#workshop/api/facade';
+import { workshopsModule } from '#workshop/ui/module';
+import { OfferModule } from '#offer/api/module';
+import type { CooperationModuleResolvers } from '#cooperation/api/types';
+import { cooperationJsonRepo } from '#cooperation/infra/repo';
+import { CooperationModule } from '#cooperation/api/module';
+import { ModelBackendFacade } from '#models/api/facade';
 
 const PROJECT_PATH = cwd();
 const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
@@ -75,6 +84,8 @@ export const workshopModuleResolvers: WorkshopsModuleResolvers = {
 
 export const workshopBackendModule = new WorkshopsModule(workshopModuleResolvers);
 
+export const workshopModuleFacade = new WorkshopBackendFacade(workshopBackendModule);
+
 // +++++++++++++ model module ++++++++++++++
 export const modelModuleResolvers: ModelModuleResolvers = {
   serverResolver: craftYardServerResolver,
@@ -85,3 +96,27 @@ export const modelModuleResolvers: ModelModuleResolvers = {
 }
 
 export const modelBackendModule = new ModelModule(modelModuleResolvers);
+
+export const modelFacade = new ModelBackendFacade(modelBackendModule);
+
+// +++++++++++++ offers module ++++++++++++++
+export const offerModuleResolvers: OfferModuleResolvers = {
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {
+    offerRepo: offerJsonRepo,
+    workshopFacade: workshopModuleFacade,
+    modelFacade: modelFacade
+  }
+}
+
+export const offerBackendModule = new OfferModule(offerModuleResolvers);
+
+// +++++++++++++ cooperation module ++++++++++++++
+export const cooperationModuleResolvers: CooperationModuleResolvers = {
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {
+    cooperationRepo: cooperationJsonRepo
+  }
+}
+
+export const cooperationBackendModule = new CooperationModule(cooperationModuleResolvers);

@@ -64,7 +64,7 @@ export class ContentComponentManager {
             </sl-menu-item>
             <sl-menu-item @click=${() => handleAddByType('PDF')}>
               <sl-icon slot="prefix" name="file-earmark-pdf"></sl-icon>
-              Файл
+              PDF
             </sl-menu-item>
             <sl-menu-item @click=${() => handleAddByType('VIDEO')}>
               <sl-icon slot="prefix" name="camera-video"></sl-icon>

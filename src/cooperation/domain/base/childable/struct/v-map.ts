@@ -9,6 +9,7 @@ export const childableAttrsVmap: ValidatorMap<ChildableAttrs> = {
   id: cooperationNodeVMap.id,
   title: cooperationNodeVMap.title,
   responsibilities: cooperationNodeVMap.responsibilities,
+  organizationId: cooperationNodeVMap.organizationId,
   childrenIds: new LiteralFieldValidator(
       'childrenIds', true, { isArray: true }, 'string', [uuidRule]
   ),

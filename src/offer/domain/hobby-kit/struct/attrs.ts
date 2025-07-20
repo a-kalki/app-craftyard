@@ -1,15 +1,10 @@
-import type { ModelCreationOfferAttrs } from "#offer/domain/base-offer/struct/attrs";
-
-/**
- * @description Пользовательский контент для hobby offer.
- */
-export type HobbyKitOfferContentType = 'hobby-kit';
+import type { ModelOfferAttrs } from "#offer/domain/base-offer/struct/attrs";
 
 /**
  * @description Предложение набора для самостоятельного изготовления (хобби).
  */
-export type HobbyKitOfferAttrs = ModelCreationOfferAttrs & {
+export type HobbyKitOfferAttrs = ModelOfferAttrs & {
   type: 'HOBBY_KIT_OFFER';
-  workshopOfferId: string; // Автоматический абонемент для хобби
+  workspaceRentOfferId: string; // Автоматический абонемент для хобби
   materialPreparationHours: number; // Срок подготовки материалов в часах
 }

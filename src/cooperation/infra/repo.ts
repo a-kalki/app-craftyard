@@ -13,11 +13,15 @@ class CooperationJsonRepo implements CooperationRepo {
   }
 
   getAll(): MaybePromise<CooperationAttrs[]> {
-    return this.filter({});
+    return this.jsonRepo.filter({});
   }
 
   filter(attrs: Partial<CooperationAttrs>): MaybePromise<CooperationAttrs[]> {
-    return this.filter(attrs);
+    return this.jsonRepo.filter(attrs);
+  }
+
+  getWorkshopAttrs(workshopId: string): MaybePromise<CooperationAttrs[]> {
+    return this.filter({ organizationId: workshopId });
   }
 
   /**

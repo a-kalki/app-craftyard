@@ -1,3 +1,9 @@
+export type DomainRuleError = {
+  name: 'DomainRuleError',
+  description?: string,
+  type: 'domain-error',
+}
+
 export type EditingIsNotPermittedError = {
   name: 'EditingIsNotPermittedError',
   description?: string,

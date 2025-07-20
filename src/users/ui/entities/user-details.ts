@@ -13,13 +13,21 @@ export class UserDetailsEntity extends BaseElement {
   static styles = css`
     :host {
       display: block;
-      max-width: 800px;
-      margin: 8px auto;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
       padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .user-details-content-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
       background: var(--sl-color-neutral-0);
       border-radius: var(--sl-border-radius-medium);
       box-shadow: var(--sl-shadow-large);
       font-family: var(--sl-font-sans);
+      padding: 16px;
     }
 
     .header {
@@ -130,6 +138,10 @@ export class UserDetailsEntity extends BaseElement {
     }
 
     @media (max-width: 600px) {
+      .user-details-content-wrapper {
+        padding: 8px;
+      }
+
       .user-info {
         flex-direction: column;
         text-align: center;
@@ -161,7 +173,7 @@ export class UserDetailsEntity extends BaseElement {
     const userId = this.getUserId();
     const result = await this.loadUser(userId);
     if (result.isFailure()) {
-      this.app.error('Не удалось загрузать данные пользователя', {
+      this.app.error('Не удалось загружать данные пользователя', {
         userId,
         description: 'Пользователя с таким id не существует'
       });
@@ -172,7 +184,7 @@ export class UserDetailsEntity extends BaseElement {
     const currentUser = this.app.getState().currentUser;
     const userPolicy = new UserPolicy(currentUser);
     const targetAttrs = result.value;
-    this.canEdit = userPolicy.canEdit(targetAttrs);;
+    this.canEdit = userPolicy.canEdit(targetAttrs);
   }
 
   protected getUserId(): string {
@@ -200,82 +212,83 @@ export class UserDetailsEntity extends BaseElement {
     const contributions = userAR.getContributions();
 
     return html`
-      <div class="header">
-        <div class="user-info">
-          <user-avatar size="96" .user=${this.user}></user-avatar>
-          <div class="user-text">
-            <div class="name">${this.user.name}</div>
-            <div class="join-date">
-              <sl-icon name="person-plus" style="font-size: 0.9rem;"></sl-icon>
-              <span style="margin-left: 0.25rem;">${this.formatDate(this.user.createAt)}</span>
+      <div class="user-details-content-wrapper"> <div class="header">
+          <div class="user-info">
+            <user-avatar size="96" .user=${this.user}></user-avatar>
+            <div class="user-text">
+              <div class="name">${this.user.name}</div>
+              <div class="join-date">
+                <sl-icon name="person-plus" style="font-size: 0.9rem;"></sl-icon>
+                <span style="margin-left: 0.25rem;">${this.formatDate(this.user.createAt)}</span>
+              </div>
             </div>
+          </div>
+
+          <div class="actions">
+            ${profile.telegramNickname ? html`
+              <sl-button
+                variant="primary"
+                href="https://t.me/${profile.telegramNickname}"
+                target="_blank"
+              >
+                <sl-icon name="telegram"></sl-icon>
+                Написать
+              </sl-button>
+            ` : null}
+
+            ${this.canEdit ? html`
+              <sl-button variant="neutral" @click=${this.onEditClick}>
+                <sl-icon name="pencil"></sl-icon>
+                Изменить
+              </sl-button>
+            ` : null}
           </div>
         </div>
 
-        <div class="actions">
-          ${profile.telegramNickname ? html`
-            <sl-button
-              variant="primary"
-              href="https://t.me/${profile.telegramNickname}"
-              target="_blank"
-            >
-              <sl-icon name="telegram"></sl-icon>
-              Написать
-            </sl-button>
-          ` : null}
+        <sl-divider></sl-divider>
 
-          ${this.canEdit ? html`
-            <sl-button variant="neutral" @click=${this.onEditClick}>
-              <sl-icon name="pencil"></sl-icon>
-              Изменить
-            </sl-button>
-          ` : null}
+        <div class="contribution-section">
+          <h3 class="contribution-title">Статусы и активность</h3>
+          <table class="contribution-table">
+            <thead>
+              <tr>
+                <th>Статус</th>
+                <th>Действий</th>
+                <th>Активность</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${keys.map(key => {
+                const contribution = contributions[key] as UserContributionCounter;
+                return html`
+                  <tr>
+                    <td>
+                      <div class="status-badge">
+                        <user-contribution-tag .contributionKey=${key}></user-contribution-tag>
+                      </div>
+                    </td>
+                    <td>${contribution.count || 0}</td>
+                    <td>
+                      ${html`
+                        Первый: ${this.formatDate(contribution.firstAt)}<br>
+                        Последний: ${this.formatDate(contribution.lastAt)}
+                      `}
+                    </td>
+                  </tr>
+                `;
+              })}
+            </tbody>
+          </table>
         </div>
-      </div>
 
-      <sl-divider></sl-divider>
-
-      <div class="contribution-section">
-        <h3 class="contribution-title">Статусы и активность</h3>
-        <table class="contribution-table">
-          <thead>
-            <tr>
-              <th>Статус</th>
-              <th>Действий</th>
-              <th>Активность</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${keys.map(key => {
-              const contribution = contributions[key] as UserContributionCounter;
-              return html`
-                <tr>
-                  <td>
-                    <div class="status-badge">
-                      <user-contribution-tag .contributionKey=${key}></user-contribution-tag>
-                    </div>
-                  </td>
-                  <td>${contribution.count || 0}</td>
-                  <td>
-                    ${html`
-                      Первый: ${this.formatDate(contribution.firstAt)}<br>
-                      Последний: ${this.formatDate(contribution.lastAt)}
-                    `}
-                  </td>
-                </tr>
-              `;
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <div class="skills-section">
-        <h3>Навыки и специализации</h3>
-        ${skillsEntries.length === 0
-          ? html`<p>Навыки не указаны</p>`
-          : skillsEntries.map(([skill, desc]) => html`
-            <sl-details summary=${skill}>${desc}</sl-details>
-          `)}
+        <div class="skills-section">
+          <h3>Навыки и специализации</h3>
+          ${skillsEntries.length === 0
+            ? html`<p>Навыки не указаны</p>`
+            : skillsEntries.map(([skill, desc]) => html`
+              <sl-details summary=${skill}>${desc}</sl-details>
+            `)}
+        </div>
       </div>
     `;
   }

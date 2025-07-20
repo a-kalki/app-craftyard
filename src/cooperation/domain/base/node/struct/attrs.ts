@@ -1,15 +1,17 @@
-export type CooperationContextType = 'rent' | 'product-sale' | 'course' | 'hobby-kit';
+export type CooperationContextType = 'RENT' | 'PRODUCT_SALE' | 'COURSE' | 'HOBBY_KIT';
 
 export type CooperaionContext = {
   type: CooperationContextType,
   title: string,
   descriprion: string,
 }
+
 /** Абстрактный узел дерева вкладов */
 export type CooperationNodeAttrs = {
   id: string,
-  title: string, 
-  responsibilities: string[],
   type: string,
+  title: string, 
   contextType: CooperationContextType[],
+  organizationId: string,
+  responsibilities: string[],
 }

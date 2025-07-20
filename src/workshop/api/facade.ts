@@ -6,13 +6,13 @@ import type { WorkshopsModule } from "./module";
 export class WorkshopBackendFacade implements ApiWorkshopsFacade {
   constructor(private module: WorkshopsModule) {}
 
-  async getWorkshop(workshopId: string, caller: Caller): Promise<BackendResultByMeta<GetWorkshopMeta>> {
+  async getWorkshop(
+    workshopId: string, caller: Caller, requestId: string
+  ): Promise<BackendResultByMeta<GetWorkshopMeta>> {
     const command: GetWorkshopCommand = {
-        name: "get-workshop",
-        attrs: {
-            id: workshopId
-        },
-        requestId: crypto.randomUUID(),
+      name: "get-workshop",
+      attrs: { id: workshopId },
+      requestId,
     }
     return this.module.handleRequest(command, { caller }) as unknown as BackendResultByMeta<GetWorkshopMeta>;
   }

@@ -13,22 +13,9 @@ export class ContentContainer extends BaseElement {
       display: block;
       width: 100%;
       position: relative;
-    }
-
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
       background: var(--sl-color-gray-50);
       border: 1px dashed var(--sl-color-gray-200);
       border-radius: var(--sl-border-radius-medium);
-      padding: 16px;
-    }
-
-    .header-and-tabs-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
     }
 
     .tabs-and-button-row {
@@ -36,9 +23,11 @@ export class ContentContainer extends BaseElement {
       align-items: center;
       gap: 1rem;
       padding: 0 0 0 1rem;
-      margin: 0 -16px;
+      margin: 0;
       background-color: var(--sl-color-neutral-0);
       border-bottom: 1px solid var(--sl-color-neutral-200);
+      border-top-left-radius: var(--sl-border-radius-medium);
+      border-top-right-radius: var(--sl-border-radius-medium);
     }
 
     sl-tab-group {
@@ -52,26 +41,15 @@ export class ContentContainer extends BaseElement {
       --focus-ring-width: 0;
     }
 
-    sl-tab-panel {
-      padding: 1rem 0;
-    }
-
-    .section-title {
-      margin: 0;
-      font-size: 1.5rem;
-      color: var(--sl-color-gray-800);
-    }
-
     .add-section-button sl-icon-button {
       flex-shrink: 0;
-      color: var(--sl-color-primary-600);
       font-size: 1.2rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 4px;
       background: none;
       padding: 0.15rem;
@@ -85,6 +63,8 @@ export class ContentContainer extends BaseElement {
 
     .empty-state {
       padding: 16px;
+      border-bottom-left-radius: var(--sl-border-radius-medium);
+      border-bottom-right-radius: var(--sl-border-radius-medium);
     }
 
     .empty-state sl-icon {
@@ -118,12 +98,12 @@ export class ContentContainer extends BaseElement {
     }
   `;
 
-  @property({ type: String }) title = ''; // Свойство для заголовка
-  @property({ type: Object }) ownerAttrs!: CyOwnerAggregateAttrs;
-  @property({ type: Boolean }) canEdit = false;
   @state() private contentSections: ContentSectionAttrs[] = [];
   @state() private isLoading = false;
   @state() private activeSectionId: string = '';
+
+  @property({ type: Object }) ownerAttrs!: CyOwnerAggregateAttrs;
+  @property({ type: Boolean }) canEdit = false;
 
   protected emptyContentDefaults: { title?: string; body?: string } = {
     title: 'Начните добавлять разделы и контент.',
@@ -133,9 +113,15 @@ export class ContentContainer extends BaseElement {
   connectedCallback() {
     super.connectedCallback();
     if (!this.ownerAttrs) {
-      throw new Error(`[${this.constructor.name}] Неверная инициализация компонента`);
+      throw new Error(`[${this.constructor.name}] Неверная инициализация компонента: ownerAttrs отсутствуют.`);
     }
     this.loadContentSections();
+  }
+
+  willUpdate(changedProperties: Map<PropertyKey, unknown>): void {
+    if (changedProperties.has('ownerAttrs') && changedProperties.get('ownerAttrs') !== undefined) {
+      this.loadContentSections();
+    }
   }
 
   async loadContentSections() {
@@ -144,22 +130,26 @@ export class ContentContainer extends BaseElement {
       const result = await this.contentSectionApi.getOwnerArContentSection(this.ownerAttrs.ownerId);
       if (result.isFailure()) {
         this.app.error(
-          'Не удалось загрузить пользовательский контент.',
+          'Не удалось загрузить пользовательские разделы контента.',
           { ownerAttrs: this.ownerAttrs, result },
         );
+        this.contentSections = [];
         return;
       }
+
       this.contentSections = result.value.filter(cs => cs.context === this.ownerAttrs.context);
       this.sortContentSections();
       if (this.contentSections.length > 0 && !this.activeSectionId) {
           this.activeSectionId = this.contentSections[0].id;
+      } else if (this.contentSections.length === 0) {
+          this.activeSectionId = '';
       }
     } catch (error) {
       this.app.error(
-        'Ошибка при загрузке пользовательского контента.',
+        'Ошибка при загрузке пользовательских разделов контента.',
         { ownerAttrs: this.ownerAttrs, errMsg: (error as Error).message },
       );
-      throw error;
+      this.contentSections = [];
     } finally {
       this.isLoading = false;
     }
@@ -177,40 +167,21 @@ export class ContentContainer extends BaseElement {
       const newContentSectionId = await modal.show();
       if (!newContentSectionId) return;
 
-      const getResult = await this.contentSectionApi.getContentSection(newContentSectionId);
-      if (getResult.isFailure()) {
-        this.app.error(`Не удалось создать новый раздел: ${getResult.value}`, { result: getResult });
-        return;
-      }
-      this.contentSections = [...this.contentSections, getResult.value];
-      this.sortContentSections();
-      this.activeSectionId = getResult.value.id;
+      await this.loadContentSections();
+      this.activeSectionId = newContentSectionId;
     } catch (error) {
       console.error('Failed to create content section:', error);
       this.app.error('Ошибка при создании раздела.', { error });
     }
   }
 
-  private async handleContentSectionEdited(editedId: string) {
-    const getResult = await this.contentSectionApi.getContentSection(editedId, true);
-    if (getResult.isFailure()) {
-      this.app.error(`[${this.constructor.name}]: Не удалось загрузить данные о разделе.`, {
-        id: editedId, result: { status: false, value: getResult.value }
-      })
-      return;
-    }
-    const updated = getResult.value;
-    this.contentSections = this.contentSections.map(ts => 
-      ts.id === updated.id ? updated : ts
-    );
-    this.sortContentSections();
+  private async handleContentSectionEdited(event: CustomEvent<{ id: string }>) {
+    await this.loadContentSections();
+    this.activeSectionId = event.detail.id;
   }
 
-  private handleContentSectionDelete(deletedId: string) {
-    this.contentSections = this.contentSections.filter(ts => ts.id !== deletedId);
-    if (this.activeSectionId === deletedId) {
-      this.activeSectionId = this.contentSections.length > 0 ? this.contentSections[0].id : '';
-    }
+  private async handleContentSectionDelete(event: CustomEvent<{ id: string }>) {
+    await this.loadContentSections();
   }
 
   private handleTabShow(event: CustomEvent) {
@@ -226,74 +197,64 @@ export class ContentContainer extends BaseElement {
 
   render() {
     if (this.isLoading) {
-      return html`<sl-spinner></sl-spinner>`;
+      return html`<sl-spinner style="width:48px; height:48px; margin: 20px auto; display: block;" label="Загрузка разделов контента..."></sl-spinner>`;
     }
 
-    if (!this.canEdit && this.contentSections.length === 0) {
+    if (this.contentSections.length === 0 && !this.canEdit) {
       return html`<div style="display: none"></div>`;
     }
 
     return html`
-      <div class="main-container">
-        ${this.renderHeaderAndTabs()}
-
-        ${this.contentSections.length === 0
-          ? this.renderEmptyContainer()
-          : html`
-            ${this.contentSections.map(contentSection => html`
-              <sl-tab-panel name=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
-                <content-section
-                  .contentSection=${contentSection}
-                  .canEdit=${this.canEdit}
-                  @content-section-edited=${(e: CustomEvent<{ id: string }>) =>
-                    this.handleContentSectionEdited(e.detail.id)}
-                  @content-section-deleted=${(e: CustomEvent<{id: string}>) =>
-                    this.handleContentSectionDelete(e.detail.id)}
-                ></content-section>
-              </sl-tab-panel>
-            `)}
-          `
-        }
+      <div class="tabs-and-button-row">
+        <sl-tab-group @sl-tab-show=${this.handleTabShow} active-tab=${this.activeSectionId}>
+          ${this.contentSections.map(contentSection => html`
+            <sl-tab slot="nav" panel=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
+              ${contentSection.title}
+            </sl-tab>
+          `)}
+        </sl-tab-group>
+        ${this.canEdit ? html`
+          <div class="add-section-button">
+            <sl-icon-button
+              name="plus-square"
+              label="Добавить раздел"
+              tabindex="0"
+              @click=${this.handleAddContentSection}
+              @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, () => this.handleAddContentSection())}
+            ></sl-icon-button>
+          </div>
+        ` : nothing}
       </div>
-    `;
-  }
 
-  protected renderHeaderAndTabs(): TemplateResult {
-    return html`
-      <div class="header-and-tabs-wrapper">
-        ${this.title ? html`<h2 class="section-title">${this.title}</h2>` : nothing}
-        <div class="tabs-and-button-row">
-          <sl-tab-group @sl-tab-show=${this.handleTabShow} active-tab=${this.activeSectionId}>
-            ${this.contentSections.map(contentSection => html`
-              <sl-tab slot="nav" panel=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
-                ${contentSection.title}
-              </sl-tab>
-            `)}
-          </sl-tab-group>
-          ${this.canEdit ? html`
-            <div class="add-section-button">
-              <sl-icon-button 
-                name="plus-square"
-                label="Добавить раздел"
-                tabindex="0"
-                @click=${this.handleAddContentSection}
-                @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, () => this.handleAddContentSection())}
-              ></sl-icon-button>
-            </div>
-          ` : nothing}
-        </div>
-      </div>
+      ${this.contentSections.length === 0
+        ? this.renderEmptyContainer()
+        : html`
+          ${this.contentSections.map(contentSection => html`
+            <sl-tab-panel name=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
+              <content-section
+                .contentSection=${contentSection}
+                .canEdit=${this.canEdit}
+                .ownerAttrs=${this.ownerAttrs}
+                @content-section-edited=${this.handleContentSectionEdited}
+                @content-section-deleted=${this.handleContentSectionDelete}
+              ></content-section>
+            </sl-tab-panel>
+          `)}
+        `
+      }
     `;
   }
 
   protected renderEmptyContainer(): TemplateResult {
-    const title = this.emptyContentDefaults?.title ?? 'Пока нет ни одного раздела';
+    const title = this.emptyContentDefaults?.title ?? 'Пока нет ни одного раздела.';
     const body = this.emptyContentDefaults?.body ?? 'Создайте свой первый раздел, чтобы начать добавлять контент используя разметку markdown.';
     return html`
       <div class="empty-state">
         ${markdownUtils.parseWithOptions(title, { class: 'title' })}
         ${markdownUtils.parse(body)}
-        <p class="instruction">Чтобы добавить раздел нажмите кнопку: <sl-icon name="plus-square"></sl-icon> на правом верхнем углу</p>
+        ${this.canEdit ? html`
+          <p class="instruction">Чтобы добавить раздел нажмите кнопку: <sl-icon name="plus-square"></sl-icon> на правом верхнем углу</p>
+        ` : nothing}
       </div>
     `;
   }

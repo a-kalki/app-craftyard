@@ -8,9 +8,14 @@ export class ModelsWidget extends BaseElement {
   static styles = css`
     :host {
       display: block;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
       padding: 16px;
       box-sizing: border-box;
-      width: 100%;
+    }
+
+    .models-list-wrapper {
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -61,10 +66,10 @@ export class ModelsWidget extends BaseElement {
 
   render() {
     return html`
-      <div class="grid">
-        ${this.models.map(model => html`<model-card .model=${model}></model-card>`)}
+      <div class="models-list-wrapper"> <div class="grid">
+          ${this.models.map(model => html`<model-card .model=${model}></model-card>`)}
+        </div>
       </div>
     `;
   }
 }
-

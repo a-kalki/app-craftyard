@@ -1,6 +1,12 @@
-import { DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, RangeNumberValidationRule, StringChoiceValidationRule, type ValidatorMap } from "rilata/validator";
-import type { ExpenseItem, ModelCreationOfferAttrs, BaseOfferAttrs, OfferStatus } from "./attrs";
-import { createAtValidator, descriptionValidator, editorIdsValidator, ownerIdValidator, titleValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import {
+  DtoFieldValidator, LiteralFieldValidator, RangeNumberValidationRule,
+  StringChoiceValidationRule, type ValidatorMap,
+} from "rilata/validator";
+import type { ExpenseItem, ModelOfferAttrs, BaseOfferAttrs, OfferStatus } from "./attrs";
+import {
+  createAtValidator, descriptionValidator, editorIdsValidator, ownerIdValidator,
+  titleValidator, updateAtValidator, uuidFieldValidator,
+} from "#app/domain/base-validators";
 import { costValidator } from "#app/domain/v-map";
 import type { UnionToTuple } from "rilata/core";
 import { modelAttrsVmap } from "#models/domain/struct/v-map";
@@ -31,7 +37,7 @@ export const offerAttrsVmap: ValidatorMap<BaseOfferAttrs> = {
   updateAt: updateAtValidator
 }
 
-export const modelCreateionOfferVmap: ValidatorMap<ModelCreationOfferAttrs> = {
+export const modelCreateionOfferVmap: ValidatorMap<ModelOfferAttrs> = {
   ...offerAttrsVmap,
   modelId: modelAttrsVmap.id.cloneWithName('modelId'),
   masterId: ownerIdValidator.cloneWithName('masterId'),

@@ -191,25 +191,25 @@ export class Bootstrap {
   }
 
   protected showAppPage(user: UserAttrs, token: TokenType): void {
-      localStore.set(ACCESS_TOKEN_KEY, token.access);
-      localStore.set(REFRESH_TOKEN_KEY, token.refresh);
-      const app = new App(this.resolves, this.modules, user, this.isTelegramMiniApp);
-      app.init();
-      this.redirectStartApp(app);
+    localStore.set(ACCESS_TOKEN_KEY, token.access);
+    localStore.set(REFRESH_TOKEN_KEY, token.refresh);
+    const app = new App(this.resolves, this.modules, user, this.isTelegramMiniApp);
+    app.init();
+    this.redirectStartApp(app);
 
-      const root = this.prepareBody();
-      const appPage = document.createElement('app-page');
-      root.appendChild(appPage);
+    const root = this.prepareBody();
+    const appPage = document.createElement('app-page');
+    root.appendChild(appPage);
   }
 
   protected redirectStartApp(app: App): void {
-      const path = app.router.getPath();
-      const isLoginPath = path.startsWith('/login');
-      const isRegistrationPath = path.startsWith('/register');
-      const isHomePath = ['/home', '', '/'].includes(path);
-      if (isLoginPath || isRegistrationPath || isHomePath) {
-        app.router.navigate('/my-profile')
-      }
+    const path = app.router.getPath();
+    const isLoginPath = path.startsWith('/login');
+    const isRegistrationPath = path.startsWith('/register');
+    const isHomePath = ['/home', '', '/'].includes(path);
+    if (isLoginPath || isRegistrationPath || isHomePath) {
+      app.router.navigate('/my-profile')
+    }
   }
 
   protected prepareBody(): HTMLDivElement {

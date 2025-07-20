@@ -12,7 +12,19 @@ export class WorkshopPolicy {
   }
 
   isEditor(): boolean {
-    return this.workshop.editorIds.includes(this.user.id) || this.userPolicy.isModerator();
+    return this.workshop.editorIds.includes(this.user.id);
+  }
+
+  isMaster(): boolean {
+    return this.workshop.masterIds.includes(this.user.id);
+  }
+
+  isMentor(): boolean {
+    return this.workshop.mentorIds.includes(this.user.id);
+  }
+
+  isModerator(): boolean {
+    return this.userPolicy.isModerator();
   }
 
   canEdit(): boolean {
@@ -24,19 +36,19 @@ export class WorkshopPolicy {
   }
 
   canAddWorkshopRentOffer(): boolean {
-    return this.workshop.editorIds.includes(this.user.id);
+    return this.workshop.editorIds.includes(this.user.id.toString());
   }
 
   canAddProductSaleOffer(): boolean {
-    return this.workshop.masterIds.includes(this.user.id);
+    return this.isMaster();
   }
 
   canAddHobbyKitOffer(): boolean {
-    return this.workshop.masterIds.includes(this.user.id);
+    return this.isMaster();
   }
 
   canAddCourseOffer(): boolean {
-    return this.workshop.mentorIds.includes(this.user.id);
+    return this.isMentor();
   }
 }
 

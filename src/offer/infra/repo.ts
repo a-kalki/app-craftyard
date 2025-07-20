@@ -5,7 +5,7 @@ import type { MaybePromise } from "rilata/core";
 
 const repoPath = import.meta.dir + '/offers.json';
 
-export class OfferJsonRepo implements OfferRepo {
+class OfferJsonRepo implements OfferRepo {
   protected jsonRepo = new JsonRepository<OfferAttrs>(repoPath);
 
   findOffer(id: string): MaybePromise<OfferAttrs | undefined> {
@@ -21,11 +21,15 @@ export class OfferJsonRepo implements OfferRepo {
   addOffer(attrs: OfferAttrs): MaybePromise<{ changes: number; }> {
     return this.jsonRepo.update(attrs.id, attrs)
       .then(() => ({ changes: 1 }));
-    
   }
+
   editOffer(attrs: OfferAttrs): MaybePromise<{ changes: number; }> {
     return this.jsonRepo.update(attrs.id, attrs)
       .then(() => ({ changes: 1 }));
+  }
+
+  deleteOffer(offerId: string): MaybePromise<{ changes: number; }> {
+    return this.jsonRepo.delete(offerId);
   }
 
   getWorkshopOffers(organizationId: string): MaybePromise<OfferAttrs[]> {
@@ -36,3 +40,5 @@ export class OfferJsonRepo implements OfferRepo {
     return this.jsonRepo.filter({ masterId });
   }
 }
+
+export const offerJsonRepo = new OfferJsonRepo();

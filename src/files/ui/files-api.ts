@@ -7,6 +7,7 @@ import type { GetFileCommand, GetFileEntryResult, GetFileUcMeta } from "#files/d
 import type { UpdateFileCommand, UpdateFileResult, UpdateFileUcMeta } from "#files/domain/struct/update-file/contract";
 import type { DeleteFileCommand, DeleteFileResult, DeleteFileUcMeta } from "#files/domain/struct/delete-file/contract";
 import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { GetFilesCommand, GetFilesEntryResult, GetFilesUcMeta } from "#files/domain/struct/get-files/contract";
 
 /** Реализация для файлового хранилища сохраняющего прямо на сервере (не в s3) */
 export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFileFacade {
@@ -52,6 +53,15 @@ export class FileBackendLocalApi extends BaseBackendApi<unknown> implements UiFi
       requestId: crypto.randomUUID(),
     }
     return this.request<GetFileUcMeta>(command);
+  }
+
+  async getFileEntries(ids: string[]): Promise<GetFilesEntryResult> {
+    const command: GetFilesCommand = {
+      name: 'get-files',
+      attrs: { ids },
+      requestId: crypto.randomUUID(),
+    }
+    return this.request<GetFilesUcMeta>(command);
   }
 
   async updateFileEntry(id: string, patch: UpdateFileCommand['attrs']['patch']): Promise<UpdateFileResult> {

@@ -8,6 +8,7 @@ import { GetWorkshopOffersUseCase } from "./use-cases/get-workshop-offers.uc";
 import { GetMasterOffersUseCase } from "./use-cases/get-master-offers.uc";
 import { AddOfferUseCase } from "./use-cases/add-offer.uc";
 import { EditOfferUseCase } from "./use-cases/edit-offer.uc";
+import { DeleteOfferUseCase } from "./use-cases/delete-offer.uc";
 
 export const offerModuleConfig: ModuleConfig = {
     moduleUrls: [offerApiUrl]
@@ -19,6 +20,7 @@ export const offerModuleUseCases: UseCase[] = [
   new GetMasterOffersUseCase(),
   new AddOfferUseCase(),
   new EditOfferUseCase(),
+  new DeleteOfferUseCase(),
 ]
 
 export const offerModulePermissionCheckers: PerformCheckerService<CraftYardResolvers>[] = [
