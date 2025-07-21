@@ -1,4 +1,4 @@
-import { html, css, type TemplateResult } from 'lit';
+import { html, css, type TemplateResult, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { SidebarItem } from '../base/types';
 import { BaseElement } from '../base/base-element';
@@ -88,6 +88,10 @@ export class AppSidebarWidget extends BaseElement {
   }
 
   private renderItems(items: SidebarItem[]): TemplateResult[] {
+    const isNotAuthUser = !this.app.userInfo.isAuth;
+    if (isNotAuthUser) {
+      items = items.filter(item => item.name !== 'my-profile')
+    }
     return items.map(item => {
       const isActive = this.activeItem === item.name;
 

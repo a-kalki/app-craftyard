@@ -12,3 +12,4 @@ import './entities/contribution-tag';
 import './entities/cost-input';
 import './entities/image-gallery-dialog.ts';
 import './entities/user-info-section.ts';
+import './entities/user-skill-tag.ts';

@@ -1,11 +1,12 @@
 import { html, css, nothing, type TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
 import { USER_CONTRIBUTIONS_DETAILS } from '#app/domain/user-contributions/constants';
 import type { UserContributionKey } from '#app/domain/user-contributions/types';
+import type { ThesisContent } from '#user-contents/domain/content/struct/thesis-attrs';
 
-@customElement('user-info-card')
+@customElement('user-info-section')
 export class UserInfoCard extends BaseElement {
   static styles = css`
     :host {
@@ -106,13 +107,35 @@ export class UserInfoCard extends BaseElement {
   @property({ type: Boolean })
   showActions: boolean = true;
 
+  @state() skillContents: ThesisContent[] = [];
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.loadSkills();
+  }
+
+  protected async loadSkills(): Promise<void> {
+    const result = await this.userContentApi.getSectionContens(this.user.profile.skillsContentSectionId);
+    if (result.isFailure()) {
+      this.app.error(
+        `[${this.constructor.name}]: Не удалось загрузить навыки пользователя`,
+        { details: result.value }
+      )
+      return;
+    }
+    this.skillContents = result.value.filter(c => c.type === 'THESIS');
+  }
+
   protected render(): TemplateResult {
     if (!this.user) {
-      return nothing;
+      return html`<h2>Пользователь не найден!</h2>`;
     }
 
     const telegramHref = this.user.profile.telegramNickname ? `https://t.me/${this.user.profile.telegramNickname}` : null;
     const profileHref = `/users/${this.user.id}`;
+
+    const userContributions = this.user.statistics.contributions;
+    const userContributionKeys = Object.keys(userContributions);
 
     return html`
       <div class="section-header">
@@ -148,9 +171,7 @@ export class UserInfoCard extends BaseElement {
                 ` : nothing}
                 ${profileHref ? html`
                   <sl-menu-item
-                    href=${profileHref}
-                    target="_blank"
-                    rel="noopener"
+                    @click=${() => this.app.router.navigate(profileHref)}
                   >
                     <sl-icon slot="prefix" name="info-circle"></sl-icon>
                     Профиль пользователя
@@ -169,26 +190,27 @@ export class UserInfoCard extends BaseElement {
         ` : nothing}
         <div class="master-info">
           <h3>${this.user.name}</h3>
-          ${Object.keys(this.user.profile.skills).length ? html`
+          ${this.skillContents.length ? html`
             <div class="master-skills-section">
               <h4>Навыки:</h4>
-              <div class="master-skills">
-                ${Object.keys(this.user.profile.skills).map((skill) => html`
-                  <sl-tag size="small" variant="primary">${skill}</sl-tag>
-                `)}
-              </div>
+              ${this.skillContents.map(content => (
+                html`<user-skill-tag .content=${content}></user-skill-tag>`
+              ))}
             </div>
           ` : nothing}
-          ${Object.keys(this.user.statistics.contributions).length ? html`
+          ${userContributionKeys.length ? html`
             <div class="master-contributions-section">
               <h4>Вклад в сообщество:</h4>
               <div>
-                ${Object.keys(this.user.statistics.contributions).sort((a, b) => {
+                ${userContributionKeys.sort((a, b) => {
                   const orderA = USER_CONTRIBUTIONS_DETAILS[a as UserContributionKey]?.orderNumber || 999;
                   const orderB = USER_CONTRIBUTIONS_DETAILS[b as UserContributionKey]?.orderNumber || 999;
                   return orderA - orderB;
-                }).map((contributionKey) => html`
-                  <user-contribution-tag .contributionKey=${contributionKey as UserContributionKey}></user-contribution-tag>
+                }).map((key) => html`
+                  <user-contribution-tag
+                    .key=${key as UserContributionKey}
+                    .counter=${userContributions[key as keyof typeof userContributions]!}
+                  ></user-contribution-tag>
                 `)}
               </div>
             </div>
@@ -202,6 +224,6 @@ export class UserInfoCard extends BaseElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'user-info-card': UserInfoCard;
+    'user-info-section': UserInfoCard;
   }
 }

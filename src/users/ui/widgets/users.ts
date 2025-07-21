@@ -25,25 +25,24 @@ export class UsersWidget extends BaseElement {
       display: grid;
       gap: 16px;
       width: 100%;
-      
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 
-    @media (min-width: 1150px) {
-      .grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (min-width: 900px) and (max-width: 899px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 650px) {
+    @media (max-width: 600px) {
       .grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 991px) {
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+    }
+
+    @media (min-width: 992px) and (max-width: 1200px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
@@ -68,7 +67,8 @@ export class UsersWidget extends BaseElement {
 
   render() {
     return html`
-      <div class="users-list-wrapper"> <div class="grid">
+      <div class="users-list-wrapper">
+        <div class="grid">
           ${this.users.map(user => html`<user-card .user=${user}></user-card>`)}
         </div>
       </div>

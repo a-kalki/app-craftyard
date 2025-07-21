@@ -61,7 +61,9 @@ export class AppHeaderWidget extends BaseElement {
   `;
 
   render() {
-    const user = this.app.getState().currentUser;
+    const userInfo = this.app.userInfo;
+    const user = userInfo.isAuth ? userInfo.user : null;
+
     return html`
       <div class="container">
         <div class="left">
@@ -81,7 +83,7 @@ export class AppHeaderWidget extends BaseElement {
               `
             : null}
           <img
-            src="/assets/app/logo_full.svg"}
+            src="/assets/app/logo_full.svg"
             alt="logo"
           />
         </div>

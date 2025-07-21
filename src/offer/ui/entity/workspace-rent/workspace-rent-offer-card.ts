@@ -23,7 +23,7 @@ export class WorkspaceRentOfferCard extends BaseOfferCard {
   ];
 
   protected canVisibleDiscount(): boolean {
-    const userWorkshop = this.app.userWorkshop;
+    const userWorkshop = this.app.userWorkshopInfo;
     if (!userWorkshop.isBind) return false;
     const policy = new WorkshopPolicy(userWorkshop.user, userWorkshop.workshop);
     return policy.isMaster() || policy.isMentor() || policy.isModerator() || policy.isEmpoyee();

@@ -275,10 +275,10 @@ export class OfferDetails extends BaseElement {
   }
 
   protected canEditOffer(): boolean {
-    const userInfo = this.app.assertAuthUser();
-    if (!userInfo || !this.offer) return false;
+    const userInfo = this.app.userInfo;
+    if (!userInfo.isAuth || !this.offer) return false;
 
-    const policy = new OfferPolicy(userInfo, this.offer);
+    const policy = new OfferPolicy(userInfo.user, this.offer);
     switch (this.offer.type) {
       case 'COURSE_OFFER': return policy.canEditCourse();
       case 'PRODUCT_SALE_OFFER': return policy.canEditProductSale();
@@ -288,15 +288,15 @@ export class OfferDetails extends BaseElement {
   }
 
   protected viewExtendInfo(): boolean {
-    const userInfo = this.app.user;
+    const userInfo = this.app.userInfo;
     if (!userInfo.isAuth || !this.offer) return false;
 
-    const policy = new OfferPolicy(userInfo.attrs, this.offer);
+    const policy = new OfferPolicy(userInfo.user, this.offer);
     if (policy.canEdit()) return true;
 
-    const workshopInfo = this.app.userWorkshop;
+    const workshopInfo = this.app.userWorkshopInfo;
     if (!workshopInfo.isBind) return false;
-    const wPolicy = new WorkshopPolicy(userInfo.attrs, workshopInfo.workshop);
+    const wPolicy = new WorkshopPolicy(userInfo.user, workshopInfo.workshop);
     return wPolicy.isEmpoyee();
   }
 

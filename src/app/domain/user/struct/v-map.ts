@@ -1,13 +1,12 @@
 import {
-  DtoFieldValidator, IsStringTypeRule,
+  DtoFieldValidator,
   LiteralFieldValidator,
   MinCharsCountValidationRule,
-  RecordDtoValidator,
   type ValidatorMap,
 } from "rilata/validator";
-import { userStatisticsVMap } from "../user-contributions/v-map";
-import type { UserAttrs } from "./struct/attrs";
-import { createAtValidator, updateAtValidator, userIdValidator } from "../base-validators";
+import { userStatisticsVMap } from "../../user-contributions/v-map";
+import type { UserAttrs } from "../struct/attrs";
+import { createAtValidator, updateAtValidator, userIdValidator, uuidFieldValidator } from "../../base-validators";
 
 export const userSupportVMap: ValidatorMap<UserAttrs['support']> = {
   isModerator: new LiteralFieldValidator('isModerator', false, { isArray: false }, 'boolean', [])
@@ -16,10 +15,7 @@ export const userSupportVMap: ValidatorMap<UserAttrs['support']> = {
 export const userProfileVMap: ValidatorMap<UserAttrs['profile']> = {
   telegramNickname: new LiteralFieldValidator('telegramNickname', false, { isArray: false }, 'string', []),
   avatarUrl: new LiteralFieldValidator('avatarUrl', false, { isArray: false }, 'string', []),
-  skills: new RecordDtoValidator(true, { isArray: false }, [
-    new IsStringTypeRule(),
-    new MinCharsCountValidationRule(30, 'Описание навыка должно содержать не менее 30 символов'),
-  ]),
+  skillsContentSectionId: uuidFieldValidator.cloneWithName('skillsContentSectionId'),
 }
 
 export const userVMap: ValidatorMap<UserAttrs> = {
@@ -27,6 +23,7 @@ export const userVMap: ValidatorMap<UserAttrs> = {
   name: new LiteralFieldValidator('name', true, { isArray: false }, 'string', [
       new MinCharsCountValidationRule(3, 'Имя должно содержать не менее 3 символов'),
   ]),
+  bindWorkshopId: uuidFieldValidator.cloneWithName('bindWorkshopId').cloneWithRequired(false),
   support: new DtoFieldValidator('support', false, { isArray: false }, 'dto', userSupportVMap),
   profile: new DtoFieldValidator('profile', true, { isArray: false }, 'dto', userProfileVMap),
   statistics: new DtoFieldValidator('statistics', true, { isArray: false }, 'dto', userStatisticsVMap),

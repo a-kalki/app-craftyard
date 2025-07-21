@@ -44,11 +44,11 @@ const routableTags: RoutableCustomComponent[] = [
 const routeRedirects: RouteRedirect[] = [
   {
     from: '',
-    to: '/my-profile',
+    to: '/default',
   },
   {
     from: '/',
-    to: '/my-profile',
+    to: '/default',
   }
 ]
 

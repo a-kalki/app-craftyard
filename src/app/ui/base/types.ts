@@ -2,7 +2,12 @@ import type { UserAttrs } from "#app/domain/user/struct/attrs";
 import type { WorkshopAttrs } from "#workshop/domain/struct/attrs";
 
 export type AppState = {
-  currentUser: UserAttrs,
+  userIsAuth: false,
+  isMobile: boolean,
+  isTelegramMiniApp: boolean,
+} | {
+  userIsAuth: true,
+  user: UserAttrs,
   isMobile: boolean,
   isTelegramMiniApp: boolean,
 }
@@ -15,18 +20,18 @@ export type RoutableCustomComponent = {
 
 type UserAuthentificated = {
   isAuth: true;
-  attrs: UserAttrs;
+  user: UserAttrs;
 }
 
-export type AppCurrentUser = UserAuthentificated | { isAuth: false };
+export type AppCurrentUserInfo = UserAuthentificated | { isAuth: false };
 
 type UserWorkshopBinded = {
   isBind: true;
   workshop: WorkshopAttrs;
-  user: UserAuthentificated['attrs']
+  user: UserAuthentificated['user']
 }
 
-export type AppUserWorkshop = UserWorkshopBinded | { isBind: false }
+export type AppUserWorkshopInfo = UserWorkshopBinded | { isBind: false }
 
 export type UrlParams = Record<string, string>;
 
@@ -43,7 +48,7 @@ export type SidebarItem = {
   children?: SidebarItem[];
 };
 
-export type ToastVariant = 'info' | 'success' | 'warning' | 'danger';
+export type ToastVariant = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
 
 export type ToastMessage = {
   id: number;

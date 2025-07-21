@@ -38,7 +38,7 @@ export class ContentSection extends BaseElement {
       margin: 0;
     }
 
-    .theses-container {
+    .contents-container {
       display: grid;
       gap: 1.5rem;
     }
@@ -54,7 +54,7 @@ export class ContentSection extends BaseElement {
     }
 
     @media (min-width: 768px) {
-      .theses-container {
+      .contents-container {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       }
     }
@@ -186,7 +186,7 @@ export class ContentSection extends BaseElement {
         </div>
 
         ${this.sectionContents.length > 0 ? html`
-          <div class="theses-container">
+          <div class="contents-container">
             ${this.sectionContents.map(content =>
               this.contentComponentManager.renderContent(
                 content,

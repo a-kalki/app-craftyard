@@ -1,9 +1,9 @@
 import { AggregateRoot } from "rilata/domain";
-import { userInvariantsValidator } from "./v-map";
 import type { UserContributionKey, UserContributions } from "../user-contributions/types";
 import { USER_CONTRIBUTIONS_DETAILS } from "../user-contributions/constants";
 import type { UserArMeta } from "./meta";
-import type { Skills, UserAttrs } from "./struct/attrs";
+import type { UserAttrs } from "./struct/attrs";
+import { userInvariantsValidator } from "./struct/v-map";
 
 export class UserAr extends AggregateRoot<UserArMeta> {
   name = "UserAr" as const;
@@ -34,9 +34,5 @@ export class UserAr extends AggregateRoot<UserArMeta> {
   // Метод для проверки, есть ли у пользователя определённая роль
   hasContribution(key: UserContributionKey): boolean {
     return this.getContributionKeys().includes(key);
-  }
-
-  getSkills(): Skills {
-    return this.getAttrs().profile.skills;
   }
 }

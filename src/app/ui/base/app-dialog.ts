@@ -4,13 +4,13 @@ import { render } from 'lit-html';
 type DialogContent = string | HTMLElement | TemplateResult;
 
 export type DialogOptions = {
-    title: DialogContent;
-    content: DialogContent;
-    confirmText?: string;
-    cancelText?: string;
-    confirmVariant?: 'primary' | 'default' | 'success' | 'danger' | 'warning' | 'text';
-    cancelVariant?: 'primary' | 'default' | 'success' | 'danger' | 'warning' | 'text';
-  }
+  title: DialogContent;
+  content: DialogContent;
+  confirmText?: string;
+  cancelText?: string;
+  confirmVariant?: 'primary' | 'default' | 'success' | 'danger' | 'warning' | 'text';
+  cancelVariant?: 'primary' | 'default' | 'success' | 'danger' | 'warning' | 'text';
+}
 
 export class AppDialog {
   private dialog: HTMLDialogElement & { show: () => void; hide: () => void } & HTMLElement;
@@ -19,7 +19,7 @@ export class AppDialog {
   private footer!: HTMLElement;
 
   constructor() {
-    this.dialog = this.getOrCreateDialog();
+    this.dialog = this.getDialog();
   }
 
   async show(options: DialogOptions): Promise<boolean> {
@@ -56,7 +56,7 @@ export class AppDialog {
     });
   }
 
-  private getOrCreateDialog() {
+  private getDialog() {
     let dialog = document.getElementById('app-dialog') as typeof this.dialog | null;
     if (!dialog) {
       throw Error('App dialog not found');

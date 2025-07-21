@@ -1,6 +1,6 @@
 import type { GetUserCommand } from "#app/domain/user/struct/get-user/contract";
-import { userVMap } from "#app/domain/user/v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
+import { userVMap } from "../v-map";
 
 const getUserVmap: ValidatorMap<GetUserCommand['attrs']> = {
     id: userVMap.id,

@@ -1,6 +1,6 @@
 import { createHash, createHmac } from "crypto";
 import type { RequestScope, DomainResult } from "rilata/api";
-import { AssertionException, failure, success, type JwtDto } from "rilata/core";
+import { AssertionException, failure, success, type BackendResultByMeta, type JwtDto } from "rilata/core";
 import { UserUseCase } from "#users/api/base-uc";
 import type { AuthUserMeta } from "#app/domain/user/struct/auth-user/contract";
 import { UserAr } from "#app/domain/user/a-root";
@@ -8,6 +8,9 @@ import { TELEGRAM_AUTH_TIME_AS_SEC } from "#app/ui/base-run/constants";
 import type { TelegramUser } from "#app/ui/base-run/run-types";
 import type { UserAttrs } from "#app/domain/user/struct/attrs";
 import { authUserValidator } from "#app/domain/user/struct/auth-user/v-map";
+import type { UserArMeta } from "#app/domain/user/meta";
+import type { AddContentSectionCommand, AddContentSectionMeta } from "#user-contents/domain/section/struct/add-section/contract";
+import { dedokWorkshopId } from "#workshop/constants";
 
 export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
   inputName = "auth-user" as const;
@@ -31,13 +34,13 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
 
     const getResult = await this.getUserAttrs(tgUser.id);
     if (getResult.isFailure()) {
-      return this.registerUser(tgUser);
+      return this.registerUser(tgUser, input.requestId);
     }
 
     const currUser = getResult.value;
     return success({
       user: currUser,
-      token: {
+      tokens: {
         access: this.createToken(currUser, 'access'),
         refresh: this.createToken(currUser, 'refresh'),
       }
@@ -92,14 +95,24 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
     return hash === computedHash;
   }
 
-  protected async registerUser(tgUser: TelegramUser): Promise<DomainResult<AuthUserMeta>> {
+  protected async registerUser(
+    tgUser: TelegramUser, reqId: string
+  ): Promise<DomainResult<AuthUserMeta>> {
+    const createSkillResult = await this.createSkillsContentSection(tgUser.id, reqId)
+    if (createSkillResult.isFailure()) {
+      throw this.logger.error(
+        `[${this.constructor.name}]: Не удалось создать секцию контента для навыков.`,
+        { result: createSkillResult.toObject(), reqId }
+      );
+    }
+
     const userAttrs: UserAttrs = {
       id: tgUser.id,
       name: tgUser.first_name,
       profile: {
-        skills: {},
         telegramNickname: tgUser.username,
-        avatarUrl: tgUser.photo_url
+        avatarUrl: tgUser.photo_url,
+        skillsContentSectionId: createSkillResult.value.id,
       },
       statistics: {
         contributions: {
@@ -112,6 +125,7 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
       },
       createAt: Date.now(),
       updateAt: Date.now(),
+      bindWorkshopId: dedokWorkshopId,
     }
 
     const user = new UserAr(userAttrs);
@@ -119,7 +133,7 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
     if (result.changes > 0) {
       return success({
         user: user.getAttrs(),
-        token: {
+        tokens: {
           access: this.createToken(userAttrs, 'access'),
           refresh: this.createToken(userAttrs, 'refresh'),
         },
@@ -128,8 +142,24 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
     throw new AssertionException('БД вернула неожиданный результат: ' + JSON.stringify(result));
   }
 
+  protected createSkillsContentSection(
+    userId: string, reqId: string
+  ): Promise<BackendResultByMeta<AddContentSectionMeta>> {
+    const ownerName: UserArMeta['name'] = 'UserAr';
+    const commandAttrs: AddContentSectionCommand['attrs'] = {
+      access: 'public',
+      ownerId: userId,
+      ownerName,
+      context: 'user-info',
+      title: "Навыки"
+    }
+    return this.moduleResolver.userContentFacade.addContentSection(
+      commandAttrs, { type: 'AnonymousUser' }, reqId
+    );
+  }
+
   protected createToken(user: UserAttrs, tokenType: 'access' | 'refresh'): string {
-    const dto: JwtDto = { userId: user.id }
+    const dto: JwtDto = { id: user.id }
     if (user.support?.isModerator) dto.support = { isModerator: true }
     return this.serverResolver.jwtCreator.createToken(dto, tokenType);
   }

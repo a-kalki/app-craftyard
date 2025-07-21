@@ -8,7 +8,7 @@ export class AppNotifier {
     this.show({
       id: Date.now(),
       text,
-      variant: options?.variant ?? 'info',
+      variant: options?.variant ?? 'neutral',
       details: options?.details,
     });
   }

@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import type { TelegramWidgetUserData } from '../base-run/run-types';
+import type { BootstrapResolves, TelegramWidgetUserData } from '../base-run/run-types';
 import { AppNotifier } from '../base/app-notifier';
 import type { AuthData, AuthUserSuccess } from '#app/domain/user/struct/auth-user/contract';
 import type { UiUserFacade } from '#app/domain/user/facade';
@@ -12,15 +12,21 @@ export class LoginPage extends LitElement {
   }
 
   @property({ type: Boolean }) debug = true;
-  @property({ type: Object }) userApi!: UiUserFacade;
   @state() private widgetLoaded = false;
 
   private appNotifier = new AppNotifier();
 
+  protected get userFacade(): UiUserFacade {
+    return (window as any).userApi;
+  }
+
+  protected get resolves(): BootstrapResolves {
+    return (window as any).app.resolves; // надо ли resolves делать глобальным?
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
     window.onTelegramAuth = this.onTelegramAuth.bind(this);
-    this.userApi = (window as any).userApi;
   }
 
   firstUpdated() {
@@ -104,19 +110,21 @@ export class LoginPage extends LitElement {
       type: 'widget-login',
       data: new URLSearchParams(tgUser as Record<string, string>).toString(),
     }
-    const result = await this.userApi.authUser(data);
+    const result = await this.userFacade.authUser(data);
     if (result.isFailure()) {
-      this.appNotifier.error(
-        'В процессе авторизации произошел сбой, попробуйте перезагрузить страницу и повторить процесс.',
-        { details: result.value }
-      );
+      const msg = 'В процессе авторизации произошел сбой, попробуйте перезагрузить страницу.';
+      if (this.appNotifier) {
+        this.appNotifier.error(msg, { details: result.value });
+      }
       return;
     }
     window.dispatchEvent(new CustomEvent<AuthUserSuccess>('user-logined', { detail: result.value }));
   }
 
   private getDebugAuthUser(): TelegramWidgetUserData | undefined {
-    return (window as any).debugAuthUser;
+    return this.resolves.debugUserMode.isDebugMode
+      ?this.resolves.debugUserMode.user
+      : undefined;
   }
 
   render() {

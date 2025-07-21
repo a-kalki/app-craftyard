@@ -8,7 +8,7 @@ import type { UserAttrs } from '#app/domain/user/struct/attrs';
 @customElement('user-panel')
 export class UserPanelWidget extends BaseElement {
   @property({ type: Boolean }) isMobile = false;
-  @property({ type: Object }) user!: UserAttrs;
+  @property({ type: Object }) user: UserAttrs | null = null;
 
   static styles = css`
     :host {
@@ -32,22 +32,25 @@ export class UserPanelWidget extends BaseElement {
       font-size: 0.75rem;
       color: var(--sl-color-neutral-600);
     }
-
-    .mobile-only {
-      display: none;
-    }
-
-    @media (max-width: 480px) {
-      .desktop-only {
-        display: none;
-      }
-      .mobile-only {
-        display: flex;
-      }
-    }
   `;
 
   render() {
+    if (!this.user) {
+      return html`
+        <sl-tooltip content="Войти" placement="bottom">
+          <sl-button
+            variant="text"
+            size="large"
+            @click=${() => this.app.showLogin(this.app.router.getPath())}
+          >
+            <sl-icon slot="prefix" label="Войти" name="box-arrow-in-right"></sl-icon>
+          </sl-button>
+        </sl-tooltip>
+      `;
+    }
+
+    const isTelegramApp = this.app.appState.isTelegramMiniApp;
+
     const userAr = new UserAr(this.user);
     const topKey = userAr.getTopContributionKeyByOrder();
     const title = USER_CONTRIBUTIONS_DETAILS[topKey].title;
@@ -55,21 +58,22 @@ export class UserPanelWidget extends BaseElement {
     return html`
       <user-avatar .user=${this.user} shape="circle" size="36"></user-avatar>
       
-      <div class="info desktop-only">
+      <div class="info">
         <span class="name">${this.user.name}</span>
         <span class="title">${title}</span>
       </div>
       
-      <div class="mobile-only">
-        <sl-button variant="text" @click=${this.app.logout}>
-          <sl-icon name="box-arrow-right"></sl-icon>
-        </sl-button>
-      </div>
-      
-      <sl-divider vertical class="desktop-only"></sl-divider>
-      <sl-button variant="text" class="desktop-only" @click=${this.app.logout}>
-        <sl-icon name="box-arrow-right"></sl-icon>
-      </sl-button>
+      ${!isTelegramApp ? html`
+        <sl-tooltip content="Выйти" placement="bottom">
+          <sl-button
+            variant="text"
+            size="large"
+            @click=${() => this.app.logout()}
+          >
+            <sl-icon name="box-arrow-right"></sl-icon>
+          </sl-button>
+        </sl-tooltip>
+      `: ''}
     `;
   }
 }

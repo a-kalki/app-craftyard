@@ -58,9 +58,29 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     description: 'Делает изделия для себя',
     action: 'Создавать свои изделия',
     icon: 'wrench',
-    condition: 'Сделать в мастерской что нибудь',
+    condition: 'Сделать в мастерской Изделия для себя',
     implemented: false,
     orderNumber: 5,
+    trackedBy: ['APP']
+  },
+  PROPOSER: {
+    title: 'Инициатор',
+    description: 'Открывает новые возможности, публикуя предложения.',
+    action: 'Создавать и публиковать предложения.',
+    icon: 'lightbulb',
+    condition: 'Опубликовать предложения.',
+    implemented: false,
+    orderNumber: 6,
+    trackedBy: ['APP']
+  },
+  EXECUTOR: {
+    title: 'Реализатор',
+    description: 'Исполняет предложения или заказы.',
+    action: 'Реализовывать предложения или выполнять заказы.',
+    icon: 'check-circle',
+    condition: 'Реализовать предложения/заказы.',
+    implemented: false,
+    orderNumber: 7,
     trackedBy: ['APP']
   },
   MAKER: {
@@ -68,29 +88,29 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     description: 'Создаёт изделия в мастерской',
     action: 'Работать в мастерской',
     icon: 'tools',
-    condition: 'Завершить сессии в мастерской',
+    condition: 'Сделать Изделия для продажи',
     implemented: false,
-    orderNumber: 6,
+    orderNumber: 8,
     trackedBy: ['APP']
   },
   SELLER: {
     title: 'Продавец',
-    description: 'Реализует изделия через платформу',
+    description: 'Реализует Изделия через платформу',
     action: 'Продавать свои работы',
     icon: 'cash-stack',
     condition: 'Завершить продажи',
     implemented: false,
-    orderNumber: 7,
+    orderNumber: 9,
     trackedBy: ['APP']
   },
   DESIGNER: {
     title: 'Конструктор',
     description: 'Создаёт 3D-модели для сообщества',
-    action: 'Публиковать модели изделий',
+    action: 'Публиковать модели Изделий',
     icon: 'cloud-upload',
     condition: 'Опубликовать модели',
     implemented: false,
-    orderNumber: 8,
+    orderNumber: 10,
     trackedBy: ['APP']
   },
   TRAINER: {
@@ -98,9 +118,9 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     description: 'Проводит обучение для участников',
     action: 'Организовывать мастер-классы',
     icon: 'person-video',
-    condition: 'Провести мероприятия',
+    condition: 'Провести курсы или мастер-классы',
     implemented: false,
-    orderNumber: 9,
+    orderNumber: 11,
     trackedBy: ['BOTH']
   },
   AUTHOR: {
@@ -110,7 +130,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     icon: 'journal-code',
     condition: 'Опубликовать курсы',
     implemented: false,
-    orderNumber: 10,
+    orderNumber: 12,
     trackedBy: ['APP']
   },
   KEEPER: {
@@ -120,7 +140,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     icon: 'tools',
     condition: 'Быть назначенным',
     implemented: false,
-    orderNumber: 11,
+    orderNumber: 13,
     trackedBy: ['MANUAL']
   },
   MODERATOR: {
@@ -130,7 +150,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     icon: 'shield-lock',
     condition: 'Быть назначенным',
     implemented: false,
-    orderNumber: 12,
+    orderNumber: 14,
     trackedBy: ['MANUAL']
   },
   ORGANIZER: {
@@ -140,7 +160,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     icon: 'calendar-event',
     condition: 'Организовать мероприятия',
     implemented: false,
-    orderNumber: 13,
+    orderNumber: 15,
     trackedBy: ['BOTH']
   },
   INVESTOR: {
@@ -150,7 +170,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     icon: 'coin',
     condition: 'Сделать финансовый вклад',
     implemented: false,
-    orderNumber: 14,
+    orderNumber: 16,
     trackedBy: ['APP']
   },
   AMBASSADOR: {
@@ -160,7 +180,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     icon: 'megaphone',
     condition: 'Привести новых участников',
     implemented: false,
-    orderNumber: 15,
+    orderNumber: 17,
     trackedBy: ['BOTH']
   },
   REVIEWER: {
@@ -170,18 +190,28 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     icon: 'stars',
     condition: 'Оставить экспертные оценки',
     implemented: false,
-    orderNumber: 16,
+    orderNumber: 18,
     trackedBy: ['APP']
   },
-  WORKSHOP_CREATOR: {
-    title: 'Создатель мастерской',
-    description: 'Основатель и владелец мастерской',
+  CRAFTSMAN: {
+    title: 'Мастеровой',
+    description: 'Мастерит и открывает мастерскую для других',
     action: 'Создать и развивать мастерскую',
     icon: 'building',
     condition: 'Создать мастерскую',
     implemented: false,
-    orderNumber: 17,
-    trackedBy: ['MANUAL']
+    orderNumber: 19,
+    trackedBy: ['APP']
+  },
+  FOUNDER: {
+    title: 'Основатель',
+    description: 'Основатель и владелец коворкинг-центра',
+    action: 'Создать и развивать коворкинг-центр',
+    icon: 'building',
+    condition: 'Создать мастерскую',
+    implemented: false,
+    orderNumber: 20,
+    trackedBy: ['APP']
   },
 };
 

@@ -5,7 +5,7 @@ import { UserDetailsEntity } from './user-details';
 export class MyProfileEntity extends UserDetailsEntity {
 
   protected getUserId(): string {
-    return this.app.getState().currentUser.id;
+    return this.app.assertAuthUser().id;
   }
 }
 

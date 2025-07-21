@@ -3,10 +3,11 @@ import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import { UserAr } from '#app/domain/user/a-root';
 import type { UserContributionCounter, UserContributionKey } from '#app/domain/user-contributions/types';
-import type { BackendResultByMeta } from 'rilata/core';
-import type { GetUserMeta } from '#app/domain/user/struct/get-user/contract';
 import { UserPolicy } from '#app/domain/user/policy';
 import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import type { ContentSectionAttrs } from '#user-contents/domain/section/struct/attrs';
+import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { UserArMeta } from '#app/domain/user/meta';
 
 @customElement('user-details')
 export class UserDetailsEntity extends BaseElement {
@@ -170,29 +171,29 @@ export class UserDetailsEntity extends BaseElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    const userId = this.getUserId();
-    const result = await this.loadUser(userId);
-    if (result.isFailure()) {
-      this.app.error('Не удалось загружать данные пользователя', {
-        userId,
-        description: 'Пользователя с таким id не существует'
-      });
-      return;
-    }
-    this.user = result.value;
-
-    const currentUser = this.app.getState().currentUser;
-    const userPolicy = new UserPolicy(currentUser);
-    const targetAttrs = result.value;
-    this.canEdit = userPolicy.canEdit(targetAttrs);
+    this.loadUser();
   }
 
   protected getUserId(): string {
     return this.app.router.getParams().userId;
   }
 
-  private async loadUser(userId: string): Promise<BackendResultByMeta<GetUserMeta>> {
-    return this.userApi.getUser(userId);
+  private async loadUser(forceRefresh?: boolean): Promise<void> {
+    const userId = this.getUserId();
+    if (!userId) return;
+    const result = await this.userApi.getUser(userId, forceRefresh);
+    if (result.isFailure()) {
+      this.app.error('Не удалось загружать данные пользователя', { userId, result });
+      return;
+    }
+    this.user = result.value;
+
+    const userInfo = this.app.userInfo;
+    if (!userInfo.isAuth) return;
+
+    const userPolicy = new UserPolicy(userInfo.user);
+    const targetUser = result.value;
+    this.canEdit = userPolicy.canEdit(targetUser);
   }
 
   private formatDate(timestamp: number): string {
@@ -207,9 +208,16 @@ export class UserDetailsEntity extends BaseElement {
 
     const userAR = new UserAr(this.user);
     const keys: UserContributionKey[] = userAR.getContributionKeys();
-    const skillsEntries = Object.entries(userAR.getSkills());
     const profile = userAR.getAttrs().profile;
     const contributions = userAR.getContributions();
+
+    const ownerName: UserArMeta['name'] = 'UserAr';
+    const ownerAttrs: CyOwnerAggregateAttrs = {
+      ownerId: this.user.id,
+      ownerName,
+      access: 'public',
+      context: 'user-info',
+    }
 
     return html`
       <div class="user-details-content-wrapper"> <div class="header">
@@ -264,7 +272,7 @@ export class UserDetailsEntity extends BaseElement {
                   <tr>
                     <td>
                       <div class="status-badge">
-                        <user-contribution-tag .contributionKey=${key}></user-contribution-tag>
+                        <user-contribution-tag .key=${key} .counter=${contribution}></user-contribution-tag>
                       </div>
                     </td>
                     <td>${contribution.count || 0}</td>
@@ -281,19 +289,27 @@ export class UserDetailsEntity extends BaseElement {
           </table>
         </div>
 
-        <div class="skills-section">
-          <h3>Навыки и специализации</h3>
-          ${skillsEntries.length === 0
-            ? html`<p>Навыки не указаны</p>`
-            : skillsEntries.map(([skill, desc]) => html`
-              <sl-details summary=${skill}>${desc}</sl-details>
-            `)}
-        </div>
+        <content-container
+          .ownerAttrs=${ownerAttrs}
+          .canEdit=${this.canEdit}
+        ></content-container>
       </div>
     `;
   }
 
-  private onEditClick() {
-    this.app.router.navigate(`/users/${this.user!.id}/edit`);
+  private async onEditClick() {
+    if (!this.user) return;
+
+    const modal = document.createElement('user-edit');
+    const result = await modal.show(this.user);
+    if (result) {
+      await this.loadUser(true);
+    }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'user-details': UserDetailsEntity;
   }
 }

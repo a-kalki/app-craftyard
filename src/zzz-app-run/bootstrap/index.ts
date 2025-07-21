@@ -3,7 +3,7 @@ import { modelsModule } from "#models/ui/module";
 import { workshopsModule } from "#workshop/ui/module";
 import { BaseJwtDecoder } from "rilata/core";
 import { Bootstrap } from "../../app/ui/base-run/bootstrap";
-import type { BootstrapResolves, TelegramWidgetUserData } from "../../app/ui/base-run/run-types";
+import type { BootstrapResolves, DebugUserMode, TelegramWidgetUserData } from "../../app/ui/base-run/run-types";
 import { usersModule } from "../../users/ui/module";
 import { UsersBackendApi } from "../../users/ui/users-api";
 import { filesModule } from "src/files/ui/module";
@@ -21,6 +21,7 @@ import { OffersBackendApi } from "#offer/ui/offers-api";
 import { offersModule } from "#offer/ui/module";
 import { cooperationsModule } from "#cooperation/ui/module";
 import { CooperationBackendApi } from "#cooperation/ui/cooperation-api";
+import type { JwtUser } from "#app/domain/user/struct/attrs";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,
@@ -42,26 +43,41 @@ const modules: Module[] = [
   cooperationsModule,
 ]
 
-// токен будет истекшим до наступления этот периода
+// refresh токен будет считаться истекшим до наступления этот периода
 const expiredTimeShiftAsMs = 3000;
 
-// данные будут уничтожаться с кэше запросов в бэк при наступлении этого периода
+// время жизни кэша во фронте
 const cacheTtlAsMin = 5;
 
-const jwtDecoder = new BaseJwtDecoder(expiredTimeShiftAsMs);
+const jwtDecoder = new BaseJwtDecoder<JwtUser>(expiredTimeShiftAsMs);
+
+const userBackendApi = new UsersBackendApi(jwtDecoder, cacheTtlAsMin)
+const workshopBackenApi = new WorkshopsBackendApi(jwtDecoder, cacheTtlAsMin);
+
+const nodeEnvNotProduction = process.env.NODE_ENV !== 'production';
+const debugModeOn = process.env.DEBUG_USER === 'on';
+const debugUserMode: DebugUserMode = nodeEnvNotProduction && debugModeOn
+  ? {
+    isDebugMode: true,
+    user: debugAuthUser,
+  } : {
+    isDebugMode: false,
+  }
 
 const resolves: BootstrapResolves = {
-  userFacade: new UsersBackendApi(jwtDecoder, cacheTtlAsMin),
   jwtDecoder,
+  userFacade: userBackendApi,
+  workshopApi: workshopBackenApi,
+  debugUserMode: debugUserMode,
 }
 
 const otherApis = {
   ...resolves,
   fileFacade: new FileBackendLocalApi(jwtDecoder, cacheTtlAsMin),
-  modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
-  workshopApi: new WorkshopsBackendApi(jwtDecoder, cacheTtlAsMin),
   contentSectionApi: new ContentSectionBackendApi(jwtDecoder, cacheTtlAsMin),
   userContentApi: new UserContentBackendApi(jwtDecoder, cacheTtlAsMin),
+  workshopApi: workshopBackenApi,
+  modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
   offerApi: new OffersBackendApi(jwtDecoder, cacheTtlAsMin),
   cooperationApi: new CooperationBackendApi(jwtDecoder, cacheTtlAsMin),
 }
@@ -87,6 +103,8 @@ Object.keys(withFacades).forEach((key) => {
 });
 
 // все пользователи будут считаться привязанными к мастерской Дедок
-(window as any).userWorkshop = (await otherApis.workshopApi.getWorkshop('4e82828c-43c9-4fb5-9716-e31b03103c29')).value;
+(window as any).userWorkshop = (await otherApis.workshopApi.getWorkshop(
+  '4e82828c-43c9-4fb5-9716-e31b03103c29'
+)).value;
 
-new Bootstrap(modules, withFacades).start();
+new Bootstrap(modules, resolves).start();

@@ -131,9 +131,9 @@ export class ModelDetails extends BaseElement {
       }
       this.model = modelResult.value;
 
-      const userInfo = this.app.user;
+      const userInfo = this.app.userInfo;
       if (userInfo.isAuth) {
-        this.canEditModel = new ModelPolicy(userInfo.attrs, this.model).canEdit();
+        this.canEditModel = new ModelPolicy(userInfo.user, this.model).canEdit();
       }
 
       const modelOwnerResult = await this.userApi.getUser(this.model.ownerId);
@@ -147,7 +147,7 @@ export class ModelDetails extends BaseElement {
         this.modelOwner = modelOwnerResult.value;
       }
 
-      const user = this.app.user.isAuth && this.app.user.attrs;
+      const user = this.app.userInfo.isAuth && this.app.userInfo.user;
       if (user) {
         const offersResult = await this.offerApi.getModelOffers(this.model!.id);
         if (offersResult.isSuccess()) {
@@ -242,11 +242,11 @@ export class ModelDetails extends BaseElement {
   }
 
   protected getWorkshopPolicy(): WorkshopPolicy | undefined {
-    const user = this.app.user;
+    const user = this.app.userInfo;
     if (!user.isAuth) return;
-    const workshop = this.app.userWorkshop;
+    const workshop = this.app.userWorkshopInfo;
     if (!workshop.isBind) return;
-    return new WorkshopPolicy(user.attrs, workshop.workshop);
+    return new WorkshopPolicy(user.user, workshop.workshop);
   }
 
   protected haveOffer(type: Exclude<OfferTypes, 'WORKSPACE_RENT_OFFER'>): boolean {
@@ -284,7 +284,13 @@ export class ModelDetails extends BaseElement {
       ownerName,
       access
     };
-    const modelPolicy = new ModelPolicy(this.app.getState().currentUser, this.model);
+    const userInfo = this.app.userInfo;
+    let canEditUserContent = false;
+    if (userInfo.isAuth) {
+      const modelPolicy = new ModelPolicy(userInfo.user, this.model);
+      canEditUserContent = modelPolicy.canEditUserContent(ownerAttrs);
+    }
+    
 
     return html`
       <div class="model-details-container">
@@ -322,13 +328,13 @@ export class ModelDetails extends BaseElement {
         ${this.modelOwner ? html`
           <hr>
           <div class="model-owner-section">
-            <user-info-card .user=${this.modelOwner} title="О Конструкторе Модели"></user-info-card>
+            <user-info-section .user=${this.modelOwner} title="О Конструкторе"></user-info-section>
           </div>
         ` : nothing}
 
         <content-container
           .ownerAttrs=${ownerAttrs}
-          .canEdit=${modelPolicy.canEditUserContent(ownerAttrs)}
+          .canEdit=${canEditUserContent}
         ></content-container>
 
       </div>

@@ -49,6 +49,8 @@ export const userContribuitionsVmap: ValidatorMap<UserContributions> = {
     SPEAKER: getContributionDetailsVMap('SPEAKER'),
     BUYER: getContributionDetailsVMap('BUYER'),
     HOBBIST: getContributionDetailsVMap('HOBBIST'),
+    PROPOSER: getContributionDetailsVMap('PROPOSER'),
+    EXECUTOR: getContributionDetailsVMap('EXECUTOR'),
     MAKER: getContributionDetailsVMap('MAKER'),
     SELLER: getContributionDetailsVMap('SELLER'),
     DESIGNER: getContributionDetailsVMap('DESIGNER'),
@@ -60,7 +62,8 @@ export const userContribuitionsVmap: ValidatorMap<UserContributions> = {
     INVESTOR: getContributionDetailsVMap('INVESTOR'),
     AMBASSADOR: getContributionDetailsVMap('AMBASSADOR'),
     REVIEWER: getContributionDetailsVMap('REVIEWER'),
-    WORKSHOP_CREATOR: getContributionDetailsVMap('WORKSHOP_CREATOR'),
+    CRAFTSMAN: getContributionDetailsVMap('CRAFTSMAN'),
+    FOUNDER: getContributionDetailsVMap('FOUNDER')
 }
 
 

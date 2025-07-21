@@ -21,6 +21,7 @@ await Bun.build({
   format: 'esm',
   sourcemap: 'linked',
   minify: false,
+  env: "inline",
 });
 
 // Хешируем собранный JS

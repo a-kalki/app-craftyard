@@ -1,11 +1,10 @@
 import type { UserContributions } from "#app/domain/user-contributions/types";
-
-export type Skills = Record<string, string>;
+import type { JwtDto } from "rilata/core";
 
 export type UserProfile = {
   telegramNickname?: string,
   avatarUrl?: string,
-  skills: Skills,
+  skillsContentSectionId: string
 };
 
 export type UserStatistics = {
@@ -17,17 +16,13 @@ export type UserAttrs = {
   name: string;
   support?: {
     isModerator?: boolean,
-  }
+  },
+  bindWorkshopId?: string,
   profile: UserProfile,
   statistics: UserStatistics,
   createAt: number,
   updateAt: number,
 };
 
-export type JwtUser = {
-  id: string,
-  support?: {
-    isModerator?: boolean,
-  }
-}
+export type JwtUser = JwtDto
 

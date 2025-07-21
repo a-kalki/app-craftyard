@@ -22,12 +22,12 @@ import { userContentJsonRepo } from '#user-contents/infra/user-content/repo';
 import type { OfferModuleResolvers } from '#offer/api/types';
 import { offerJsonRepo } from '#offer/infra/repo';
 import { WorkshopBackendFacade } from '#workshop/api/facade';
-import { workshopsModule } from '#workshop/ui/module';
 import { OfferModule } from '#offer/api/module';
 import type { CooperationModuleResolvers } from '#cooperation/api/types';
 import { cooperationJsonRepo } from '#cooperation/infra/repo';
 import { CooperationModule } from '#cooperation/api/module';
 import { ModelBackendFacade } from '#models/api/facade';
+import { ApiUserContendSectionMonolithFacade } from '#user-contents/infra/monolith-facade';
 
 const PROJECT_PATH = cwd();
 const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
@@ -64,10 +64,13 @@ export const userContentModuleResolvers: UserContentModuleResolvers = {
 
 export const userContentsBackendModule = new UserContentModule(userContentModuleResolvers);
 
+export const userContentApiFacade = new ApiUserContendSectionMonolithFacade(userContentsBackendModule);
+
 // +++++++++++++ users module ++++++++++++++
 export const userModuleResolvers: UsersModuleResolvers = {
   serverResolver: craftYardServerResolver,
   moduleResolver: {
+    userContentFacade: userContentApiFacade,
     userRepo: usersJsonRepo
   }
 }

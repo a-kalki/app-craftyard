@@ -152,7 +152,10 @@ export class WorkshopOffers extends BaseElement {
       return;
     }
     this.workshop = workshopResult.value;
-    this.canEdit = new WorkshopPolicy(this.app.getState().currentUser, this.workshop).canEdit();
+    const userInfo = this.app.userInfo;
+    if (userInfo.isAuth) {
+      this.canEdit = new WorkshopPolicy(userInfo.user, this.workshop).canEdit();
+    }
 
     const offersResult = await this.offerApi.getWorkshopOffers(this.workshopId, forceRefresh);
     if (offersResult.isFailure()) {
@@ -259,9 +262,9 @@ export class WorkshopOffers extends BaseElement {
     }
 
     let showAdminInfo: boolean = false;
-    const currUser = this.app.assertAuthUser();
-    if (currUser) {
-      const policy = new WorkshopPolicy(currUser, this.workshop);
+    const { userInfo } = this.app;
+    if (userInfo.isAuth) {
+      const policy = new WorkshopPolicy(userInfo.user, this.workshop);
       showAdminInfo = policy.isEditor() || policy.isModerator() || policy.isMentor();
     }
 

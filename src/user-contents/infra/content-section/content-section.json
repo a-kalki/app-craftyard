@@ -8,8 +8,7 @@
     "title": "Для новичков (дома)",
     "icon": "person-check",
     "createAt": 1751084400759,
-    "updateAt": 1751084400759,
-    "type": "thesis-set"
+    "updateAt": 1751084400759
   },
   "0197b72b-9662-7183-af32-cebc9e84b37a": {
     "id": "0197b72b-9662-7183-af32-cebc9e84b37a",
@@ -20,8 +19,31 @@
     "title": "Для мастеров (цех)",
     "icon": "person-fill-check",
     "createAt": 1751124776548,
-    "updateAt": 1751124776548,
-    "type": "thesis-set"
+    "updateAt": 1751124776548
+  },
+  "0197fdc1-ce50-4568-bbb0-f425746328a7": {
+    "id": "0197fdc1-ce50-4568-bbb0-f425746328a7",
+    "ownerId": "773084180",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1735862400000,
+    "updateAt": 1735862400000
+  },
+  "0197fdc1-0051-49d1-97f3-9c56f154be7f": {
+    "id": "0197fdc1-ce50-4568-bbb0-f425746328a7",
+    "ownerId": "1",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1749821077648,
+    "updateAt": 1749821077648
   },
   "0197fdc1-1dab-7a60-828f-6a4560de8a8f": {
     "id": "0197fdc1-1dab-7a60-828f-6a4560de8a8f",

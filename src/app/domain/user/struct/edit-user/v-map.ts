@@ -1,6 +1,6 @@
 import { userStatisticsVMap } from "#app/domain/user-contributions/v-map";
 import type { EditUserCommand } from "#app/domain/user/struct/edit-user/contract";
-import { userVMap } from "#app/domain/user/v-map";
+import { userVMap } from "../v-map";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 
 const editUserVmap: ValidatorMap<EditUserCommand['attrs']> = {

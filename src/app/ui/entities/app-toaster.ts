@@ -14,17 +14,17 @@ export class AppToaster extends LitElement {
       gap: 12px;
       z-index: 10000;
     }
+
+    sl-alert {
+      --sl-alert-width: auto;
+      max-width: clamp(300px, 90vw, 600px);
+    }
   `;
 
   @state()
-  private messages: ToastMessage[];
+  private messages: ToastMessage[] = [];
 
   private timers = new Map<number, number>();
-  
-  constructor() {
-    super();
-    this.messages = []; // ✅ теперь инициализация не мешает реактивности
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -43,7 +43,6 @@ export class AppToaster extends LitElement {
   };
 
   private startTimer(id: number) {
-    // Очистить старый таймер, если был
     if (this.timers.has(id)) {
       clearTimeout(this.timers.get(id));
     }
@@ -68,7 +67,10 @@ export class AppToaster extends LitElement {
 
         if (msg.details instanceof Error) {
           const { name, message, stack } = msg.details;
-          detailContent = JSON.stringify({ name, message, stack }, null, 2);
+
+          // Используем JSON.stringify для форматирования ошибки, если stack доступен,
+          // иначе только имя и сообщение
+          detailContent = JSON.stringify({ name, message, stack: stack || 'No stack trace available' }, null, 2);
         } else if (typeof msg.details === 'string' && msg.details.trim()) {
           detailContent = msg.details;
         } else if (
@@ -85,7 +87,15 @@ export class AppToaster extends LitElement {
             closable 
             variant=${msg.variant}
             style="max-width: 90vw; word-break: break-word;"
+            @sl-after-hide=${() => this.removeMessage(msg.id)}
           >
+            <div slot="icon">
+              ${msg.variant === 'primary' ? html`<sl-icon name="info-circle"></sl-icon>` : ''}
+              ${msg.variant === 'success' ? html`<sl-icon name="check-circle"></sl-icon>` : ''}
+              ${msg.variant === 'warning' ? html`<sl-icon name="exclamation-triangle"></sl-icon>` : ''}
+              ${msg.variant === 'danger' ? html`<sl-icon name="exclamation-octagon"></sl-icon>` : ''}
+              ${msg.variant === 'neutral' ? html`<sl-icon name="chat-dots"></sl-icon>` : ''}
+            </div>
             <div style="white-space: pre-wrap; word-break: break-word;">
               <strong>${msg.text}</strong>
             </div>
@@ -96,23 +106,23 @@ export class AppToaster extends LitElement {
                     style="margin-top: 0.5rem"
                     @sl-show=${() => this.onDetailsToggle(msg.id, true)}
                     @sl-hide=${() => this.onDetailsToggle(msg.id, false)}
+                  >
                     <div style="
                       max-height: 40vh; 
                       max-width: 90vw; 
                       overflow: auto; 
-                      background: #f9f9f9; 
-                      padding: 4px; 
-                      border-radius: 4px;
+                      background: var(--sl-color-neutral-50); /* Нейтральный фон для кода */
+                      padding: var(--sl-spacing-x-small); 
+                      border-radius: var(--sl-border-radius-small);
                     ">
                       <pre style="
-                        white-space: pre; 
+                        white-space: pre-wrap; /* <-- ИСПРАВЛЕНО: позволяет перенос строк */
+                        word-break: break-word; /* <-- ИСПРАВЛЕНО: принудительный перенос длинных слов */
+                        font-family: var(--sl-font-mono); /* Используем моноширинный шрифт для читаемости кода */
                         font-size: 0.8rem; 
-                        overflow-x: auto; 
-                        overflow-wrap: normal;
-                        word-break: normal;
-                      ">
-                    ${detailContent}
-                      </pre>
+                        overflow-x: auto; /* Сохраняем, если строка ОЧЕНЬ длинная и word-break не справляется */
+                        margin: 0; /* Убираем стандартный отступ <pre> */
+                      ">${detailContent}</pre>
                     </div>
                   </sl-details>
                 `
@@ -135,4 +145,3 @@ export class AppToaster extends LitElement {
     }
   }
 }
-

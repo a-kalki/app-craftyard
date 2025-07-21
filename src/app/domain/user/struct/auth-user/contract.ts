@@ -22,7 +22,7 @@ export type AuthUserCommand = {
 // ========== success ============
 export type AuthUserSuccess = {
   user: UserAttrs,
-  token: TokenType,
+  tokens: TokenType,
 };
 
 // ========== errors ============

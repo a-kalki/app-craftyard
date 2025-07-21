@@ -132,9 +132,10 @@ export class WorkshopDetailsFeature extends BaseElement {
     }
 
     this.workshop = getResult.value;
-    if (this.app.getState().currentUser) {
+    const userInfo = this.app.userInfo;
+    if (userInfo.isAuth) {
       const policy = new WorkshopPolicy(
-        this.app.getState().currentUser,
+        userInfo.user,
         this.workshop,
       );
       this.canEdit = policy.canEdit();

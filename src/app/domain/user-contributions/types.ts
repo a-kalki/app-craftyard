@@ -18,6 +18,8 @@ export type UserContributionKey =
   | 'SPEAKER'
   | 'BUYER'
   | 'HOBBIST'
+  | 'PROPOSER'
+  | 'EXECUTOR'
   | 'MAKER'
   | 'SELLER'
   | 'DESIGNER'
@@ -29,7 +31,8 @@ export type UserContributionKey =
   | 'INVESTOR'
   | 'AMBASSADOR'
   | 'REVIEWER'
-  | 'WORKSHOP_CREATOR';
+  | 'CRAFTSMAN'
+  | 'FOUNDER';
 
 export type UserContributionCounter = {
   count: number;

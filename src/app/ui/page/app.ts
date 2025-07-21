@@ -78,50 +78,43 @@ export class AppPage extends BaseElement {
   @state()
   private currentTag: string | null = null;
 
-  private observer?: ResizeObserver;
-
   private unsubscribeRouter?: () => void;
 
   connectedCallback(): void {
     super.connectedCallback();
-    this.observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const width = entry.contentRect.width;
-        const isMobile = width < 768;
-        const currentState = this.app.getState();
-        if (currentState.isMobile !== isMobile) {
-          this.app.setMobileState(isMobile);
-          this.requestUpdate();
-        }
-      }
-    });
-    this.observer.observe(document.body);
 
+    // Changed to arrow function to preserve 'this' context
+    window.addEventListener('app-is-mobile-changed', this.handlerIsMobileChanged);
     this.unsubscribeRouter = this.app.router.subscribe(this.handleUrlChanged.bind(this));
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
-    this.observer?.disconnect();
+
+    window.removeEventListener('app-is-mobile-changed', this.handlerIsMobileChanged)
     this.unsubscribeRouter?.();
   }
 
+  protected handlerIsMobileChanged = (): void => {
+    this.requestUpdate();
+  };
+
   render() {
-    const state = this.app.getState();
+    const appState = this.app.appState;
 
     return html`
       <div class="container">
         <app-header
-          .isMobile=${state.isMobile}
+          .isMobile=${appState.isMobile}
           @toggle-sidebar=${() => (this.sidebarVisible = !this.sidebarVisible)}
         ></app-header>
 
-        <main class=${state.isMobile ? 'mobile' : ''}>
-          ${!state.isMobile
+        <main class=${appState.isMobile ? 'mobile' : ''}>
+          ${!appState.isMobile
             ? html`<app-sidebar 
                   .items=${this.app.getRootItems()}
                   .closeSidebar=${() => (this.sidebarVisible = false)}
-                  .isMobile=${state.isMobile}
+                  .isMobile=${appState.isMobile}
                 ></app-sidebar>`
             : null}
 
@@ -138,7 +131,7 @@ export class AppPage extends BaseElement {
           <app-sidebar 
             .items=${this.app.getRootItems()}
             .closeSidebar=${() => (this.sidebarVisible = false)}
-            .isMobile=${state.isMobile}
+            .isMobile=${appState.isMobile}
           ></app-sidebar>
         </sl-drawer>
       </div>
@@ -160,6 +153,10 @@ export class AppPage extends BaseElement {
   }
 
   private handleUrlChanged(): void {
+    const url = this.app.router.getPath();
+    // url авторизации не должен рендерится приложением
+    // для этого url будет перерисовано вся страница приложения
+    if (url === '/login') return;
     const entry = this.app.router.getEntry();
     this.currentTag = entry ? entry.tag : '404 page';
   }

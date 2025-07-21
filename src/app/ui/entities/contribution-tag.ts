@@ -1,14 +1,15 @@
-import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { UserContributionKey } from '#app/domain/user-contributions/types';
+import type { UserContributionCounter, UserContributionKey } from '#app/domain/user-contributions/types';
 import { USER_CONTRIBUTIONS_DETAILS } from '#app/domain/user-contributions/constants';
 import { BaseElement } from '../base/base-element';
+import { css, html } from 'lit';
 
 @customElement('user-contribution-tag')
 export class ContributionTag extends BaseElement {
   static styles = css`
     :host {
       display: inline-block;
+      margin: 2px;
       --scale-factor: 1.2;
       --pulse-duration: 1s;
       --pulse-delay: 10s;
@@ -43,28 +44,74 @@ export class ContributionTag extends BaseElement {
         transform: scale(var(--scale-factor));
       }
     }
+
+    .details-content p {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+
+    .details-content strong {
+      color: var(--sl-color-primary-600); /* Пример цвета для выделения */
+    }
   `;
 
   @property({ type: String })
-  contributionKey!: UserContributionKey;
+  key!: UserContributionKey;
+
+  @property({ type: Object })
+  counter!: UserContributionCounter
 
   getDetails(): { icon: string; title: string; description: string } {
-    const icon = USER_CONTRIBUTIONS_DETAILS[this.contributionKey].icon;
-    const title = USER_CONTRIBUTIONS_DETAILS[this.contributionKey].title;
-    const description = USER_CONTRIBUTIONS_DETAILS[this.contributionKey].description;
+    console.log('key: ', this.key)
+    const icon = USER_CONTRIBUTIONS_DETAILS[this.key].icon;
+    const title = USER_CONTRIBUTIONS_DETAILS[this.key].title;
+    const description = USER_CONTRIBUTIONS_DETAILS[this.key].description;
     return { icon, title, description };
   }
 
   private showStatusDetails() {
     const { icon, title, description } = this.getDetails();
+
+    const formatDate = (timestamp: number): string => {
+      if (!timestamp) return 'Неизвестно';
+      const date = new Date(timestamp);
+      return new Intl.DateTimeFormat('ru-RU', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }).format(date);
+    };
+
+    const firstContributionDate = formatDate(this.counter.firstAt);
+    const lastContributionDate = formatDate(this.counter.lastAt);
+
+    const fullContent = html`
+      <div class="details-content">
+        <p>${description}</p>
+        <hr>
+        <p>
+          Всего: <strong>${this.counter.count}</strong>
+        </p>
+        <p>
+          Впервые: <strong>${firstContributionDate}</strong>
+        </p>
+        <p>
+          Последний раз: <strong>${lastContributionDate}</strong>
+        </p>
+      </div>
+    `;
+
     this.app.showDialog({
       title: html`
         <div style="display: flex; align-items: center; gap: 0.5em;">
           <sl-icon name=${icon}></sl-icon>
-          <span><strong>Описание статуса "${title}"</strong></span>
+          <span><strong>Описание вклада: "${title}"</strong></span>
         </div>
       `,
-      content: description,
+      content: fullContent,
       confirmText: 'Закрыть',
     });
   }
@@ -79,7 +126,7 @@ export class ContributionTag extends BaseElement {
         @click=${this.showStatusDetails}
       >
         <sl-icon name=${icon}></sl-icon>
-        <span>&nbsp;|&nbsp;${title}</span>
+        <span>&nbsp;|&nbsp;${title}&nbsp;|&nbsp;${this.counter.count}</span>
       </sl-tag>
     `;
   }

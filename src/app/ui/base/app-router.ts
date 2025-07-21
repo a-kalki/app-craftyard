@@ -61,6 +61,10 @@ export class AppRouter {
     this.redirects.push(redirect);
   }
 
+  clearRedirects(): void {
+    this.redirects = [];
+  }
+
   // Получение текущего пути
   getPath() {
     return this.removeTrailingSlash(window.location.pathname);
