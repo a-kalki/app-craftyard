@@ -12,7 +12,7 @@ interface Action {
   variant?: string;
 }
 
-export class BaseOfferCard extends BaseElement {
+export abstract class BaseOfferCard extends BaseElement {
   static styles: CSSResultGroup = css`
     :host {
       display: block;
@@ -50,7 +50,6 @@ export class BaseOfferCard extends BaseElement {
       word-break: break-word;
     }
 
-    /* .actions больше не нужен для кнопок, но оставлю на всякий случай */
     .actions {
       display: flex;
       gap: 0.5rem;
@@ -72,15 +71,31 @@ export class BaseOfferCard extends BaseElement {
       color: var(--sl-color-neutral-700);
       margin-bottom: 1rem;
     }
+
+    /* Стили для метки типа оффера */
+    .offer-type-badge {
+      position: absolute;
+      top: 0rem;
+      left: 0.4rem;
+      color: white;
+      padding: 0.2rem 0.3rem;
+      border-radius: var(--sl-border-radius-small);
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 5;
+      box-shadow: var(--sl-shadow-x-small);
+    }
   `;
   @property({ type: Object }) offer!: BaseOfferAttrs;
   @property({ type: Boolean }) canEdit = false;
   @property({ type: Boolean }) showAdminInfo = false;
+  @property({ type: Boolean }) stylize = false;
 
-  /**
-   * Возвращает список действий, доступных для этой карточки.
-   * Этот метод может быть переопределен в дочерних классах.
-   */
+  static filterLabel: Record<string, string> = { all: 'Все' };
+
+  abstract offerLabel: string;
+  abstract offerColor: string;
+
   protected _getActions(): Action[] {
     const actions: Action[] = [];
 
@@ -111,13 +126,15 @@ export class BaseOfferCard extends BaseElement {
 
     return html`
       <sl-button-group>
-        <sl-button
-          size="small"
-          variant="primary"
-          @click=${mainAction.handler}
-        >
-          <sl-icon name=${mainAction.icon}></sl-icon>
-        </sl-button>
+        <sl-tooltip content=${mainAction.label} placement="left">
+          <sl-button
+            size="small"
+            variant="primary"
+            @click=${mainAction.handler}
+          >
+            <sl-icon name=${mainAction.icon}></sl-icon>
+          </sl-button>
+        </sl-tooltip>
 
         ${availableActions.length > 1 ? html`
           <sl-dropdown placement="bottom-end" hoist>
@@ -185,6 +202,12 @@ export class BaseOfferCard extends BaseElement {
     const isStatusActive = this.offer.status === 'active';
 
     return html`
+      ${this.stylize ? html`
+        <span class="offer-type-badge" style="background-color: ${this.offerColor};">
+          ${this.offerLabel}
+        </span>
+      ` : nothing}
+
       <div class="card-header">
         <div class="title-group">
           <h3 class="title">${this.offer.title}</h3>

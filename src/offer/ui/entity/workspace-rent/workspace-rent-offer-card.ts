@@ -3,10 +3,17 @@ import { customElement, property } from 'lit/decorators.js';
 import type { WorkspaceRentOfferAttrs } from '#offer/domain/workspace-rent/struct/attrs';
 import { BaseOfferCard } from '../base/base-offer-card';
 import { WorkshopPolicy } from '#workshop/domain/policy';
+import { workspaceRentOfferType } from '#offer/domain/workspace-rent/struct/v-map';
 
 @customElement('workspace-rent-offer-card')
 export class WorkspaceRentOfferCard extends BaseOfferCard {
   @property({ type: Object }) offer!: WorkspaceRentOfferAttrs;
+
+  static filterLabel: Record<string, string> = { [workspaceRentOfferType]: 'Аренда места' }
+
+  offerLabel = 'Аренда';
+
+  offerColor = 'rgba(23, 120, 201, 0.75)';
 
   static styles = [
     BaseOfferCard.styles,

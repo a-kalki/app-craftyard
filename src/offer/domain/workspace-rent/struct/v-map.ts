@@ -3,7 +3,7 @@ import { offerAttrsVmap } from "#offer/domain/base-offer/struct/v-map";
 import { positiveNumberValidator } from "#app/domain/base-validators";
 import type { WorkspaceRentOfferAttrs } from "./attrs";
 
-const workspaceRentOfferType: WorkspaceRentOfferAttrs['type'] = 'WORKSPACE_RENT_OFFER';
+export const workspaceRentOfferType: WorkspaceRentOfferAttrs['type'] = 'WORKSPACE_RENT_OFFER';
 
 export const workspaceRentOfferVmap: ValidatorMap<WorkspaceRentOfferAttrs> = {
     id: offerAttrsVmap.id,

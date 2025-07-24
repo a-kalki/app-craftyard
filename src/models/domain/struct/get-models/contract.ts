@@ -4,7 +4,7 @@ import type { ModelAttrs } from "../attrs";
 // ========== commands ============
 export type GetModelsCommand = {
   name: 'get-models',
-  attrs: {},
+  attrs: Partial<ModelAttrs>,
   requestId: string,
 };
 

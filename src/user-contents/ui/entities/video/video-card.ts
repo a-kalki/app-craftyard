@@ -69,7 +69,7 @@ export class VideoCard extends BaseContentCard<FileContent> {
   protected renderButtons(): TemplateResult {
     return html`
       ${this.fileUrl && !this.isPlaying ? html`
-        <sl-tooltip content="Воспроизвести видео" placement="bottom">
+        <sl-tooltip content="Воспроизвести видео" placement="left">
           <sl-button
             class="action-btn"
             size="small"
@@ -83,7 +83,7 @@ export class VideoCard extends BaseContentCard<FileContent> {
       ` : ''}
 
       ${this.isPlaying ? html`
-        <sl-tooltip content="Остановить воспроизведение" placement="bottom">
+        <sl-tooltip content="Остановить воспроизведение" placement="left">
           <sl-button
             class="action-btn"
             size="small"

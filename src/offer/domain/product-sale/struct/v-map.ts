@@ -3,7 +3,7 @@ import { modelCreateionOfferVmap } from "#offer/domain/base-offer/struct/v-map";
 import { positiveNumberValidator } from "#app/domain/base-validators";
 import type { ProductSaleOfferAttrs } from "./attrs";
 
-const productSaleOfferType: ProductSaleOfferAttrs['type'] = 'PRODUCT_SALE_OFFER';
+export const productSaleOfferType: ProductSaleOfferAttrs['type'] = 'PRODUCT_SALE_OFFER';
 
 export const productSaleOfferVmap: ValidatorMap<ProductSaleOfferAttrs> = {
     id: modelCreateionOfferVmap.id,

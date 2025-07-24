@@ -6,7 +6,7 @@ export interface OfferRepo {
 
   filterOffers(attrs: Partial<OfferAttrs>): MaybePromise<OfferAttrs[]>
 
-  getOffers(): MaybePromise<OfferAttrs[]>
+  getOffers<O extends OfferAttrs>(attrs: Partial<O>): MaybePromise<O[]>
 
   addOffer(attrs: OfferAttrs): MaybePromise<{ changes: number }>
 

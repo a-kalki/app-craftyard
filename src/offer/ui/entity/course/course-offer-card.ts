@@ -2,10 +2,17 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { CourseOfferAttrs } from '#offer/domain/course/struct/attrs';
 import { ModelOfferCard } from '../base/model-offer-card';
+import { courseOfferType } from '#offer/domain/course/struct/v-map';
 
 @customElement('course-offer-card')
 export class CourseOfferCard extends ModelOfferCard {
   @property({ type: Object }) offer!: CourseOfferAttrs;
+
+  static filterLabel: Record<string, string> = { [courseOfferType]: 'Курсы' }
+
+  offerLabel = 'Курсы';
+
+  offerColor = 'rgba(128, 77, 204, 0.75)';
 
   static styles = [
     ModelOfferCard.styles,

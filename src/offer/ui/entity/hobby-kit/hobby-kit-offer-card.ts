@@ -2,10 +2,17 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { HobbyKitOfferAttrs } from '#offer/domain/hobby-kit/struct/attrs';
 import { ModelOfferCard } from '../base/model-offer-card';
+import { hobbyKitOfferType } from '#offer/domain/hobby-kit/struct/v-map';
 
 @customElement('hobby-kit-offer-card')
 export class HobbyKitOfferCard extends ModelOfferCard {
   @property({ type: Object }) offer!: HobbyKitOfferAttrs;
+
+  static filterLabel: Record<string, string> = { [hobbyKitOfferType]: 'DIY-наборы' }
+
+  offerLabel = 'DIY-набор';
+
+  offerColor = 'rgba(204, 111, 23, 0.75)';
 
   static styles = [
     ModelOfferCard.styles,

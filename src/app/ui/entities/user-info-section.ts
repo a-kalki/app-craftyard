@@ -143,7 +143,7 @@ export class UserInfoCard extends BaseElement {
         ${this.showActions ? html`
           <sl-button-group>
             ${telegramHref ? html`
-              <sl-tooltip content="Написать в Telegram">
+              <sl-tooltip content="Написать в Telegram" placement="left">
                 <sl-button
                   size="small"
                   variant="primary"

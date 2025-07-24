@@ -5,18 +5,17 @@ import { success } from "rilata/core";
 import { getModelsValidator } from "#models/domain/struct/get-models/v-map";
 
 export class GetModelsUC extends ModelUseCase<GetModelsMeta> {
-    arName = "ModelAr" as const;
+  arName = "ModelAr" as const;
 
-    name = "Get Model Use Case" as const;
+  name = "Get Model Use Case" as const;
 
-    inputName = "get-models" as const;
+  inputName = "get-models" as const;
 
-    protected supportAnonimousCall = true;
+  protected supportAnonimousCall = true;
 
-    protected validator = getModelsValidator;
+  protected validator = getModelsValidator;
 
-    async runDomain(input: GetModelsCommand, requestData: RequestScope): Promise<DomainResult<GetModelsMeta>> {
-      return success(await this.moduleResolver.modelRepo.getModels());
-    }
-
+  async runDomain(input: GetModelsCommand, requestData: RequestScope): Promise<DomainResult<GetModelsMeta>> {
+    return success(await this.moduleResolver.modelRepo.filter(input.attrs));
+  }
 }

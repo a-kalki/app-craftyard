@@ -62,7 +62,6 @@ export class ContributionTag extends BaseElement {
   counter!: UserContributionCounter
 
   getDetails(): { icon: string; title: string; description: string } {
-    console.log('key: ', this.key)
     const icon = USER_CONTRIBUTIONS_DETAILS[this.key].icon;
     const title = USER_CONTRIBUTIONS_DETAILS[this.key].title;
     const description = USER_CONTRIBUTIONS_DETAILS[this.key].description;

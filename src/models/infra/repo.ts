@@ -11,8 +11,8 @@ class ModelsJsonRepo implements ModelRepo {
     this.jsonRepo = new JsonRepository(path);
   }
 
-  getModels(): Promise<ModelAttrs[]> {
-    return this.jsonRepo.getAll();
+  filter(attrs: Partial<ModelAttrs>): Promise<ModelAttrs[]> {
+    return this.jsonRepo.filter(attrs);
   }
 
   findModel(id: string): Promise<ModelAttrs | undefined> {

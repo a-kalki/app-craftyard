@@ -46,7 +46,7 @@ export class PdfCard extends BaseContentCard<FileContent> {
   protected renderButtons(): TemplateResult {
     return html`
       ${this.fileUrl ? html`
-        <sl-tooltip content="Скачать файл" placement="bottom">
+        <sl-tooltip content="Скачать файл" placement="left">
           <sl-button
             class="action-btn"
             size="small"

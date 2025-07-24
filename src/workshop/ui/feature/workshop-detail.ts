@@ -12,7 +12,7 @@ export class WorkshopDetailsFeature extends BaseElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%; 
+      height: 100%;
       width: 100%;
     }
 
@@ -52,6 +52,8 @@ export class WorkshopDetailsFeature extends BaseElement {
 
     .tabs-wrapper {
       flex-grow: 1;
+      min-width: 0; /* Позволяет flex-элементу сжиматься */
+      /* overflow-x: auto; и скрытие скроллбара удалены, чтобы sl-tab-group управлял прокруткой */
     }
 
     .tabs-wrapper sl-tab-group {
@@ -63,6 +65,7 @@ export class WorkshopDetailsFeature extends BaseElement {
       --focus-ring-width: 0;
       padding-left: 1rem;
       margin-left: -1rem;
+      /* width: max-content; min-width: 100%; удалены, чтобы sl-tab-group управлял своей шириной */
     }
 
     .add-section-button sl-icon-button {
@@ -147,12 +150,11 @@ export class WorkshopDetailsFeature extends BaseElement {
     if (!this.workshop) return;
     const ownerAttrs = this.getOwnerAttrs();
     try {
-      // Здесь предполагается, что ownerId и context будут использоваться
       const result = await this.contentSectionApi.getOwnerArContentSection(ownerAttrs.ownerId);
       if (result.isFailure()) {
         this.app.error(
           'Не удалось загрузить пользовательский контент для мастерской.',
-          { ownerAttrs, result },
+          { details: { ownerAttrs, result: result.value } },
         );
         return;
       }
@@ -164,7 +166,7 @@ export class WorkshopDetailsFeature extends BaseElement {
     } catch (error) {
       this.app.error(
         'Ошибка при загрузке пользовательского контента для мастерской.',
-        { ownerAttrs, errMsg: (error as Error).message },
+        { details: { ownerAttrs, errMsg: (error as Error).message } },
       );
     }
   }
@@ -183,7 +185,7 @@ export class WorkshopDetailsFeature extends BaseElement {
 
         const getResult = await this.contentSectionApi.getContentSection(newContentSectionId);
         if (getResult.isFailure()) {
-          this.app.error(`Не удалось создать новый раздел: ${getResult.value}`, { result: getResult });
+          this.app.error(`Не удалось создать новый раздел: ${getResult.value}`, { details: { result: getResult.value } });
           return;
         }
         this.contentSections = [...this.contentSections, getResult.value];
@@ -191,13 +193,12 @@ export class WorkshopDetailsFeature extends BaseElement {
         this.activeSectionId = getResult.value.id;
       } catch (error) {
         console.error('Failed to create content section:', error);
-        this.app.error('Ошибка при создании раздела.', { error });
+        this.app.error('Ошибка при создании раздела.', { details: { error } });
       }
   }
 
   private async handleContentSectionEdited(editedId: string) {
-    console.log('Content section edited:', editedId);
-    await this.loadContentSections(); // Reload sections to reflect changes
+    alert('Не реализовано');
   }
 
   private handleContentSectionDelete(deletedId: string) {
@@ -252,12 +253,14 @@ export class WorkshopDetailsFeature extends BaseElement {
         </div>
         ${this.canEdit ? html`
           <div class="add-section-button">
-            <sl-icon-button 
-              name="plus-square"
-              label="Добавить раздел"
-              tabindex="0"
-              @click=${this.handleAddContentSectionFromWorkshop}
-            ></sl-icon-button>
+            <sl-tooltip content="Добавить раздел" placement="left">
+              <sl-icon-button 
+                name="plus-square"
+                label="Добавить раздел"
+                tabindex="0"
+                @click=${this.handleAddContentSectionFromWorkshop}
+              ></sl-icon-button>
+            </sl-tooltip>
           </div>
         ` : ''}
       </div>
@@ -309,11 +312,5 @@ export class WorkshopDetailsFeature extends BaseElement {
         <p class="instruction">Чтобы добавить раздел нажмите кнопку: <sl-icon name="plus-square"></sl-icon> на правом верхнем углу</p>
       </div>
     `;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'workshop-details': WorkshopDetailsFeature;
   }
 }

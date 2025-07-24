@@ -1,7 +1,7 @@
 import type { ModelAttrs } from "./struct/attrs";
 
 export interface ModelRepo {
-  getModels(): Promise<ModelAttrs[]>
+  filter(attrs: Partial<ModelAttrs>): Promise<ModelAttrs[]>
 
   findModel(id: string): Promise<ModelAttrs | undefined>
 

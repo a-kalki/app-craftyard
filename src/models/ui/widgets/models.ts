@@ -56,7 +56,7 @@ export class ModelsWidget extends BaseElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    const result = await this.modelApi.getModels();
+    const result = await this.modelApi.getModels({});
     if (result.isFailure()) {
       this.app.error('Не удалось загрузить модели. Попробуйте позже.', { details: { result: result.value } });
       return;

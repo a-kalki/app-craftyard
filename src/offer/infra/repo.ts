@@ -14,8 +14,8 @@ class OfferJsonRepo implements OfferRepo {
   filterOffers(attrs: Partial<OfferAttrs>): MaybePromise<OfferAttrs[]> {
     return this.jsonRepo.filter(attrs);
   }
-  getOffers(): MaybePromise<OfferAttrs[]> {
-    return this.jsonRepo.filter({});
+  getOffers<O extends OfferAttrs>(attrs: Partial<O>): MaybePromise<O[]> {
+    return this.jsonRepo.filter(attrs) as MaybePromise<O[]>;
   }
 
   addOffer(attrs: OfferAttrs): MaybePromise<{ changes: number; }> {

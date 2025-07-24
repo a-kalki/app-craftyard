@@ -9,6 +9,7 @@ import { GetMasterOffersUseCase } from "./use-cases/get-master-offers.uc";
 import { AddOfferUseCase } from "./use-cases/add-offer.uc";
 import { EditOfferUseCase } from "./use-cases/edit-offer.uc";
 import { DeleteOfferUseCase } from "./use-cases/delete-offer.uc";
+import { GetOffersUseCase } from "./use-cases/get-offers.uc";
 
 export const offerModuleConfig: ModuleConfig = {
     moduleUrls: [offerApiUrl]
@@ -16,6 +17,7 @@ export const offerModuleConfig: ModuleConfig = {
 
 export const offerModuleUseCases: UseCase[] = [
   new GetOfferUseCase(),
+  new GetOffersUseCase(),
   new GetWorkshopOffersUseCase(),
   new GetMasterOffersUseCase(),
   new AddOfferUseCase(),

@@ -36,7 +36,7 @@ export class ContentComponentManager {
   ): TemplateResult {
     return html`
       <sl-button-group>
-        <sl-tooltip content="Добавить ${this.getTooltipTextForType(lastUsedContentType)}" placement="bottom">
+        <sl-tooltip content="Добавить ${this.getTooltipTextForType(lastUsedContentType)}" placement="left">
           <sl-button
             class="action-btn"
             size="small"
@@ -55,7 +55,8 @@ export class ContentComponentManager {
             caret
             @contextmenu=${(e: Event) => e.preventDefault()}
           >
-            <sl-icon name="three-dots"></sl-icon> </sl-button>
+            <sl-icon name="three-dots"></sl-icon>
+          </sl-button>
 
           <sl-menu>
             <sl-menu-item @click=${() => handleAddByType('THESIS')}>

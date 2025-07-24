@@ -44,18 +44,14 @@ export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements UiMo
     return result;
   }
 
-  async getModels(forceRefresh?: boolean): Promise<BackendResultByMeta<GetModelsMeta>> {
-    const cached = this.getFromCacheList(forceRefresh);
-    if (cached) return success(cached);
-
+  async getModels(attrs: Partial<ModelAttrs>): Promise<BackendResultByMeta<GetModelsMeta>> {
     const command: GetModelsCommand = {
       name: 'get-models',
-      attrs: {},
+      attrs,
       requestId: crypto.randomUUID(),
     }
     const result = await this.request<GetModelsMeta>(command);
     if (result.isSuccess()) {
-      this.setCacheList(result.value);
       result.value.forEach(m => this.setCacheById(m.id, m));
     }
     return result;

@@ -9,6 +9,7 @@ import './entities/content-not-found';
 import './entities/internal-error';
 import './entities/app-toaster';
 import './entities/contribution-tag';
+import './entities/contribution-card.ts';
 import './entities/cost-input';
 import './entities/image-gallery-dialog.ts';
 import './entities/user-info-section.ts';

@@ -91,15 +91,18 @@ export abstract class BaseFileUpload extends BaseElement {
             ?disabled=${this.isUploading}
             readonly
           >
-            <sl-icon-button
-              slot="suffix"
-              name=${this.uploadIcon}
-              label="Загрузить с диска"
-              ?disabled=${this.isUploading}
-              @click=${() => this.fileInput.value?.click()}
-            ></sl-icon-button>
+            <sl-tooltip content="Загрузить с диска" placement="left">
+              <sl-icon-button
+                slot="suffix"
+                name=${this.uploadIcon}
+                label="Загрузить с диска"
+                ?disabled=${this.isUploading}
+                @click=${() => this.fileInput.value?.click()}
+              ></sl-icon-button>
+            </sl-tooltip>
             ${this.fileId && this.clearable
               ? html`
+                <sl-tooltip content="Удалить с диска" placement="left">
                   <sl-icon-button
                     slot="suffix"
                     name="trash"
@@ -109,6 +112,7 @@ export abstract class BaseFileUpload extends BaseElement {
                     @click=${this.handleClearUrl}
                     style="margin-inline-start: var(--sl-spacing-x-small);"
                   ></sl-icon-button>
+                </sl-tooltip>
                 `
               : null}
           </sl-input>

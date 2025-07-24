@@ -69,17 +69,19 @@ export class AppHeaderWidget extends BaseElement {
         <div class="left">
           ${this.isMobile
             ? html`
-                <sl-button
-                  variant="text"
-                  class="menu-button"
-                  @click=${() =>
-                    this.dispatchEvent(new CustomEvent('toggle-sidebar', {
-                      bubbles: true,
-                      composed: true
-                    }))}
-                >
-                  <sl-icon name="list"></sl-icon>
-                </sl-button>
+              <sl-tooltip content="Показать/Скрыть меню" placement="right">
+                  <sl-button
+                    variant="text"
+                    class="menu-button"
+                    @click=${() =>
+                      this.dispatchEvent(new CustomEvent('toggle-sidebar', {
+                        bubbles: true,
+                        composed: true
+                      }))}
+                  >
+                    <sl-icon name="list"></sl-icon>
+                  </sl-button>
+              </sl-tooltip>
               `
             : null}
           <img

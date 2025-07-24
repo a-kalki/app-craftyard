@@ -142,7 +142,7 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
 
   @property({ type: Boolean }) canEdit = false;
   @property({ type: Object }) content!: T;
-  @property({ type: Object }) ownerAttrs!: CyOwnerAggregateAttrs;
+  @property({ type: Object }) ownerAttrs: CyOwnerAggregateAttrs | null = null;
 
   @state() fileUrl?: string;
   @state() thumbUrl?: string;
@@ -190,6 +190,8 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
   }
 
   protected async handleEditContent(): Promise<void> {
+    if (!this.ownerAttrs) return;
+
     try {
       const modal = this.createEditModal();
       const result = await modal.show(this.content, this.ownerAttrs);
@@ -285,7 +287,7 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
 
   protected renderButtons(): TemplateResult {
     return html`
-      <sl-tooltip content="Редактировать контент" placement="bottom">
+      <sl-tooltip content="Редактировать контент" placement="left">
         <sl-button
           class="action-btn"
           size="small"
@@ -296,7 +298,7 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
         </sl-button>
       </sl-tooltip>
 
-      <sl-tooltip content="Удалить контент" placement="bottom">
+      <sl-tooltip content="Удалить контент" placement="left">
         <sl-button
           class="action-btn"
           size="small"
@@ -322,7 +324,7 @@ export abstract class BaseContentCard<T extends UserContent> extends BaseElement
   }
 
   render(): TemplateResult {
-    if (!this.content || !this.ownerAttrs) return html`<sl-card>Данные не загружены.</sl-card>`;
+    if (!this.content) return html`<sl-card>Данные не загружены.</sl-card>`;
 
     return html`
       <sl-card>

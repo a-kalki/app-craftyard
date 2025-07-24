@@ -506,27 +506,31 @@ export class ModelImages extends LitElement {
 
   protected renderAddImageButton(): TemplateResult {
     return html`
-      <sl-icon-button
-        class="add-btn"
-        name="plus-square"
-        label="Добавить"
-        tabindex="0"
-        @click=${this.openFileDialog}
-        @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.openFileDialog)}
-      ></sl-icon-button>
+      <sl-tooltip content="Добавить фото в конец" placement="left">
+        <sl-icon-button
+          class="add-btn"
+          name="plus-square"
+          label="Добавить"
+          tabindex="0"
+          @click=${this.openFileDialog}
+          @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.openFileDialog)}
+        ></sl-icon-button>
+      </sl-tooltip>
     `
   }
 
   protected renderDeletemageButton(): TemplateResult {
     return html`
-      <sl-icon-button
-        class="delete-btn"
-        name="x-square"
-        label="Удалить"
-        tabindex="0"
-        @click=${this.confirmDelete}
-        @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.confirmDelete)}
-      ></sl-icon-button>
+      <sl-tooltip content="Удалить выбранное фото" placement="left">
+        <sl-icon-button
+          class="delete-btn"
+          name="x-square"
+          label="Удалить"
+          tabindex="0"
+          @click=${this.confirmDelete}
+          @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.confirmDelete)}
+        ></sl-icon-button>
+      </sl-tooltip>
     `
   }
 }

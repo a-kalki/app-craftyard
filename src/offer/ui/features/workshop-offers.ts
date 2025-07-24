@@ -1,5 +1,5 @@
 import { html, css, type TemplateResult } from 'lit';
-import { customElement, state } from 'lit/decorators.js'; // Убрал queryAll
+import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import type { WorkshopAttrs } from '#workshop/domain/struct/attrs';
 import { WorkshopPolicy } from '#workshop/domain/policy';
@@ -53,6 +53,8 @@ export class WorkshopOffers extends BaseElement {
 
     .tabs-wrapper {
       flex-grow: 1;
+      min-width: 0; /* Позволяет flex-элементу сжиматься */
+      /* overflow-x: auto; и скрытие скроллбара удалены */
     }
 
     .tabs-wrapper sl-tab-group {
@@ -64,6 +66,7 @@ export class WorkshopOffers extends BaseElement {
       --focus-ring-width: 0;
       padding-left: 1rem;
       margin-left: -1rem;
+      /* width: max-content; min-width: 100%; удалены */
     }
 
     .add-section-button sl-icon-button {
@@ -117,8 +120,6 @@ export class WorkshopOffers extends BaseElement {
   @state() private allOffers: OfferAttrs[] = [];
   @state() private isLoadingOffers: boolean = true;
 
-  // @queryAll('offer-list-container') offerListContainers!: NodeListOf<OfferListContainer>; // Удалили
-
   constructor() {
     super();
     this.workshopId = this.app.router.getParams().workshopId;
@@ -131,7 +132,6 @@ export class WorkshopOffers extends BaseElement {
 
   private handleTabShow(event: CustomEvent) {
     this.activeTabId = event.detail.name as OfferTypes;
-    // Удалили логику refreshAllCarousels, так как она больше не нужна
   }
 
   private async loadWorkshopData(forceRefresh?: boolean) {
@@ -146,7 +146,7 @@ export class WorkshopOffers extends BaseElement {
     if (workshopResult.isFailure()) {
       this.app.error(
         'Не удалось загрузить данные мастерской для страницы предложений',
-        { result: workshopResult, workshopId: this.workshopId }
+        { details: { result: workshopResult.value, workshopId: this.workshopId } }
       );
       this.isLoadingOffers = false;
       return;
@@ -160,8 +160,7 @@ export class WorkshopOffers extends BaseElement {
     const offersResult = await this.offerApi.getWorkshopOffers(this.workshopId, forceRefresh);
     if (offersResult.isFailure()) {
       this.app.error('Не удалось загрузить все предложения мастерской', {
-        result: offersResult,
-        workshopId: this.workshopId,
+        details: { result: offersResult.value, workshopId: this.workshopId },
       });
       this.allOffers = [];
     } else {
@@ -182,8 +181,6 @@ export class WorkshopOffers extends BaseElement {
     }
 
     try {
-      // Здесь предполагается, что OfferModalManager или соответствующий модальный компонент
-      // будет импортирован или доступен глобально
       const modal = document.createElement('add-workspace-rent-offer-modal');
       // @ts-ignore
       const result = await modal.show('WORKSPACE_RENT_OFFER', this.workshop);
@@ -195,7 +192,7 @@ export class WorkshopOffers extends BaseElement {
         this.app.info('Не удалось добавить предложение.');
       }
     } catch (error) {
-      this.app.error(`Ошибка при добавлении предложения: ${(error as Error).message}, { error }`);
+      this.app.error(`Ошибка при добавлении предложения: ${(error as Error).message}`, { details: { error } });
     }
   }
 
@@ -323,11 +320,5 @@ export class WorkshopOffers extends BaseElement {
         </div>
       </div>
     `;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'workshop-offers': WorkshopOffers;
   }
 }

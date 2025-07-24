@@ -429,9 +429,11 @@ export class OfferDetails extends BaseElement {
       return html`<div class="error-message">Предложение не найдено или произошла ошибка загрузки.</div>`;
     }
 
+    const masterOrMentorTitle = this.offer.type === 'COURSE_OFFER' ? 'Ментор' : 'Мастер'
+
     const partialLoadError = this.hasError ? html`<div class="error-message">
       Некоторые данные (модель/мастер/конструктор) не удалось загрузить. Попробуйте обновить страницу.
-    </div>` : nothing; // Изменено сообщение об ошибке, добавлено "конструктор"
+    </div>` : nothing;
 
     let durationText: TemplateResult | typeof nothing = nothing;
     if (this.offer.type === 'COURSE_OFFER') {
@@ -478,7 +480,7 @@ export class OfferDetails extends BaseElement {
         <hr>
 
         ${this.master ? html`
-          <user-info-card .user=${this.master} title="О Мастере"></user-info-card>
+          <user-info-section .user=${this.master} title="О ${this.offer.type === 'COURSE_OFFER' ? 'Менторе' : 'Мастере'}"></user-info-section>
         ` : nothing}
 
         ${this.model ? html`
@@ -503,7 +505,10 @@ export class OfferDetails extends BaseElement {
                 <strong>Категория:</strong>
                 <span>
                   ${this.model.categories.map((category: ModelCategory) => html`
-                    <sl-tag size="small" variant="neutral">${MODEL_CATEGORY_TITLES[category] || category}</sl-tag>
+                    <sl-tag
+                      size="small"
+                      variant="success"
+                    >${MODEL_CATEGORY_TITLES[category] || category}</sl-tag>
                   `)}
                 </span>
               </div>
@@ -522,7 +527,7 @@ export class OfferDetails extends BaseElement {
             </div>
 
             ${this.modelOwner && this.model.ownerId !== this.master?.id ? html`
-              <user-info-card .user=${this.modelOwner} title="О Конструкторе Модели" .showActions=${false}></user-info-card>
+              <user-info-section .user=${this.modelOwner} title="Конструктор Модели" .showActions=${false}></user-info-section>
             ` : html`
               <div class="model-owner-info">
                   <strong>Конструктор модели:</strong>
@@ -563,7 +568,7 @@ export class OfferDetails extends BaseElement {
     return html`
       <sl-button-group>
         ${orderHref ? html`
-          <sl-tooltip content="Заказать / Задать вопрос">
+          <sl-tooltip content="Заказать / Задать вопрос" placement="left">
             <sl-button
               size="small"
               variant="primary"
@@ -611,13 +616,13 @@ export class OfferDetails extends BaseElement {
     return html`
       <sl-button-group>
         ${modelPageHref ? html`
-          <sl-tooltip content="Подробнее о модели">
+          <sl-tooltip content="Подробнее о модели" placement="left">
             <sl-button
               size="small"
               variant="primary"
               href=${modelPageHref}
             >
-              <sl-icon name="link"></sl-icon>
+              <sl-icon name="info-circle"></sl-icon>
             </sl-button>
           </sl-tooltip>
         ` : nothing}
@@ -628,7 +633,7 @@ export class OfferDetails extends BaseElement {
             <sl-menu-item
               href=${modelPageHref}
             >
-              <sl-icon slot="prefix" name="link"></sl-icon>
+              <sl-icon slot="prefix" name="info-circle"></sl-icon>
               Подробнее о модели
             </sl-menu-item>
           </sl-menu>

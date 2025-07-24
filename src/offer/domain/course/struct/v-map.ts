@@ -3,7 +3,7 @@ import type { CourseOfferAttrs } from "./attrs";
 import { modelCreateionOfferVmap } from "#offer/domain/base-offer/struct/v-map";
 import { positiveNumberValidator } from "#app/domain/base-validators";
 
-const courseOfferType: CourseOfferAttrs['type'] = 'COURSE_OFFER';
+export const courseOfferType: CourseOfferAttrs['type'] = 'COURSE_OFFER';
 
 export const courseOfferVmap: ValidatorMap<CourseOfferAttrs> = {
     id: modelCreateionOfferVmap.id,

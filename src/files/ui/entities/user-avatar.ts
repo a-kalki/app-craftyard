@@ -37,14 +37,18 @@ export class UserAvatarEntity extends BaseElement {
       color: var(--sl-color-neutral-600);
       width: 100%;
       aspect-ratio: 1 / 1;
+      box-shadow: var(--sl-shadow-small);
+      font-size: 96px; 
     }
 
     .icon-avatar sl-icon {
-      font-size: inherit;
+      font-size: 75%; 
       line-height: 1;
       display: block;
       flex-shrink: 0;
       flex-grow: 0;
+      max-width: 100%;
+      max-height: 100%;
     }
   `;
 
@@ -80,7 +84,7 @@ export class UserAvatarEntity extends BaseElement {
       `;
     }
 
-    const iconFontSize = this.size ? `${this.size * 0.75}px` : '7.5rem';
+    const iconContainerFontSizeStyle = this.size ? `font-size: ${this.size}px;` : '';
 
     return html`
       <div
@@ -88,7 +92,7 @@ export class UserAvatarEntity extends BaseElement {
         style=${[
           sizePx ? `width: ${sizePx}; height: ${sizePx};` : '',
           `border-radius: ${borderRadius};`,
-          `font-size: ${iconFontSize};`
+          iconContainerFontSizeStyle
         ].filter(Boolean).join(' ')}
       >
         <sl-icon name=${USER_CONTRIBUTIONS_DETAILS[key].icon}></sl-icon>

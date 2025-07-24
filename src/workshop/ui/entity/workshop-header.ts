@@ -160,7 +160,7 @@ export class WorkshopHeader extends BaseElement {
       `;
     }
 
-    const navButtonText = this.activePage === 'details' ? 'Предложения' : 'О мастерской';
+    const navButtonText = this.activePage === 'details' ? 'Предложения мастерской' : 'О мастерской';
     const navButtonIcon = this.activePage === 'details' ? 'check2-square' : 'info-square';
 
     return html`
@@ -176,9 +176,11 @@ export class WorkshopHeader extends BaseElement {
             <h1 class="name">${this.workshop.title}</h1>
             <div class="header-actions">
               <sl-button-group>
-                <sl-button size="small" variant="primary" @click=${this.navigateToOtherPage}>
-                  <sl-icon slot="prefix" name=${navButtonIcon}></sl-icon>
-                </sl-button>
+                <sl-tooltip content=${navButtonText} placement="left">
+                  <sl-button size="small" variant="primary" @click=${this.navigateToOtherPage}>
+                    <sl-icon slot="prefix" name=${navButtonIcon}></sl-icon>
+                  </sl-button>
+                </sl-tooltip>
                 ${this.canEdit ? html`
                   <sl-dropdown placement="bottom-end" hoist>
                     <sl-button size="small" slot="trigger" variant="primary" caret>

@@ -16,7 +16,7 @@ export class OfferModule extends CraftYardModule<OfferModuleMeta> {
     }
 
     async checkArInvariants(): Promise<void> {
-      const offers = await this.resolvers.moduleResolver.offerRepo.getOffers();
+      const offers = await this.resolvers.moduleResolver.offerRepo.getOffers({});
       offers.forEach(attrs => offerFactory.restore(attrs));
     }
 }

@@ -207,7 +207,7 @@ export class ContentSection extends BaseElement {
         this.lastUsedIcon,
         this.handleAddByType.bind(this),
       )}
-      <sl-tooltip content="Редактировать раздел" placement="bottom">
+      <sl-tooltip content="Редактировать раздел" placement="left">
         <sl-button
           class="action-btn"
           size="small"
@@ -217,7 +217,7 @@ export class ContentSection extends BaseElement {
           <sl-icon name="pencil"></sl-icon>
         </sl-button>
       </sl-tooltip>
-      <sl-tooltip content="Удалить раздел" placement="bottom">
+      <sl-tooltip content="Удалить раздел" placement="left">
         <sl-button
           class="action-btn"
           size="small"

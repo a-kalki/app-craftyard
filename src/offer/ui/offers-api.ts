@@ -8,6 +8,7 @@ import type { AddOfferCommand, AddOfferMeta } from "#offer/domain/crud/add-offer
 import type { EditOfferCommand, EditOfferMeta } from "#offer/domain/crud/edit-offer/contract";
 import { offerApiUrl } from "#offer/constants";
 import type { DeleteOfferCommand, DeleteOfferMeta } from "#offer/domain/crud/delete-offer/contract";
+import type { GetOffersCommand, GetOffersMeta } from "#offer/domain/crud/get-offers/contract";
 
 export class OffersBackendApi extends BaseBackendApi<OfferAttrs> {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
@@ -29,7 +30,9 @@ export class OffersBackendApi extends BaseBackendApi<OfferAttrs> {
     return result;
   }
 
-  async getWorkshopOffers(workshopId: string, forceRefresh?: boolean): Promise<BackendResultByMeta<GetWorkshopOffersMeta>> {
+  async getWorkshopOffers(
+    workshopId: string, forceRefresh?: boolean,
+  ): Promise<BackendResultByMeta<GetWorkshopOffersMeta>> {
     const cacheKey = 'workshop-offers';
     const cached = this.getOtherFromCacheById(workshopId, cacheKey, forceRefresh);
     if (cached) return success(cached as GetWorkshopOffersSuccess);
@@ -42,12 +45,12 @@ export class OffersBackendApi extends BaseBackendApi<OfferAttrs> {
     const result = await this.request<GetWorkshopOffersMeta>(command);
     if (result.isSuccess()) {
       this.setOtherCacheById(workshopId, result.value, cacheKey);
-      result.value.forEach(content => this.setCacheById(content.id, content));
+      result.value.forEach(offer => this.setCacheById(offer.id, offer));
     }
     return result;
   }
 
-  async getModelOffers(
+  async getMasterOffers(
     masterId: string, forceRefresh?: boolean,
   ): Promise<BackendResultByMeta<GetMasterOffersMeta>> {
     const cacheKey = 'master-offers';
@@ -62,7 +65,22 @@ export class OffersBackendApi extends BaseBackendApi<OfferAttrs> {
     const result = await this.request<GetMasterOffersMeta>(command);
     if (result.isSuccess()) {
       this.setOtherCacheById(masterId, result.value, cacheKey);
-      result.value.forEach(content => this.setCacheById(content.id, content));
+      result.value.forEach(offer => this.setCacheById(offer.id, offer));
+    }
+    return result;
+  }
+
+  async getOffers(
+    attrs: GetOffersCommand['attrs'],
+  ): Promise<BackendResultByMeta<GetOffersMeta>> {
+    const command: GetOffersCommand = {
+      name: 'get-offers',
+      attrs,
+      requestId: crypto.randomUUID(),
+    }
+    const result = await this.request<GetOffersMeta>(command);
+    if (result.isSuccess()) {
+      result.value.forEach(offer => this.setCacheById(offer.id, offer));
     }
     return result;
   }

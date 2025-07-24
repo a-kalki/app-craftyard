@@ -103,7 +103,6 @@ export class App {
   }
 
   showLogin(afterLoginedUrl?: string): void {
-    console.log('ff', this.appState);
     if (this.appState.isTelegramMiniApp) {
       this.error(
         `[${this.constructor.name}]: Нельзя показать страницу авторизации в telegram mini app.`,

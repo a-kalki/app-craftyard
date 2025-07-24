@@ -16,6 +16,8 @@ export class ContentContainer extends BaseElement {
       background: var(--sl-color-gray-50);
       border: 1px dashed var(--sl-color-gray-200);
       border-radius: var(--sl-border-radius-medium);
+      /* Убедимся, что контейнер не расширяется горизонтально */
+      overflow-x: hidden; 
     }
 
     .tabs-and-button-row {
@@ -28,6 +30,8 @@ export class ContentContainer extends BaseElement {
       border-bottom: 1px solid var(--sl-color-neutral-200);
       border-top-left-radius: var(--sl-border-radius-medium);
       border-top-right-radius: var(--sl-border-radius-medium);
+      /* Убедимся, что эта строка не переносится */
+      flex-wrap: nowrap;
     }
 
     sl-tab-group {
@@ -39,10 +43,22 @@ export class ContentContainer extends BaseElement {
       --active-tab-color: var(--sl-color-primary-600);
       --inactive-tab-color: var(--sl-color-neutral-600);
       --focus-ring-width: 0;
+      /* Удалены white-space, width, min-width - Shoelace должен управлять этим сам */
+    }
+
+    .tabs-scroll-wrapper {
+      flex-grow: 1;
+      min-width: 0; /* Позволяет flex-элементу сжиматься */
+      /* Удалены все overflow-x и стили скроллбара - Shoelace будет управлять прокруткой */
+    }
+
+    .add-section-button {
+      flex-shrink: 0; /* Предотвращает сжатие кнопки */
+      margin-left: auto; /* Прижимает кнопку к правому краю, если нужно */
+      padding-right: 1rem; /* Добавим отступ справа */
     }
 
     .add-section-button sl-icon-button {
-      flex-shrink: 0;
       font-size: 1.2rem;
       cursor: pointer;
       display: flex;
@@ -54,7 +70,6 @@ export class ContentContainer extends BaseElement {
       background: none;
       padding: 0.15rem;
       transition: background-color 0.2s ease;
-      margin-right: 20px;
     }
 
     .add-section-button sl-icon-button:hover {
@@ -131,7 +146,7 @@ export class ContentContainer extends BaseElement {
       if (result.isFailure()) {
         this.app.error(
           'Не удалось загрузить пользовательские разделы контента.',
-          { ownerAttrs: this.ownerAttrs, result },
+          { ownerAttrs: this.ownerAttrs, result: result.value },
         );
         this.contentSections = [];
         return;
@@ -159,7 +174,7 @@ export class ContentContainer extends BaseElement {
     this.contentSections = [...this.contentSections].sort((a, b) => (a.order || 0) - (b.order || 0));
   }
 
-  private async handleAddContentSection() {
+  private handleAddContentSection = async () => {
     const modal = document.createElement('add-content-section-modal');
     modal.ownerAttrs = this.ownerAttrs;
 
@@ -171,24 +186,24 @@ export class ContentContainer extends BaseElement {
       this.activeSectionId = newContentSectionId;
     } catch (error) {
       console.error('Failed to create content section:', error);
-      this.app.error('Ошибка при создании раздела.', { error });
+      this.app.error('Ошибка при создании раздела.', { details: { error } });
     }
   }
 
-  private async handleContentSectionEdited(event: CustomEvent<{ id: string }>) {
+  private handleContentSectionEdited = async (event: CustomEvent<{ id: string }>) => {
     await this.loadContentSections();
     this.activeSectionId = event.detail.id;
   }
 
-  private async handleContentSectionDelete(event: CustomEvent<{ id: string }>) {
+  private handleContentSectionDelete = async (event: CustomEvent<{ id: string }>) => {
     await this.loadContentSections();
   }
 
-  private handleTabShow(event: CustomEvent) {
+  private handleTabShow = (event: CustomEvent) => {
     this.activeSectionId = event.detail.name;
   }
 
-  private handleKeyAction(e: KeyboardEvent, action: () => void) {
+  private handleKeyAction = (e: KeyboardEvent, action: () => void) => {
     if (keyboardUtils.isActionKey(e)) {
       e.preventDefault();
       action();
@@ -206,22 +221,26 @@ export class ContentContainer extends BaseElement {
 
     return html`
       <div class="tabs-and-button-row">
-        <sl-tab-group @sl-tab-show=${this.handleTabShow} active-tab=${this.activeSectionId}>
-          ${this.contentSections.map(contentSection => html`
-            <sl-tab slot="nav" panel=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
-              ${contentSection.title}
-            </sl-tab>
-          `)}
-        </sl-tab-group>
+        <div class="tabs-scroll-wrapper">
+          <sl-tab-group @sl-tab-show=${this.handleTabShow} active-tab=${this.activeSectionId}>
+            ${this.contentSections.map(contentSection => html`
+              <sl-tab slot="nav" panel=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
+                ${contentSection.title}
+              </sl-tab>
+            `)}
+          </sl-tab-group>
+        </div>
         ${this.canEdit ? html`
           <div class="add-section-button">
-            <sl-icon-button
-              name="plus-square"
-              label="Добавить раздел"
-              tabindex="0"
-              @click=${this.handleAddContentSection}
-              @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, () => this.handleAddContentSection())}
-            ></sl-icon-button>
+            <sl-tooltip content="Добавить раздел" placement="left">
+              <sl-icon-button
+                name="plus-square"
+                label="Добавить раздел"
+                tabindex="0"
+                @click=${this.handleAddContentSection}
+                @keydown=${(e: KeyboardEvent) => this.handleKeyAction(e, this.handleAddContentSection)}
+              ></sl-icon-button>
+            </sl-tooltip>
           </div>
         ` : nothing}
       </div>
@@ -229,18 +248,18 @@ export class ContentContainer extends BaseElement {
       ${this.contentSections.length === 0
         ? this.renderEmptyContainer()
         : html`
-          ${this.contentSections.map(contentSection => html`
-            <sl-tab-panel name=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
-              <content-section
-                .contentSection=${contentSection}
-                .canEdit=${this.canEdit}
-                .ownerAttrs=${this.ownerAttrs}
-                @content-section-edited=${this.handleContentSectionEdited}
-                @content-section-deleted=${this.handleContentSectionDelete}
-              ></content-section>
-            </sl-tab-panel>
-          `)}
-        `
+            ${this.contentSections.map(contentSection => html`
+              <sl-tab-panel name=${contentSection.id} ?active=${this.activeSectionId === contentSection.id}>
+                <content-section
+                  .contentSection=${contentSection}
+                  .canEdit=${this.canEdit}
+                  .ownerAttrs=${this.ownerAttrs}
+                  @content-section-edited=${this.handleContentSectionEdited}
+                  @content-section-deleted=${this.handleContentSectionDelete}
+                ></content-section>
+              </sl-tab-panel>
+            `)}
+          `
       }
     `;
   }
@@ -257,11 +276,5 @@ export class ContentContainer extends BaseElement {
         ` : nothing}
       </div>
     `;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'content-container': ContentContainer;
   }
 }

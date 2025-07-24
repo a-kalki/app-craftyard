@@ -2,10 +2,17 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ProductSaleOfferAttrs } from '#offer/domain/product-sale/struct/attrs';
 import { ModelOfferCard } from '../base/model-offer-card';
+import { productSaleOfferType } from '#offer/domain/product-sale/struct/v-map';
 
 @customElement('product-sale-offer-card')
 export class ProductSaleOfferCard extends ModelOfferCard {
   @property({ type: Object }) offer!: ProductSaleOfferAttrs;
+
+  static filterLabel: Record<string, string> = { [productSaleOfferType]: 'Купить' }
+
+  offerLabel = 'Товар на продажу';
+
+  offerColor = 'rgba(61, 153, 92, 0.75)';
 
   static styles = [
     ModelOfferCard.styles,

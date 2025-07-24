@@ -1,3 +1,4 @@
+import type { UnionToTuple } from 'rilata/core';
 import type { OfferTypes } from './types';
 
 export const offersData: Record<OfferTypes, {
@@ -21,3 +22,7 @@ export const offersData: Record<OfferTypes, {
       title: 'Курсы'
   }
 }
+
+export const offerTypes: UnionToTuple<OfferTypes> = [
+  'WORKSPACE_RENT_OFFER', 'PRODUCT_SALE_OFFER', 'HOBBY_KIT_OFFER', 'COURSE_OFFER'
+]

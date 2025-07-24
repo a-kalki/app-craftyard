@@ -37,7 +37,7 @@ export class UserPanelWidget extends BaseElement {
   render() {
     if (!this.user) {
       return html`
-        <sl-tooltip content="Войти" placement="bottom">
+        <sl-tooltip content="Войти" placement="left">
           <sl-button
             variant="text"
             size="large"
@@ -64,7 +64,7 @@ export class UserPanelWidget extends BaseElement {
       </div>
       
       ${!isTelegramApp ? html`
-        <sl-tooltip content="Выйти" placement="bottom">
+        <sl-tooltip content="Выйти" placement="left">
           <sl-button
             variant="text"
             size="large"

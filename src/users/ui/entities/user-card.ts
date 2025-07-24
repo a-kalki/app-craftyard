@@ -23,23 +23,28 @@ export class UserCardEntity extends BaseElement {
       flex-direction: column;
     }
 
-    sl-card::part(header) {
+    .header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       padding-right: var(--sl-spacing-small);
       gap: var(--sl-spacing-medium);
       flex-wrap: nowrap;
+      overflow: hidden;
     }
 
     .header-title {
       font-size: 1.3rem;
       font-weight: 600;
-      flex: 1;
+      flex: 1 1 auto;
       min-width: 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    sl-card::part(header) sl-button {
+      flex-shrink: 0;
+      margin-left: auto;
     }
 
     .main {
@@ -83,7 +88,6 @@ export class UserCardEntity extends BaseElement {
     .contribution-list {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--sl-spacing-x-small);
       max-width: 100%;
       overflow: hidden;
     }
@@ -95,7 +99,6 @@ export class UserCardEntity extends BaseElement {
     .skills-list {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--sl-spacing-x-small);
       max-width: 100%;
       overflow: hidden;
     }
@@ -146,7 +149,7 @@ export class UserCardEntity extends BaseElement {
       <sl-card>
         <div slot="header" class="header">
           <div class="header-title">${this.user.name}</div>
-          <sl-tooltip content="Детали" placement="bottom">
+          <sl-tooltip content="Детали" placement="left">
             <sl-button @click=${this.navigateToDetails} variant="primary" size="small">
               <sl-icon name="archive"></sl-icon>
             </sl-button>
@@ -166,7 +169,7 @@ export class UserCardEntity extends BaseElement {
                   ? html`<p>Вклад отсутствует</p>`
                   : activeContributionKeys.map(key => html`
                       <user-contribution-tag
-                        .key=${key as keyof typeof activeContributionKeys}
+                        .key=${key as keyof typeof userContributions}
                         .counter=${userContributions[key as keyof typeof userContributions]!}
                       ></user-contribution-tag>
                     `)}

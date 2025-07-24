@@ -105,7 +105,7 @@ export class ModelDetails extends BaseElement {
 
   @state() modelId: string;
   @state() private model: ModelAttrs | null = null;
-  @state() private modelOffers: OfferAttrs[] | null = null;
+  @state() private modelAndMasterOffers: OfferAttrs[] | null = null;
   @state() private canEditModel = false;
   @state() private modelOwner: UserAttrs | null = null;
   @state() private isLoading = true;
@@ -125,7 +125,7 @@ export class ModelDetails extends BaseElement {
     try {
       const modelResult = await this.modelApi.getModel(this.modelId);
       if (modelResult.isFailure()) {
-        this.app.error('Не удалось загрузить модель', { result: modelResult.value, modelId: this.modelId });
+        this.app.error('Не удалось загрузить модель', { details: { result: modelResult.value, modelId: this.modelId } });
         this.isLoading = false;
         return;
       }
@@ -140,7 +140,7 @@ export class ModelDetails extends BaseElement {
       if (modelOwnerResult.isFailure()) {
         this.app.error(
           'Не удалось загрузить информацию о конструкторе модели',
-          { result: modelOwnerResult.value, ownerId: this.model.ownerId }
+          { details: { result: modelOwnerResult.value, ownerId: this.model.ownerId } }
         );
         this.modelOwner = null;
       } else {
@@ -149,31 +149,30 @@ export class ModelDetails extends BaseElement {
 
       const user = this.app.userInfo.isAuth && this.app.userInfo.user;
       if (user) {
-        const offersResult = await this.offerApi.getModelOffers(this.model!.id);
+        const offersResult = await this.offerApi.getOffers({ masterId: user.id, modelId: this.model.id });
         if (offersResult.isSuccess()) {
-          this.modelOffers = offersResult.value.filter(offer => (offer as ModelOfferAttrs).masterId === user.id);
+          this.modelAndMasterOffers = offersResult.value;
         } else {
           this.app.error(
             'Не удалось загрузить предложения для модели',
-            { result: offersResult.value, modelId: this.model.id }
+            { details: { result: offersResult.value, modelId: this.model.id } }
           );
-          this.modelOffers = [];
+          this.modelAndMasterOffers = [];
         }
       }
     } catch (error) {
-      this.app.error('Произошла непредвиденная ошибка при загрузке деталей модели', { error });
+      this.app.error('Произошла непредвиденная ошибка при загрузке деталей модели', { details: { error } });
     } finally {
       this.isLoading = false;
     }
   }
 
-  private handleAddImages(event: CustomEvent<string[]>) {
+  private handleAddImages = (event: CustomEvent<string[]>) => {
     this.modelApi.addModelImages(this.modelId, event.detail)
       .then(result => {
         if (result.isFailure()) {
           this.app.error('Ошибка обновления модели с новыми изображениями', {
-            result,
-            ids: event.detail
+            details: { result: result.value, ids: event.detail }
           });
         } else {
           this.model = {
@@ -185,13 +184,12 @@ export class ModelDetails extends BaseElement {
       });
   }
 
-  private handleRemoveImage(event: CustomEvent<string>) {
+  private handleRemoveImage = (event: CustomEvent<string>) => {
     this.modelApi.deleteImage(this.modelId, event.detail)
       .then(result => {
         if (result.isFailure()) {
           this.app.error('Ошибка удаления изображения', {
-            result,
-            id: event.detail
+            details: { result: result.value, id: event.detail }
           });
         } else {
           this.model = {
@@ -203,13 +201,12 @@ export class ModelDetails extends BaseElement {
       });
   }
 
-  private async handleReorderImages(event: CustomEvent<string[]>) {
+  private handleReorderImages = async (event: CustomEvent<string[]>) => {
     const pendingReorder = event.detail;
     const result = await this.modelApi.reorderModelImages(this.modelId, pendingReorder!);
     if (result.isFailure()) {
       this.app.error('Ошибка изменения порядка изображений', {
-        result,
-        ids: pendingReorder
+        details: { result: result.value, ids: pendingReorder }
       });
       return;
     }
@@ -220,7 +217,8 @@ export class ModelDetails extends BaseElement {
     this.requestUpdate();
   }
 
-  private async openEditModelModal() {
+  // Изменено на стрелочную функцию для сохранения контекста 'this'
+  private openEditModelModal = async () => {
     const modal = document.createElement('edit-model-modal');
 
     const result = await modal.show(this.model!);
@@ -250,7 +248,7 @@ export class ModelDetails extends BaseElement {
   }
 
   protected haveOffer(type: Exclude<OfferTypes, 'WORKSPACE_RENT_OFFER'>): boolean {
-    return !!this.modelOffers && this.modelOffers
+    return !!this.modelAndMasterOffers && this.modelAndMasterOffers
       .filter(offer => offer.type === type)
       .length > 0
   }
@@ -354,7 +352,7 @@ export class ModelDetails extends BaseElement {
         type: 'edit-model',
         label: 'Редактировать модель',
         icon: 'pencil',
-        handler: this.openEditModelModal,
+        handler: this.openEditModelModal, // Теперь openEditModelModal - стрелочная функция
       });
     }
     if (this.canAddOffer('HOBBY_KIT_OFFER')) {
@@ -393,7 +391,7 @@ export class ModelDetails extends BaseElement {
       return html`
         <div class="section-header">
           <h2>${this.model?.title || 'Описание модели'}</h2>
-          <sl-button-group>
+          <sl-tooltip content=${action.label} placement="left">
             <sl-button
               size="small"
               variant="primary"
@@ -401,7 +399,7 @@ export class ModelDetails extends BaseElement {
             >
               <sl-icon slot="prefix" name=${action.icon}></sl-icon>
             </sl-button>
-          </sl-button-group>
+          </sl-tooltip>
         </div>
       `;
     }
@@ -413,13 +411,15 @@ export class ModelDetails extends BaseElement {
       <div class="section-header">
         <h2>${this.model?.title || 'Описание модели'}</h2>
         <sl-button-group>
-          <sl-button
-            size="small"
-            variant="primary"
-            @click=${mainAction.handler}
-          >
-            <sl-icon slot="prefix" name=${mainAction.icon}></sl-icon>
-          </sl-button>
+          <sl-tooltip content=${mainAction.label} placement="left">
+            <sl-button
+              size="small"
+              variant="primary"
+              @click=${mainAction.handler}
+            >
+              <sl-icon slot="prefix" name=${mainAction.icon}></sl-icon>
+            </sl-button>
+          </sl-tooltip>
 
           <sl-dropdown placement="bottom-end" hoist>
             <sl-button size="small" slot="trigger" variant="primary" caret> </sl-button>

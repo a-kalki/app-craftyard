@@ -18,7 +18,7 @@ export class ModelModule extends CraftYardModule<ModelModuleMeta> {
     }
 
     async checkArInvariants(): Promise<void> {
-      const models = await this.resolvers.moduleResolver.modelRepo.getModels();
+      const models = await this.resolvers.moduleResolver.modelRepo.filter({});
       models.forEach(attrs => new ModelAr(attrs));
     }
 }
