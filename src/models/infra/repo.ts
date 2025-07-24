@@ -20,6 +20,17 @@ class ModelsJsonRepo implements ModelRepo {
   }
 
   async update(attrs: ModelAttrs): Promise<{ changes: number }> {
+    if (!(await this.findModel(attrs.id))) {
+      throw Error(`not finded model by id: ${attrs.id}`);
+    }
+    await this.jsonRepo.update(attrs.id, attrs);
+    return { changes: 1 };
+  }
+
+  async add(attrs: ModelAttrs): Promise<{ changes: number }> {
+    if (await this.findModel(attrs.id)) {
+      throw Error(`finded model by id: ${attrs.id}`);
+    }
     await this.jsonRepo.update(attrs.id, attrs);
     return { changes: 1 };
   }

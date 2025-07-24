@@ -22,62 +22,23 @@
     "createAt": 1751109315000,
     "updateAt": 1751109315000
   },
-  "5c62a9ba-a686-4472-9ffe-b40aa7296e17": {
-    "id": "5c62a9ba-a686-4472-9ffe-b40aa7296e17",
-    "title": "Кресло \"Кентукки\"",
-    "description": "Это кресло не сложно изготовить, он складывается и его можно убрать на зиму в сарай и при этом он довольно функционален.",
+  "01983cd7-7799-7eef-8037-82476c44a77a": {
+    "id": "01983cd7-7799-7eef-8037-82476c44a77a",
     "ownerId": "773084180",
-    "imageIds": [
-      "0197fd4d-169b-78fe-a6a3-4cce6501470e"
-    ],
+    "title": "Гостевой стол",
+    "description": "Этот стол спроектирован не для каждодневного использования.\n\nНо он прекрасно поможет вам, если нужно принять гостей.",
     "categories": [
-      "GARDEN"
+      "KITCHEN",
+      "FURNITURE"
     ],
-    "estimatedTime": "Два дня.",
     "difficultyLevel": "BEGINNER",
+    "estimatedTime": "2 полных дня + покраска",
     "cost": {
       "price": 1000,
       "currency": "KZT"
     },
-    "createAt": 1751109617000,
-    "updateAt": 1751384854484
-  },
-  "272fc7f4-2354-4858-93b4-19223f200980": {
-    "id": "272fc7f4-2354-4858-93b4-19223f200980",
-    "title": "Кресло \"Кентукки-2\"",
-    "description": "Усовершенствованная модель. Мы собрали все отзывы и предлагаем вам изготовить ее самим.",
-    "ownerId": "773084180",
     "imageIds": [],
-    "categories": [
-      "GARDEN",
-      "FURNITURE"
-    ],
-    "estimatedTime": "Два дня.",
-    "difficultyLevel": "BEGINNER",
-    "cost": {
-      "price": 2000,
-      "currency": "KZT"
-    },
-    "createAt": 1751110255000,
-    "updateAt": 1751392431426
-  },
-  "0401267a-e1c0-431b-b759-68f5da16f13c": {
-    "id": "0401267a-e1c0-431b-b759-68f5da16f13c",
-    "title": "Кресло \"Кентукки\"",
-    "description": "Это кресло не сложно изготовить, он складывается и его можно убрать на зиму в сарай и при этом он довольно функционален.",
-    "ownerId": "773084180",
-    "imageIds": [],
-    "categories": [
-      "GARDEN",
-      "FURNITURE"
-    ],
-    "estimatedTime": "Два дня.",
-    "difficultyLevel": "BEGINNER",
-    "cost": {
-      "price": 250,
-      "currency": "KZT"
-    },
-    "createAt": 1751124794000,
-    "updateAt": 1751124794000
+    "createAt": 1753367410587,
+    "updateAt": 1753367410587
   }
 }

@@ -7,11 +7,25 @@ import type { UsersModule } from "./module";
 export class UsersBackendFacade implements ApiUserFacade {
   constructor(private module: UsersModule) {}
 
-  getUser(input: GetUserCommand, caller: Caller): Promise<BackendResultByMeta<GetUserMeta>> {
-      throw new Error("Method not implemented.");
+  async getUser(userId: string, caller: Caller, requestId: string): Promise<BackendResultByMeta<GetUserMeta>> {
+    const command: GetUserCommand = {
+      name: "get-user",
+      attrs: { id: userId },
+      requestId
+    }
+    return this.module.handleRequest(
+      command, { caller }
+    ) as unknown as BackendResultByMeta<GetUserMeta>
   }
 
-  getUsers(input: GetUsersCommand, caller: Caller): Promise<BackendResultByMeta<GetUsersMeta>> {
-      throw new Error("Method not implemented.");
+  async getUsers(
+    input: GetUsersCommand, caller: Caller, requestId: string,
+  ): Promise<BackendResultByMeta<GetUsersMeta>> {
+    const command: GetUsersCommand = {
+      name: "get-users",
+      attrs: input.attrs,
+      requestId: requestId,
+    }
+    return this.module.handleRequest(command, { caller }) as unknown as BackendResultByMeta<GetUsersMeta>
   }
 }

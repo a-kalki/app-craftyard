@@ -12,7 +12,7 @@ export class EditModelUC extends ModelUseCase<EditModelMeta> {
 
   inputName = "edit-model" as const;
 
-  protected supportAnonimousCall = true;
+  protected supportAnonimousCall = false;
 
   protected validator = editModelValidator;
 

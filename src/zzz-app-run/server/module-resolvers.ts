@@ -28,6 +28,7 @@ import { cooperationJsonRepo } from '#cooperation/infra/repo';
 import { CooperationModule } from '#cooperation/api/module';
 import { ModelBackendFacade } from '#models/api/facade';
 import { ApiUserContendSectionMonolithFacade } from '#user-contents/infra/monolith-facade';
+import { UsersBackendFacade } from '#users/api/backend-facade';
 
 const PROJECT_PATH = cwd();
 const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
@@ -95,6 +96,7 @@ export const modelModuleResolvers: ModelModuleResolvers = {
   moduleResolver: {
     modelRepo: modelsJsonRepo,
     fileFacade: new FileModuleBackendFacade(filesBackendModule),
+    userFacade: new UsersBackendFacade(userBackendModule)
   }
 }
 

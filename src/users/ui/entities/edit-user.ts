@@ -65,8 +65,6 @@ export class UserEditModal extends ValidatableElement<EditUserAttrs> {
 
   @state() userLoaded = false;
 
-  @state() urlIsValid = false;
-
   @state() isLoading = false;
 
   @state() open = false;
@@ -174,8 +172,7 @@ export class UserEditModal extends ValidatableElement<EditUserAttrs> {
     return false;
   }
 
-  handleAvatarChanged(e: CustomEvent<{ isValid: boolean, url: string }>): void {
-    this.urlIsValid = e.detail.isValid;
+  handleAvatarChanged(e: CustomEvent<{ id: string, url: string }>): void {
     this.setFieldValue('avatarUrl', e.detail.url);
     e.preventDefault();
   };
@@ -208,12 +205,13 @@ export class UserEditModal extends ValidatableElement<EditUserAttrs> {
         ></sl-input>
         ${this.renderFieldErrors('name')}
         
-        <image-upload
+        <image-upload-input
+          placeholder="Выберите свою аватарку"
           .url=${this.user.profile.avatarUrl}
           .ownerAttrs=${ownerAttrs}
           .aspectRatio=${1/1}
-          @image-loaded=${this.handleAvatarChanged}
-        ></image-upload>
+          @file-id-changed=${this.handleAvatarChanged}
+        ></image-upload-input>
         
         <sl-input
           label="Ник в Телеграм"

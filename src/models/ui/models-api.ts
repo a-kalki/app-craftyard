@@ -9,6 +9,7 @@ import type { GetModelCommand, GetModelMeta } from "#models/domain/struct/get-mo
 import type { GetModelsCommand, GetModelsMeta } from "#models/domain/struct/get-models/contract";
 import type { ReorderModelImagesCommand, ReorderModelImagesMeta } from "#models/domain/struct/reorder-images/contract";
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
+import type { AddModelCommand, AddModelMeta } from "#models/domain/struct/add-model/contract";
 
 export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements UiModelsFacade {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
@@ -28,6 +29,16 @@ export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements UiMo
       this.setCacheById(result.value.id, result.value);
     }
     return result;
+  }
+
+  async addModel(attrs: AddModelCommand['attrs']): Promise<BackendResultByMeta<AddModelMeta>> {
+    const command: AddModelCommand = {
+      name: "add-model",
+      attrs,
+      requestId: crypto.randomUUID(),
+    }
+    console.log('token: ', this.jwtDecoder.getTokenPayload(this.accessToken))
+    return this.request<AddModelMeta>(command);
   }
 
   async editModel(attrs: EditModelCommand['attrs']): Promise<BackendResultByMeta<EditModelMeta>> {

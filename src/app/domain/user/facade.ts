@@ -1,7 +1,7 @@
 import type { BackendResultByMeta, Caller } from "rilata/core";
 import type { GetUsersCommand, GetUsersMeta } from "../user/struct/get-users/contract";
 import type { RefreshUserCommand, RefreshUserMeta } from "../user/struct/refresh-user/contract";
-import type { GetUserCommand, GetUserMeta } from "../user/struct/get-user/contract";
+import type { GetUserMeta } from "../user/struct/get-user/contract";
 import type { AuthUserMeta } from "../user/struct/auth-user/contract";
 import type { AuthData } from "./struct/auth-user/contract";
 
@@ -16,7 +16,7 @@ export interface UiUserFacade {
 }
 
 export interface ApiUserFacade {
-  getUser(input: GetUserCommand, caller: Caller): Promise<BackendResultByMeta<GetUserMeta>>;
+  getUser(userId: string, caller: Caller, reqId: string): Promise<BackendResultByMeta<GetUserMeta>>;
 
-  getUsers(input: GetUsersCommand, caller: Caller): Promise<BackendResultByMeta<GetUsersMeta>>
+  getUsers(input: GetUsersCommand, caller: Caller, reqId: string): Promise<BackendResultByMeta<GetUsersMeta>>
 }

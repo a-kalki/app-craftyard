@@ -11,6 +11,7 @@ import { AddModelImagesUC } from "./use-cases/add-images.uc.ts";
 import { DeleteModelImageUC } from "./use-cases/delete-image.uc.ts";
 import { ReoderModelImagesUC } from "./use-cases/reorder-images.uc.ts";
 import { EditModelUC } from "./use-cases/edit-model.uc.ts";
+import { AddModelUC } from "./use-cases/add-model.uc.ts";
 
 export const modelModuleConfig: ModuleConfig = {
     moduleUrls: [modelApiUrl]
@@ -23,6 +24,7 @@ export const modelModuleUseCases: UseCase[] = [
   new ReoderModelImagesUC(),
   new DeleteModelImageUC(),
   new EditModelUC(),
+  new AddModelUC(),
 ]
 
 export const modelModulePermissionCheckers: PerformCheckerService<CraftYardResolvers>[] = [
