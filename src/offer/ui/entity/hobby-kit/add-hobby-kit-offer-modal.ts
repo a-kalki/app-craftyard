@@ -6,8 +6,8 @@ import { addHobbyKitOfferVmap } from '#offer/domain/crud/add-offer/v-map';
 import type { OfferTypes } from '#offer/domain/types';
 import type { WorkspaceRentOfferAttrs } from '#offer/domain/workspace-rent/struct/attrs';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
-import type { Cost } from '#app/domain/types';
-import { costUtils } from '#app/domain/utils/cost/cost-utils';
+import type { Cost } from '#app/core/types';
+import { costUtils } from '#app/core/utils/cost/cost-utils';
 import { hobbyKitOfferService } from '#offer/domain/hobby-kit/services/hobby-kit-service';
 
 @customElement('add-hobby-kit-offer-modal')

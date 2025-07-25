@@ -1,6 +1,6 @@
 import type { UsersModuleMeta, UsersModuleResolvers } from "./types";
 import { usersModuleConfig, usersModulePermissionCheckers, usersModuleUseCases } from "./setup";
-import { UserAr } from "#app/domain/user/a-root";
+import { UserAr } from "#users/domain/user/a-root";
 import { CraftYardModule } from "#app/api/module";
 
 export class UsersModule extends CraftYardModule<UsersModuleMeta> {

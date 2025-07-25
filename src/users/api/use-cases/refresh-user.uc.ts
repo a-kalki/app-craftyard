@@ -1,8 +1,8 @@
 import type { RequestScope, DomainResult } from "rilata/api";
 import { AssertionException, failure, success, type UcResult } from "rilata/core";
 import { UserUseCase } from "#users/api/base-uc";
-import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user/contract";
-import { refreshUserValidator } from "#app/domain/user/struct/refresh-user/v-map";
+import type { RefreshUserCommand, RefreshUserMeta } from "#users/domain/user/struct/refresh-user/contract";
+import { refreshUserValidator } from "#users/domain/user/struct/refresh-user/v-map";
 
 export class RefreshUserUseCase extends UserUseCase<RefreshUserMeta> {
   inputName = "refresh-user" as const;

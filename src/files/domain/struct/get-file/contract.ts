@@ -1,7 +1,7 @@
 import type { BackendResultByMeta } from "rilata/core";
 import type { FileEntryAttrs } from "../attrs";
 import type { FileEntryArMeta } from "../../meta";
-import type { GettingIsNotPermittedError } from "#app/domain/errors";
+import type { GettingIsNotPermittedError } from "#app/core/errors";
 
 // ========== command ============
 export type GetFileCommand = {

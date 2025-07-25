@@ -1,7 +1,7 @@
 import { QueryUseCase, type RequestScope } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs, type Result, type UCMeta } from "rilata/core";
 import type { UserContentModuleResolvers } from "./types";
-import type { AggregateDoesNotExistError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError } from "#app/core/errors";
 import type { ContentSectionRepo } from "#user-contents/domain/section/repo";
 import type { ContentSectionAttrs } from "#user-contents/domain/section/struct/attrs";
 import { ContentSectionAr } from "#user-contents/domain/section/a-root";

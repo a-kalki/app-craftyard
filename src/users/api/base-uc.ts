@@ -1,6 +1,6 @@
-import { UserAr } from "#app/domain/user/a-root";
-import type { UserAttrs } from "#app/domain/user/struct/attrs";
-import type { UserDoesNotExistError } from "#app/domain/user/struct/get-user/contract";
+import { UserAr } from "#users/domain/user/a-root";
+import type { UserAttrs } from "#users/domain/user/struct/attrs";
+import type { UserDoesNotExistError } from "#users/domain/user/struct/get-user/contract";
 import type { UsersModuleResolvers } from "#users/api/types";
 import { QueryUseCase } from "rilata/api";
 import { failure, success, type Result, type UCMeta } from "rilata/core";

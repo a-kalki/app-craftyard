@@ -1,5 +1,5 @@
-import type { Cost } from "#app/domain/types";
-import { costUtils } from "#app/domain/utils/cost/cost-utils";
+import type { Cost } from "#app/core/types";
+import { costUtils } from "#app/core/utils/cost/cost-utils";
 import { BaseOfferAr } from "../base-offer/a-root";
 import type { WorkspaceRentOfferMeta } from "./meta";
 import type { WorkspaceRentOfferAttrs } from "./struct/attrs";

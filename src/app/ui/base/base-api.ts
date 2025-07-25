@@ -1,7 +1,7 @@
 import { BackendApi, localStore } from "rilata/ui";
 import { type JwtDecoder, type JwtDto, type ResultDTO } from "rilata/core";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "../base-run/constants";
-import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user/contract";
+import type { RefreshUserCommand, RefreshUserMeta } from "#users/domain/user/struct/refresh-user/contract";
 
 export abstract class BaseBackendApi<T> extends BackendApi<T> {
   constructor(

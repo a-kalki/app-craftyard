@@ -2,7 +2,7 @@ import { html, css, nothing, type CSSResultGroup } from 'lit';
 import { property } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import type { BaseOfferAttrs } from '#offer/domain/base-offer/struct/attrs';
-import { costUtils } from '#app/domain/utils/cost/cost-utils';
+import { costUtils } from '#app/core/utils/cost/cost-utils';
 import { markdownUtils } from '#app/ui/utils/markdown';
 
 interface Action {

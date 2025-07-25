@@ -1,7 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
-import type { GettingIsNotPermittedError } from "#app/domain/errors";
+import type { GettingIsNotPermittedError } from "#app/core/errors";
 import type { GetUserContentCommand, GetUserContentMeta } from "#user-contents/domain/content/struct/get-content/contract";
 import { getUserContentValidator } from "#user-contents/domain/content/struct/get-content/v-map";
 

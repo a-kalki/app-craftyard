@@ -1,6 +1,6 @@
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
-import { UserPolicy } from "#app/domain/user/policy";
-import type { JwtUser } from "#app/domain/user/struct/attrs";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
+import { UserPolicy } from "#users/domain/user/policy";
+import type { JwtUser } from "#users/domain/user/struct/attrs";
 import type { ModelAttrs } from "./struct/attrs";
 
 export class ModelPolicy {

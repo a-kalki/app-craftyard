@@ -4,4 +4,4 @@ import {} from "./entity/add-model";
 
 import {} from "./feature/model-details";
 import {} from "./feature/model-card";
-import {} from "./widgets/models";
+import {} from "./feature/models";

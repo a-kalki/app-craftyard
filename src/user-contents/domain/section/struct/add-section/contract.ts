@@ -1,4 +1,4 @@
-import type { AddingIsNotPermittedError } from "#app/domain/errors";
+import type { AddingIsNotPermittedError } from "#app/core/errors";
 import type { UuidType } from "rilata/core";
 import type { ContentSectionAttrs } from "../attrs";
 import type { ContentSectionArMeta } from "../../meta";

@@ -37,7 +37,6 @@ export class ModelsBackendApi extends BaseBackendApi<ModelAttrs> implements UiMo
       attrs,
       requestId: crypto.randomUUID(),
     }
-    console.log('token: ', this.jwtDecoder.getTokenPayload(this.accessToken))
     return this.request<AddModelMeta>(command);
   }
 

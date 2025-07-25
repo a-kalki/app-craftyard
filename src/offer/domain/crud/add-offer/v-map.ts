@@ -1,4 +1,6 @@
-import type { AddWorkspaceRentOfferAttrs, AddHobbyKitOfferAttrs, AddProductSaleOfferAttrs, AddCourseOfferAttrs } from "./contract";
+import type {
+  AddWorkspaceRentOfferAttrs, AddHobbyKitOfferAttrs, AddProductSaleOfferAttrs, AddCourseOfferAttrs,
+} from "./contract";
 import { DtoFieldValidator, type ValidatorMap } from "rilata/validator";
 import { hobbyKitOfferVmap } from "#offer/domain/hobby-kit/struct/v-map";
 import { workspaceRentOfferVmap } from "#offer/domain/workspace-rent/struct/v-map";

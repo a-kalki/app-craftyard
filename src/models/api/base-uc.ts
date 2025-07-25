@@ -5,7 +5,7 @@ import type { ModelAttrs } from "#models/domain/struct/attrs";
 import { ModelAr } from "#models/domain/a-root";
 import type { ModelRepo } from "#models/domain/repo";
 import { ModelPolicy } from "#models/domain/policy";
-import type { AggregateDoesNotExistError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError } from "#app/core/errors";
 
 export abstract class ModelUseCase<META extends UCMeta> extends QueryUseCase<
   ModelModuleResolvers, META

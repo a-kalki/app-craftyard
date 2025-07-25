@@ -5,9 +5,9 @@ import { failure, success } from "rilata/core";
 import { ModelAr } from "#models/domain/a-root";
 import { addModelValidator } from "#models/domain/struct/add-model/v-map";
 import { callerUtils } from "rilata/utils";
-import { ContributionPolicy } from "#app/domain/user-contributions/policy";
 import type { ModelAttrs } from "#models/domain/struct/attrs";
 import { uuidUtility } from "rilata/api-helper";
+import { ContributionPolicy } from "#users/domain/user-contributions/policy";
 
 export class AddModelUC extends ModelUseCase<AddModelMeta> {
   arName = "ModelAr" as const;

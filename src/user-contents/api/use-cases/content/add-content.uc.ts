@@ -1,7 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
-import { AssertionException, failure, success, type AbstractAggregateAttrs, type DTO } from "rilata/core";
-import type { AddingIsNotPermittedError } from "#app/domain/errors";
+import { failure, success, type AbstractAggregateAttrs, type DTO } from "rilata/core";
+import type { AddingIsNotPermittedError } from "#app/core/errors";
 import { uuidUtility } from "rilata/api-helper";
 import type {
   AddFileContentAttrs, AddThesisAttrs, AddUserContentCommand, AddUserContentMeta,

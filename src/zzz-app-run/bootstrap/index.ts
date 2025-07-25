@@ -10,7 +10,7 @@ import { filesModule } from "src/files/ui/module";
 import { FileBackendLocalApi } from "#files/ui/files-api";
 import { ModelsBackendApi } from "#models/ui/models-api";
 import { WorkshopsBackendApi } from "#workshop/ui/workshops-api";
-import type { UiUserFacade } from "#app/domain/user/facade";
+import type { UiUserFacade } from "#users/domain/user/facade";
 import type { UiModelsFacade } from "#models/domain/facade";
 import type { UiWorkshopsFacade } from "#workshop/domain/facade";
 import { userContentModule } from "#user-contents/ui/module";
@@ -19,9 +19,9 @@ import { ContentSectionBackendApi } from "#user-contents/ui/section-api";
 import { UserContentBackendApi } from "#user-contents/ui/content-api";
 import { OffersBackendApi } from "#offer/ui/offers-api";
 import { offersModule } from "#offer/ui/module";
-import { cooperationsModule } from "#cooperation/ui/module";
-import { CooperationBackendApi } from "#cooperation/ui/cooperation-api";
-import type { JwtUser } from "#app/domain/user/struct/attrs";
+import { cooperationsModule } from "#cooperations/ui/module";
+import { CooperationBackendApi } from "#cooperations/ui/cooperation-api";
+import type { JwtUser } from "#users/domain/user/struct/attrs";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,

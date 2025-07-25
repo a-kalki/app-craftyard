@@ -2,13 +2,13 @@ import { createHash, createHmac } from "crypto";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { AssertionException, failure, success, type BackendResultByMeta, type JwtDto } from "rilata/core";
 import { UserUseCase } from "#users/api/base-uc";
-import type { AuthUserMeta } from "#app/domain/user/struct/auth-user/contract";
-import { UserAr } from "#app/domain/user/a-root";
+import type { AuthUserMeta } from "#users/domain/user/struct/auth-user/contract";
+import { UserAr } from "#users/domain/user/a-root";
 import { TELEGRAM_AUTH_TIME_AS_SEC } from "#app/ui/base-run/constants";
 import type { TelegramUser } from "#app/ui/base-run/run-types";
-import type { UserAttrs } from "#app/domain/user/struct/attrs";
-import { authUserValidator } from "#app/domain/user/struct/auth-user/v-map";
-import type { UserArMeta } from "#app/domain/user/meta";
+import type { UserAttrs } from "#users/domain/user/struct/attrs";
+import { authUserValidator } from "#users/domain/user/struct/auth-user/v-map";
+import type { UserArMeta } from "#users/domain/user/meta";
 import type { AddContentSectionCommand, AddContentSectionMeta } from "#user-contents/domain/section/struct/add-section/contract";
 import { dedokWorkshopId } from "#workshop/constants";
 

@@ -1,8 +1,8 @@
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success } from "rilata/core";
 import { UserUseCase } from "#users/api/base-uc";
-import type { GetUserCommand, GetUserMeta } from "#app/domain/user/struct/get-user/contract";
-import { getUserValidator } from "#app/domain/user/struct/get-user/v-map";
+import type { GetUserCommand, GetUserMeta } from "#users/domain/user/struct/get-user/contract";
+import { getUserValidator } from "#users/domain/user/struct/get-user/v-map";
 
 export class GetUserUC extends UserUseCase<GetUserMeta> {
   arName = "UserAr" as const;

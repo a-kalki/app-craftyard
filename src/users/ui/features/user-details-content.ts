@@ -1,16 +1,16 @@
-import { html, css, nothing, type TemplateResult } from 'lit';
+import { html, css, type TemplateResult } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import type { UserAttrs } from '#users/domain/user/struct/attrs';
 import type { ThesisContent } from '#user-contents/domain/content/struct/thesis-attrs';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import type { OfferAttrs } from '#offer/domain/types';
-import type { UserContributionCounter, UserContributionKey } from '#app/domain/user-contributions/types';
-import { USER_CONTRIBUTIONS_DETAILS } from '#app/domain/user-contributions/constants'; // Для сортировки
 import { BaseOfferCard } from '#offer/ui/entity/base/base-offer-card';
 import { HobbyKitOfferCard } from '#offer/ui/entity/hobby-kit/hobby-kit-offer-card';
 import { ProductSaleOfferCard } from '#offer/ui/entity/product-sale/product-sale-offer-card';
 import { CourseOfferCard } from '#offer/ui/entity/course/course-offer-card';
+import type { UserContributionCounter, UserContributionKey } from '#users/domain/user-contributions/types';
+import { USER_CONTRIBUTIONS_DETAILS } from '#users/domain/user-contributions/constants';
 
 @customElement('user-details-content')
 export class UserDetailsContent extends BaseElement {

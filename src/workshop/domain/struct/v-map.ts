@@ -1,7 +1,10 @@
 import {
   DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, type ValidatorMap,
 } from "rilata/validator";
-import { createAtValidator, descriptionValidator, editorIdsValidator, titleValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import {
+  createAtValidator, descriptionValidator, editorIdsValidator, titleValidator,
+  updateAtValidator, uuidFieldValidator,
+}from "#app/core/base-validators";
 import type { OrganizationAbout, WorkshopAttrs } from "./attrs";
 
 const workshopAbout: ValidatorMap<OrganizationAbout> = {

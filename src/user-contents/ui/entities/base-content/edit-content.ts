@@ -1,7 +1,7 @@
 import { ValidatableElement } from "#app/ui/base/validatable-element";
 import { css, html, type TemplateResult, type CSSResultGroup } from "lit";
 import { property, state } from "lit/decorators.js";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 import type { UserContent } from "#user-contents/domain/content/meta";
 import type { EditUserContentCommand } from "#user-contents/domain/content/struct/edit-content/contract";
 import type { EditUserContentModalDialog } from "./types";

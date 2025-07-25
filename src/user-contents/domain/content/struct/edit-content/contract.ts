@@ -1,4 +1,4 @@
-import type { AggregateDoesNotExistError, EditingIsNotPermittedError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError, EditingIsNotPermittedError } from "#app/core/errors";
 import type { PatchValue } from "rilata/core";
 import type { ThesisContent } from "../thesis-attrs";
 import type { UserContentArMeta } from "../../meta";

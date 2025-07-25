@@ -2,11 +2,11 @@ import { html, css, type TemplateResult, type CSSResultGroup } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ValidatableElement } from '#app/ui/base/validatable-element';
 import { MODEL_CATEGORY_TITLES, MODEL_CATEGORY_KEYS } from '#models/domain/struct/constants';
-import { SKILL_LEVEL_TITLES, SKILL_LEVEL_KEYS } from '#app/domain/constants';
+import { SKILL_LEVEL_TITLES, SKILL_LEVEL_KEYS } from '#app/core/constants';
 import type { AddModelCommand } from '#models/domain/struct/add-model/contract';
 import { addModelVmap } from '#models/domain/struct/add-model/v-map';
 import type { LiteralDataType, LiteralFieldValidator } from 'rilata/validator';
-import { costVmap } from '#app/domain/v-map';
+import { costVmap } from '#app/core/v-map';
 
 type AddModelAttrs = AddModelCommand['attrs'];
 

@@ -1,4 +1,4 @@
-import type { AggregateDoesNotExistError, AddingIsNotPermittedError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError, AddingIsNotPermittedError } from "#app/core/errors";
 import type { ModelArMeta } from "../../meta";
 import type { ModelAttrs } from "../attrs";
 

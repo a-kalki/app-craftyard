@@ -3,10 +3,10 @@ import { AppRouter } from "./app-router";
 import type { Module } from "./module";
 import { AppNotifier } from "./app-notifier";
 import { AppDialog, type DialogOptions } from "./app-dialog";
-import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import type { UserAttrs } from "#users/domain/user/struct/attrs";
 import type { BootstrapResolves } from "../base-run/run-types";
 import type { WorkshopAttrs } from "#workshop/domain/struct/attrs";
-import type { AuthUserSuccess } from "#app/domain/user/struct/auth-user/contract";
+import type { AuthUserSuccess } from "#users/domain/user/struct/auth-user/contract";
 import { AuthHelper } from "./auth-helper";
 import { workshopUrl } from "#workshop/constants";
 

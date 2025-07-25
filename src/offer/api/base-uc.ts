@@ -1,6 +1,6 @@
 import { QueryUseCase } from "rilata/api";
 import { AssertionException, failure, success, type Caller, type Result, type UCMeta } from "rilata/core";
-import type { AggregateDoesNotExistError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError } from "#app/core/errors";
 import type { OfferAr, OfferAttrs } from "#offer/domain/types";
 import type { OfferModuleResolvers } from "./types";
 import type { OfferRepo } from "#offer/domain/repo";

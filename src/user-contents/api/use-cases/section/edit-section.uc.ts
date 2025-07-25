@@ -1,7 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
-import type { EditingIsNotPermittedError } from "#app/domain/errors";
+import type { EditingIsNotPermittedError } from "#app/core/errors";
 import type { ContentSectionAttrs } from "#user-contents/domain/section/struct/attrs";
 import { ContentSectionAr } from "#user-contents/domain/section/a-root";
 import type { EditContentSectionCommand, EditContentSectionMeta } from "#user-contents/domain/section/struct/edit-section/contract";

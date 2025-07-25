@@ -1,4 +1,4 @@
-import type { DeletingIsNotPermittedError, AggregateDoesNotExistError } from "#app/domain/errors";
+import type { DeletingIsNotPermittedError, AggregateDoesNotExistError } from "#app/core/errors";
 import type { BaseOfferArMeta } from "#offer/domain/base-offer/meta";
 
 // ========== commands ============

@@ -1,5 +1,5 @@
-import type { Cost } from '#app/domain/types';
-import { costUtils } from '#app/domain/utils/cost/cost-utils';
+import type { Cost } from '#app/core/types';
+import { costUtils } from '#app/core/utils/cost/cost-utils';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { WorkspaceRentOfferAR } from '#offer/domain/workspace-rent/a-root';
 import type { WorkspaceRentOfferAttrs } from '#offer/domain/workspace-rent/struct/attrs';

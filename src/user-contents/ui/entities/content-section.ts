@@ -4,7 +4,7 @@ import { BaseElement } from '#app/ui/base/base-element';
 import type { ContentSectionAttrs } from '#user-contents/domain/section/struct/attrs';
 import type { ContentTypes, UserContent } from '#user-contents/domain/content/meta';
 import { ContentComponentManager } from '#user-contents/ui/content-component-manager'; // Импортируем менеджер
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 
 @customElement('content-section')
 export class ContentSection extends BaseElement {

@@ -6,8 +6,8 @@ import type { ExpenseItem, ModelOfferAttrs, BaseOfferAttrs, OfferStatus } from "
 import {
   createAtValidator, descriptionValidator, editorIdsValidator, ownerIdValidator,
   titleValidator, updateAtValidator, uuidFieldValidator,
-} from "#app/domain/base-validators";
-import { costValidator } from "#app/domain/v-map";
+} from "#app/core/base-validators";
+import { costValidator } from "#app/core/v-map";
 import type { UnionToTuple } from "rilata/core";
 import { modelAttrsVmap } from "#models/domain/struct/v-map";
 import { workshopVmap } from "#workshop/domain/struct/v-map";

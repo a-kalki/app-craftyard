@@ -1,10 +1,10 @@
-import { html, css, nothing, type TemplateResult } from 'lit';
+import { html, css, type TemplateResult } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
-import { UserPolicy } from '#app/domain/user/policy';
-import type { UserAttrs } from '#app/domain/user/struct/attrs';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
-import type { UserArMeta } from '#app/domain/user/meta';
+import { UserPolicy } from '#users/domain/user/policy';
+import type { UserAttrs } from '#users/domain/user/struct/attrs';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
+import type { UserArMeta } from '#users/domain/user/meta';
 
 @customElement('user-details')
 export class UserDetailsEntity extends BaseElement {

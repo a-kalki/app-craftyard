@@ -1,12 +1,12 @@
 import { failure, success, type JwtDecoder, type JwtDto, type ResultDTO } from "rilata/core";
 import { BaseBackendApi } from "#app/ui/base/base-api";
-import { fileApiUrls, formFileName } from "../constants";
+import { fileApiUrls } from "../constants";
 import type { UiFileFacade } from "./facade";
 import type { FileUploadResult, UploadFileInput, UploadFileUcMeta } from "#files/domain/struct/upload-file/contract";
 import type { GetFileCommand, GetFileEntryResult, GetFileUcMeta } from "#files/domain/struct/get-file/contract";
 import type { UpdateFileCommand, UpdateFileResult, UpdateFileUcMeta } from "#files/domain/struct/update-file/contract";
 import type { DeleteFileCommand, DeleteFileResult, DeleteFileUcMeta } from "#files/domain/struct/delete-file/contract";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 import type { GetFilesCommand, GetFilesEntryResult, GetFilesUcMeta } from "#files/domain/struct/get-files/contract";
 
 /** Реализация для файлового хранилища сохраняющего прямо на сервере (не в s3) */

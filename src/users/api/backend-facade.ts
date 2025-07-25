@@ -1,6 +1,6 @@
-import type { ApiUserFacade } from "#app/domain/user/facade";
-import type { GetUserCommand, GetUserMeta } from "#app/domain/user/struct/get-user/contract";
-import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users/contract";
+import type { ApiUserFacade } from "#users/domain/user/facade";
+import type { GetUserCommand, GetUserMeta } from "#users/domain/user/struct/get-user/contract";
+import type { GetUsersCommand, GetUsersMeta } from "#users/domain/user/struct/get-users/contract";
 import type { Caller, BackendResultByMeta } from "rilata/core";
 import type { UsersModule } from "./module";
 

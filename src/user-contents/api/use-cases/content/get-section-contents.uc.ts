@@ -1,7 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
-import type { GettingIsNotPermittedError } from "#app/domain/errors";
+import type { GettingIsNotPermittedError } from "#app/core/errors";
 import type { GetSectionContentsCommand, GetSectionContentsMeta } from "#user-contents/domain/content/struct/get-section-contents/contract";
 import { getSectionContentsValidator } from "#user-contents/domain/content/struct/get-section-contents/v-map";
 

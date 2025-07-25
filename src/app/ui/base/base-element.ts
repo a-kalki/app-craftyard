@@ -4,14 +4,14 @@ import type { WorkshopsBackendApi } from '#workshop/ui/workshops-api';
 import type { UsersBackendApi } from '#users/ui/users-api';
 import type { ModelsBackendApi } from '#models/ui/models-api';
 import type { FileBackendLocalApi } from '#files/ui/files-api';
-import type { UiUserFacade } from '#app/domain/user/facade';
+import type { UiUserFacade } from '#users/domain/user/facade';
 import type { UiModelsFacade } from '#models/domain/facade';
 import type { UiWorkshopsFacade } from '#workshop/domain/facade';
 import type { UiFileFacade } from '#files/ui/facade';
 import type { ContentSectionBackendApi } from '#user-contents/ui/section-api';
 import type { UserContentBackendApi } from '#user-contents/ui/content-api';
 import type { OffersBackendApi } from '#offer/ui/offers-api';
-import type { CooperationBackendApi } from '#cooperation/ui/cooperation-api';
+import type { CooperationBackendApi } from '#cooperations/ui/cooperation-api';
 
 export abstract class BaseElement extends LitElement {
   protected globalAttr<T>(key: string): T {

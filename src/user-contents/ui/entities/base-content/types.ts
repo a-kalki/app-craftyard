@@ -1,4 +1,4 @@
-import type { CyOwnerAggregateAttrs } from "#app/domain/types"
+import type { CyOwnerAggregateAttrs } from "#app/core/types"
 import type { UserContent } from "#user-contents/domain/content/meta"
 
 export interface EditUserContentModalDialog {

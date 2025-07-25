@@ -1,6 +1,6 @@
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
-import type { DeletingIsNotPermittedError } from "#app/domain/errors";
+import type { DeletingIsNotPermittedError } from "#app/core/errors";
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { DeleteContentSectionCommand, DeleteContentSectionMeta } from "#user-contents/domain/section/struct/delete-section/contract";
 import { deleteContentSectionValidator } from "#user-contents/domain/section/struct/delete-section/v-map";

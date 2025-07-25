@@ -1,5 +1,5 @@
 import type { CraftYardServerResolver } from "#app/api/resolvers"
-import type { UserRepo } from "#app/domain/user/repo"
+import type { UserRepo } from "#users/domain/user/repo"
 import type { ApiUserContentsSectionFacade } from "#user-contents/domain/section/facade"
 
 export type UsersModuleResolver = {

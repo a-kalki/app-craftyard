@@ -1,8 +1,8 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { USER_CONTRIBUTIONS_DETAILS } from '#app/domain/user-contributions/constants';
-import { UserAr } from '#app/domain/user/a-root';
-import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import { USER_CONTRIBUTIONS_DETAILS } from '#users/domain/user-contributions/constants';
+import { UserAr } from '#users/domain/user/a-root';
+import type { UserAttrs } from '#users/domain/user/struct/attrs';
 import { BaseElement } from '#app/ui/base/base-element';
 
 @customElement('user-avatar')

@@ -3,7 +3,7 @@ import type { FilesModule } from "./module";
 import { failure, success, type BadRequestError, type Result } from "rilata/core";
 import { uuidUtility } from "rilata/api-helper";
 import type { UploadFileCommand } from "#files/domain/struct/upload-file/contract";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 
 export class FileModuleController extends WebModuleController {
   declare protected module: FilesModule

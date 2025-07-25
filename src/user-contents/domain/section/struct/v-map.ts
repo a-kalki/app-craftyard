@@ -5,7 +5,7 @@ import {
 import type { AccessType, ContentSectionAttrs } from "./attrs";
 import {
   createAtValidator, shoelaceIconValidator, updateAtValidator, uuidFieldValidator,
-} from "#app/domain/base-validators";
+} from "#app/core/base-validators";
 import { ownerArAttrsVmap, type UnionToTuple } from "rilata/core";
 
 const accessTypes: UnionToTuple<AccessType> = ['public', 'paid'];

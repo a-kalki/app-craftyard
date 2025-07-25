@@ -19,7 +19,7 @@ import {
   addHobbyKitOfferValidator, addProductSaleOfferValidator, addWorkspaceRentOfferValidator,
 }from "#offer/domain/crud/add-offer/v-map";
 import { hobbyKitOfferService } from "#offer/domain/hobby-kit/services/hobby-kit-service";
-import type { AggregateDoesNotExistError, DomainRuleError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError, DomainRuleError } from "#app/core/errors";
 import type { ProductSaleOfferAttrs } from "#offer/domain/product-sale/struct/attrs";
 import { ProductSaleOfferAR } from "#offer/domain/product-sale/a-root";
 import type { CourseOfferAttrs } from "#offer/domain/course/struct/attrs";

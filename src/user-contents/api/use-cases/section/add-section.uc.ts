@@ -2,7 +2,7 @@ import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { uuidUtility } from "rilata/api-helper";
 import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
-import type { AddingIsNotPermittedError } from "#app/domain/errors";
+import type { AddingIsNotPermittedError } from "#app/core/errors";
 import type { ContentSectionAttrs } from "#user-contents/domain/section/struct/attrs";
 import { ContentSectionAr } from "#user-contents/domain/section/a-root";
 import type { AddContentSectionCommand, AddContentSectionMeta } from "#user-contents/domain/section/struct/add-section/contract";

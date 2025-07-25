@@ -1,13 +1,13 @@
 import { success, type BackendResultByMeta, type JwtDecoder, type JwtDto } from "rilata/core";
-import { type GetUserCommand, type GetUserMeta } from "#app/domain/user/struct/get-user/contract";
-import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users/contract";
-import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user/contract";
-import type { AuthData, AuthUserCommand, AuthUserMeta } from "#app/domain/user/struct/auth-user/contract";
-import type { RefreshUserCommand, RefreshUserMeta } from "#app/domain/user/struct/refresh-user/contract";
+import { type GetUserCommand, type GetUserMeta } from "#users/domain/user/struct/get-user/contract";
+import type { GetUsersCommand, GetUsersMeta } from "#users/domain/user/struct/get-users/contract";
+import type { EditUserCommand, EditUserMeta } from "#users/domain/user/struct/edit-user/contract";
+import type { AuthData, AuthUserCommand, AuthUserMeta } from "#users/domain/user/struct/auth-user/contract";
+import type { RefreshUserCommand, RefreshUserMeta } from "#users/domain/user/struct/refresh-user/contract";
 import { BaseBackendApi } from "#app/ui/base/base-api";
-import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import type { UserAttrs } from "#users/domain/user/struct/attrs";
 import { usersApiUrl } from "#users/constants";
-import type { UiUserFacade } from "#app/domain/user/facade";
+import type { UiUserFacade } from "#users/domain/user/facade";
 
 export class UsersBackendApi extends BaseBackendApi<UserAttrs> implements UiUserFacade {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {

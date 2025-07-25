@@ -1,7 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs, type DTO, type PatchValue } from "rilata/core";
-import type { EditingIsNotPermittedError } from "#app/domain/errors";
+import type { EditingIsNotPermittedError } from "#app/core/errors";
 import type { EditUserContentCommand, EditUserContentMeta } from "#user-contents/domain/content/struct/edit-content/contract";
 import type { FileContent } from "#user-contents/domain/content/struct/file-attrs";
 import type { ThesisContent } from "#user-contents/domain/content/struct/thesis-attrs";

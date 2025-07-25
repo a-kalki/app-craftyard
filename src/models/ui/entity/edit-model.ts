@@ -3,9 +3,8 @@ import { css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { MODEL_CATEGORY_KEYS, MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
-import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
+import { SKILL_LEVEL_TITLES } from '#app/core/constants';
 import type { EditModelCommand } from '#models/domain/struct/edit-model/contract';
-import { dtoUtility } from 'rilata/utils';
 import { editModelVmap } from '#models/domain/struct/edit-model/v-map';
 
 type EditModelAttrs = EditModelCommand['attrs'];

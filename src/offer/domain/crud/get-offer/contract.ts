@@ -1,4 +1,4 @@
-import type { AggregateDoesNotExistError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError } from "#app/core/errors";
 import type { BaseOfferArMeta } from "#offer/domain/base-offer/meta";
 import type { OfferAttrs } from "#offer/domain/types";
 

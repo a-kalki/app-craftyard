@@ -1,4 +1,4 @@
-import type { AggregateDoesNotExistError, GettingIsNotPermittedError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError, GettingIsNotPermittedError } from "#app/core/errors";
 import type { UserContent, UserContentArMeta } from "../../meta";
 
 // ========== commands ============

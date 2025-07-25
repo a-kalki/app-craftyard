@@ -1,4 +1,4 @@
-import type { Cost } from "#app/domain/types";
+import type { Cost } from "#app/core/types";
 import type { UserId } from "rilata/core";
 
 /**

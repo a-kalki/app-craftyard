@@ -4,7 +4,7 @@ import { BaseElement } from '#app/ui/base/base-element';
 import { markdownUtils } from '#app/ui/utils/markdown';
 import { keyboardUtils } from '#app/ui/utils/keyboard';
 import type { ContentSectionAttrs } from '#user-contents/domain/section/struct/attrs';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 
 @customElement('content-container')
 export class ContentContainer extends BaseElement {

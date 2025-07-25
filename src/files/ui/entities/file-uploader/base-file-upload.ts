@@ -3,7 +3,7 @@ import { property, state } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import type { UploadFileInput } from '#files/domain/struct/upload-file/contract';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 
 /**
  * Абстрактный базовый класс для компонентов загрузки одиночного файла.

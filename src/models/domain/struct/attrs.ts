@@ -1,4 +1,4 @@
-import type { Cost, SkillLevel } from "#app/domain/types";
+import type { Cost, SkillLevel } from "#app/core/types";
 import type { MODEL_CATEGORY_TITLES } from "./constants"
 
 /** User content contexts */

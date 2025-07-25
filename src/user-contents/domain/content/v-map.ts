@@ -1,6 +1,9 @@
 import { DtoFieldValidator, LiteralFieldValidator, MinCharsCountValidationRule, PositiveNumberValidationRule, StrictEqualFieldValidator, StringChoiceValidationRule, type ValidatorMap } from "rilata/validator";
 import type { ContentAttrs } from "./struct/attrs";
-import { shoelaceIconValidator, createAtValidator, updateAtValidator, uuidFieldValidator, descriptionValidator, uuidRule } from "#app/domain/base-validators";
+import {
+  shoelaceIconValidator, createAtValidator, updateAtValidator, uuidFieldValidator,
+  descriptionValidator, uuidRule,
+}from "#app/core/base-validators";
 import type { ThesisContent } from "./struct/thesis-attrs";
 import type { DTO, UnionToTuple } from "rilata/core";
 import type { FileContent, FileType } from "./struct/file-attrs";

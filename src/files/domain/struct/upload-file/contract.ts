@@ -1,8 +1,8 @@
 import type { BackendResultByMeta } from "rilata/core";
 import type { FileEntryAttrs } from "../attrs";
 import type { FileEntryArMeta } from "../../meta";
-import type { AddingIsNotPermittedError } from "#app/domain/errors";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { AddingIsNotPermittedError } from "#app/core/errors";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 
 export type UploadFileInput = CyOwnerAggregateAttrs & {
   comment?: string;

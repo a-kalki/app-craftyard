@@ -1,6 +1,6 @@
 import { DtoFieldValidator, LiteralFieldValidator, RangeNumberValidationRule, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
 import { offerAttrsVmap } from "#offer/domain/base-offer/struct/v-map";
-import { positiveNumberValidator } from "#app/domain/base-validators";
+import { positiveNumberValidator } from "#app/core/base-validators";
 import type { WorkspaceRentOfferAttrs } from "./attrs";
 
 export const workspaceRentOfferType: WorkspaceRentOfferAttrs['type'] = 'WORKSPACE_RENT_OFFER';

@@ -4,7 +4,7 @@ import { BaseElement } from '#app/ui/base/base-element';
 import type { DeleteUserContentCommand } from '#user-contents/domain/content/struct/delete-content/contract';
 import { markdownUtils } from '#app/ui/utils/markdown';
 import type { EditUserContentModalDialog } from './types';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 import type { UserContent } from '#user-contents/domain/content/meta';
 import type { FileContent } from '#user-contents/domain/content/struct/file-attrs';
 

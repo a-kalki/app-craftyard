@@ -1,6 +1,10 @@
-import { DtoFieldValidator, LiteralFieldValidator, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
+import {
+  DtoFieldValidator, LiteralFieldValidator, TextStrictEqualValidationRule, type ValidatorMap,
+} from "rilata/validator";
 import { modelCreateionOfferVmap } from "#offer/domain/base-offer/struct/v-map";
-import { createAtValidator, positiveNumberValidator, updateAtValidator, userIdValidator } from "#app/domain/base-validators";
+import {
+  createAtValidator, positiveNumberValidator, updateAtValidator, userIdValidator,
+} from "#app/core/base-validators";
 import type { HobbyKitOfferAttrs } from "./attrs";
 import { workspaceRentOfferVmap } from "#offer/domain/workspace-rent/struct/v-map";
 

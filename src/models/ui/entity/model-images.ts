@@ -5,7 +5,7 @@ import { keyboardUtils } from '#app/ui/utils/keyboard';
 import type { App } from '#app/ui/base/app';
 import { ref } from 'lit/directives/ref.js';
 import type { UiFileFacade } from '#files/ui/facade';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 
 @customElement('model-images')
 export class ModelImages extends LitElement {

@@ -5,7 +5,7 @@ import { ModelPolicy } from "#models/domain/policy";
 import { PerformCheckerService } from "#app/api/perform-checker-service";
 import type { ModelModuleResolvers } from "#models/api/types";
 import type { GetFileCommand } from "#files/domain/struct/get-file/contract";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 import type { FileEntryArMeta } from "#files/domain/meta";
 
 const isNotMutableActions: [

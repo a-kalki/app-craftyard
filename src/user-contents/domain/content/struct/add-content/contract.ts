@@ -1,4 +1,4 @@
-import type { AddingIsNotPermittedError, AggregateDoesNotExistError } from "#app/domain/errors";
+import type { AddingIsNotPermittedError, AggregateDoesNotExistError } from "#app/core/errors";
 import type { UserContentArMeta } from "../../meta";
 import type { FileContent } from "../file-attrs";
 import type { ImagesContent } from "../images-attrs";

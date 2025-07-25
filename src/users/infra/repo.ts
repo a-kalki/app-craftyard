@@ -1,5 +1,5 @@
-import type { UserRepo } from "#app/domain/user/repo";
-import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import type { UserRepo } from "#users/domain/user/repo";
+import type { UserAttrs } from "#users/domain/user/struct/attrs";
 import { JsonRepository } from "../../app/infra/json-repo";
 
 const path = import.meta.dir + '/users.json';

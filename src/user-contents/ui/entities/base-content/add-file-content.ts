@@ -4,7 +4,7 @@ import { BaseAddContentModal } from "../base-content/add-content-modal";
 import type { AddFileContentAttrs } from "#user-contents/domain/content/struct/add-content/contract";
 import type { FileType } from "#user-contents/domain/content/struct/file-attrs";
 import { state } from "lit/decorators.js";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 
 export abstract class BaseAddFileModal extends BaseAddContentModal<AddFileContentAttrs> {
   protected abstract fileType: FileType;

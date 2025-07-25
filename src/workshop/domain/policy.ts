@@ -1,5 +1,5 @@
-import { UserPolicy } from "#app/domain/user/policy";
-import type { JwtUser } from "#app/domain/user/struct/attrs";
+import { UserPolicy } from "#users/domain/user/policy";
+import type { JwtUser } from "#users/domain/user/struct/attrs";
 import type { WorkshopAttrs } from "./struct/attrs";
 
 export class WorkshopPolicy {

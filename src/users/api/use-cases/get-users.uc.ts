@@ -1,8 +1,8 @@
 import type { RequestScope, DomainResult } from "rilata/api";
 import { success } from "rilata/core";
 import { UserUseCase } from "#users/api/base-uc";
-import type { GetUsersCommand, GetUsersMeta } from "#app/domain/user/struct/get-users/contract";
-import { getUsersValidator } from "#app/domain/user/struct/get-users/v-map";
+import type { GetUsersCommand, GetUsersMeta } from "#users/domain/user/struct/get-users/contract";
+import { getUsersValidator } from "#users/domain/user/struct/get-users/v-map";
 
 export class GetUsersUC extends UserUseCase<GetUsersMeta> {
   protected supportAnonimousCall = true;

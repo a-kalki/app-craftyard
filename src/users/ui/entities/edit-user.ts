@@ -1,15 +1,13 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { BaseElement } from '../../../app/ui/base/base-element';
-import type { UserContributionKey } from '#app/domain/user-contributions/types';
-import { UserPolicy } from '#app/domain/user/policy';
-import type { EditUserCommand } from '#app/domain/user/struct/edit-user/contract';
-import type { UserAttrs, UserProfile } from '#app/domain/user/struct/attrs';
-import type { UserArMeta } from '#app/domain/user/meta';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import { UserPolicy } from '#users/domain/user/policy';
+import type { EditUserCommand } from '#users/domain/user/struct/edit-user/contract';
+import type { UserAttrs, UserProfile } from '#users/domain/user/struct/attrs';
+import type { UserArMeta } from '#users/domain/user/meta';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 import { ValidatableElement } from '#app/ui/base/validatable-element';
 import type { ValidatorMap } from 'rilata/validator';
-import { userProfileVMap, userVMap } from '#app/domain/user/struct/v-map';
+import { userProfileVMap, userVMap } from '#users/domain/user/struct/v-map';
 
 type EditUserAttrs = Pick<UserAttrs, 'name'> & {
   telegramNickname: UserProfile['telegramNickname'],
@@ -90,7 +88,6 @@ export class UserEditModal extends ValidatableElement<EditUserAttrs> {
       telegramNickname: this.user.profile.telegramNickname,
       avatarUrl: this.user.profile.avatarUrl,
     }
-    this.urlIsValid = !!this.formData.avatarUrl;
     this.open = true;
 
     if (!document.body.contains(this)) {
@@ -115,7 +112,7 @@ export class UserEditModal extends ValidatableElement<EditUserAttrs> {
         profile: {
           ...this.user!.profile,
           telegramNickname: this.formData.telegramNickname,
-          avatarUrl: this.urlIsValid ? this.formData.avatarUrl : this.user!.profile.avatarUrl
+          avatarUrl: this.user!.profile.avatarUrl
         }
       }
       const result = await this.userApi.editUser(command);

@@ -3,13 +3,13 @@ import {
   StringChoiceValidationRule, type ValidatorMap,
 }from "rilata/validator";
 import type { ModelAttrs } from "./attrs";
-import { SKILL_LEVEL_KEYS } from "#app/domain/constants";
+import { SKILL_LEVEL_KEYS } from "#app/core/constants";
 import { MODEL_CATEGORY_KEYS } from "./constants";
 import {
   descriptionValidator, createAtValidator, titleValidator, updateAtValidator,
   userIdValidator, uuidFieldValidator,
-} from "#app/domain/base-validators";
-import { costValidator } from "#app/domain/v-map";
+} from "#app/core/base-validators";
+import { costValidator } from "#app/core/v-map";
 
 export const modelAttrsVmap: ValidatorMap<ModelAttrs> = {
     id: uuidFieldValidator,

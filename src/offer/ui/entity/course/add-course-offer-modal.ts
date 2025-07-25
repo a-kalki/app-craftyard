@@ -1,5 +1,5 @@
 import { customElement } from 'lit/decorators.js';
-import { html, type TemplateResult, css } from 'lit';
+import { html, type TemplateResult } from 'lit';
 import { BaseAddOfferModal } from '../base/base-add-offer-modal';
 import type { AddCourseOfferAttrs } from '#offer/domain/crud/add-offer/contract';
 import { addCourseOfferVmap } from '#offer/domain/crud/add-offer/v-map';

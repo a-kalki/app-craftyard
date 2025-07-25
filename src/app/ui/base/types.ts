@@ -1,4 +1,4 @@
-import type { UserAttrs } from "#app/domain/user/struct/attrs";
+import type { UserAttrs } from "#users/domain/user/struct/attrs";
 import type { WorkshopAttrs } from "#workshop/domain/struct/attrs";
 
 export type AppState = {

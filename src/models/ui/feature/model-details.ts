@@ -3,18 +3,17 @@ import { customElement, state } from 'lit/decorators.js';
 import { ModelPolicy } from '#models/domain/policy';
 import type { ModelAttrs, ModelContentContextTypes } from '#models/domain/struct/attrs';
 import { BaseElement } from '#app/ui/base/base-element';
-import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
+import { SKILL_LEVEL_TITLES } from '#app/core/constants';
 import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
 import type { ModelArMeta } from '#models/domain/meta';
-import { costUtils } from '#app/domain/utils/cost/cost-utils';
+import { costUtils } from '#app/core/utils/cost/cost-utils';
 import type { ContentSectionAttrs } from '#user-contents/domain/section/struct/attrs';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 import { WorkshopPolicy } from '#workshop/domain/policy';
 import { OfferModalManager } from '#offer/ui/offer-modal-manager';
 import type { OfferAttrs, OfferTypes } from '#offer/domain/types';
-import type { ModelOfferAttrs } from '#offer/domain/base-offer/struct/attrs';
 import { offersData } from '#offer/domain/constants';
-import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import type { UserAttrs } from '#users/domain/user/struct/attrs';
 
 @customElement('model-details')
 export class ModelDetails extends BaseElement {

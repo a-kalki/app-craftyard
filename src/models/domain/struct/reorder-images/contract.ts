@@ -1,4 +1,4 @@
-import type { AggregateDoesNotExistError, EditingIsNotPermittedError } from "#app/domain/errors";
+import type { AggregateDoesNotExistError, EditingIsNotPermittedError } from "#app/core/errors";
 import type { ModelArMeta } from "../../meta";
 
 // ========== commands ============

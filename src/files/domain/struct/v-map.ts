@@ -2,7 +2,7 @@ import {
   DtoFieldValidator, LiteralFieldValidator, PositiveNumberValidationRule, type ValidatorMap,
 } from "rilata/validator";
 import type { FileEntryAttrs } from "./attrs";
-import { createAtValidator, updateAtValidator, uuidFieldValidator } from "#app/domain/base-validators";
+import { createAtValidator, updateAtValidator, uuidFieldValidator } from "#app/core/base-validators";
 import { ownerArAttrsVmap } from "rilata/core";
 
 export const fileEntryAttrsVmap: ValidatorMap<FileEntryAttrs> = {

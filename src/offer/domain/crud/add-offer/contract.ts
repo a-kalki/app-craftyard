@@ -1,4 +1,4 @@
-import type { AddingIsNotPermittedError, AggregateDoesNotExistError, DomainRuleError } from "#app/domain/errors";
+import type { AddingIsNotPermittedError, AggregateDoesNotExistError, DomainRuleError } from "#app/core/errors";
 import type { BaseOfferArMeta } from "#offer/domain/base-offer/meta";
 import type { CourseOfferAttrs } from "#offer/domain/course/struct/attrs";
 import type { HobbyKitOfferAttrs } from "#offer/domain/hobby-kit/struct/attrs";

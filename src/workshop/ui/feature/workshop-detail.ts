@@ -2,7 +2,7 @@ import { html, css, type TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { WorkshopAttrs } from '#workshop/domain/struct/attrs';
-import type { CyOwnerAggregateAttrs } from '#app/domain/types';
+import type { CyOwnerAggregateAttrs } from '#app/core/types';
 import type { WorkshopArMeta } from '#workshop/domain/meta';
 import { WorkshopPolicy } from '#workshop/domain/policy';
 import { markdownUtils } from '#app/ui/utils/markdown';

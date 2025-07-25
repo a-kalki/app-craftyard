@@ -2,7 +2,7 @@ import { html, css, nothing } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { BaseElement } from '#app/ui/base/base-element';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
-import { SKILL_LEVEL_TITLES } from '#app/domain/constants';
+import { SKILL_LEVEL_TITLES } from '#app/core/constants';
 import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
 import type { FileEntryAttrs } from '#files/domain/struct/attrs';
 import type { ImageGalleryDialog } from '#app/ui/entities/image-gallery-dialog';

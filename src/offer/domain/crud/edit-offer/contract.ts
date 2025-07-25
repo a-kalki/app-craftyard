@@ -1,4 +1,4 @@
-import type { EditingIsNotPermittedError, AggregateDoesNotExistError } from "#app/domain/errors";
+import type { EditingIsNotPermittedError, AggregateDoesNotExistError } from "#app/core/errors";
 import type { BaseOfferArMeta } from "#offer/domain/base-offer/meta";
 import type { HobbyKitOfferAttrs } from "#offer/domain/hobby-kit/struct/attrs";
 import type { WorkspaceRentOfferAttrs } from "#offer/domain/workspace-rent/struct/attrs";

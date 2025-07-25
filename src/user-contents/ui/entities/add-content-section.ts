@@ -1,4 +1,4 @@
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 import { ValidatableElement } from "#app/ui/base/validatable-element";
 import { type AddContentSectionCommand } from "#user-contents/domain/section/struct/add-section/contract";
 import { contentSectionVmap } from "#user-contents/domain/section/struct/v-map";

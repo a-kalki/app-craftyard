@@ -5,7 +5,7 @@ import { ModelPolicy } from "#models/domain/policy";
 import { PerformCheckerService } from "#app/api/perform-checker-service";
 import type { ModelModuleResolvers } from "#models/api/types";
 import type { ContentSectionArMeta } from "#user-contents/domain/section/meta";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 import type { GetOwnerArContentSectionsCommand } from "#user-contents/domain/section/struct/get-owner-sections/contract";
 import type { GetContentSectionCommand } from "#user-contents/domain/section/struct/get-section/contract";
 

@@ -4,12 +4,12 @@ import { ValidatableElement } from '#app/ui/base/validatable-element';
 import type { AddModelOfferModalDialog } from './types';
 import type { AddOfferCommand } from '#offer/domain/crud/add-offer/contract';
 import type { OfferTypes } from '#offer/domain/types';
-import type { CooperationAttrs } from '#cooperation/domain/types';
-import type { CooperationContextType, CooperationNodeAttrs } from '#cooperation/domain/base/node/struct/attrs';
+import type { CooperationAttrs } from '#cooperations/domain/types';
+import type { CooperationContextType, CooperationNodeAttrs } from '#cooperations/domain/base/node/struct/attrs';
 import type { LiteralDataType, LiteralFieldValidator } from 'rilata/validator';
-import { costVmap } from '#app/domain/v-map';
-import type { Cost } from '#app/domain/types';
-import type { UserAttrs } from '#app/domain/user/struct/attrs';
+import { costVmap } from '#app/core/v-map';
+import type { Cost } from '#app/core/types';
+import type { UserAttrs } from '#users/domain/user/struct/attrs';
 import type { WorkshopAttrs } from '#workshop/domain/struct/attrs';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 

@@ -1,6 +1,6 @@
 import { localStore } from "rilata/ui";
 import type { AppState } from "./types";
-import type { AuthUserSuccess, TokenType } from "#app/domain/user/struct/auth-user/contract";
+import type { AuthUserSuccess, TokenType } from "#users/domain/user/struct/auth-user/contract";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "../base-run/constants";
 import type { BootstrapResolves } from "../base-run/run-types";
 

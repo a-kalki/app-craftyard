@@ -1,4 +1,4 @@
-import type { UiUserFacade } from "#app/domain/user/facade";
+import type { UiUserFacade } from "#users/domain/user/facade";
 import type { WorkshopsBackendApi } from "#workshop/ui/workshops-api";
 import type { JwtDecoder, JwtDto } from "rilata/core";
 

@@ -1,6 +1,6 @@
 import { DtoFieldValidator, LiteralFieldValidator, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
 import { modelCreateionOfferVmap } from "#offer/domain/base-offer/struct/v-map";
-import { positiveNumberValidator } from "#app/domain/base-validators";
+import { positiveNumberValidator } from "#app/core/base-validators";
 import type { ProductSaleOfferAttrs } from "./attrs";
 
 export const productSaleOfferType: ProductSaleOfferAttrs['type'] = 'PRODUCT_SALE_OFFER';

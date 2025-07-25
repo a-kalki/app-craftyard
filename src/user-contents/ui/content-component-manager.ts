@@ -3,7 +3,7 @@ import type { ContentTypes, UserContent } from "#user-contents/domain/content/me
 import type { ThesisContent } from "#user-contents/domain/content/struct/thesis-attrs";
 import type { FileContent } from "#user-contents/domain/content/struct/file-attrs";
 import type { AddUserContentModalDialog } from "./entities/base-content/types";
-import type { CyOwnerAggregateAttrs } from "#app/domain/types";
+import type { CyOwnerAggregateAttrs } from "#app/core/types";
 import type { ImagesContent } from "#user-contents/domain/content/struct/images-attrs";
 
 /**

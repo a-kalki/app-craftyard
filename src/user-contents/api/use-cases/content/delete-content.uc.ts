@@ -1,7 +1,7 @@
 import { UserContentUseCase } from "#user-contents/api/base-uc";
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type AbstractAggregateAttrs } from "rilata/core";
-import type { DeletingIsNotPermittedError } from "#app/domain/errors";
+import type { DeletingIsNotPermittedError } from "#app/core/errors";
 import type { DeleteUserContentCommand, DeleteUserContentMeta } from "#user-contents/domain/content/struct/delete-content/contract";
 import { deleteUserContentValidator } from "#user-contents/domain/content/struct/delete-content/v-map";
 

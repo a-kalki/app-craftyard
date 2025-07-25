@@ -1,11 +1,11 @@
 import type { RequestScope, DomainResult } from "rilata/api";
 import { failure, success, type ValidationError } from "rilata/core";
 import { UserUseCase } from "#users/api/base-uc";
-import type { EditUserCommand, EditUserMeta } from "#app/domain/user/struct/edit-user/contract";
-import { UserAr } from "#app/domain/user/a-root";
-import { UserPolicy } from "#app/domain/user/policy";
-import type { UserAttrs } from "#app/domain/user/struct/attrs";
-import { editUserValidator } from "#app/domain/user/struct/edit-user/v-map";
+import type { EditUserCommand, EditUserMeta } from "#users/domain/user/struct/edit-user/contract";
+import { UserAr } from "#users/domain/user/a-root";
+import { UserPolicy } from "#users/domain/user/policy";
+import type { UserAttrs } from "#users/domain/user/struct/attrs";
+import { editUserValidator } from "#users/domain/user/struct/edit-user/v-map";
 
 export class EditUserUseCase extends UserUseCase<EditUserMeta> {
   inputName = "edit-user" as const;

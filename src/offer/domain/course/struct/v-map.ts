@@ -1,7 +1,7 @@
 import { DtoFieldValidator, LiteralFieldValidator, TextStrictEqualValidationRule, type ValidatorMap } from "rilata/validator";
 import type { CourseOfferAttrs } from "./attrs";
 import { modelCreateionOfferVmap } from "#offer/domain/base-offer/struct/v-map";
-import { positiveNumberValidator } from "#app/domain/base-validators";
+import { positiveNumberValidator } from "#app/core/base-validators";
 
 export const courseOfferType: CourseOfferAttrs['type'] = 'COURSE_OFFER';
 
