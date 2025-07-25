@@ -8,6 +8,7 @@ import { BaseBackendApi } from "#app/ui/base/base-api";
 import type { UserAttrs } from "#users/domain/user/struct/attrs";
 import { usersApiUrl } from "#users/constants";
 import type { UiUserFacade } from "#users/domain/user/facade";
+import { IncrementContributionMeta, type IncrementContributionAttrs, type IncrementContributionCommand } from "#users/domain/user-contributions/struct/increment/contract";
 
 export class UsersBackendApi extends BaseBackendApi<UserAttrs> implements UiUserFacade {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {
@@ -77,5 +78,16 @@ export class UsersBackendApi extends BaseBackendApi<UserAttrs> implements UiUser
       requestId: crypto.randomUUID(),
     }
     return this.request<EditUserMeta>(command);
+  }
+
+  incrementContribuition(
+    attrs: IncrementContributionAttrs,
+  ): Promise<BackendResultByMeta<IncrementContributionMeta>> {
+    const command:IncrementContributionCommand = {
+      name: "increment-user-contribution",
+      attrs,
+      requestId: crypto.randomUUID(),
+    }
+    return this.request<IncrementContributionMeta>(command);
   }
 }

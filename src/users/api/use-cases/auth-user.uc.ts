@@ -118,8 +118,8 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
         contributions: {
           NEWBIE: {
             count: 0,
-            firstAt: Date.now(),
-            lastAt: Date.now(),
+            createAt: Date.now(),
+            updateAt: Date.now(),
           }
         }
       },

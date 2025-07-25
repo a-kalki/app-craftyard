@@ -31,8 +31,30 @@ export class UserAr extends AggregateRoot<UserArMeta> {
     ))[0];
   }
 
-  // Метод для проверки, есть ли у пользователя определённая роль
   hasContribution(key: UserContributionKey): boolean {
     return this.getContributionKeys().includes(key);
+  }
+
+  incrementContribution(key: UserContributionKey): boolean {
+    const now = Date.now();
+
+    let currentContribution = this.attrs.statistics.contributions[key];
+
+    if (currentContribution) {
+      currentContribution.count++;
+      currentContribution.updateAt = now;
+    } else {
+      // Если вклад новый, инициализируем его
+      this.attrs.statistics.contributions[key] = {
+        count: 1,
+        createAt: now,
+        updateAt: now,
+      };
+    }
+
+    // Обновляем общее время обновления пользователя
+    this.attrs.updateAt = now;
+
+    return true;
   }
 }

@@ -36,8 +36,8 @@ export type UserContributionKey =
 
 export type UserContributionCounter = {
   count: number;
-  firstAt: number;
-  lastAt: number;
+  createAt: number;
+  updateAt: number;
 };
 
 export type UserContributions = {[key in UserContributionKey]?: UserContributionCounter};

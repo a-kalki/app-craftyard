@@ -84,8 +84,8 @@ export class ContributionTag extends BaseElement {
       }).format(date);
     };
 
-    const firstContributionDate = formatDate(this.counter.firstAt);
-    const lastContributionDate = formatDate(this.counter.lastAt);
+    const firstContributionDate = formatDate(this.counter.createAt);
+    const lastContributionDate = formatDate(this.counter.updateAt);
 
     const fullContent = html`
       <div class="details-content">

@@ -11,8 +11,8 @@
       "contributions": {
         "NEWBIE": {
           "count": 0,
-          "firstAt": 1749821077648,
-          "lastAt": 1749821077648
+          "createAt": 1749821077648,
+          "updateAt": 1749821077648
         }
       }
     },
@@ -37,28 +37,28 @@
       "contributions": {
         "KEEPER": {
           "count": 1,
-          "firstAt": 1735862400000,
-          "lastAt": 1735862400000
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
         },
         "MODERATOR": {
           "count": 0,
-          "firstAt": 1749150000000,
-          "lastAt": 1749150000000
+          "createAt": 1749150000000,
+          "updateAt": 1749150000000
         },
         "DESIGNER": {
-          "count": 1,
-          "firstAt": 1751364915130,
-          "lastAt": 1751364915130
+          "count": 2,
+          "createAt": 1751364915130,
+          "updateAt": 1753445890674
         },
         "PROPOSER": {
           "count": 3,
-          "firstAt": 1752297435130,
-          "lastAt": 1752316325130
+          "createAt": 1752297435130,
+          "updateAt": 1752316325130
         },
         "CRAFTSMAN": {
           "count": 1,
-          "firstAt": 1735892952000,
-          "lastAt": 1735892952000
+          "createAt": 1735892952000,
+          "updateAt": 1735892952000
         }
       }
     }

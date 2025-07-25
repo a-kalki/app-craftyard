@@ -28,7 +28,7 @@ class UserJsonRepo implements UserRepo {
     return this.jsonRepo.getAll();
   }
 
-  async editUser(id: string, patch: Partial<UserAttrs>): Promise<{ changes: number }> {
+  async updateUser(id: string, patch: Partial<UserAttrs>): Promise<{ changes: number }> {
     const existing = await this.jsonRepo.find(id);
     if (!existing) {
       throw Error('User not exist');

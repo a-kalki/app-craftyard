@@ -8,5 +8,5 @@ export interface UserRepo  {
 
   getUsers(): MaybePromise<UserAttrs[]>;
 
-  editUser(id: string, patch: Partial<UserAttrs>): MaybePromise<{ changes: number }>
+  updateUser(id: string, patch: Partial<UserAttrs>): MaybePromise<{ changes: number }>
 }

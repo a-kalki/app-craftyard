@@ -83,7 +83,7 @@ export class EditUserUseCase extends UserUseCase<EditUserMeta> {
 
     // проверка инвариантов
     new UserAr({...dbUser, ...patch});
-    const res = await this.moduleResolver.userRepo.editUser(inAttrs.id, patch);
+    const res = await this.moduleResolver.userRepo.updateUser(inAttrs.id, patch);
     if (res.changes > 0) {
       return success({ status: 'success' });
     }

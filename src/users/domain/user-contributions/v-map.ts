@@ -33,10 +33,10 @@ const contribuitionCounterVmap: ValidatorMap<UserContributionCounter> = {
     count: new LiteralFieldValidator('count', true, { isArray: false }, 'number', [
       new PositiveNumberValidationRule(),
     ]),
-    firstAt: new LiteralFieldValidator('firstAt', true, {isArray: false}, 'number', [
+    createAt: new LiteralFieldValidator('createAt', true, {isArray: false}, 'number', [
       new IsTimeStampValidationRule(),
     ]),
-    lastAt: new LiteralFieldValidator('lastAt', true, {isArray: false}, 'number', [
+    updateAt: new LiteralFieldValidator('updateAt', true, {isArray: false}, 'number', [
       new IsTimeStampValidationRule(),
     ]),
 }

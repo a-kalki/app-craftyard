@@ -73,8 +73,8 @@ export class UserContributionCard extends BaseElement {
       <h4 class="contribution-title">${details.title}</h4>
       <div class="contribution-count">${this.counter.count || 0}</div>
       <div class="contribution-dates">
-        ${this.counter.firstAt ? html`Первый: ${this.formatDate(this.counter.firstAt)}<br>` : nothing}
-        ${this.counter.lastAt ? html`Последний: ${this.formatDate(this.counter.lastAt)}` : nothing}
+        ${this.counter.createAt ? html`Первый: ${this.formatDate(this.counter.createAt)}<br>` : nothing}
+        ${this.counter.updateAt ? html`Последний: ${this.formatDate(this.counter.updateAt)}` : nothing}
       </div>
     `;
   }

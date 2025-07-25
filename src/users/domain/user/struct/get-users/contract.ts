@@ -4,7 +4,7 @@ import type { UserAttrs } from "../attrs";
 // ========== commands ============
 export type GetUsersCommand = {
   name: 'get-users',
-  attrs: Record<never, unknown>
+  attrs: Partial<UserAttrs>,
   requestId: string
 };
 
