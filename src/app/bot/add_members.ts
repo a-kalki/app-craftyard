@@ -1,46 +1,20 @@
-// main.ts
-import { Telegraf } from 'telegraf';
-import { MTProto } from 'telegram-mtproto';
+import { TelegramClient } from 'telegram';
+import { StringSession } from 'telegram/sessions';
 import fs from 'fs';
 import readline from 'readline';
 
-
-const APP_BOT_TOKEN = '8021888139:AAFNATZTZZYhboByY5LmlHxB3RzHFJ1XRh0';
-
-const MEMBERS_BOT_TOKEN='7709770349:AAFMwQCA5f1IKFzaD7SwMf9TVmhRS_XAvcM';
-
-const MEMBERS_BOT_NAME='dedok_members_bot'
-
-const DEDOK_GROUP_ID='-1002375685369'
-
-const DEDOK_GROUP_NAME='cc-Dedok'
-
-const DEDOK_ACTIONS_TOPIC_ID=17
-
-const API_ID = '26712731';
-
+const API_ID = 26712731;
 const API_HASH = '3d8a7b6bc515012866801a59cb51c6d1';
+const PHONE_NUMBER = '+77772878182';
 
-const PHONE_NUMBER = '-++77772878182';
+const stringSession = new StringSession(''); // Можно сохранить сессию для повторного использования
 
-const api = {
-  layer: 57,
-  initConnection: 0x69796de9,
-  api_id: parseInt(API_ID!),
-  api_hash: API_HASH!
-};
-
-const phone = {
-  num: PHONE_NUMBER!,
-  code: ''
-};
-
-const client = MTProto({
-  server: {
-    dev: false
-  },
-  api
-});
+const client = new TelegramClient(
+  stringSession,
+  API_ID,
+  API_HASH,
+  { connectionRetries: 5 }
+);
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -48,94 +22,104 @@ const rl = readline.createInterface({
 });
 
 async function auth() {
+  await client.start({
+    phoneNumber: PHONE_NUMBER,
+    phoneCode: async () => {
+      return new Promise(resolve => {
+        rl.question('Введите код из SMS: ', resolve);
+      });
+    },
+    onError: err => console.log('Ошибка авторизации:', err)
+  });
+  console.log('Авторизация успешна!');
+  console.log('Session:', client.session.save()); // Сохраняем сессию
+}
+
+async function listDialogs() {
   try {
-    // 1. Запрашиваем код
-    const { phone_code_hash } = await client('auth.sendCode', {
-      phone_number: phone.num,
-      current_number: false,
-      api_id: api.api_id,
-      api_hash: api.api_hash
+    const dialogs = await client.getDialogs({});
+    console.log('\nДоступные чаты:');
+    dialogs.forEach((dialog, index) => {
+      const chat = dialog.entity;
+      console.log(`${index + 1}. ${chat.title || chat.firstName} (ID: ${chat.id})`);
     });
 
-    // 2. Получаем код от пользователя
-    phone.code = await new Promise<string>(resolve => {
-      rl.question('Введите код из SMS: ', resolve);
-    });
-
-    // 3. Авторизуемся
-    await client('auth.signIn', {
-      phone_number: phone.num,
-      phone_code_hash,
-      phone_code: phone.code
-    });
-
-    console.log('Авторизация успешна!');
+    return dialogs;
   } catch (error) {
-    console.error('Ошибка авторизации:', error);
+    console.error('Ошибка при получении списка чатов:', error);
     throw error;
   }
 }
 
-async function getChatHistory() {
+async function getChatHistory(chatId: number) {
   try {
-    // 1. Ищем чат
-    const resolved = await client('contacts.resolveUsername', {
-      username: 'cc-Dedok' // или 'cc-Dedok'
-    });
+    // Получаем информацию о чате
+    const chat = await client.getEntity(chatId);
+    console.log(`\nВыбран чат: ${chat.title}`);
 
-    if (!resolved.chats || resolved.chats.length === 0) {
-      throw new Error('Чат не найден');
-    }
-
-    const chat = resolved.chats[0];
-    console.log(`Найден чат: ${chat.title}`);
-
-    // 2. Получаем историю сообщений
+    // Собираем все сообщения
     let allMessages: any[] = [];
     let offsetId = 0;
 
     while (true) {
-      const history = await client('messages.getHistory', {
-        peer: {
-          _: 'inputPeerChannel',
-          channel_id: chat.id,
-          access_hash: chat.access_hash
-        },
+      const messages = await client.getMessages(chat, {
         limit: 100,
-        offset_id: offsetId,
-        add_offset: 0
+        offsetId
       });
 
-      if (!history.messages || history.messages.length === 0) break;
+      if (messages.length === 0) break;
 
-      allMessages = [...allMessages, ...history.messages];
-      offsetId = history.messages[history.messages.length - 1].id;
+      allMessages = [...allMessages, ...messages];
+      offsetId = messages[messages.length - 1].id;
       
       console.log(`Загружено ${allMessages.length} сообщений...`);
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
-    // 3. Сохраняем результат
-    fs.writeFileSync('dedok_chat.json', JSON.stringify({
+    // Сохраняем результат
+    const filename = `chat_${chat.id}_history.json`;
+    fs.writeFileSync(filename, JSON.stringify({
       chatInfo: {
         id: chat.id,
         title: chat.title,
         username: chat.username
       },
-      messages: allMessages
+      messages: allMessages.map(m => ({
+        id: m.id,
+        text: m.text,
+        date: m.date,
+        fromId: m.fromId
+      }))
     }, null, 2));
 
-    console.log(`Сохранено ${allMessages.length} сообщений в dedok_chat.json`);
+    console.log(`\nСохранено ${allMessages.length} сообщений в ${filename}`);
 
   } catch (error) {
     console.error('Ошибка:', error);
-  } finally {
-    rl.close();
-    process.exit();
   }
 }
 
 (async () => {
-  await auth();
-  await getChatHistory();
+  try {
+    await auth();
+    const dialogs = await listDialogs();
+    
+    const answer = await new Promise<string>(resolve => {
+      rl.question('\nВведите номер чата для загрузки истории (или 0 для выхода): ', resolve);
+    });
+    
+    const selectedIndex = parseInt(answer) - 1;
+    
+    if (selectedIndex >= 0 && selectedIndex < dialogs.length) {
+      const selectedChat = dialogs[selectedIndex].entity;
+      await getChatHistory(selectedChat.id);
+    } else {
+      console.log('Выход...');
+    }
+  } catch (error) {
+    console.error('Ошибка:', error);
+  } finally {
+    rl.close();
+    await client.disconnect();
+  }
 })();

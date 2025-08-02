@@ -33,18 +33,6 @@
     "createAt": 1735862400000,
     "updateAt": 1735862400000
   },
-  "0197fdc1-0051-49d1-97f3-9c56f154be7f": {
-    "id": "0197fdc1-ce50-4568-bbb0-f425746328a7",
-    "ownerId": "1",
-    "ownerName": "UserAr",
-    "access": "public",
-    "context": "user-info",
-    "title": "Навыки",
-    "order": 1,
-    "icon": "brilliance",
-    "createAt": 1749821077648,
-    "updateAt": 1749821077648
-  },
   "0197fdc1-1dab-7a60-828f-6a4560de8a8f": {
     "id": "0197fdc1-1dab-7a60-828f-6a4560de8a8f",
     "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
