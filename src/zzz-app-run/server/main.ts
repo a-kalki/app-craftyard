@@ -4,6 +4,7 @@ import { craftYardServerResolver } from "./server-resolver.ts";
 import { getServerConfig, InjectCallerMiddleware, LogResponseAfterware, ServerAfterware, type ServerMiddleware } from "rilata/api-server";
 import type { Controller, Module, ModuleMeta } from "rilata/api";
 import {
+    appAboutBackendModule,
   cooperationBackendModule, filesBackendModule, modelBackendModule, offerBackendModule,
   userBackendModule, userContentsBackendModule, workshopBackendModule,
 } from "./module-resolvers";
@@ -31,6 +32,7 @@ const modules: Module<ModuleMeta>[] = [
   modelBackendModule,
   offerBackendModule,
   cooperationBackendModule,
+  appAboutBackendModule,
 ]
 
 const controllers: Controller[] = [

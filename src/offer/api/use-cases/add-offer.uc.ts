@@ -41,7 +41,7 @@ export class AddOfferUseCase extends OfferUseCase<AddOfferMeta> {
     if (!(await this.canAddOffer(input, checkedUser))) {
       return failure({
         name: 'AddingIsNotPermittedError',
-        description: 'У вас нет прав на добавление предложения.',
+        description: 'У вас нет прав на добавление оффера.',
         type: 'domain-error',
       });
     }

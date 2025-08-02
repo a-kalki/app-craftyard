@@ -12,6 +12,7 @@ import type { ContentSectionBackendApi } from '#user-contents/ui/section-api';
 import type { UserContentBackendApi } from '#user-contents/ui/content-api';
 import type { OffersBackendApi } from '#offer/ui/offers-api';
 import type { CooperationBackendApi } from '#cooperations/ui/cooperation-api';
+import type { AppAboutBackendApi } from '#about/ui/about-api';
 
 export abstract class BaseElement extends LitElement {
   protected globalAttr<T>(key: string): T {
@@ -69,5 +70,9 @@ export abstract class BaseElement extends LitElement {
 
   get cooperationApi(): CooperationBackendApi {
     return this.globalAttr('cooperationApi');
+  }
+
+  get appAboutApi(): AppAboutBackendApi {
+    return this.globalAttr('appAboutApi');
   }
 }

@@ -29,7 +29,7 @@ export class EditOfferUseCase extends OfferUseCase<EditOfferMeta> {
     if (await this.canEditOffer(offerAr.getAttrs(), checkedUser, input.requestId)) {
       return failure({
         name: 'EditingIsNotPermittedError',
-        description: 'У вас нет прав на добавление предложения.',
+        description: 'У вас нет прав на добавление оффера.',
         type: 'domain-error',
       });
     }

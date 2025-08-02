@@ -28,6 +28,13 @@ export class UsersWidget extends BaseElement {
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 
+    @media (max-width: 768px) {
+      :host {
+        padding-top: 32px;
+        box-sizing: border-box;
+      }
+    }
+
     @media (max-width: 600px) {
       .grid {
         grid-template-columns: 1fr;

@@ -70,6 +70,12 @@ export class ModelDetails extends BaseElement {
       margin-bottom: 2rem;
     }
 
+    @media (min-width: 768px) {
+      :host {
+        padding-top: 32px;
+      }
+    }
+
     @media (min-width: 600px) {
       .middle {
         grid-template-columns: 1fr 1fr;
@@ -153,7 +159,7 @@ export class ModelDetails extends BaseElement {
           this.modelAndMasterOffers = offersResult.value;
         } else {
           this.app.error(
-            'Не удалось загрузить предложения для модели',
+            'Не удалось загрузить офферы для модели',
             { details: { result: offersResult.value, modelId: this.model.id } }
           );
           this.modelAndMasterOffers = [];

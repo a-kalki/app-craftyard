@@ -22,7 +22,7 @@ const routeRedirects: RouteRedirect[] = []
 
 export const offersModule = new Module(
   'Offers Module',
-  'Модуль Предложений',
+  'Модуль Офферов',
   routeItems,
   routableTags,
   routeRedirects

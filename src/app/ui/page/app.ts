@@ -60,10 +60,6 @@ export class AppPage extends BaseElement {
     }
 
     @media (max-width: 768px) {
-      main {
-        grid-template-columns: 1fr;
-        min-width: 0;
-      }
       
       app-sidebar {
         position: static;

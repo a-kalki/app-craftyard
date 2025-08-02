@@ -14,7 +14,7 @@ const routeItems: SidebarItem[] = [
       {
         name: 'offers',
         url: workshopUrl + '/offers',
-        title: 'Предложения',
+        title: 'Офферы',
         icon: 'check2-square',
       },
     ]

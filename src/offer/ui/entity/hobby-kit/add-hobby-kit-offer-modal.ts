@@ -132,7 +132,7 @@ export class AddHobbyKitOfferModal extends BaseAddOfferModal<AddHobbyKitOfferAtt
       const result = await this.offerApi.getWorkshopOffers(workshopAttrs.id);
       if (result.isFailure()) {
         this.app.error(
-          'Не удалось загрузить "Предложения абонементов" для мастерской',
+          'Не удалось загрузить "Офферы абонементов" для мастерской',
           { result: result.value }
         );
         return false;
@@ -142,7 +142,7 @@ export class AddHobbyKitOfferModal extends BaseAddOfferModal<AddHobbyKitOfferAtt
         .filter(offer => offer.mastersDiscount > 0);
       return true;
     } catch (error) {
-      this.app.error('Ошибка при загрузке "Предложений абонементов"', { errMsg: (error as Error).message });
+      this.app.error('Ошибка при загрузке "Офферы абонементов"', { errMsg: (error as Error).message });
       return false;
     }
   }

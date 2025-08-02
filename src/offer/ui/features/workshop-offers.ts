@@ -90,6 +90,10 @@ export class WorkshopOffers extends BaseElement {
     }
 
     @media (max-width: 768px) {
+      :host {
+        padding-top: 24px;
+      }
+
       .workshop-page-container {
         margin: 0;
         border-radius: 0;
@@ -145,7 +149,7 @@ export class WorkshopOffers extends BaseElement {
     const workshopResult = await this.workshopApi.getWorkshop(this.workshopId, forceRefresh);
     if (workshopResult.isFailure()) {
       this.app.error(
-        'Не удалось загрузить данные мастерской для страницы предложений',
+        'Не удалось загрузить данные мастерской для страницы оффера',
         { details: { result: workshopResult.value, workshopId: this.workshopId } }
       );
       this.isLoadingOffers = false;
@@ -159,7 +163,7 @@ export class WorkshopOffers extends BaseElement {
 
     const offersResult = await this.offerApi.getWorkshopOffers(this.workshopId, forceRefresh);
     if (offersResult.isFailure()) {
-      this.app.error('Не удалось загрузить все предложения мастерской', {
+      this.app.error('Не удалось загрузить все офферы мастерской', {
         details: { result: offersResult.value, workshopId: this.workshopId },
       });
       this.allOffers = [];
@@ -172,11 +176,11 @@ export class WorkshopOffers extends BaseElement {
   /** Можно добавлять только предложения абонемента. Остальные через карточки моделей. */
   private async handleAddOfferButtonClick() {
     if (!this.workshop) {
-      this.app.error('Данные мастерской не загружены. Невозможно добавить предложение.');
+      this.app.error('Данные мастерской не загружены. Невозможно добавить Оффер.');
       return;
     }
     if (this.activeTabId !== 'WORKSPACE_RENT_OFFER') {
-      this.app.error('Можно добавлять только "Предложения абонемента"');
+      this.app.error('Можно добавлять только "Офферы абонемента"');
       return;
     }
 
@@ -186,13 +190,13 @@ export class WorkshopOffers extends BaseElement {
       const result = await modal.show('WORKSPACE_RENT_OFFER', this.workshop);
 
       if (result && result.offerId) {
-        this.app.info(`Предложение успешно добавлено! ID: ${result.offerId}`);
+        this.app.info(`Оффер успешно добавлен! ID: ${result.offerId}`);
         this.loadWorkshopData(true);
       } else {
-        this.app.info('Не удалось добавить предложение.');
+        this.app.info('Не удалось добавить Оффер.');
       }
     } catch (error) {
-      this.app.error(`Ошибка при добавлении предложения: ${(error as Error).message}`, { details: { error } });
+      this.app.error(`Ошибка при добавлении Оффера: ${(error as Error).message}`, { details: { error } });
     }
   }
 
@@ -228,7 +232,7 @@ export class WorkshopOffers extends BaseElement {
           <div class="add-section-button">
             <sl-icon-button 
               name="plus-square"
-              label="Добавить предложение"
+              label="Добавить Оффер"
               tabindex="0"
               @click=${this.handleAddOfferButtonClick}
             ></sl-icon-button>
@@ -250,9 +254,9 @@ export class WorkshopOffers extends BaseElement {
           <div style="text-align: center; padding: 20px;">
             <sl-spinner
               style="width:48px; height:48px; display: inline-block;"
-              label="Загрузка предложений..."
+              label="Загрузка Офферов..."
             ></sl-spinner>
-            <p>Загрузка данных мастерской и предложений...</p>
+            <p>Загрузка данных мастерской и офферов...</p>
           </div>
         </div>
       `;

@@ -111,6 +111,13 @@ export class UserDetailsEntity extends BaseElement {
       margin-top: 0.5rem;
     }
 
+    @media (max-width: 768px) {
+      :host {
+        padding-top: 32px;
+        box-sizing: border-box;
+      }
+    }
+
     @media (max-width: 600px) {
       .user-details-content-wrapper {
         padding: 8px;

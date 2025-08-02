@@ -65,7 +65,7 @@ export function createOffer({
   fatherKey,
   childrenKeys = [],
   contextType = ['RENT'],
-  title = `Предложение ${key}`,
+  title = `Оффер ${key}`,
   editorIds = [userId],
 }: {
   key: string;

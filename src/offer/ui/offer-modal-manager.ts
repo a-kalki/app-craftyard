@@ -14,7 +14,7 @@ export class OfferModalManager {
       case 'COURSE_OFFER':
          return document.createElement('add-course-offer-modal') as AddModelOfferModalDialog;
       default:
-        throw new Error(`Неизвестный тип предложения: ${type}`);
+        throw new Error(`Неизвестный тип Оффера: ${type}`);
     }
   }
 }

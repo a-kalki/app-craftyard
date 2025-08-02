@@ -22,6 +22,8 @@ import { offersModule } from "#offer/ui/module";
 import { cooperationsModule } from "#cooperations/ui/module";
 import { CooperationBackendApi } from "#cooperations/ui/cooperation-api";
 import type { JwtUser } from "#users/domain/user/struct/attrs";
+import { aboutModule } from "#about/ui/module";
+import { AppAboutBackendApi } from "#about/ui/about-api";
 
 const debugAuthUser: TelegramWidgetUserData = {
   id: 773084180,
@@ -41,6 +43,7 @@ const modules: Module[] = [
   modelsModule,
   offersModule,
   cooperationsModule,
+  aboutModule,
 ]
 
 // refresh токен будет считаться истекшим до наступления этот периода
@@ -80,6 +83,7 @@ const otherApis = {
   modelApi: new ModelsBackendApi(jwtDecoder, cacheTtlAsMin),
   offerApi: new OffersBackendApi(jwtDecoder, cacheTtlAsMin),
   cooperationApi: new CooperationBackendApi(jwtDecoder, cacheTtlAsMin),
+  appAboutApi: new AppAboutBackendApi(jwtDecoder, cacheTtlAsMin),
 }
 
 type Facades = {
