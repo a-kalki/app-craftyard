@@ -68,5 +68,113 @@
     "icon": "back",
     "createAt": 1752322229418,
     "updateAt": 1752322229418
+  },
+  "3f718751-50e6-4f6d-92a1-fe1664a9600c": {
+    "id": "3f718751-50e6-4f6d-92a1-fe1664a9600c",
+    "ownerId": "736545458",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1741701917000,
+    "updateAt": 1741701917000
+  },
+  "b9c21f53-56c9-4153-a5e1-2109e775549d": {
+    "id": "b9c21f53-56c9-4153-a5e1-2109e775549d",
+    "ownerId": "246496514",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "f812c1d0-552a-466f-857a-9572c163cc2c": {
+    "id": "f812c1d0-552a-466f-857a-9572c163cc2c",
+    "ownerId": "470044301",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "1fdfef8f-a07b-41a4-b1ed-d69b264759f2": {
+    "id": "1fdfef8f-a07b-41a4-b1ed-d69b264759f2",
+    "ownerId": "598157828",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "2a06c02a-193c-4ec2-aaad-ac151be27a17": {
+    "id": "2a06c02a-193c-4ec2-aaad-ac151be27a17",
+    "ownerId": "622332780",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "22dc8a24-51e1-4900-9dd6-5aaed0b3a5c7": {
+    "id": "22dc8a24-51e1-4900-9dd6-5aaed0b3a5c7",
+    "ownerId": "447678734",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "be50167d-e5e9-42a2-8151-4305e9ecef24": {
+    "id": "be50167d-e5e9-42a2-8151-4305e9ecef24",
+    "ownerId": "870334355",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1746552267000,
+    "updateAt": 1746552267000
+  },
+  "83e95a0a-be6c-449d-9957-c106b7b73403": {
+    "id": "83e95a0a-be6c-449d-9957-c106b7b73403",
+    "ownerId": "5101364386",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "802bda60-8212-4d9b-a28d-2d46ece1c2e8": {
+    "id": "802bda60-8212-4d9b-a28d-2d46ece1c2e8",
+    "ownerId": "895046240",
+    "ownerName": "UserAr",
+    "access": "public",
+    "context": "user-info",
+    "title": "Навыки",
+    "order": 1,
+    "icon": "brilliance",
+    "createAt": 1747551348000,
+    "updateAt": 1747551348000
   }
 }

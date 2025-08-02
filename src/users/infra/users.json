@@ -25,6 +25,16 @@
           "createAt": 1749150000000,
           "updateAt": 1749150000000
         },
+        "WRITER": {
+          "count": 18,
+          "createAt": 1748526808000,
+          "updateAt": 1747643206000
+        },
+        "REACTOR": {
+          "count": 2,
+          "createAt": 1748526808000,
+          "updateAt": 1747643206000
+        },
         "DESIGNER": {
           "count": 2,
           "createAt": 1751364915130,
@@ -42,5 +52,205 @@
         }
       }
     }
+  },
+  "736545458": {
+    "id": "736545458",
+    "name": "Нури",
+    "profile": {
+      "skillsContentSectionId": "3f718751-50e6-4f6d-92a1-fe1664a9600c",
+      "telegramNickname": "nur_zhaugan"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1741701917000,
+          "updateAt": 1741701917000
+        },
+        "WRITER": {
+          "count": 5,
+          "createAt": 1749031282000,
+          "updateAt": 1741701917000
+        },
+        "REACTOR": {
+          "count": 1,
+          "createAt": 1749031282000,
+          "updateAt": 1749031282000
+        }
+      }
+    },
+    "createAt": 1741701917000,
+    "updateAt": 1749031282000
+  },
+  "870334355": {
+    "id": "870334355",
+    "name": "Gadylbek",
+    "profile": {
+      "skillsContentSectionId": "be50167d-e5e9-42a2-8151-4305e9ecef24",
+      "telegramNickname": "GADYLBEK",
+      "avatarUrl": "https://t.me/i/userpic/320/2/3738057591766493107.jpg"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        },
+        "WRITER": {
+          "count": 1,
+          "createAt": 1748535536000,
+          "updateAt": 1748535536000
+        },
+        "REACTOR": {
+          "count": 1,
+          "createAt": 1748535536000,
+          "updateAt": 1748535536000
+        }
+      }
+    },
+    "createAt": 1746552267000,
+    "updateAt": 1748535536000
+  },
+  "598157828": {
+    "id": "598157828",
+    "name": "Ivan",
+    "profile": {
+      "skillsContentSectionId": "1fdfef8f-a07b-41a4-b1ed-d69b264759f2",
+      "telegramNickname": "iO_42graf",
+      "avatarUrl": "https://t.me/i/userpic/320/2/2569068309562632105.jpg"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        }
+      }
+    },
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "470044301": {
+    "id": "470044301",
+    "name": "Асылбек",
+    "profile": {
+      "skillsContentSectionId": "f812c1d0-552a-466f-857a-9572c163cc2c",
+      "telegramNickname": "a_tobyshbayev"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        }
+      }
+    },
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "5101364386": {
+    "id": "5101364386",
+    "name": "user_5101364386",
+    "profile": {
+      "skillsContentSectionId": "83e95a0a-be6c-449d-9957-c106b7b73403",
+      "telegramNickname": null
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        }
+      }
+    },
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "447678734": {
+    "id": "447678734",
+    "name": "Oксана Ваюева",
+    "profile": {
+      "skillsContentSectionId": "22dc8a24-51e1-4900-9dd6-5aaed0b3a5c7",
+      "telegramNickname": "Oksana_vayuyeva",
+      "avatarUrl": "https://t.me/i/userpic/320/2/1922765522100922285.jpg"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        }
+      }
+    },
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "622332780": {
+    "id": "622332780",
+    "name": "Самал",
+    "profile": {
+      "skillsContentSectionId": "2a06c02a-193c-4ec2-aaad-ac151be27a17",
+      "avatarUrl": "https://t.me/i/userpic/320/2/2672898937785001899.jpg"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        }
+      }
+    },
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "246496514": {
+    "id": "246496514",
+    "name": "Yerlan",
+    "profile": {
+      "skillsContentSectionId": "b9c21f53-56c9-4153-a5e1-2109e775549d",
+      "telegramNickname": "okaen"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        }
+      }
+    },
+    "createAt": 1746976820000,
+    "updateAt": 1746976820000
+  },
+  "895046240": {
+    "id": "895046240",
+    "name": "Натали",
+    "profile": {
+      "skillsContentSectionId": "802bda60-8212-4d9b-a28d-2d46ece1c2e8",
+      "telegramNickname": "Ta27ta",
+      "avatarUrl": "https://t.me/i/userpic/320/2/3844194329664006059.jpg"
+    },
+    "statistics": {
+      "contributions": {
+        "NEWBIE": {
+          "count": 0,
+          "createAt": 1735862400000,
+          "updateAt": 1735862400000
+        },
+        "REACTOR": {
+          "count": 1,
+          "createAt": 1747551348000,
+          "updateAt": 1747551348000
+        }
+      }
+    },
+    "createAt": 1747551348000,
+    "updateAt": 1747551348000
   }
 }
