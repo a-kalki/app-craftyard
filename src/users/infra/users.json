@@ -1,24 +1,4 @@
 {
-  "1": {
-    "id": "1",
-    "name": "Нурболат",
-    "profile": {
-      "skills": {},
-      "skillsContentSectionId": "0197fdc1-0051-49d1-97f3-9c56f154be7f",
-      "telegramNickname": "anzUralsk"
-    },
-    "statistics": {
-      "contributions": {
-        "NEWBIE": {
-          "count": 0,
-          "createAt": 1749821077648,
-          "updateAt": 1749821077648
-        }
-      }
-    },
-    "createAt": 1749821077648,
-    "updateAt": 1749821077648
-  },
   "773084180": {
     "id": "773084180",
     "name": "Nurbolat",

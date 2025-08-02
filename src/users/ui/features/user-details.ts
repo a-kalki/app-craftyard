@@ -167,7 +167,6 @@ export class UserDetailsEntity extends BaseElement {
       .actions sl-icon-button {
         width: auto;
         max-width: unset;
-        padding: 0.4rem;
       }
     }
   `;

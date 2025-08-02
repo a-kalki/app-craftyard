@@ -37,6 +37,13 @@ export class UserContributionCard extends BaseElement {
       line-height: 1.2;
     }
 
+    .contribution-description {
+      font-size: 0.9rem;
+      color: var(--sl-color-neutral-600);
+      margin-top: var(--sl-spacing-x-small);
+      line-height: 1.4;
+    }
+
     .contribution-count {
       font-size: 1.5rem;
       font-weight: 700;
@@ -71,6 +78,7 @@ export class UserContributionCard extends BaseElement {
     return html`
       <sl-icon name=${details.icon} class="contribution-icon"></sl-icon>
       <h4 class="contribution-title">${details.title}</h4>
+      <div class="contribution-description">${details.description}</div>
       <div class="contribution-count">${this.counter.count || 0}</div>
       <div class="contribution-dates">
         ${this.counter.createAt ? html`Первый: ${this.formatDate(this.counter.createAt)}<br>` : nothing}

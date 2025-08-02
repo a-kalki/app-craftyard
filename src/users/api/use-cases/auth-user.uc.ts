@@ -98,6 +98,7 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
   protected async registerUser(
     tgUser: TelegramUser, reqId: string
   ): Promise<DomainResult<AuthUserMeta>> {
+    console.log('tgUser: ', tgUser.id)
     const createSkillResult = await this.createSkillsContentSection(tgUser.id, reqId)
     if (createSkillResult.isFailure()) {
       throw this.logger.error(
@@ -154,7 +155,7 @@ export class AuthUserUseCase extends UserUseCase<AuthUserMeta> {
       title: "Навыки"
     }
     return this.moduleResolver.userContentFacade.addContentSection(
-      commandAttrs, { type: 'AnonymousUser' }, reqId
+      commandAttrs, { type: 'AuthUser', id: userId }, reqId
     );
   }
 

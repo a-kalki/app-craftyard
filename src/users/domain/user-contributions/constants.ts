@@ -200,10 +200,10 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
   },
   CRAFTSMAN: {
     title: 'Мастеровой',
-    description: 'Мастерит и открывает мастерскую для других',
-    action: 'Создать и развивать мастерскую',
+    description: 'Открывает коворкинг-мастерскую(ие)',
+    action: 'Создать и развивать коворкинг мастерскую',
     icon: 'building',
-    condition: 'Создать мастерскую',
+    condition: 'Открыть коворкинг мастерскую',
     implemented: 'planned',
     orderNumber: 19,
     trackedBy: ['APP']

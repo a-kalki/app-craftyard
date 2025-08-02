@@ -2,7 +2,7 @@ import { Telegraf } from 'telegraf';
 import https from 'node:https';
 
 const BOT_TOKEN = '8021888139:AAFNATZTZZYhboByY5LmlHxB3RzHFJ1XRh0';
-const WEB_APP_URL = 'https://d292-2a0d-b201-6020-cc8f-7f33-ea4d-dbbb-e63c.ngrok-free.app/';
+const WEB_APP_URL = 'https://efec025b43ff.ngrok-free.app/';
 
 export const bot = new Telegraf(BOT_TOKEN);
 
