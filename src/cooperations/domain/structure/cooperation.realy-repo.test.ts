@@ -23,7 +23,7 @@ describe('cooperation.json object tests', () => {
             currency: "KZT",
             price: 50000,
           },
-          title: "Предложения: мастера, ментора",
+          title: "Офферы: мастера, ментора",
           type: "OFFER_COOPERATION",
           childs: [
             {

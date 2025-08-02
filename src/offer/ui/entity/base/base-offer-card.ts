@@ -160,8 +160,8 @@ export abstract class BaseOfferCard extends BaseElement {
 
   protected async handleDeleteClick(): Promise<void> {
     const confirm = await this.app.showDialog({
-      title: 'Удаление предложения',
-      content: 'Вы действительно хотите удалить предложение?',
+      title: 'Удаление Оффера',
+      content: 'Вы действительно хотите удалить Оффер?',
       confirmText: 'Удалить',
       confirmVariant: 'danger',
     });
@@ -170,7 +170,7 @@ export abstract class BaseOfferCard extends BaseElement {
     const result = await this.offerApi.deleteOffer(this.offer.id);
     if (result.isFailure()) {
       this.app.error(
-        'Не удалось удалить предложение',
+        'Не удалось удалить Оффер',
         { result: result.value },
       );
     }

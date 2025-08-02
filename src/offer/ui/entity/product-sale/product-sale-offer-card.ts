@@ -39,7 +39,7 @@ export class ProductSaleOfferCard extends ModelOfferCard {
 
   // Переопределяем методы для работы с модалками конкретного типа
   protected handleEditClick() {
-    this.app.error(`Редактирование предложения о продаже "${this.offer.title}" (ID: ${this.offer.id})`);
+    this.app.error(`Редактирование оффера о продаже "${this.offer.title}" (ID: ${this.offer.id})`);
   }
 }
 

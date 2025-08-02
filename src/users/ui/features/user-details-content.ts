@@ -218,7 +218,7 @@ export class UserDetailsContent extends BaseElement {
         this.offers = offersResult.value;
       } else {
         this.app.error(
-          'Не удалось загрузить предложения пользователя.',
+          'Не удалось загрузить Офферы пользователя.',
           { details: { error: offersResult.value } }
         );
       }
@@ -326,7 +326,7 @@ export class UserDetailsContent extends BaseElement {
           <sl-tab slot="nav" panel="contributions">Вклад</sl-tab>
           <sl-tab slot="nav" panel="skills">Навыки</sl-tab>
           <sl-tab slot="nav" panel="models">Модели</sl-tab>
-          <sl-tab slot="nav" panel="offers">Предложения</sl-tab>
+          <sl-tab slot="nav" panel="offers">Офферы</sl-tab>
         </sl-tab-group>
       </div>
 
@@ -394,7 +394,7 @@ export class UserDetailsContent extends BaseElement {
           </div>
           <div class="list-grid">
             ${filteredOffers.length === 0
-              ? html`<p>Предложения не найдены.</p>`
+              ? html`<p>Офферы не найдены.</p>`
               : filteredOffers.map(offer => this.renderOfferCard(offer))}
           </div>
         </sl-tab-panel>

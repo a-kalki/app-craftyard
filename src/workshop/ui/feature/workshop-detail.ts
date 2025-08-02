@@ -52,8 +52,7 @@ export class WorkshopDetailsFeature extends BaseElement {
 
     .tabs-wrapper {
       flex-grow: 1;
-      min-width: 0; /* Позволяет flex-элементу сжиматься */
-      /* overflow-x: auto; и скрытие скроллбара удалены, чтобы sl-tab-group управлял прокруткой */
+      min-width: 0;
     }
 
     .tabs-wrapper sl-tab-group {
@@ -65,7 +64,6 @@ export class WorkshopDetailsFeature extends BaseElement {
       --focus-ring-width: 0;
       padding-left: 1rem;
       margin-left: -1rem;
-      /* width: max-content; min-width: 100%; удалены, чтобы sl-tab-group управлял своей шириной */
     }
 
     .add-section-button sl-icon-button {
@@ -90,6 +88,10 @@ export class WorkshopDetailsFeature extends BaseElement {
 
     /* Медиа-запросы для мобильных устройств */
     @media (max-width: 768px) {
+      :host {
+        padding-top: 24px;
+      }
+
       .workshop-page-container {
         height: calc(100% - 16px);
       }
@@ -185,7 +187,10 @@ export class WorkshopDetailsFeature extends BaseElement {
 
         const getResult = await this.contentSectionApi.getContentSection(newContentSectionId);
         if (getResult.isFailure()) {
-          this.app.error(`Не удалось создать новый раздел: ${getResult.value}`, { details: { result: getResult.value } });
+          this.app.error(
+            `Не удалось создать новый раздел: ${getResult.value}`,
+            { details: { result: getResult.value } }
+          );
           return;
         }
         this.contentSections = [...this.contentSections, getResult.value];

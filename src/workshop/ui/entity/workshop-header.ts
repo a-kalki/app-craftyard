@@ -103,10 +103,6 @@ export class WorkshopHeader extends BaseElement {
 
     /* Медиа-запросы для мобильных устройств */
     @media (max-width: 768px) {
-      :host {
-        padding: 12px;
-      }
-
       .header-content-grid {
         gap: 1rem;
       }
@@ -160,7 +156,7 @@ export class WorkshopHeader extends BaseElement {
       `;
     }
 
-    const navButtonText = this.activePage === 'details' ? 'Предложения мастерской' : 'О мастерской';
+    const navButtonText = this.activePage === 'details' ? 'Офферы мастерской' : 'О мастерской';
     const navButtonIcon = this.activePage === 'details' ? 'check2-square' : 'info-square';
 
     return html`

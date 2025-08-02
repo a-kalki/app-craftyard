@@ -1,5 +1,7 @@
 export type TrackingMethod = 'BOT' | 'APP' | 'MANUAL' | 'BOTH';
 
+export type ImplementedStatus = 'implemented' | 'in-progress' | 'planned';
+
 export type UserContributionDetails = {
   title: string;
   description: string;
@@ -8,7 +10,7 @@ export type UserContributionDetails = {
   condition: string;
   trackedBy: TrackingMethod[];
   orderNumber: number;
-  implemented: boolean;
+  implemented: ImplementedStatus;
 }
 
 export type UserContributionKey =

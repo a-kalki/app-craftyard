@@ -8,7 +8,9 @@ import { BaseBackendApi } from "#app/ui/base/base-api";
 import type { UserAttrs } from "#users/domain/user/struct/attrs";
 import { usersApiUrl } from "#users/constants";
 import type { UiUserFacade } from "#users/domain/user/facade";
-import { IncrementContributionMeta, type IncrementContributionAttrs, type IncrementContributionCommand } from "#users/domain/user-contributions/struct/increment/contract";
+import type {
+  IncrementContributionMeta, IncrementContributionAttrs, IncrementContributionCommand,
+} from "#users/domain/user-contributions/struct/increment/contract";
 
 export class UsersBackendApi extends BaseBackendApi<UserAttrs> implements UiUserFacade {
   constructor(jwtDecoder: JwtDecoder<JwtDto>, cacheTtlAsMin: number) {

@@ -111,6 +111,13 @@ export class UserDetailsEntity extends BaseElement {
       margin-top: 0.5rem;
     }
 
+    @media (max-width: 768px) {
+      :host {
+        padding-top: 32px;
+        box-sizing: border-box;
+      }
+    }
+
     @media (max-width: 600px) {
       .user-details-content-wrapper {
         padding: 8px;
@@ -160,7 +167,6 @@ export class UserDetailsEntity extends BaseElement {
       .actions sl-icon-button {
         width: auto;
         max-width: unset;
-        padding: 0.4rem;
       }
     }
   `;

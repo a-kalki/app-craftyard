@@ -1,6 +1,11 @@
-import type { UserContributionDetails, UserContributionKey, TrackingMethod } from "./types";
+import type { UnionToTuple } from "rilata/core";
+import type { UserContributionDetails, UserContributionKey, TrackingMethod, ImplementedStatus } from "./types";
 
 export const TRACKING_METHODS: TrackingMethod[] = ['BOT', 'APP', 'MANUAL', 'BOTH'];
+
+export const CONTRIBUTION_IMPLEMENTED_STATUSES: UnionToTuple<ImplementedStatus> = [
+  'implemented', 'in-progress', 'planned',
+]
 
 export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContributionDetails> = {
   NEWBIE: {
@@ -9,7 +14,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Зарегистрировался в системе.',
     icon: 'person',
     condition: 'Зарегистрироваться в системе.',
-    implemented: false,
+    implemented: 'implemented',
     orderNumber: 0,
     trackedBy: ['BOT', 'APP']
   },
@@ -19,7 +24,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Оставлять реакции на сообщения',
     icon: 'emoji-smile',
     condition: 'Оставить реакции на сообщения',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 1,
     trackedBy: ['BOT']
   },
@@ -29,17 +34,17 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Писать сообщения длиннее 50 символов',
     icon: 'pencil',
     condition: 'Написать сообщения в чате',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 2,
     trackedBy: ['BOT']
   },
   SPEAKER: {
     title: 'Коммуникатор',
-    description: 'Создаёт контент, вызывающий обсуждения',
-    action: 'Писать сообщения, которые получают реакции',
+    description: 'Создаёт контент, вызывающий обсуждения и реакции',
+    action: 'Писать сообщения, которые получают ответы и/или реакции',
     icon: 'chat-dots',
-    condition: 'Получить реакции на свои сообщения',
-    implemented: false,
+    condition: 'Получить ответы/реакции на свои сообщения',
+    implemented: 'planned',
     orderNumber: 3,
     trackedBy: ['BOT']
   },
@@ -49,7 +54,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Покупать изделия у наших мастеров',
     icon: 'cart-check',
     condition: 'Совершить покупки',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 4,
     trackedBy: ['APP']
   },
@@ -59,27 +64,27 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Создавать свои изделия',
     icon: 'wrench',
     condition: 'Сделать в мастерской Изделия для себя',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 5,
     trackedBy: ['APP']
   },
   PROPOSER: {
     title: 'Инициатор',
-    description: 'Открывает новые возможности, публикуя предложения.',
-    action: 'Создавать и публиковать предложения.',
+    description: 'Создает Предложения, публикуя Офферы.',
+    action: 'Создавать и публиковать Офферы.',
     icon: 'lightbulb',
-    condition: 'Опубликовать предложения.',
-    implemented: false,
+    condition: 'Опубликовать Оффер.',
+    implemented: 'planned',
     orderNumber: 6,
     trackedBy: ['APP']
   },
   EXECUTOR: {
     title: 'Реализатор',
-    description: 'Исполняет предложения или заказы.',
-    action: 'Реализовывать предложения или выполнять заказы.',
+    description: 'Исполняет заказы.',
+    action: 'Выполнять заказы.',
     icon: 'check-circle',
-    condition: 'Реализовать предложения/заказы.',
-    implemented: false,
+    condition: 'Реализовать заказы.',
+    implemented: 'planned',
     orderNumber: 7,
     trackedBy: ['APP']
   },
@@ -89,27 +94,27 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Работать в мастерской',
     icon: 'tools',
     condition: 'Сделать Изделия для продажи',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 8,
     trackedBy: ['APP']
   },
   SELLER: {
     title: 'Продавец',
     description: 'Реализует Изделия через платформу',
-    action: 'Продавать свои работы',
+    action: 'Продавать Изделия',
     icon: 'cash-stack',
     condition: 'Завершить продажи',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 9,
     trackedBy: ['APP']
   },
   DESIGNER: {
     title: 'Конструктор',
-    description: 'Создаёт 3D-модели для сообщества',
+    description: 'Создаёт Mодели для Сообщества',
     action: 'Публиковать модели Изделий',
     icon: 'cloud-upload',
     condition: 'Опубликовать модели',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 10,
     trackedBy: ['APP']
   },
@@ -119,7 +124,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Организовывать мастер-классы',
     icon: 'person-video',
     condition: 'Провести курсы или мастер-классы',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 11,
     trackedBy: ['BOTH']
   },
@@ -129,7 +134,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Разрабатывать курсы',
     icon: 'journal-code',
     condition: 'Опубликовать курсы',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 12,
     trackedBy: ['APP']
   },
@@ -139,17 +144,17 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Помогать в организации пространства',
     icon: 'tools',
     condition: 'Быть назначенным',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 13,
     trackedBy: ['MANUAL']
   },
   MODERATOR: {
     title: 'Модератор',
-    description: 'Поддерживает порядок в сообществе',
-    action: 'Контролировать соблюдение правил',
+    description: 'Поддерживает порядок в сообществе и помогает с решением проблем',
+    action: 'Контролировать соблюдение правил, помогать участникам сообществ',
     icon: 'shield-lock',
     condition: 'Быть назначенным',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 14,
     trackedBy: ['MANUAL']
   },
@@ -159,7 +164,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Создавать события для сообщества',
     icon: 'calendar-event',
     condition: 'Организовать мероприятия',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 15,
     trackedBy: ['BOTH']
   },
@@ -169,7 +174,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Вкладывать в развитие мастерской',
     icon: 'coin',
     condition: 'Сделать финансовый вклад',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 16,
     trackedBy: ['APP']
   },
@@ -179,7 +184,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Рассказывать о сообществе',
     icon: 'megaphone',
     condition: 'Привести новых участников',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 17,
     trackedBy: ['BOTH']
   },
@@ -189,17 +194,17 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Рецензировать работы',
     icon: 'stars',
     condition: 'Оставить экспертные оценки',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 18,
     trackedBy: ['APP']
   },
   CRAFTSMAN: {
     title: 'Мастеровой',
-    description: 'Мастерит и открывает мастерскую для других',
-    action: 'Создать и развивать мастерскую',
+    description: 'Открывает коворкинг-мастерскую(ие)',
+    action: 'Создать и развивать коворкинг мастерскую',
     icon: 'building',
-    condition: 'Создать мастерскую',
-    implemented: false,
+    condition: 'Открыть коворкинг мастерскую',
+    implemented: 'planned',
     orderNumber: 19,
     trackedBy: ['APP']
   },
@@ -209,7 +214,7 @@ export const USER_CONTRIBUTIONS_DETAILS: Record<UserContributionKey, UserContrib
     action: 'Создать и развивать коворкинг-центр',
     icon: 'building',
     condition: 'Создать мастерскую',
-    implemented: false,
+    implemented: 'planned',
     orderNumber: 20,
     trackedBy: ['APP']
   },

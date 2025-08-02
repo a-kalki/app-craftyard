@@ -2,7 +2,7 @@ import type { CourseOfferAttrs } from "./struct/attrs"
 
 export type CourseOfferMeta = {
   name: "CourseOfferAr",
-  title: "Предложение курса",
+  title: "Оффер: Курс мастерства",
   attrs: CourseOfferAttrs,
   events: never
 }

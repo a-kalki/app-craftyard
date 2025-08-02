@@ -61,9 +61,9 @@ export class OfferListContainer extends BaseElement {
     if (this.offersData.length === 0) {
       return html`
         <div class="empty-state">
-          <p>Пока нет предложений в категории "${currentTabName}".</p>
+          <p>Пока нет офферов в категории "${currentTabName}".</p>
           ${this.canEdit ? html`
-            <p>Чтобы добавить новое предложение, нажмите кнопку <sl-icon name="plus-square" style="font-size: 1.2em; vertical-align: middle;"></sl-icon> справа от вкладок.</p>
+            <p>Чтобы добавить новый Оффер, нажмите кнопку <sl-icon name="plus-square" style="font-size: 1.2em; vertical-align: middle;"></sl-icon> справа от вкладок.</p>
           ` : nothing}
         </div>
       `;

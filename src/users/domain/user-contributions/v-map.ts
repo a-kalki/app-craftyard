@@ -3,7 +3,7 @@ import {
   PositiveNumberValidationRule, StringChoiceValidationRule, type ValidatorMap,
 } from "rilata/validator"
 import type { UserContributionCounter, UserContributionDetails, UserContributionKey, UserContributions } from "./types"
-import { TRACKING_METHODS } from "./constants"
+import { CONTRIBUTION_IMPLEMENTED_STATUSES, TRACKING_METHODS } from "./constants"
 import type { UserStatistics } from "#users/domain/user/struct/attrs"
 
 export const userContribuitionDetailsVmap: ValidatorMap<UserContributionDetails> = {
@@ -26,7 +26,9 @@ export const userContribuitionDetailsVmap: ValidatorMap<UserContributionDetails>
   trackedBy: new LiteralFieldValidator('trackedBy', true, { isArray: true, mustBeFilled: true }, 'string', [
     new StringChoiceValidationRule(TRACKING_METHODS)
   ]),
-  implemented: new LiteralFieldValidator('implemented', true, { isArray: false }, 'boolean', []),
+  implemented: new LiteralFieldValidator('implemented', true, { isArray: false }, 'string', [
+    new StringChoiceValidationRule(CONTRIBUTION_IMPLEMENTED_STATUSES)
+  ]),
 }
 
 const contribuitionCounterVmap: ValidatorMap<UserContributionCounter> = {

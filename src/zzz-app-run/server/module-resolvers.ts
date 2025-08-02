@@ -29,6 +29,8 @@ import { CooperationModule } from '#cooperations/api/module';
 import { ModelBackendFacade } from '#models/api/facade';
 import { ApiUserContendSectionMonolithFacade } from '#user-contents/infra/monolith-facade';
 import { UsersBackendFacade } from '#users/api/backend-facade';
+import type { AppAboutModuleResolvers } from '#about/api/types';
+import { AppAboutModule } from '#about/api/module';
 
 const PROJECT_PATH = cwd();
 const PATH_TO_UPLOADS = join(PROJECT_PATH, 'src/zzz-app-run/data/uploads');
@@ -125,3 +127,11 @@ export const cooperationModuleResolvers: CooperationModuleResolvers = {
 }
 
 export const cooperationBackendModule = new CooperationModule(cooperationModuleResolvers);
+
+// +++++++++++++ cooperation module ++++++++++++++
+export const appAboutModuleResolvers: AppAboutModuleResolvers = {
+  serverResolver: craftYardServerResolver,
+  moduleResolver: {}
+}
+
+export const appAboutBackendModule = new AppAboutModule(appAboutModuleResolvers);

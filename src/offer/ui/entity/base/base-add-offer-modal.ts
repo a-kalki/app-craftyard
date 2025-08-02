@@ -126,7 +126,7 @@ export abstract class BaseAddOfferModal<T extends AddOfferCommand['attrs']>
       const addResult = await this.offerApi.addOffer(commandAttrs);
 
       if (addResult.isFailure()) {
-        this.app.error(`Не удалось добавить предложение.`, {
+        this.app.error(`Не удалось добавить Оффер.`, {
           attrs: this.formData, result: addResult.value,
         });
         return;
@@ -137,7 +137,7 @@ export abstract class BaseAddOfferModal<T extends AddOfferCommand['attrs']>
       }
       this.hide();
     } catch (err) {
-      this.app.error(`Ошибка при добавлении предложения`, {
+      this.app.error(`Ошибка при добавлении оффера`, {
         attrs: this.formData, error: err
       });
     } finally {
@@ -159,7 +159,7 @@ export abstract class BaseAddOfferModal<T extends AddOfferCommand['attrs']>
   render() {
     return html`
       <sl-dialog
-        label=${`Добавление предложения: ${this.getOfferTypeDisplayName(this.offerType)}`}
+        label=${`Добавление оффера: ${this.getOfferTypeDisplayName(this.offerType)}`}
         ?open=${this.open}
         @sl-request-close=${this.hide}
       >
@@ -185,8 +185,8 @@ export abstract class BaseAddOfferModal<T extends AddOfferCommand['attrs']>
   protected renderCommonFields(): TemplateResult {
     return html`
       <sl-input
-        label="Заголовок предложения"
-        help-text="Основное название предложения"
+        label="Заголовок оффера"
+        help-text="Основное название оффера"
         .value=${this.formData.title ?? ''}
         @sl-input=${this.createValidateHandler('title')}
       ></sl-input>
@@ -194,7 +194,7 @@ export abstract class BaseAddOfferModal<T extends AddOfferCommand['attrs']>
 
       <sl-textarea
         label="Описание (Markdown)"
-        help-text="Подробное описание предложения"
+        help-text="Подробное описание оффера"
         rows=5
         .value=${this.formData.description ?? ''}
         @sl-input=${this.createValidateHandler('description')}
@@ -221,7 +221,7 @@ export abstract class BaseAddOfferModal<T extends AddOfferCommand['attrs']>
         <sl-alert variant="warning" open>
           <sl-icon slot="icon" name="info-circle"></sl-icon>
           Нет доступных коопераций типа "OFFER_COOPERATION" для этой мастерской.
-          Для привязки предложения, сначала создайте кооперацию.
+          Для привязки оффера, сначала создайте кооперацию.
         </sl-alert>
       `;
     }
@@ -230,7 +230,7 @@ export abstract class BaseAddOfferModal<T extends AddOfferCommand['attrs']>
       return html`
         <sl-alert variant="warning" open>
           <sl-icon slot="icon" name="exclamation-triangle"></sl-icon>
-          Нет подходящих коопераций для текущего типа предложения (${this.getOfferTypeDisplayName(this.offerType)}).
+          Нет подходящих коопераций для текущего типа оффера (${this.getOfferTypeDisplayName(this.offerType)}).
         </sl-alert>
       `;
     }

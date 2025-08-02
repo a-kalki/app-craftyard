@@ -314,7 +314,7 @@ export class OfferDetails extends BaseElement {
     try {
       const offerResult = await this.offerApi.getOffer(this.offerId);
       if (offerResult.isFailure()) {
-        this.app.error('Не удалось загрузить предложение', { result: offerResult.value });
+        this.app.error('Не удалось загрузить Оффер', { result: offerResult.value });
         this.hasError = true;
         this.isLoading = false;
         return;
@@ -323,7 +323,7 @@ export class OfferDetails extends BaseElement {
       // Check if it's a Workspace Rent Offer and set error
       if (offerResult.value.type === 'WORKSPACE_RENT_OFFER') {
         this.isRentOfferError = true;
-        this.app.error('Неверный тип предложения. Предложения по аренде рабочего места не могут быть отображены на этой странице.', { offerId: this.offerId });
+        this.app.error('Неверный тип оффера. Предложения по аренде рабочего места не могут быть отображены на этой странице.', { offerId: this.offerId });
         this.isLoading = false;
         return;
       }
@@ -383,7 +383,7 @@ export class OfferDetails extends BaseElement {
 
     } catch (err) {
       this.app.error(
-        'Произошла непредвиденная ошибка при загрузке деталей предложения',
+        'Произошла непредвиденная ошибка при загрузке деталей оффера',
         { error: err },
       );
       this.hasError = true;
@@ -393,17 +393,17 @@ export class OfferDetails extends BaseElement {
   }
 
   protected getOfferSectionTitle(): string {
-    if (!this.offer) return 'Предложение';
+    if (!this.offer) return 'Оффер';
 
     switch (this.offer.type) {
       case 'PRODUCT_SALE_OFFER':
-        return 'Предложение: закажи Изделие у мастера!';
+        return 'Оффер: закажи Изделие у мастера!';
       case 'HOBBY_KIT_OFFER':
-        return 'Предложение: сделай Изделие Сам!';
+        return 'Оффер: сделай Изделие Сам!';
       case 'COURSE_OFFER':
-        return 'Предложение: пройди курсы, получи навыки и готовое Изделие!';
+        return 'Оффер: пройди курсы, получи навыки и готовое Изделие!';
       default:
-        return 'Предложение';
+        return 'Оффер';
     }
   }
 
@@ -411,22 +411,22 @@ export class OfferDetails extends BaseElement {
     if (!this.offer || !this.master || !this.master.profile.telegramNickname) {
       return null;
     }
-    const message = encodeURIComponent(`Привет! Меня заинтересовало предложение "${this.offer.title}" (ID: ${this.offer.id}). Хотел(а) бы узнать подробнее.`);
+    const message = encodeURIComponent(`Привет! Меня заинтересовал оффер "${this.offer.title}" (ID: ${this.offer.id}). Хотел(а) бы узнать подробнее.`);
     return `https://t.me/${this.master.profile.telegramNickname}?text=${message}`;
   }
 
   protected render(): TemplateResult {
     if (this.isLoading) {
-      return html`<sl-spinner label="Загрузка предложения..."></sl-spinner>`;
+      return html`<sl-spinner label="Загрузка оффера..."></sl-spinner>`;
     }
     if (this.isRentOfferError) {
       return html`<div class="error-message">
-        Ошибка: Предложения по аренде рабочего места не могут быть отображены на этой странице.
+        Ошибка: Оффера по аренде рабочего места не могут быть отображены на этой странице.
         Пожалуйста, убедитесь, что вы перешли по корректной ссылке.
       </div>`;
     }
     if (!this.offer) {
-      return html`<div class="error-message">Предложение не найдено или произошла ошибка загрузки.</div>`;
+      return html`<div class="error-message">Оффер не найден или произошла ошибка загрузки.</div>`;
     }
 
     const masterOrMentorTitle = this.offer.type === 'COURSE_OFFER' ? 'Ментор' : 'Мастер'
@@ -533,7 +533,7 @@ export class OfferDetails extends BaseElement {
                   <strong>Конструктор модели:</strong>
                   <span>
                     ${this.master && this.model.ownerId === this.master.id
-                      ? html`То же, что и мастер предложения (${this.master.name})`
+                      ? html`То же, что и мастер оффера (${this.master.name})`
                       : html`ID: ${this.model.ownerId} (возможно, другой пользователь)`
                     }
                   </span>
@@ -597,7 +597,7 @@ export class OfferDetails extends BaseElement {
             ${canEdit ? html`
               <sl-menu-item @click=${this.openEditOfferModal}>
                 <sl-icon slot="prefix" name="pencil"></sl-icon>
-                Редактировать предложение
+                Редактировать Оффер
               </sl-menu-item>
             ` : nothing}
           </sl-menu>

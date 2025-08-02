@@ -28,7 +28,7 @@ export class DeleteOfferUseCase extends OfferUseCase<DeleteOfferMeta> {
     if (!(await this.canDeleteOffer(offerAttrs, checkedUser, input.requestId))) {
       return failure({
         name: 'DeletingIsNotPermittedError',
-        description: 'У вас нет прав на удаление предложения.',
+        description: 'У вас нет прав на удаление оффера.',
         type: 'domain-error',
       });
     }

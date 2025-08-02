@@ -23,7 +23,7 @@ export class ModelsWidget extends BaseElement {
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      height: 100%; /* Занимает всю высоту родителя */
+      height: 100%;
     }
 
     .header-bar {
@@ -31,35 +31,41 @@ export class ModelsWidget extends BaseElement {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      position: sticky; /* Делаем заголовок липким */
+      position: sticky;
       top: 0;
-      z-index: 10; /* Убедимся, что он поверх контента */
-      background-color: var(--sl-color-neutral-0); /* Фон для sticky элемента */
-      padding-bottom: 8px; /* Отступ снизу */
-      padding-top: 8px; /* Отступ сверху */
-      margin-top: -16px; /* Компенсируем padding-top родителя */
-      margin-left: -16px; /* Компенсируем padding-left родителя */
-      margin-right: -16px; /* Компенсируем padding-right родителя */
-      padding-left: 16px; /* Восстанавливаем padding-left */
-      padding-right: 16px; /* Восстанавливаем padding-right */
-      border-bottom: 1px solid var(--sl-color-neutral-200); /* Разделитель */
+      z-index: 10;
+      background-color: var(--sl-color-neutral-0);
+      padding-bottom: 8px;
+      padding-top: 8px;
+      margin-top: -16px;
+      margin-left: -16px;
+      margin-right: -16px;
+      padding-left: 16px;
+      padding-right: 16px;
+      border-bottom: 1px solid var(--sl-color-neutral-200);
     }
 
     .filters-group {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap; /* Разрешаем перенос фильтров на новую строку */
+      flex-wrap: wrap;
     }
 
     .grid {
       display: grid;
       gap: 16px;
       width: 100%;
-      /* Базовая адаптивная сетка */
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      flex-grow: 1; /* Позволяет сетке занимать оставшееся пространство */
-      overflow-y: auto; /* Если нужно, чтобы только сетка прокручивалась */
+      flex-grow: 1;
+      overflow-y: auto;
     }
+
+    @media (max-width: 768px) {
+      :host {
+        padding-top: 24px;
+      }
+    }
+
 
     /* Медиа-запросы для более тонкой настройки */
     @media (max-width: 600px) {

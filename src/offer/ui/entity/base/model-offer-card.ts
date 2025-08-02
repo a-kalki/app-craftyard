@@ -55,7 +55,7 @@ export abstract class ModelOfferCard extends BaseOfferCard {
     try {
       const result = await this.modelApi.getModel(this.offer.modelId);
       if (result.isFailure()) {
-        this.app.error('Не удалось загрузить модель для предложения', { result, modelId: this.offer.modelId });
+        this.app.error('Не удалось загрузить модель для оффера', { result, modelId: this.offer.modelId });
         this.model = null;
         return;
       }

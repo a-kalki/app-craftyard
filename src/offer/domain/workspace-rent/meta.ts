@@ -2,7 +2,7 @@ import type { WorkspaceRentOfferAttrs } from "./struct/attrs"
 
 export type WorkspaceRentOfferMeta = {
   name: "WorkspaceRentOfferAr",
-  title: "Предложение аренды рабочего места",
+  title: "Оффер: абонемент",
   attrs: WorkspaceRentOfferAttrs,
   events: never
 }
