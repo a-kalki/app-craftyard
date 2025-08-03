@@ -142,5 +142,15 @@
     "icon": "brilliance",
     "createAt": 1747551348000,
     "updateAt": 1747551348000
+  },
+  "01986f53-c034-72e0-8e1b-cbd5b217c361": {
+    "id": "01986f53-c034-72e0-8e1b-cbd5b217c361",
+    "access": "public",
+    "ownerId": "622332780",
+    "ownerName": "UserAr",
+    "context": "user-info",
+    "title": "Навыки",
+    "createAt": 1754214416437,
+    "updateAt": 1754214416437
   }
 }
