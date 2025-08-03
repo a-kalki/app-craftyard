@@ -13,7 +13,7 @@ const routeItems: SidebarItem[] = [
   {
     name: 'users',
     url: '/users',
-    title: 'Пользователи',
+    title: 'Сообщество',
     icon: '	people'
   }
 ];
