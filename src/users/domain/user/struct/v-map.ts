@@ -23,7 +23,7 @@ export const userProfileVMap: ValidatorMap<UserAttrs['profile']> = {
 export const userVMap: ValidatorMap<UserAttrs> = {
   id: userIdValidator,
   name: new LiteralFieldValidator('name', true, { isArray: false }, 'string', [
-      new MinCharsCountValidationRule(3, 'Имя должно содержать не менее 3 символов'),
+      new MinCharsCountValidationRule(1, 'Имя должно содержать не менее 1 символа'),
   ]),
   bindWorkshopId: uuidFieldValidator.cloneWithName('bindWorkshopId').cloneWithRequired(false),
   support: new DtoFieldValidator('support', false, { isArray: false }, 'dto', userSupportVMap),

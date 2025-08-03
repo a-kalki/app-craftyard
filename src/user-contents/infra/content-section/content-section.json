@@ -1,26 +1,4 @@
 {
-  "0197b4c3-8076-7f98-bfb1-2977b9173d08": {
-    "id": "0197b4c3-8076-7f98-bfb1-2977b9173d08",
-    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
-    "ownerName": "ModelAr",
-    "context": "model-info",
-    "access": "public",
-    "title": "Для новичков (дома)",
-    "icon": "person-check",
-    "createAt": 1751084400759,
-    "updateAt": 1751084400759
-  },
-  "0197b72b-9662-7183-af32-cebc9e84b37a": {
-    "id": "0197b72b-9662-7183-af32-cebc9e84b37a",
-    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
-    "ownerName": "ModelAr",
-    "context": "model-info",
-    "access": "public",
-    "title": "Для мастеров (цех)",
-    "icon": "person-fill-check",
-    "createAt": 1751124776548,
-    "updateAt": 1751124776548
-  },
   "0197fdc1-ce50-4568-bbb0-f425746328a7": {
     "id": "0197fdc1-ce50-4568-bbb0-f425746328a7",
     "ownerId": "773084180",
@@ -108,18 +86,6 @@
   "1fdfef8f-a07b-41a4-b1ed-d69b264759f2": {
     "id": "1fdfef8f-a07b-41a4-b1ed-d69b264759f2",
     "ownerId": "598157828",
-    "ownerName": "UserAr",
-    "access": "public",
-    "context": "user-info",
-    "title": "Навыки",
-    "order": 1,
-    "icon": "brilliance",
-    "createAt": 1746976820000,
-    "updateAt": 1746976820000
-  },
-  "2a06c02a-193c-4ec2-aaad-ac151be27a17": {
-    "id": "2a06c02a-193c-4ec2-aaad-ac151be27a17",
-    "ownerId": "622332780",
     "ownerName": "UserAr",
     "access": "public",
     "context": "user-info",

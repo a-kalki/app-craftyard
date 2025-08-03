@@ -1,76 +1,4 @@
 {
-  "0197d916-6f8b-7572-9549-ada6abfc36b3": {
-    "id": "0197d916-6f8b-7572-9549-ada6abfc36b3",
-    "url": "/uploads/model-info/0197d916-6f8b-7572-9549-ada6abfc36b3.jpg",
-    "mimeType": "image/jpeg",
-    "size": 107081,
-    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
-    "ownerName": "ModelAr",
-    "access": "public",
-    "context": "model-info",
-    "createAt": 1751693815693,
-    "updateAt": 1751693815693
-  },
-  "0197fd4d-169b-78fe-a6a3-4cce6501470e": {
-    "id": "0197fd4d-169b-78fe-a6a3-4cce6501470e",
-    "url": "/uploads/model-info/0197fd4d-169b-78fe-a6a3-4cce6501470e.jpg",
-    "mimeType": "image/jpeg",
-    "size": 20032,
-    "ownerId": "5c62a9ba-a686-4472-9ffe-b40aa7296e17",
-    "ownerName": "ModelAr",
-    "access": "public",
-    "context": "model-info",
-    "createAt": 1752301377179,
-    "updateAt": 1752301377179
-  },
-  "0197fe4a-4feb-786d-ba27-006aae5f1818": {
-    "id": "0197fe4a-4feb-786d-ba27-006aae5f1818",
-    "url": "/uploads/workshop-info/0197fe4a-4feb-786d-ba27-006aae5f1818.jpg",
-    "mimeType": "image/jpeg",
-    "size": 97918,
-    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
-    "ownerName": "WorkshopAr",
-    "access": "public",
-    "context": "workshop-info",
-    "createAt": 1752317972460,
-    "updateAt": 1752317972460
-  },
-  "0197fe4a-5000-7f39-8057-b4f9245b5d7a": {
-    "id": "0197fe4a-5000-7f39-8057-b4f9245b5d7a",
-    "url": "/uploads/workshop-info/0197fe4a-5000-7f39-8057-b4f9245b5d7a.jpg",
-    "mimeType": "image/jpeg",
-    "size": 20032,
-    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
-    "ownerName": "WorkshopAr",
-    "access": "public",
-    "context": "workshop-info",
-    "createAt": 1752317972480,
-    "updateAt": 1752317972480
-  },
-  "0197fe4a-501e-7f77-9117-72e23beb3441": {
-    "id": "0197fe4a-501e-7f77-9117-72e23beb3441",
-    "url": "/uploads/workshop-info/0197fe4a-501e-7f77-9117-72e23beb3441.jpg",
-    "mimeType": "image/jpeg",
-    "size": 107081,
-    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
-    "ownerName": "WorkshopAr",
-    "access": "public",
-    "context": "workshop-info",
-    "createAt": 1752317972510,
-    "updateAt": 1752317972510
-  },
-  "0197fe5f-afa6-7bfa-ac96-ff389d2e96eb": {
-    "id": "0197fe5f-afa6-7bfa-ac96-ff389d2e96eb",
-    "url": "/uploads/workshop-info/0197fe5f-afa6-7bfa-ac96-ff389d2e96eb.jpg",
-    "mimeType": "image/jpeg",
-    "size": 36054,
-    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
-    "ownerName": "WorkshopAr",
-    "access": "public",
-    "context": "workshop-info",
-    "createAt": 1752319373224,
-    "updateAt": 1752319373224
-  },
   "0197fe61-b7a1-724f-ab4b-025f5127f29b": {
     "id": "0197fe61-b7a1-724f-ab4b-025f5127f29b",
     "url": "/uploads/workshop-info/0197fe61-b7a1-724f-ab4b-025f5127f29b.jpg",
@@ -119,18 +47,6 @@
     "createAt": 1752320755266,
     "updateAt": 1752320755266
   },
-  "0197fe81-dbc1-721f-8422-df29bdfdb665": {
-    "id": "0197fe81-dbc1-721f-8422-df29bdfdb665",
-    "url": "/uploads/workshop-info/0197fe81-dbc1-721f-8422-df29bdfdb665.jpg",
-    "mimeType": "image/jpeg",
-    "size": 33639,
-    "ownerId": "4e82828c-43c9-4fb5-9716-e31b03103c29",
-    "ownerName": "WorkshopAr",
-    "access": "public",
-    "context": "workshop-info",
-    "createAt": 1752321612739,
-    "updateAt": 1752321612739
-  },
   "0197fe83-16f3-7a6a-9cc0-a3dcfd8008f8": {
     "id": "0197fe83-16f3-7a6a-9cc0-a3dcfd8008f8",
     "url": "/uploads/workshop-info/0197fe83-16f3-7a6a-9cc0-a3dcfd8008f8.jpg",
@@ -154,29 +70,5 @@
     "context": "workshop-info",
     "createAt": 1752322125438,
     "updateAt": 1752322125438
-  },
-  "01981d1b-60fd-7f83-ad4f-6f3a91ccecd5": {
-    "id": "01981d1b-60fd-7f83-ad4f-6f3a91ccecd5",
-    "url": "/uploads/model-info/01981d1b-60fd-7f83-ad4f-6f3a91ccecd5.jpg",
-    "mimeType": "image/jpeg",
-    "size": 97918,
-    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
-    "ownerName": "ModelAr",
-    "access": "public",
-    "context": "model-info",
-    "createAt": 1752834990335,
-    "updateAt": 1752834990335
-  },
-  "01981d1b-6125-7854-b70d-e5cf90d660c2": {
-    "id": "01981d1b-6125-7854-b70d-e5cf90d660c2",
-    "url": "/uploads/model-info/01981d1b-6125-7854-b70d-e5cf90d660c2.jpg",
-    "mimeType": "image/jpeg",
-    "size": 20032,
-    "ownerId": "ea17ead7-9759-4bfe-a657-8cd2352a12fe",
-    "ownerName": "ModelAr",
-    "access": "public",
-    "context": "model-info",
-    "createAt": 1752834990373,
-    "updateAt": 1752834990373
   }
 }

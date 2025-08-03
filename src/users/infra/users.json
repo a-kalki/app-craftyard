@@ -87,8 +87,7 @@
     "name": "Gadylbek",
     "profile": {
       "skillsContentSectionId": "be50167d-e5e9-42a2-8151-4305e9ecef24",
-      "telegramNickname": "GADYLBEK",
-      "avatarUrl": "https://t.me/i/userpic/320/2/3738057591766493107.jpg"
+      "telegramNickname": "GADYLBEK"
     },
     "statistics": {
       "contributions": {
@@ -118,7 +117,7 @@
     "profile": {
       "skillsContentSectionId": "1fdfef8f-a07b-41a4-b1ed-d69b264759f2",
       "telegramNickname": "iO_42graf",
-      "avatarUrl": "https://t.me/i/userpic/320/2/2569068309562632105.jpg"
+      "avatarUrl": "https://api.telegram.org/file/bot7709770349:AAFMwQCA5f1IKFzaD7SwMf9TVmhRS_XAvcM/photos/file_1.jpg"
     },
     "statistics": {
       "contributions": {
@@ -153,10 +152,9 @@
   },
   "5101364386": {
     "id": "5101364386",
-    "name": "user_5101364386",
+    "name": "Sultan",
     "profile": {
-      "skillsContentSectionId": "83e95a0a-be6c-449d-9957-c106b7b73403",
-      "telegramNickname": null
+      "skillsContentSectionId": "83e95a0a-be6c-449d-9957-c106b7b73403"
     },
     "statistics": {
       "contributions": {
@@ -176,26 +174,7 @@
     "profile": {
       "skillsContentSectionId": "22dc8a24-51e1-4900-9dd6-5aaed0b3a5c7",
       "telegramNickname": "Oksana_vayuyeva",
-      "avatarUrl": "https://t.me/i/userpic/320/2/1922765522100922285.jpg"
-    },
-    "statistics": {
-      "contributions": {
-        "NEWBIE": {
-          "count": 0,
-          "createAt": 1735862400000,
-          "updateAt": 1735862400000
-        }
-      }
-    },
-    "createAt": 1746976820000,
-    "updateAt": 1746976820000
-  },
-  "622332780": {
-    "id": "622332780",
-    "name": "Самал",
-    "profile": {
-      "skillsContentSectionId": "2a06c02a-193c-4ec2-aaad-ac151be27a17",
-      "avatarUrl": "https://t.me/i/userpic/320/2/2672898937785001899.jpg"
+      "avatarUrl": "https://api.telegram.org/file/bot7709770349:AAFMwQCA5f1IKFzaD7SwMf9TVmhRS_XAvcM/photos/file_2.jpg"
     },
     "statistics": {
       "contributions": {
@@ -233,8 +212,7 @@
     "name": "Натали",
     "profile": {
       "skillsContentSectionId": "802bda60-8212-4d9b-a28d-2d46ece1c2e8",
-      "telegramNickname": "Ta27ta",
-      "avatarUrl": "https://t.me/i/userpic/320/2/3844194329664006059.jpg"
+      "telegramNickname": "Ta27ta"
     },
     "statistics": {
       "contributions": {
