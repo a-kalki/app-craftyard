@@ -411,7 +411,7 @@ export class OfferDetails extends BaseElement {
     if (!this.offer || !this.master || !this.master.profile.telegramNickname) {
       return null;
     }
-    const message = encodeURIComponent(`Привет! Меня заинтересовал оффер "${this.offer.title}" (ID: ${this.offer.id}). Хотел(а) бы узнать подробнее.`);
+    const message = encodeURIComponent(`Привет! Меня заинтересовал оффер "${this.offer.title}" (url: ${this.app.router.getHost()}${this.app.router.getPath()}).\n\nХотел(а) бы узнать подробнее.`);
     return `https://t.me/${this.master.profile.telegramNickname}?text=${message}`;
   }
 
@@ -554,8 +554,6 @@ export class OfferDetails extends BaseElement {
     `;
   }
 
-  // --- Методы рендеринга кнопок остаются без изменений, кроме того, что они теперь вызываются из offer-details ---
-
   protected renderOfferActions(): TemplateResult | typeof nothing {
     const orderHref = this.getOrderButtonHref();
     const canEdit = this.canEditOffer();
@@ -564,6 +562,12 @@ export class OfferDetails extends BaseElement {
     if (!orderHref && !canEdit) {
         return nothing;
     }
+
+    const handleOrderClick = () => {
+      if (orderHref) {
+        window.open(orderHref, '_blank', 'noopener,noreferrer');
+      }
+    };
 
     return html`
       <sl-button-group>
@@ -585,11 +589,7 @@ export class OfferDetails extends BaseElement {
           <sl-button size="small" slot="trigger" variant="primary" caret> </sl-button>
           <sl-menu>
             ${orderHref ? html`
-              <sl-menu-item
-                href=${orderHref}
-                target="_blank"
-                rel="noopener"
-              >
+              <sl-menu-item @click=${handleOrderClick}>
                 <sl-icon slot="prefix" name="cart"></sl-icon>
                 Заказать / Задать вопрос
               </sl-menu-item>

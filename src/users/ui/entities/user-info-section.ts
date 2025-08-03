@@ -131,8 +131,20 @@ export class UserInfoCard extends BaseElement {
       return html`<h2>Пользователь не найден!</h2>`;
     }
 
-    const telegramHref = this.user.profile.telegramNickname ? `https://t.me/${this.user.profile.telegramNickname}` : null;
+    const telegramHref = this.user.profile.telegramNickname ? `https://t.me/${this.user.profile.telegramNickname}?text=Я нашел ваш профиль в приложении creaftyard. Хотел(а) поинтересоваться.` : null;
     const profileHref = `/users/${this.user.id}`;
+
+    // Обработчик для Telegram
+    const handleTelegramClick = () => {
+      if (telegramHref) {
+        window.open(telegramHref, '_blank', 'noopener,noreferrer');
+      }
+    };
+
+    // Обработчик для перехода на профиль
+    const handleProfileClick = () => {
+      this.app.router.navigate(profileHref);
+    };
 
     const userContributions = this.user.statistics.contributions;
     const userContributionKeys = Object.keys(userContributions);
@@ -160,19 +172,13 @@ export class UserInfoCard extends BaseElement {
               <sl-button size="small" slot="trigger" variant="primary" caret> </sl-button>
               <sl-menu>
                 ${telegramHref ? html`
-                  <sl-menu-item
-                    href=${telegramHref}
-                    target="_blank"
-                    rel="noopener"
-                  >
+                  <sl-menu-item @click=${handleTelegramClick}>
                     <sl-icon slot="prefix" name="telegram"></sl-icon>
                     Написать в Telegram
                   </sl-menu-item>
                 ` : nothing}
                 ${profileHref ? html`
-                  <sl-menu-item
-                    @click=${() => this.app.router.navigate(profileHref)}
-                  >
+                  <sl-menu-item @click=${handleProfileClick}>
                     <sl-icon slot="prefix" name="info-circle"></sl-icon>
                     Профиль пользователя
                   </sl-menu-item>

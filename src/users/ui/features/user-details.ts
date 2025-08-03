@@ -249,7 +249,7 @@ export class UserDetailsEntity extends BaseElement {
 
   private openTelegramChat(): void {
     if (this.user?.profile?.telegramNickname) {
-      window.open(`https://t.me/${this.user.profile.telegramNickname}`, '_blank');
+      window.open(`https://t.me/${this.user.profile.telegramNickname}?text=Я нашел ваш профиль в приложении craftyard. Хотел(а) поинтересоваться.`, '_blank');
     } else {
       this.app.error('Никнейм Telegram не указан.');
     }

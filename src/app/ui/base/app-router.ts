@@ -70,6 +70,16 @@ export class AppRouter {
     return this.removeTrailingSlash(window.location.pathname);
   }
 
+  getHost() {
+    const { protocol, hostname, port } = window.location;
+    
+    if (port) {
+      return `${protocol}//${hostname}:${port}`;
+    }
+    
+    return `${protocol}//${hostname}`;
+  }
+
   // Получение параметров текущего пути
   getParams(): UrlParams {
     const entry = this.getEntry();
