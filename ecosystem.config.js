@@ -3,14 +3,15 @@ module.exports = {
     name: "app-cy",
     script: "./src/zzz-app-run/server/main.ts",
     interpreter: "bun",
-    args: "--ts", // если Bun требует явного указания TS
+    args: "start",
     env: {
       NODE_ENV: "production"
     },
-    instances: "max",
-    exec_mode: "cluster",
+    instances: 1,
+    exec_mode: "fork",
     autorestart: true,
     watch: false,
+    time: true,
     max_memory_restart: "1G"
   }]
 }
