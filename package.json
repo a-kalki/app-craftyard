@@ -14,7 +14,7 @@
     "build": "bun ./src/zzz-app-run/server/build.ts",
     "start": "NODE_ENV=development bun run build && bun ./src/zzz-app-run/server/main.ts",
     
-    "start:prod": "NODE_ENV=production bun run build && pm2 start --name app-cy --interpreter bun -- ./src/zzz-app-run/server/main.ts",
+    "start:prod": "NODE_ENV=production bun run build && pm2 start ecosystem.config.js",
     "stop:prod": "pm2 stop app-cy && pm2 delete app-cy",
     "restart:prod": "pm2 restart app-cy",
     "logs:prod": "pm2 logs app-cy",
