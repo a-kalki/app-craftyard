@@ -209,22 +209,22 @@ export class WorkshopOffers extends BaseElement {
               slot="nav"
               panel="WORKSPACE_RENT_OFFER"
               ?active=${this.activeTabId === 'WORKSPACE_RENT_OFFER'}
-            > Взять абонемент </sl-tab>
+            > Абонемент </sl-tab>
+            <sl-tab
+              slot="nav"
+              panel="HOBBY_KIT_OFFER"
+              ?active=${this.activeTabId === 'HOBBY_KIT_OFFER'}
+            > Хобби-кит </sl-tab>
+            <sl-tab
+              slot="nav"
+              panel="COURSE_OFFER"
+              ?active=${this.activeTabId === 'COURSE_OFFER'}
+            > Курсы </sl-tab>
             <sl-tab
               slot="nav"
               panel="PRODUCT_SALE_OFFER"
               ?active=${this.activeTabId === 'PRODUCT_SALE_OFFER'}
             > Купить Изделие </sl-tab>
-            <sl-tab
-              slot="nav"
-              panel="HOBBY_KIT_OFFER"
-              ?active=${this.activeTabId === 'HOBBY_KIT_OFFER'}
-            > Сделать изделие </sl-tab>
-            <sl-tab
-              slot="nav"
-              panel="COURSE_OFFER"
-              ?active=${this.activeTabId === 'COURSE_OFFER'}
-            > Пройти курсы </sl-tab>
           </sl-tab-group>
         </div>
         
@@ -291,16 +291,6 @@ export class WorkshopOffers extends BaseElement {
               @offers-list-changed=${this.handleOffersListChanged}
             ></offer-list-container>
           </sl-tab-panel>
-          <sl-tab-panel name="PRODUCT_SALE_OFFER" ?active=${this.activeTabId === 'PRODUCT_SALE_OFFER'}>
-            <offer-list-container
-              .workshopId=${this.workshop.id}
-              .showAdminInfo=${showAdminInfo}
-              .offerType=${'PRODUCT_SALE_OFFER'}
-              .canEdit=${this.canEdit}
-              .offersData=${this.allOffers.filter(o => o.type === 'PRODUCT_SALE_OFFER')}
-              @offers-list-changed=${this.handleOffersListChanged}
-            ></offer-list-container>
-          </sl-tab-panel>
           <sl-tab-panel name="HOBBY_KIT_OFFER" ?active=${this.activeTabId === 'HOBBY_KIT_OFFER'}>
             <offer-list-container
               .workshopId=${this.workshop.id}
@@ -318,6 +308,16 @@ export class WorkshopOffers extends BaseElement {
               .offerType=${'COURSE_OFFER'}
               .canEdit=${this.canEdit}
               .offersData=${this.allOffers.filter(o => o.type === 'COURSE_OFFER')}
+              @offers-list-changed=${this.handleOffersListChanged}
+            ></offer-list-container>
+          </sl-tab-panel>
+          <sl-tab-panel name="PRODUCT_SALE_OFFER" ?active=${this.activeTabId === 'PRODUCT_SALE_OFFER'}>
+            <offer-list-container
+              .workshopId=${this.workshop.id}
+              .showAdminInfo=${showAdminInfo}
+              .offerType=${'PRODUCT_SALE_OFFER'}
+              .canEdit=${this.canEdit}
+              .offersData=${this.allOffers.filter(o => o.type === 'PRODUCT_SALE_OFFER')}
               @offers-list-changed=${this.handleOffersListChanged}
             ></offer-list-container>
           </sl-tab-panel>

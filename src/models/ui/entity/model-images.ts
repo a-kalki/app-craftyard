@@ -6,6 +6,7 @@ import type { App } from '#app/ui/base/app';
 import { ref } from 'lit/directives/ref.js';
 import type { UiFileFacade } from '#files/ui/facade';
 import type { CyOwnerAggregateAttrs } from '#app/core/types';
+import type { ImageGalleryDialog } from '#app/ui/entities/image-gallery-dialog';
 
 @customElement('model-images')
 export class ModelImages extends LitElement {
@@ -54,6 +55,7 @@ export class ModelImages extends LitElement {
       width: 100%;
       height: 100%;
       object-fit: contain;
+      cursor: zoom-in;
     }
 
     .thumbnails {
@@ -198,6 +200,18 @@ export class ModelImages extends LitElement {
     }));
   }
 
+  private openGallery(index: number) {
+    const galleryDialog = document.createElement('image-gallery-dialog');
+    galleryDialog.imageUrls = this.imageUrls;
+    galleryDialog.show(index);
+    document.body.appendChild(galleryDialog);
+  }
+
+  private handleImageClick(index: number) {
+    if (this.isTouchDragging) return;
+    this.openGallery(index);
+  }
+
   // Desktop DnD handlers
   private handleDragStart(e: DragEvent, index: number) {
     if (!this.canEdit) return;
@@ -280,6 +294,8 @@ export class ModelImages extends LitElement {
       this.isTouchDragging = false;
     } else if (Date.now() - this.touchStartTime < 200) {
       this.toggleSelection(index);
+    } else {
+      this.handleImageClick(index);
     }
     
     const target = e.currentTarget as HTMLElement;
@@ -431,9 +447,14 @@ export class ModelImages extends LitElement {
         loop 
         navigation
       >
-        ${this.imageUrls.map(url => html`
+        ${this.imageUrls.map((url, index) => html`
           <sl-carousel-item>
-            <img src=${url} alt="" role="presentation" />
+            <img 
+              src=${url} 
+              alt="" 
+              role="presentation" 
+              @click=${() => this.handleImageClick(index)}
+            />
           </sl-carousel-item>
         `)}
       </sl-carousel>
@@ -457,7 +478,7 @@ export class ModelImages extends LitElement {
               ${this.dragIndex === i ? 'dragging' : ''}
               ${this.dropTargetIndex === i && this.dragIndex !== i ? 'drop-target' : ''}
             "
-            @click=${() => this.canEdit && this.toggleSelection(i)}
+            @click=${() => this.canEdit ? this.toggleSelection(i) : this.handleImageClick(i)}
             @dragstart=${(e: DragEvent) => this.canEdit && this.handleDragStart(e, i)}
             @dragend=${this.handleDragEnd}
             @dragover=${(e: DragEvent) => this.canEdit && this.handleDragOver(e, i)}

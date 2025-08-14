@@ -244,35 +244,11 @@ export class ModelsWidget extends BaseElement {
 
   render() {
     const filteredModels = this.getFilteredModels();
-    const isUserAuthenticated = this.app.userInfo.isAuth;
-
-    // Опции фильтрации по пользователю
-    const ownerFilterOptions = [
-      { value: 'all', label: 'Все модели' },
-      ...(isUserAuthenticated ? [{ value: 'my', label: 'Мои модели' }] : []),
-    ];
 
     return html`
       <div class="models-list-wrapper">
         <div class="header-bar">
           <div class="filters-group">
-            <sl-dropdown placement="bottom-start" hoist>
-              <sl-button size="small" slot="trigger" variant="neutral" caret>
-                <sl-icon name="person"></sl-icon>
-                Пользователь
-              </sl-button>
-              <sl-menu @sl-select=${this.handleOwnerFilterChange}>
-                ${ownerFilterOptions.map(option => html`
-                  <sl-menu-item 
-                    value=${option.value} 
-                    ?checked=${this.selectedOwnerFilter === option.value}
-                    type="checkbox"
-                  >
-                    ${option.label}
-                  </sl-menu-item>
-                `)}
-              </sl-menu>
-            </sl-dropdown>
 
             <sl-dropdown placement="bottom-start" hoist>
               <sl-button size="small" slot="trigger" variant="neutral" caret>

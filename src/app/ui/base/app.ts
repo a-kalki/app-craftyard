@@ -159,12 +159,13 @@ export class App {
   }
 
   private registerRedirects(): void {
+    const dedokOffersUrl = '/workshops/4e82828c-43c9-4fb5-9716-e31b03103c29/offers';
     this.router.clearRedirects()
     this.modules.forEach(m => {
       if (m.redirects) {
         m.redirects.forEach(r => {
           if (r.to === '/default') {
-            const defaultHomeUrl = this._appState.userIsAuth ? '/my-profile' : workshopUrl;
+            const defaultHomeUrl = this._appState.userIsAuth ? '/my-profile' : dedokOffersUrl;
             const defaultRedirect: RouteRedirect = {
               from: r.from,
               to: defaultHomeUrl,

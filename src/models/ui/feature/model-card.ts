@@ -1,10 +1,12 @@
 import { html, css } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, state, query } from 'lit/decorators.js';
 import { BaseElement } from '../../../app/ui/base/base-element';
 import type { ModelAttrs } from '#models/domain/struct/attrs';
 import { MODEL_CATEGORY_TITLES } from '#models/domain/struct/constants';
 import { SKILL_LEVEL_TITLES } from '#app/core/constants';
 import { costUtils } from '#app/core/utils/cost/cost-utils';
+import type { FileEntryAttrs } from '#files/domain/struct/attrs';
+import type { ImageGalleryDialog } from '#app/ui/entities/image-gallery-dialog';
 
 @customElement('model-card')
 export class ModelCardWidget extends BaseElement {
@@ -25,6 +27,7 @@ export class ModelCardWidget extends BaseElement {
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: cover;
+      cursor: zoom-in;
     }
 
     .content {
@@ -82,18 +85,33 @@ export class ModelCardWidget extends BaseElement {
   @state()
   private previewUrl = '';
 
+  @state()
+  private imageFiles: FileEntryAttrs[] = [];
+
+  @query('image-gallery-dialog')
+  private galleryDialog!: ImageGalleryDialog;
+
   connectedCallback(): void {
     super.connectedCallback();
-    this.loadPreview();
+    this.loadImages();
   }
 
-  async loadPreview(): Promise<void> {
-    const imageId = this.model.imageIds[0];
-    if (!imageId) return;
+  async loadImages(): Promise<void> {
+    if (!this.model.imageIds?.length) return;
 
-    const getResult = await this.fileApi.getFileEntry(imageId);
+    const getResult = await this.fileApi.getFileEntries(this.model.imageIds);
     if (getResult.isFailure()) return;
-    this.previewUrl = getResult.value.url;
+    
+    this.imageFiles = getResult.value;
+    this.previewUrl = this.imageFiles[0]?.url || '';
+  }
+
+  private openGallery() {
+    if (!this.galleryDialog || this.imageFiles.length === 0) return;
+
+    const imageUrls = this.imageFiles.map(file => file.url);
+    this.galleryDialog.imageUrls = imageUrls;
+    this.galleryDialog.show(0);
   }
 
   render() {
@@ -102,7 +120,13 @@ export class ModelCardWidget extends BaseElement {
     return html`
       <sl-card>
         ${this.previewUrl
-          ? html`<img slot="image" class="preview" src=${this.previewUrl} alt="preview" />`
+          ? html`<img 
+                slot="image" 
+                class="preview" 
+                src=${this.previewUrl} 
+                alt="preview" 
+                @click=${this.openGallery}
+              />`
           : ''}
 
         <div class="content">
@@ -125,6 +149,8 @@ export class ModelCardWidget extends BaseElement {
           <span><strong>${costUtils.toString(this.model.cost)}</strong></span>
         </div>
       </sl-card>
+
+      <image-gallery-dialog></image-gallery-dialog>
     `;
   }
 
@@ -132,4 +158,3 @@ export class ModelCardWidget extends BaseElement {
     this.app.router.navigate(`/models/${this.model.id}`);
   }
 }
-
