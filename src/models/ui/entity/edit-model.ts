@@ -6,6 +6,7 @@ import { MODEL_CATEGORY_KEYS, MODEL_CATEGORY_TITLES } from '#models/domain/struc
 import { SKILL_LEVEL_TITLES } from '#app/core/constants';
 import type { EditModelCommand } from '#models/domain/struct/edit-model/contract';
 import { editModelVmap } from '#models/domain/struct/edit-model/v-map';
+import { costValidator, costVmap } from '#app/core/v-map';
 
 type EditModelAttrs = EditModelCommand['attrs'];
 
@@ -187,6 +188,11 @@ export class EditModelModal extends ValidatableElement<EditModelAttrs> {
     }
     // @ts-expect-error: ошибка типов будет обработана валидацией
     this.formData[field] = toSetValue;
+  }
+
+  protected getValidator(field: keyof EditModelAttrs) {
+    if (field === 'cost') return costVmap.price;
+    return super.getValidator(field);
   }
 }
 

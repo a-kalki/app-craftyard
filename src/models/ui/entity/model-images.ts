@@ -6,7 +6,6 @@ import type { App } from '#app/ui/base/app';
 import { ref } from 'lit/directives/ref.js';
 import type { UiFileFacade } from '#files/ui/facade';
 import type { CyOwnerAggregateAttrs } from '#app/core/types';
-import type { ImageGalleryDialog } from '#app/ui/entities/image-gallery-dialog';
 
 @customElement('model-images')
 export class ModelImages extends LitElement {

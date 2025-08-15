@@ -16,7 +16,7 @@
     
     "start:prod": "NODE_ENV=production bun run build && pm2 start --env production",
     "stop:prod": "pm2 stop app-cy && pm2 delete app-cy",
-    "restart:prod": "pm2 restart app-cy",
+    "restart:prod": "NODE_ENV=production bun run build && pm2 restart app-cy",
     "logs:prod": "pm2 logs app-cy",
 
     "pm2:save": "pm2 save",
