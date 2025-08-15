@@ -14,6 +14,7 @@ import { OfferModalManager } from '#offer/ui/offer-modal-manager';
 import type { OfferAttrs, OfferTypes } from '#offer/domain/types';
 import { offersData } from '#offer/domain/constants';
 import type { UserAttrs } from '#users/domain/user/struct/attrs';
+import { markdownUtils } from '#app/ui/utils/markdown';
 
 @customElement('model-details')
 export class ModelDetails extends BaseElement {
@@ -309,7 +310,7 @@ export class ModelDetails extends BaseElement {
         ></model-images>
 
         <div class="main-section">
-          <p class="description">${this.model.description}</p>
+          <p class="description">${markdownUtils.parse(this.model.description)}</p>
           <div class="middle">
             <div>
               <strong>Категория:</strong><br>

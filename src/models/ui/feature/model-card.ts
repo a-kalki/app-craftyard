@@ -7,6 +7,7 @@ import { SKILL_LEVEL_TITLES } from '#app/core/constants';
 import { costUtils } from '#app/core/utils/cost/cost-utils';
 import type { FileEntryAttrs } from '#files/domain/struct/attrs';
 import type { ImageGalleryDialog } from '#app/ui/entities/image-gallery-dialog';
+import { markdownUtils } from '#app/ui/utils/markdown';
 
 @customElement('model-card')
 export class ModelCardWidget extends BaseElement {
@@ -131,7 +132,7 @@ export class ModelCardWidget extends BaseElement {
 
         <div class="content">
           <div class="title">${this.model.title}</div>
-          <div class="description">${this.model.description}</div>
+          <div class="description">${markdownUtils.parse(this.model.description)}</div>
           <div class="tags-row">
             <div class="categories">
               ${categories.map(cat => html`<sl-tag size="small" variant="primary">${cat}</sl-tag>`)}
